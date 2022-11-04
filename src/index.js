@@ -28,6 +28,7 @@ const { default: axios } = require('axios');
   const attr = currentScript.getAttribute.bind(currentScript);
   const website = attr(_data + 'website-id');
 
+  // eslint-disable-next-line no-undef
   const hostUrl = envEndpoint;
   const autoTrack = attr(_data + 'auto-track') !== _false;
   const root = hostUrl

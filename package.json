@@ -20,11 +20,10 @@
     "rollup-plugin-uglify": "^6.0.4"
   },
   "scripts": {
-    "start": "npm run build && serve -s build",
-    "build": "npm run build-tracker && react-scripts build",
-    "test": "react-scripts test",
-    "dev": "npm run build-tracker && react-scripts start",
-    "build-tracker": "rollup -c \"rollup.tracker.config.js\""
+    "build": "rollup -c \"rollup.tracker.config.js\"",
+    "lint": "eslint --fix \"src/**/\"",
+    "lint:check": "eslint \"src/**/\"",
+    "lint:nowarns": "eslint --quiet \"src/**/\""
   },
   "eslintConfig": {
     "extends": [

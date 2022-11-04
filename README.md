@@ -4,4 +4,4 @@
 
 To build the tracker file:
 
-`npm run build-tracker`
+`npm run build`

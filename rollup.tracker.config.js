@@ -11,7 +11,7 @@ import { uglify } from 'rollup-plugin-uglify';
 export default {
   input: 'src/index.js',
   output: {
-    file: 'public/analytics.js',
+    file: 'build/analytics.js',
     format: 'iife',
     name: 'analytics',
   },
