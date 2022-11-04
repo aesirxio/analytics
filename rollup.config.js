@@ -53,9 +53,11 @@ export default {
     }),
     json(),
     replace({
-      delimiters: ['', ''],
-      preventAssignment: true,
-      envEndpoint: JSON.stringify(process.env.ENDPOINT_URL),
+      process: JSON.stringify({
+        env: {
+          ENDPOINT_URL: process.env.ENDPOINT_URL,
+        },
+      }),
     }),
     buble({
       objectAssign: true,

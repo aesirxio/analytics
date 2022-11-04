@@ -13,8 +13,7 @@ const assign = (a, b) => {
   return a;
 };
 
-const hostUrl = envEndpoint ? envEndpoint : '';
-// const hostUrl = 'https://api.dashboard.aesirx.io';
+const hostUrl = process.env.ENDPOINT_URL ? process.env.ENDPOINT_URL : '';
 const root = hostUrl ? hostUrl.replace(/\/$/, '') : '';
 const endpointInit = `${root}/index.php?webserviceClient=site&webserviceVersion=1.0.0&option=reditem&view=webevent&task=init&api=hal`;
 const endpointStart = `${root}/index.php?webserviceClient=site&webserviceVersion=1.0.0&option=reditem&view=webevent&task=start&api=hal`;
