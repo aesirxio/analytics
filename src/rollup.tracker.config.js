@@ -12,9 +12,9 @@ import { uglify } from "rollup-plugin-uglify";
 export default {
   input: "src/index.js",
   output: {
-    file: "public/bi.js",
+    file: "public/analytics.js",
     format: "iife",
-    name: "bi",
+    name: "analytics",
   },
   plugins: [
     nodeResolve({
