@@ -24,10 +24,7 @@
     "build": "npm run build-tracker && react-scripts build",
     "test": "react-scripts test",
     "dev": "npm run build-tracker && react-scripts start",
-    "lint": "eslint --fix \"src/**/\"",
-    "lint:check": "eslint \"src/**/\"",
-    "lint:nowarns": "eslint --quiet \"src/**/\"",
-    "build-tracker": "rollup -c \"src/rollup.tracker.config.js\""
+    "build-tracker": "rollup -c \"rollup.tracker.config.js\""
   },
   "eslintConfig": {
     "extends": [
