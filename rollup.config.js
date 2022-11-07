@@ -55,7 +55,7 @@ export default {
     replace({
       process: JSON.stringify({
         env: {
-          ENDPOINT_URL: process.env.ENDPOINT_URL,
+          REACT_APP_ENDPOINT_URL: process.env.REACT_APP_ENDPOINT_URL,
         },
       }),
     }),
