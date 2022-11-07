@@ -23,6 +23,7 @@ const configPlugins = [
     'process.env': JSON.stringify({
       REACT_APP_ENDPOINT_ANALYTICS_URL: process.env.REACT_APP_ENDPOINT_ANALYTICS_URL,
     }),
+    preventAssignment: true,
   }),
   buble({
     objectAssign: true,
