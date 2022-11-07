@@ -37,7 +37,8 @@
     "build": "npm-run-all -l clean -p build:esm build:cjs build:bundles",
     "lint": "eslint --fix \"src/**/\"",
     "lint:check": "eslint \"src/**/\"",
-    "lint:nowarns": "eslint --quiet \"src/**/\""
+    "lint:nowarns": "eslint --quiet \"src/**/\"",
+    "prepare": "npm run build"
   },
   "eslintConfig": {
     "extends": [
