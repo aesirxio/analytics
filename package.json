@@ -4,6 +4,8 @@
   "license": "GPL-3.0-only",
   "author": "AesirX",
   "repository": "https://gitlab.redweb.dk/aesirx/analytics",
+  "main": "build/lib/cjs/index.js",
+  "module": "build/lib/esm/index.js",
   "exports": {
     "require": "./build/lib/cjs/index.js",
     "import": "./build/lib/esm/index.js"
