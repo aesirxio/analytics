@@ -11,6 +11,9 @@
 # production
 /build
 
+# package
+.package-lock.json
+
 #vscode
 .vscode
 

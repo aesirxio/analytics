@@ -12,8 +12,11 @@ const assign = (a, b) => {
   });
   return a;
 };
+const envVars = process.env;
+const hostUrl = envVars.REACT_APP_ENDPOINT_ANALYTICS_URL
+  ? envVars.REACT_APP_ENDPOINT_ANALYTICS_URL
+  : '';
 
-const hostUrl = process.env.REACT_APP_ENDPOINT_URL ? process.env.REACT_APP_ENDPOINT_URL : '';
 const root = hostUrl ? hostUrl.replace(/\/$/, '') : '';
 const endpointInit = `${root}/index.php?webserviceClient=site&webserviceVersion=1.0.0&option=reditem&view=webevent&task=init&api=hal`;
 const endpointStart = `${root}/index.php?webserviceClient=site&webserviceVersion=1.0.0&option=reditem&view=webevent&task=start&api=hal`;
@@ -165,6 +168,5 @@ function AesirAnalytics() {
 
   update();
 }
-AesirAnalytics();
 
-export { initTracker, startTracker, endTracker };
+export { initTracker, startTracker, endTracker, AesirAnalytics };
