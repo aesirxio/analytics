@@ -34,7 +34,7 @@ const initTracker = async (endpoint, url, referrer, user_agent) => {
   const urlParams = new URLSearchParams(queryString);
   if (!urlParams.get('event_id') && !urlParams.get('uuid')) {
     let ip = await getIpAddress();
-    const response = await initTrackerService(endpoint, {
+    const response = await trackerService(endpointInit(endpoint), {
       url: url,
       referrer: referrer,
       user_agent: user_agent,
@@ -51,7 +51,7 @@ const startTracker = async (endpoint, event_id, uuid, referrer) => {
   const url = location.protocol + '//' + location.host + location.pathname;
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const responseStart = await startTrackerService(endpoint, {
+  const responseStart = await trackerService(endpointStart(endpoint), {
     ...(urlParams.get('event_id') && {
       event_id: urlParams.get('event_id'),
     }),
@@ -75,7 +75,7 @@ const endTracker = async (endpoint, event_id, uuid) => {
   // End Tracker
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const responseEnd = await endTrackerService(endpoint, {
+  const responseEnd = await trackerService(endpointEnd(endpoint), {
     ...(urlParams.get('event_id_start') && {
       event_id: urlParams.get('event_id_start'),
     }),
@@ -93,8 +93,8 @@ const endTracker = async (endpoint, event_id, uuid) => {
 };
 
 /* SERVICES */
-const initTrackerService = async (endpoint, payload) => {
-  const fetchData = await fetch(endpointInit(endpoint), {
+const trackerService = async (endpoint, payload) => {
+  const fetchData = await fetch(endpoint, {
     method: 'POST',
     body: JSON.stringify(payload),
     headers: assign({ 'Content-Type': 'application/json' }, { ['x-tracker-cache']: cache }),
@@ -103,28 +103,7 @@ const initTrackerService = async (endpoint, payload) => {
   return response;
 };
 
-const startTrackerService = async (endpoint, payload) => {
-  const fetchData = await fetch(endpointStart(endpoint), {
-    method: 'POST',
-    body: JSON.stringify(payload),
-    headers: assign({ 'Content-Type': 'application/json' }, { ['x-tracker-cache']: cache }),
-  });
-  const response = await fetchData.json();
-  return response;
-};
-
-const endTrackerService = async (endpoint, payload) => {
-  const fetchData = await fetch(endpointEnd(endpoint), {
-    method: 'POST',
-    body: JSON.stringify(payload),
-    headers: assign({ 'Content-Type': 'application/json' }, { ['x-tracker-cache']: cache }),
-  });
-  const response = await fetchData.json();
-
-  return response;
-};
-
-function AesirAnalytics() {
+const AesirAnalytics = () => {
   const hook = (_this, method, callback) => {
     const orig = _this[method];
 
@@ -200,7 +179,7 @@ function AesirAnalytics() {
   });
 
   update();
-}
+};
 const insertParam = (key, value) => {
   const url = new URL(window.location.href);
   url.searchParams.set(key, value);

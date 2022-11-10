@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { AnalyticsContext } from './AnalyticsContextProvider';
 import { initTracker, startTracker, endTracker } from '../utils';
 import { useLocation } from 'react-router-dom';
-const AnalyticsHandle = ({ children }) => {
+const AnalyticsHandle = () => {
   const AnalyticsStore = React.useContext(AnalyticsContext);
   const endPoint = process.env.REACT_APP_ENDPOINT_ANALYTICS_URL;
   const { pathname } = useLocation();
@@ -29,6 +29,6 @@ const AnalyticsHandle = ({ children }) => {
     init();
   }, [pathname, AnalyticsStore.uuid]);
 
-  return <>{children}</>;
+  return <></>;
 };
 export default AnalyticsHandle;
