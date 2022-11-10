@@ -1,5 +1,17 @@
+const sharedPresets = ['@babel/preset-env', '@babel/preset-react'];
 const shared = {
-  ignore: ['src/**/*.spec.ts'],
+  presets: sharedPresets,
+};
+
+const plugins = {
+  plugins: [
+    [
+      require.resolve('babel-plugin-module-resolver'),
+      {
+        root: ['./src/'],
+      },
+    ],
+  ],
 };
 
 module.exports = {
@@ -15,6 +27,7 @@ module.exports = {
           },
         ],
       ],
+      ...plugins,
     },
     cjs: {
       ...shared,
@@ -26,9 +39,11 @@ module.exports = {
           },
         ],
       ],
+      ...plugins,
     },
     test: {
       presets: ['@babel/env'],
+      ...plugins,
     },
   },
 };

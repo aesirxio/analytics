@@ -10,18 +10,18 @@ import { uglify } from 'rollup-plugin-uglify';
 
 const configPlugins = [
   nodeResolve({
-    jsnext: true,
+    extensions: ['.js', '.jsx'],
     main: true,
     browser: true,
   }),
-  commonjs(),
   babel({
     babelHelpers: 'bundled',
   }),
+  commonjs(),
   json(),
   replace({
     'process.env': JSON.stringify({
-      REACT_APP_ENDPOINT_ANALYTICS_URL: process.env.REACT_APP_ENDPOINT_ANALYTICS_URL,
+      ENDPOINT_ANALYTICS_URL: process.env.ENDPOINT_ANALYTICS_URL,
     }),
     preventAssignment: true,
   }),
@@ -41,26 +41,8 @@ export default [
     input: 'src/index.js',
     output: [
       {
-        file: 'build/lib/bundles/bundle.esm.js',
-        format: 'esm',
-        sourcemap: true,
-      },
-      {
         file: 'build/lib/bundles/bundle.esm.min.js',
         format: 'esm',
-        plugins: [terser()],
-        sourcemap: true,
-      },
-      {
-        file: 'build/lib/bundles/bundle.umd.js',
-        format: 'umd',
-        name: 'AesirAnalytics',
-        sourcemap: true,
-      },
-      {
-        file: 'build/lib/bundles/bundle.umd.min.js',
-        format: 'umd',
-        name: 'AesirAnalytics',
         plugins: [terser()],
         sourcemap: true,
       },
@@ -71,7 +53,8 @@ export default [
     input: 'src/analytics.js',
     output: [
       {
-        file: 'build/analytics.js',
+        // file: 'build/analytics.js',
+        file: '/home/vietredweb/viet/redweb-templates/bi/public/analytics.js',
         format: 'iife',
         name: 'AesirAnalytics',
       },

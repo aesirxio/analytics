@@ -1,2 +1,2 @@
-import { AesirAnalytics } from './index';
+import { AesirAnalytics } from './utils';
 AesirAnalytics();
