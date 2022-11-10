@@ -53,8 +53,7 @@ export default [
     input: 'src/analytics.js',
     output: [
       {
-        // file: 'build/analytics.js',
-        file: '/home/vietredweb/viet/redweb-templates/bi/public/analytics.js',
+        file: 'build/analytics.js',
         format: 'iife',
         name: 'AesirAnalytics',
       },
