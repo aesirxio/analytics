@@ -4,9 +4,15 @@
 `npm run build`
 
 # Usage in SSR site:
+##### setup package:
+`git clone git@gitlab.redweb.dk:aesirx/analytics.git`
+
+##### create `.env` file
+```
+ENDPOINT_ANALYTICS_URL=https://api.dashboard.aesirx.io
+```
 ##### build the tracker file:
 ```
-git clone git@gitlab.redweb.dk:aesirx/analytics.git
 npm install
 npm run build
 ```
@@ -17,7 +23,10 @@ npm run build
 # Usage in ReactJS
 
 `npm install aesirx_analytics git+ssh://git@gitlab.redweb.dk:aesirx/analytics.git#master --save-dev`
-
+##### add environment variable (`.env`)
+```
+REACT_APP_ENDPOINT_ANALYTICS_URL=https://api.dashboard.aesirx.io
+```
 ##### with react-router-dom v5:
 ###### create AnalyticsContainer component:
 ```
@@ -36,7 +45,10 @@ export default AnalyticsContainer;
 # Usage in NextJS
 
 `npm install aesirx_analytics git+ssh://git@gitlab.redweb.dk:aesirx/analytics.git#master --save-dev`
-
+##### add environment variable (`.env`)
+```
+NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL=https://api.dashboard.aesirx.io
+```
 ##### with next/router:
 ###### using in app.js:
 ```
