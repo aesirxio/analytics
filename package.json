@@ -36,7 +36,7 @@
     "lint": "eslint --fix \"src/**/\"",
     "lint:check": "eslint \"src/**/\"",
     "lint:nowarns": "eslint --quiet \"src/**/\"",
-    "prepare": "npm run build"
+    "preinstall": "npm run install --ignore-scripts && npm run build"
   },
   "eslintConfig": {
     "extends": [
