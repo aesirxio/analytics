@@ -6,10 +6,7 @@
   "repository": "https://gitlab.redweb.dk/aesirx/analytics",
   "main": "build/lib/cjs/index.js",
   "module": "build/lib/esm/index.js",
-  "exports": {
-    "require": "./build/lib/cjs/index.js",
-    "import": "./build/lib/esm/index.js"
-  },
+  "source": "src/index.js",
   "dependencies": {
     "@babel/cli": "^7.19.3",
     "@babel/core": "^7.19.6",
