@@ -4,7 +4,6 @@ import { babel } from '@rollup/plugin-babel';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
-import buble from '@rollup/plugin-buble';
 import replace from '@rollup/plugin-replace';
 import { uglify } from 'rollup-plugin-uglify';
 
@@ -16,6 +15,7 @@ const configPlugins = [
   }),
   babel({
     babelHelpers: 'bundled',
+    exclude: 'node_modules/**',
   }),
   commonjs(),
   json(),
@@ -25,13 +25,6 @@ const configPlugins = [
     }),
     preventAssignment: true,
   }),
-  buble({
-    objectAssign: true,
-    transforms: {
-      // make async/await work by default (no transforms)
-      asyncAwait: false,
-    },
-  }),
   terser({ compress: { evaluate: false } }),
   uglify(),
 ];
@@ -39,6 +32,7 @@ const configPlugins = [
 export default [
   {
     input: 'src/index.js',
+    external: ['react', 'react-dom'],
     output: [
       {
         file: 'build/lib/bundles/bundle.esm.min.js',

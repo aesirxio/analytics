@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
 import { AnalyticsContext } from './AnalyticsContextProvider';
 import { initTracker, startTracker, endTracker } from '../utils';
-import { useLocation } from 'react-router-dom';
-const AnalyticsHandle = () => {
+const AnalyticsHandle = ({ pathname }) => {
   const AnalyticsStore = React.useContext(AnalyticsContext);
   const endPoint = process.env.REACT_APP_ENDPOINT_ANALYTICS_URL;
-  const { pathname } = useLocation();
   useEffect(() => {
     const init = async () => {
       if (AnalyticsStore.uuid_start) {
