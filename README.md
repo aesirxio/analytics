@@ -1,10 +1,18 @@
 # Analytics
 
 # Tasks
-
-### To build the tracker file:
-
 `npm run build`
+
+# Usage in SSR site:
+### build the tracker file:
+```
+git clone git@gitlab.redweb.dk:aesirx/analytics.git
+npm install
+npm run build
+```
+### copy built file `analytics/build/analytics.js` to your project
+### Add script to `<head>`
+`<script async defer src="YOUR_PROJECT_PATH/analytics.js"></script>`
 
 # Usage in ReactJS
 
