@@ -6,6 +6,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import replace from '@rollup/plugin-replace';
 import { uglify } from 'rollup-plugin-uglify';
+import copy from 'rollup-plugin-copy';
 
 const configPlugins = [
   nodeResolve({
@@ -27,6 +28,9 @@ const configPlugins = [
   }),
   terser({ compress: { evaluate: false } }),
   uglify(),
+  copy({
+    targets: [{ src: 'src/index.d.ts', dest: 'build/lib/cjs' }],
+  }),
 ];
 
 export default [
