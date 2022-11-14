@@ -190,14 +190,18 @@ const replaceUrl = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const event_id = urlParams.get('event_id');
   const uuid = urlParams.get('uuid');
-  document.querySelectorAll('[href]').forEach((link) => {
-    const eventIdParams = getParameterByName('event_id', link.href);
-    const uuidParams = getParameterByName('uuid', link.href);
-    const url = new URL(link.href);
-    !eventIdParams && event_id && url.searchParams.append('event_id', event_id);
-    !uuidParams && uuid && url.searchParams.append('uuid', uuid);
-    link.href = url.href;
-  });
+
+  let anchors = document.getElementsByTagName('a');
+  for (let i = 0; i < anchors.length; i++) {
+    const eventIdParams = getParameterByName('event_id', anchors[i].href);
+    const uuidParams = getParameterByName('uuid', anchors[i].href);
+    if (anchors[i].href) {
+      const url = new URL(anchors[i].href);
+      !eventIdParams && event_id && url.searchParams.append('event_id', event_id);
+      !uuidParams && uuid && url.searchParams.append('uuid', uuid);
+      anchors[i].href = url.href;
+    }
+  }
 };
 
 const getParameterByName = (name, url = window.location.href) => {
