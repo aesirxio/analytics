@@ -5,7 +5,6 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import replace from '@rollup/plugin-replace';
-import { uglify } from 'rollup-plugin-uglify';
 import copy from 'rollup-plugin-copy';
 
 const configPlugins = [
@@ -27,7 +26,6 @@ const configPlugins = [
     preventAssignment: true,
   }),
   terser({ compress: { evaluate: false } }),
-  uglify(),
   copy({
     targets: [{ src: 'src/index.d.ts', dest: 'build/lib/cjs' }],
   }),
