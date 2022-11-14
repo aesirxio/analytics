@@ -9,7 +9,7 @@
 
 ##### create `.env` file
 ```
-ENDPOINT_ANALYTICS_URL=https://api.dashboard.aesirx.io
+ENDPOINT_ANALYTICS_URL=https://example.com
 ```
 ##### build the tracker file:
 ```
@@ -25,7 +25,7 @@ npm run build
 `npm install aesirx_analytics git+ssh://git@gitlab.redweb.dk:aesirx/analytics.git#master --save-dev`
 ##### add environment variable (`.env`)
 ```
-REACT_APP_ENDPOINT_ANALYTICS_URL=https://api.dashboard.aesirx.io
+REACT_APP_ENDPOINT_ANALYTICS_URL=https://example.com
 ```
 ##### with react-router-dom v5:
 ###### create AnalyticsContainer component:
@@ -47,7 +47,7 @@ export default AnalyticsContainer;
 `npm install aesirx_analytics git+ssh://git@gitlab.redweb.dk:aesirx/analytics.git#master --save-dev`
 ##### add environment variable (`.env`)
 ```
-NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL=https://api.dashboard.aesirx.io
+NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL=https://example.com
 ```
 ##### with next/router:
 ###### using in app.js:
