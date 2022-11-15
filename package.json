@@ -1,5 +1,5 @@
 {
-  "name": "analytics",
+  "name": "aesirx_analytics",
   "version": "1.0.0-alpha",
   "license": "GPL-3.0-only",
   "author": "AesirX",
@@ -7,7 +7,6 @@
   "main": "build/lib/cjs/index.js",
   "module": "build/lib/esm/index.js",
   "source": "src/index.js",
-  "type": "commonjs",
   "dependencies": {
     "axios": "^0.21.0",
     "babel-plugin-module-resolver": "^4.1.0",

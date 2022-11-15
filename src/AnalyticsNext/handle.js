@@ -1,19 +1,25 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { AnalyticsContext } from './AnalyticsContextProvider';
 import { initTracker, startTracker, endTracker } from '../utils';
 const AnalyticsHandle = ({ router }) => {
   const AnalyticsStore = React.useContext(AnalyticsContext);
   const endPoint = process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL;
-
-  const handleStartTracker = useCallback(async () => {
-    const responseStart = await startTracker(
-      endPoint,
-      AnalyticsStore.event_id,
-      AnalyticsStore.uuid
-    );
-    responseStart.result.event_id && AnalyticsStore.setEventIDStart(responseStart.result.event_id);
-    responseStart.result.uuid && AnalyticsStore.setUUIDStart(responseStart.result.uuid);
-  }, [AnalyticsStore, endPoint]);
+  const [prevRoute, setPrevRoute] = useState(router.asPath);
+  const handleStartTracker = useCallback(
+    async (prevRoute) => {
+      const referrer = prevRoute ? prevRoute : '';
+      const responseStart = await startTracker(
+        endPoint,
+        AnalyticsStore.event_id,
+        AnalyticsStore.uuid,
+        referrer
+      );
+      responseStart.result.event_id &&
+        AnalyticsStore.setEventIDStart(responseStart.result.event_id);
+      responseStart.result.uuid && AnalyticsStore.setUUIDStart(responseStart.result.uuid);
+    },
+    [AnalyticsStore, endPoint]
+  );
 
   useEffect(() => {
     const init = async () => {
@@ -32,15 +38,16 @@ const AnalyticsHandle = ({ router }) => {
     const handleRouteChange = async () => {
       if (AnalyticsStore.uuid_start) {
         await endTracker(endPoint, AnalyticsStore.event_id_start, AnalyticsStore.uuid_start);
-        await handleStartTracker();
+        await handleStartTracker(prevRoute);
       }
+      setPrevRoute(router.asPath);
     };
     router.events.on('routeChangeComplete', handleRouteChange);
 
     return () => {
       router.events.off('routeChangeComplete', handleRouteChange);
     };
-  }, [router.events, AnalyticsStore.uuid_start]);
+  }, [router.events, AnalyticsStore.uuid_start, router.asPath]);
 
   return <></>;
 };
