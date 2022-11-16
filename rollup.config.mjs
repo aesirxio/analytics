@@ -5,7 +5,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import replace from '@rollup/plugin-replace';
-import copy from 'rollup-plugin-copy';
+import typescript from 'rollup-plugin-typescript2';
 
 const configPlugins = [
   nodeResolve({
@@ -27,9 +27,6 @@ const configPlugins = [
     preventAssignment: true,
   }),
   terser({ compress: { evaluate: false } }),
-  copy({
-    targets: [{ src: 'src/index.d.ts', dest: 'build/lib/cjs' }],
-  }),
 ];
 
 export default [
@@ -45,6 +42,44 @@ export default [
       },
     ],
     plugins: configPlugins,
+  },
+  {
+    input: 'src/index.js',
+    external: ['react', 'react-dom'],
+    output: [
+      {
+        file: 'build/lib/types/index.d.ts',
+        format: 'es',
+        sourcemap: true,
+      },
+    ],
+    plugins: [
+      nodeResolve({
+        extensions: ['.js', '.jsx'],
+        main: true,
+        browser: true,
+      }),
+      babel({
+        babelHelpers: 'runtime',
+        exclude: 'node_modules/**',
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      }),
+      commonjs(),
+      json(),
+      replace({
+        'process.env': JSON.stringify({
+          ENDPOINT_ANALYTICS_URL: process.env.ENDPOINT_ANALYTICS_URL,
+        }),
+        preventAssignment: true,
+      }),
+      typescript({
+        tsconfig: 'tsconfig.json',
+        allowJs: true,
+        include: ['*.js+(|x)', '**/*.js+(|x)'],
+        exclude: ['./node_modules/**/*'],
+        module: 'ESNext',
+      }),
+    ],
   },
   {
     input: 'src/analytics.js',

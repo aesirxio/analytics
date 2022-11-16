@@ -10,7 +10,7 @@
     "require": "./build/lib/cjs/index.js",
     "import": "./build/lib/esm/index.js"
   },
-  "typings":"build/lib/cjs/index.d.ts" ,
+  "types": "build/lib/types/index.d.ts",
   "source": "src/index.js",
   "dependencies": {
     "axios": "^0.21.0",
@@ -69,8 +69,9 @@
     "eslint": "^8.17",
     "eslint-plugin-react": "^7.31.10",
     "rollup": "^2.79.1",
-    "rollup-plugin-copy": "^3.4.0",
-    "rollup-plugin-terser": "^7.0.2"
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.34.1",
+    "typescript": "^4.9.3"
   },
   "overrides": {
     "autoprefixer": "10.4.5"

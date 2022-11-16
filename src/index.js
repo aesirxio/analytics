@@ -1,4 +1,2 @@
-var AnalyticsReact = require('./AnalyticsReact').default;
-var AnalyticsNext = require('./AnalyticsNext').default;
-
-export { AnalyticsNext, AnalyticsReact };
+export { default as AnalyticsNext } from './AnalyticsNext';
+export { default as AnalyticsReact } from './AnalyticsReact';
