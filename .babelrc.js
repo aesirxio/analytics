@@ -1,10 +1,11 @@
-const sharedPresets = ['@babel/preset-env', '@babel/preset-react'];
+const sharedPresets = ['@babel/preset-react'];
 const shared = {
   presets: sharedPresets,
 };
 
 const plugins = {
   plugins: [
+    '@babel/plugin-transform-runtime',
     [
       require.resolve('babel-plugin-module-resolver'),
       {
@@ -16,16 +17,19 @@ const plugins = {
 
 module.exports = {
   env: {
-    esmUnbundled: shared,
+    esmUnbundled: {
+      presets: [['@babel/preset-env'], ...sharedPresets],
+    },
     esmBundled: {
       ...shared,
       presets: [
         [
-          '@babel/env',
+          '@babel/preset-env',
           {
-            targets: '> 0.25%, not dead',
+            targets: '>0.2%, not dead, not op_mini all',
           },
         ],
+        ...sharedPresets,
       ],
       ...plugins,
     },
@@ -33,16 +37,17 @@ module.exports = {
       ...shared,
       presets: [
         [
-          '@babel/env',
+          '@babel/preset-env',
           {
             modules: 'commonjs',
           },
         ],
+        ...sharedPresets,
       ],
       ...plugins,
     },
     test: {
-      presets: ['@babel/env'],
+      presets: ['@babel/preset-env'],
       ...plugins,
     },
   },

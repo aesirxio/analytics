@@ -14,8 +14,9 @@ const configPlugins = [
     browser: true,
   }),
   babel({
-    babelHelpers: 'bundled',
+    babelHelpers: 'runtime',
     exclude: 'node_modules/**',
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
   }),
   commonjs(),
   json(),
