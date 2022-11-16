@@ -10,7 +10,7 @@
     "require": "./build/lib/cjs/index.js",
     "import": "./build/lib/esm/index.js"
   },
-  "typings":"src/index.js" ,
+  "typings":"build/lib/cjs/index.d.ts" ,
   "source": "src/index.js",
   "dependencies": {
     "axios": "^0.21.0",
