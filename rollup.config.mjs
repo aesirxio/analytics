@@ -5,7 +5,7 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import replace from '@rollup/plugin-replace';
-import copy from 'rollup-plugin-copy';
+import typescript from 'rollup-plugin-typescript2';
 
 const configPlugins = [
   nodeResolve({
@@ -27,9 +27,6 @@ const configPlugins = [
     preventAssignment: true,
   }),
   terser({ compress: { evaluate: false } }),
-  copy({
-    targets: [{ src: 'src/index.d.ts', dest: 'build/lib/cjs' }],
-  }),
 ];
 
 export default [
@@ -45,6 +42,24 @@ export default [
       },
     ],
     plugins: configPlugins,
+  },
+  {
+    input: 'src/index.js',
+    external: ['react', 'react-dom'],
+    output: [
+      {
+        file: 'build/lib/types/index.min.js',
+      },
+    ],
+    plugins: [
+      ...configPlugins,
+      typescript({
+        tsconfig: 'tsconfig.json',
+        allowJs: true,
+        include: ['*.js+(|x)', '**/*.js+(|x)'],
+        exclude: ['./node_modules/**/*'],
+      }),
+    ],
   },
   {
     input: 'src/analytics.js',
