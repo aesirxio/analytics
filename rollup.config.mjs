@@ -48,36 +48,16 @@ export default [
     external: ['react', 'react-dom'],
     output: [
       {
-        file: 'build/lib/types/index.d.ts',
-        format: 'es',
-        sourcemap: true,
+        file: 'build/lib/types/index.min.js',
       },
     ],
     plugins: [
-      nodeResolve({
-        extensions: ['.js', '.jsx'],
-        main: true,
-        browser: true,
-      }),
-      babel({
-        babelHelpers: 'runtime',
-        exclude: 'node_modules/**',
-        extensions: ['.js', '.jsx', '.ts', '.tsx'],
-      }),
-      commonjs(),
-      json(),
-      replace({
-        'process.env': JSON.stringify({
-          ENDPOINT_ANALYTICS_URL: process.env.ENDPOINT_ANALYTICS_URL,
-        }),
-        preventAssignment: true,
-      }),
+      ...configPlugins,
       typescript({
         tsconfig: 'tsconfig.json',
         allowJs: true,
         include: ['*.js+(|x)', '**/*.js+(|x)'],
         exclude: ['./node_modules/**/*'],
-        module: 'ESNext',
       }),
     ],
   },
