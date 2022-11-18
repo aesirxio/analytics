@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { AnalyticsContextProvider } from './AnalyticsContextProvider';
+import { AnalyticsContextProvider } from '../utils/AnalyticsContextProvider';
 import AnalyticsHandle from './handle';
 
 const AnalyticsNext = ({ router }) => {

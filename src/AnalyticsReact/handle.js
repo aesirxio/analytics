@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { AnalyticsContext } from './AnalyticsContextProvider';
-import { initTracker, startTracker, endTracker } from '../utils';
+import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
+import { initTracker, startTracker, endTracker } from '../utils/index';
 const AnalyticsHandle = ({ pathname }) => {
   const AnalyticsStore = React.useContext(AnalyticsContext);
   const endPoint = process.env.REACT_APP_ENDPOINT_ANALYTICS_URL;

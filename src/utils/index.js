@@ -17,7 +17,6 @@ const initTracker = async (endpoint, url, referrer, user_agent) => {
   referrer = document.referrer;
   user_agent = window.navigator.userAgent;
   const queryString = window.location.search;
-  // Init Tracker
   const urlParams = new URLSearchParams(queryString);
   if (!urlParams.get('event_id') && !urlParams.get('uuid')) {
     let ip = await getIpAddress();
@@ -32,7 +31,6 @@ const initTracker = async (endpoint, url, referrer, user_agent) => {
 };
 
 const startTracker = async (endpoint, event_id, uuid, referrer) => {
-  // Start Tracker
   const { location, document } = window;
   referrer = referrer
     ? location.protocol + '//' + location.host + referrer
@@ -61,7 +59,6 @@ const startTracker = async (endpoint, event_id, uuid, referrer) => {
 };
 
 const endTracker = async (endpoint, event_id, uuid) => {
-  // End Tracker
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const responseEnd = await trackerService(createRequest(endpoint, 'end'), {

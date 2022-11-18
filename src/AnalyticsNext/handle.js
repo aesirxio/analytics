@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { AnalyticsContext } from './AnalyticsContextProvider';
-import { initTracker, startTracker, endTracker } from '../utils';
+import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
+import { initTracker, startTracker, endTracker } from '../utils/index';
 const AnalyticsHandle = ({ router }) => {
   const AnalyticsStore = React.useContext(AnalyticsContext);
   const endPoint = process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL;
