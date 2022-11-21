@@ -14,10 +14,8 @@ const AnalyticsHandle = ({ router }) => {
         AnalyticsStore.visitor_uuid,
         referrer
       );
-      responseStart.result.event_uuid &&
-        AnalyticsStore.setEventIDStart(responseStart.result.event_uuid);
-      responseStart.result.visitor_uuid &&
-        AnalyticsStore.setUUIDStart(responseStart.result.visitor_uuid);
+      responseStart.event_uuid && AnalyticsStore.setEventIDStart(responseStart.event_uuid);
+      responseStart.visitor_uuid && AnalyticsStore.setUUIDStart(responseStart.visitor_uuid);
     },
     [AnalyticsStore, endPoint]
   );
@@ -26,8 +24,8 @@ const AnalyticsHandle = ({ router }) => {
     const init = async () => {
       if (!AnalyticsStore.event_uuid && !AnalyticsStore.visitor_uuid) {
         const responseInit = await initTracker(endPoint);
-        responseInit.result.event_uuid && AnalyticsStore.setEventID(responseInit.result.event_uuid);
-        AnalyticsStore.setUUID(responseInit.result.visitor_uuid);
+        responseInit.event_uuid && AnalyticsStore.setEventID(responseInit.event_uuid);
+        AnalyticsStore.setUUID(responseInit.visitor_uuid);
       } else {
         await handleStartTracker();
       }
