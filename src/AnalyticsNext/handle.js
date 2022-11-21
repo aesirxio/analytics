@@ -10,34 +10,39 @@ const AnalyticsHandle = ({ router }) => {
       const referrer = prevRoute ? prevRoute : '';
       const responseStart = await startTracker(
         endPoint,
-        AnalyticsStore.event_id,
-        AnalyticsStore.uuid,
+        AnalyticsStore.event_uuid,
+        AnalyticsStore.visitor_uuid,
         referrer
       );
-      responseStart.result.event_id &&
-        AnalyticsStore.setEventIDStart(responseStart.result.event_id);
-      responseStart.result.uuid && AnalyticsStore.setUUIDStart(responseStart.result.uuid);
+      responseStart.result.event_uuid &&
+        AnalyticsStore.setEventIDStart(responseStart.result.event_uuid);
+      responseStart.result.visitor_uuid &&
+        AnalyticsStore.setUUIDStart(responseStart.result.visitor_uuid);
     },
     [AnalyticsStore, endPoint]
   );
 
   useEffect(() => {
     const init = async () => {
-      if (!AnalyticsStore.event_id && !AnalyticsStore.uuid) {
+      if (!AnalyticsStore.event_uuid && !AnalyticsStore.visitor_uuid) {
         const responseInit = await initTracker(endPoint);
-        responseInit.result.event_id && AnalyticsStore.setEventID(responseInit.result.event_id);
-        AnalyticsStore.setUUID(responseInit.result.uuid);
+        responseInit.result.event_uuid && AnalyticsStore.setEventID(responseInit.result.event_uuid);
+        AnalyticsStore.setUUID(responseInit.result.visitor_uuid);
       } else {
         await handleStartTracker();
       }
     };
     init();
-  }, [AnalyticsStore.uuid]);
+  }, [AnalyticsStore.visitor_uuid]);
 
   useEffect(() => {
     const handleRouteChange = async () => {
-      if (AnalyticsStore.uuid_start) {
-        await endTracker(endPoint, AnalyticsStore.event_id_start, AnalyticsStore.uuid_start);
+      if (AnalyticsStore.visitor_uuid_start) {
+        await endTracker(
+          endPoint,
+          AnalyticsStore.event_uuid_start,
+          AnalyticsStore.visitor_uuid_start
+        );
         await handleStartTracker(prevRoute);
       }
       setPrevRoute(router.asPath);
@@ -47,7 +52,7 @@ const AnalyticsHandle = ({ router }) => {
     return () => {
       router.events.off('routeChangeComplete', handleRouteChange);
     };
-  }, [router.events, AnalyticsStore.uuid_start, router.asPath]);
+  }, [router.events, AnalyticsStore.visitor_uuid_start, router.asPath]);
 
   return <></>;
 };

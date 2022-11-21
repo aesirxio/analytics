@@ -12,10 +12,10 @@ const AnalyticsNext = ({ router }) => {
     <>
       <AnalyticsContextProvider
         value={{
-          event_id: eventID,
-          uuid: UUID,
-          event_id_start: eventIDStart,
-          uuid_start: UUIDStart,
+          event_uuid: eventID,
+          visitor_uuid: UUID,
+          event_uuid_start: eventIDStart,
+          visitor_uuid_start: UUIDStart,
           setEventID: setEventID,
           setUUID: setUUID,
           setEventIDStart: setEventIDStart,
