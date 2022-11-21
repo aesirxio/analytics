@@ -5,7 +5,7 @@
 
 # Usage in SSR site:
 ##### setup package:
-`git clone git@gitlab.redweb.dk:aesirx/analytics.git`
+`git clone https://github.com/aesirxio/analytics.git`
 
 ##### create `.env` file
 ```
@@ -22,7 +22,7 @@ npm run build
 
 # Usage in ReactJS
 
-`npm install git+https://gitlab-ci-token:glpat-1xAG_m-nd5yc5i4Hg7mx@gitlab.redweb.dk/aesirx/analytics.git#master --save-dev`
+`npm install https://github.com/aesirxio/analytics.git#master --save-dev`
 ##### add environment variable (`.env`)
 ```
 REACT_APP_ENDPOINT_ANALYTICS_URL=https://example.com
@@ -44,7 +44,7 @@ export default AnalyticsContainer;
 
 # Usage in NextJS
 
-`npm install git+https://gitlab-ci-token:glpat-1xAG_m-nd5yc5i4Hg7mx@gitlab.redweb.dk/aesirx/analytics.git#master --save-dev`
+`npm install https://github.com/aesirxio/analytics.git#master --save-dev`
 ##### add environment variable (`.env`)
 ```
 NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL=https://example.com
