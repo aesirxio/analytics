@@ -27,7 +27,7 @@ npm run build
 
 # Usage in ReactJS
 
-`npm install https://github.com/aesirxio/analytics.git#master --save-dev`
+`npm install https://github.com/aesirxio/analytics.git#develop --save-dev`
 ##### add environment variable (`.env`)
 ```
 REACT_APP_ENDPOINT_ANALYTICS_URL=https://example.com
@@ -51,7 +51,7 @@ export default AnalyticsContainer;
 
 # Usage in NextJS
 
-`npm install https://github.com/aesirxio/analytics.git#master --save-dev`
+`npm install https://github.com/aesirxio/analytics.git#develop --save-dev`
 ##### add environment variable (`.env`)
 ```
 NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL=https://example.com
