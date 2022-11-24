@@ -46,8 +46,7 @@ const AesirAnalytics = () => {
   history.pushState = hook(history, 'pushState', handlePush);
   history.replaceState = hook(history, 'replaceState', handlePush);
 
-  const envParams = process.env;
-  const hostUrl = envParams.ENDPOINT_ANALYTICS_URL ? envParams.ENDPOINT_ANALYTICS_URL : '';
+  const hostUrl = window.aesirx1stparty ? window.aesirx1stparty : '';
 
   const root = hostUrl ? hostUrl.replace(/\/$/, '') : '';
 
