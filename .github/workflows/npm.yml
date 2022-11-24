@@ -1,13 +1,9 @@
 name: "npm"
 
-# on:
-#   push:
-#     tags:
-#       - "*"
-
 on:
   push:
-    branches: [ build ]
+    tags:
+      - "*"
 
 jobs:
   publish:
