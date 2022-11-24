@@ -18,7 +18,7 @@ Please follow instruction: [https://github.com/aesirxio/analytics-1stparty](http
 `(https://example.com is the link to your 1st party server)`
 # Usage in ReactJS
 
-`npm install aesirxio/analytics --save-dev`
+`npm i aesirx-analytics`
 ##### add environment variable (`.env`)
 ```
 REACT_APP_ENDPOINT_ANALYTICS_URL=https://example.com
@@ -30,7 +30,7 @@ REACT_APP_ENDPOINT_ANALYTICS_URL=https://example.com
 ```
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { AnalyticsReact } from 'aesirx_analytics';
+import { AnalyticsReact } from 'aesirx-analytics';
 const AnalyticsContainer = () => {
   const location = useLocation();
   return <AnalyticsReact pathname={location.pathname} />;
@@ -42,7 +42,7 @@ export default AnalyticsContainer;
 
 # Usage in NextJS
 
-`npm install aesirxio/analytics --save-dev`
+`npm i aesirx-analytics`
 ##### add environment variable (`.env`)
 ```
 NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL=https://example.com
@@ -53,7 +53,7 @@ NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL=https://example.com
 ###### using in app.js:
 ```
 import { useRouter } from "next/router";
-import { AnalyticsNext } from "aesirx_analytics";
+import { AnalyticsNext } from "aesirx-analytics";
 
 <AnalyticsNext router={useRouter()} />
 ```
