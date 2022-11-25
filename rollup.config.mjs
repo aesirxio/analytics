@@ -15,6 +15,7 @@ const configPlugins = [
   }),
   babel({
     babelHelpers: 'runtime',
+    skipPreflightCheck: true,
     exclude: 'node_modules/**',
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
   }),
