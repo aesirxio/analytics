@@ -1,13 +1,8 @@
-import axios from 'axios';
 import { trackerService } from './services';
 import Bowser from 'bowser';
 
 const createRequest = (endpoint, task) => {
   return `${endpoint}/visitor/v1/${task}`;
-};
-const getIpAddress = async () => {
-  const res = await axios.get('https://geolocation-db.com/json/');
-  return res.data.IPv4;
 };
 
 /* FUNCTION */
@@ -26,12 +21,10 @@ const initTracker = async (endpoint, url, referrer, user_agent) => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   if (!urlParams.get('event_id') && !urlParams.get('uuid')) {
-    let ip = await getIpAddress();
     const response = await trackerService(createRequest(endpoint, 'init'), {
       url: url,
       referrer: referrer,
       user_agent: user_agent,
-      ip: ip,
       domain: domain,
       browser_name: browser_name,
       browser_version: browser_version,
