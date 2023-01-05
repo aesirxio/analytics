@@ -21,10 +21,12 @@ const initTracker = async (endpoint, url, referrer, user_agent) => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   if (!urlParams.get('event_id') && !urlParams.get('uuid')) {
+    let ip = '';
     const response = await trackerService(createRequest(endpoint, 'init'), {
       url: url,
       referrer: referrer,
       user_agent: user_agent,
+      ip: ip,
       domain: domain,
       browser_name: browser_name,
       browser_version: browser_version,
