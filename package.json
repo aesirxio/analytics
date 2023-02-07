@@ -31,7 +31,7 @@
     "lint": "eslint --fix \"src/**/\"",
     "lint:check": "eslint \"src/**/\"",
     "lint:nowarns": "eslint --quiet \"src/**/\"",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "yarn run build"
   },
   "eslintConfig": {
     "extends": [

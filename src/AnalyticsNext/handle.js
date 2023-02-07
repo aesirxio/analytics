@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
 import { initTracker, startTracker, endTracker } from '../utils/index';
-const AnalyticsHandle = ({ router }) => {
+
+const AnalyticsHandle = ({ router, children }) => {
   const AnalyticsStore = React.useContext(AnalyticsContext);
   const endPoint = process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL;
   const [prevRoute, setPrevRoute] = useState(router.asPath);
@@ -52,6 +53,6 @@ const AnalyticsHandle = ({ router }) => {
     };
   }, [router.events, AnalyticsStore.visitor_uuid_start, router.asPath]);
 
-  return <></>;
+  return <>{children}</>;
 };
 export default AnalyticsHandle;

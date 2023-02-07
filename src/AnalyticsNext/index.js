@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { AnalyticsContextProvider } from '../utils/AnalyticsContextProvider';
 import AnalyticsHandle from './handle';
 
-const AnalyticsNext = ({ router }) => {
+const AnalyticsNext = ({ router, children }) => {
   const [eventID, setEventID] = useState();
   const [UUID, setUUID] = useState();
   const [eventIDStart, setEventIDStart] = useState();
@@ -22,7 +22,7 @@ const AnalyticsNext = ({ router }) => {
           setUUIDStart: setUUIDStart,
         }}
       >
-        <AnalyticsHandle router={router}></AnalyticsHandle>
+        <AnalyticsHandle router={router}>{children}</AnalyticsHandle>
       </AnalyticsContextProvider>
     </>
   );

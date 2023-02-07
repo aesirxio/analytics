@@ -85,4 +85,26 @@ const endTracker = async (endpoint, event_uuid, visitor_uuid) => {
   return responseEnd;
 };
 
-export { initTracker, startTracker, endTracker };
+const trackEvent = async (endpoint, event_uuid, visitor_uuid, data) => {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+
+  const responseEnd = await trackerService(createRequest(endpoint, 'start'), {
+    ...(urlParams.get('event_uuid_start') && {
+      event_uuid: urlParams.get('event_uuid_start'),
+    }),
+    ...(urlParams.get('visitor_uuid_start') && {
+      visitor_uuid: urlParams.get('visitor_uuid_start'),
+    }),
+    ...(event_uuid && {
+      event_uuid: event_uuid,
+    }),
+    ...(visitor_uuid && {
+      visitor_uuid: visitor_uuid,
+    }),
+    ...data,
+  });
+  return responseEnd;
+};
+
+export { initTracker, startTracker, endTracker, trackEvent };
