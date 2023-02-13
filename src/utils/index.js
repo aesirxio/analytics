@@ -20,6 +20,12 @@ const initTracker = async (endpoint, url, referrer, user_agent) => {
   const domain = `${origin}`;
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
+  let attributes = [];
+  for (var key of urlParams.keys()) {
+    if (key.startsWith('utm_')) {
+      urlParams.get(key) && attributes.push({ name: key, value: urlParams.get(key) });
+    }
+  }
   if (!urlParams.get('event_id') && !urlParams.get('uuid')) {
     let ip = '';
     const response = await trackerService(createRequest(endpoint, 'init'), {
@@ -32,6 +38,9 @@ const initTracker = async (endpoint, url, referrer, user_agent) => {
       browser_version: browser_version,
       lang: lang,
       device: device,
+      event_name: 'visit',
+      event_type: 'action',
+      attributes: attributes,
     });
     return response;
   }
