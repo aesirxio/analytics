@@ -24,7 +24,67 @@ Follow the instructions in: [https://github.com/aesirxio/analytics-1stparty](htt
 ```
 
 (`https://example.com` is the link to your 1st party server which must be installed)
-##### Track events:
+
+
+#### Usage in ReactJS
+
+`npm i aesirx-analytics`
+
+##### Add the environment variable file (`.env`)
+
+```
+REACT_APP_ENDPOINT_ANALYTICS_URL=https://example.com
+
+(https://example.com is the link to your 1st party server)
+```
+
+###### With react-router-dom v5:
+
+Create AnalyticsContainer component:
+
+```
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+import { AnalyticsReact } from 'aesirx-analytics';
+const AnalyticsContainer = ({children}) => {
+  const location = useLocation();
+  return <AnalyticsReact pathname={location.pathname}>{children}</AnalyticsReact>;
+};
+
+export default AnalyticsContainer;
+```
+
+###### Wrap your component in `<AnalyticsContainer><[YOUR-COMPONENT]/></AnalyticsContainer>`
+###### `<AnalyticsContainer>` need to using inside `<Router>` component 
+
+#### Usage in NextJS
+
+`npm i aesirx-analytics`
+
+##### Add the environment variable file (`.env`)
+
+```
+NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL=https://example.com
+
+(https://example.com is the link to your 1st party server)
+```
+
+###### With next/router:
+
+Added in app.js:
+
+```
+import { useRouter } from "next/router";
+import { AnalyticsNext } from "aesirx-analytics";
+
+<AnalyticsNext router={useRouter()}>
+  <[YOUR-COMPONENT]/>
+</AnalyticsNext>
+```
+
+## Track events:
+
+#### In SSR Site:
 To track events, simply add special data-attribute to the element you want to track.
 For example, you might have a button with the following code:
 ```
@@ -73,38 +133,7 @@ trackEvent(
 );
 ```
 
-#### Usage in ReactJS
-
-`npm i aesirx-analytics`
-
-##### Add the environment variable file (`.env`)
-
-```
-REACT_APP_ENDPOINT_ANALYTICS_URL=https://example.com
-
-(https://example.com is the link to your 1st party server)
-```
-
-###### With react-router-dom v5:
-
-Create AnalyticsContainer component:
-
-```
-import React from 'react';
-import { useLocation } from 'react-router-dom';
-import { AnalyticsReact } from 'aesirx-analytics';
-const AnalyticsContainer = ({children}) => {
-  const location = useLocation();
-  return <AnalyticsReact pathname={location.pathname}>{children}</AnalyticsReact>;
-};
-
-export default AnalyticsContainer;
-```
-
-###### Wrap your component in `<AnalyticsContainer><[YOUR-COMPONENT]/></AnalyticsContainer>`
-###### `<AnalyticsContainer>` need to using inside `<Router>` component 
-
-##### Track events:
+#### In ReactJS:
 
 ```
 import { trackEvent, AnalyticsContext } from "aesirx-analytics";
@@ -123,36 +152,7 @@ const CustomEvent = () => {
 })
 ```
 
-(`endPoint` is the link to your 1st party server which must be installed)
-
-(`referrer` is the referrer domain)
-
-#### Usage in NextJS
-
-`npm i aesirx-analytics`
-
-##### Add the environment variable file (`.env`)
-
-```
-NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL=https://example.com
-
-(https://example.com is the link to your 1st party server)
-```
-
-###### With next/router:
-
-Added in app.js:
-
-```
-import { useRouter } from "next/router";
-import { AnalyticsNext } from "aesirx-analytics";
-
-<AnalyticsNext router={useRouter()}>
-  <[YOUR-COMPONENT]/>
-</AnalyticsNext>
-```
-
-##### Track events:
+#### In NextJS:
 
 ```
 import { trackEvent, AnalyticsContext } from "aesirx-analytics";
