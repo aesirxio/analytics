@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
 import { initTracker, startTracker, endTracker } from '../utils/index';
-const AnalyticsHandle = ({ pathname }) => {
+const AnalyticsHandle = ({ pathname, children }) => {
   const AnalyticsStore = React.useContext(AnalyticsContext);
   const endPoint = process.env.REACT_APP_ENDPOINT_ANALYTICS_URL;
   const [prevRoute, setPrevRoute] = useState();
@@ -34,6 +34,6 @@ const AnalyticsHandle = ({ pathname }) => {
     init();
   }, [pathname, AnalyticsStore.visitor_uuid, history]);
 
-  return <></>;
+  return <>{children}</>;
 };
 export default AnalyticsHandle;

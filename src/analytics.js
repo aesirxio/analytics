@@ -1,4 +1,4 @@
-import { endTracker, initTracker, startTracker } from './utils';
+import { endTracker, initTracker, startTracker, trackEvent } from './utils';
 
 const AesirAnalytics = () => {
   const hook = (_this, method, callback) => {
@@ -50,6 +50,14 @@ const AesirAnalytics = () => {
 
   const root = hostUrl ? hostUrl.replace(/\/$/, '') : '';
 
+  const { currentScript } = document;
+  if (!currentScript) return;
+  const _data = 'data-';
+  const _false = 'false';
+  const attr = currentScript.getAttribute.bind(currentScript);
+  const dataEvents = attr(_data + 'aesirx-event-name') !== _false;
+  const eventSelect = '[data-aesirx-event-name]';
+
   const update = async () => {
     if (document.readyState === 'complete') {
       const responseInit = await initTracker(root);
@@ -64,6 +72,10 @@ const AesirAnalytics = () => {
         insertParam('visitor_uuid_start', responseStart.visitor_uuid);
         replaceUrl();
       }
+
+      if (dataEvents) {
+        addEvents(document);
+      }
     }
   };
 
@@ -72,6 +84,36 @@ const AesirAnalytics = () => {
   window.addEventListener('beforeunload', async () => {
     await endTracker(root);
   });
+
+  /* Handle events */
+
+  const addEvents = (node) => {
+    const elements = node.querySelectorAll(eventSelect);
+    Array.prototype.forEach.call(elements, addEvent);
+  };
+
+  const addEvent = (element) => {
+    element.addEventListener(
+      'click',
+      () => {
+        let attribute = [];
+        Object.keys(element.dataset).forEach((key) => {
+          if (key.startsWith('aesirxEventAttribute')) {
+            attribute.push({
+              name: key.replace('aesirxEventAttribute', '').toLowerCase(),
+              value: element.dataset[key],
+            });
+          }
+        });
+        trackEvent(root, null, null, null, {
+          event_name: element.dataset.aesirxEventName,
+          event_type: element.dataset.aesirxEventType,
+          attributes: attribute,
+        });
+      },
+      true
+    );
+  };
 
   update();
 };
