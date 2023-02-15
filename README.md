@@ -25,6 +25,7 @@ Follow the instructions in: [https://github.com/aesirxio/analytics-1stparty](htt
 
 (`https://example.com` is the link to your 1st party server which must be installed)
 
+
 #### Usage in ReactJS
 
 `npm i aesirx-analytics`
@@ -45,15 +46,16 @@ Create AnalyticsContainer component:
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { AnalyticsReact } from 'aesirx-analytics';
-const AnalyticsContainer = () => {
+const AnalyticsContainer = ({children}) => {
   const location = useLocation();
-  return <AnalyticsReact pathname={location.pathname} />;
+  return <AnalyticsReact pathname={location.pathname}>{children}</AnalyticsReact>;
 };
 
 export default AnalyticsContainer;
 ```
 
-###### Using `<AnalyticsContainer />` inside `<Router>` component 
+###### Wrap your component in `<AnalyticsContainer><[YOUR-COMPONENT]/></AnalyticsContainer>`
+###### `<AnalyticsContainer>` need to using inside `<Router>` component 
 
 #### Usage in NextJS
 
@@ -75,5 +77,100 @@ Added in app.js:
 import { useRouter } from "next/router";
 import { AnalyticsNext } from "aesirx-analytics";
 
-<AnalyticsNext router={useRouter()} />
+<AnalyticsNext router={useRouter()}>
+  <[YOUR-COMPONENT]/>
+</AnalyticsNext>
 ```
+
+## Track events:
+
+#### In SSR Site:
+To track events, simply add special data-attribute to the element you want to track.
+For example, you might have a button with the following code:
+```
+<button class="button" 
+    data-aesirx-event-name="sign up"
+    data-aesirx-event-type="login"
+    data-aesirx-event-attribute-a="value-a"
+    data-aesirx-event-attribute-b="value-b"
+>
+  Sign Up
+</button>
+```
+Add data-attribute with the following format:
+```
+data-aesirx-event-name="<event-name>"
+data-aesirx-event-type="<event-type>"
+data-aesirx-event-attribute-<attribute-name-1>="<attribute-value-1>"
+data-aesirx-event-attribute-<attribute-name-2>="<attribute-value-1>"
+```
+##### Or you can use your own Javascript to Track events:
+```
+window.trackEvent(endpoint, event_uuid, visitor_uuid, referrer, data)
+```
+(`endpoint` is the link to your 1st party server which must be installed)
+
+(`event_uuid` is the params get from url - it will auto generated)
+
+(`visitor_uuid` is the params get from url - it will auto generated)
+
+(`referrer` is the referrer domain)
+
+(`data` is the data you want to track)
+
+For example: 
+```
+trackEvent(
+  "https://example.com",
+  event_uuid, 
+  visitor_uuid, 
+  "https://aesirx.io",
+  {
+    event_name: element.dataset.aesirxEventName,
+    event_type: element.dataset.aesirxEventType,
+    attributes: attribute,
+  }
+);
+```
+
+#### In ReactJS:
+
+```
+import { trackEvent, AnalyticsContext } from "aesirx-analytics";
+const CustomEvent = () => {
+  const AnalyticsStore = useContext(AnalyticsContext);
+  const initTrackEvent = async () => {
+    await trackEvent(endPoint, AnalyticsStore.event_uuid, AnalyticsStore.visitor_uuid, referrer, {
+      event_name: "Submit",
+      event_type: "submit",
+      attributes: attributes,
+    });
+  };
+  return (
+    <button onClick={() => {initTrackEvent();}}> Search </button>
+  );
+})
+```
+
+#### In NextJS:
+
+```
+import { trackEvent, AnalyticsContext } from "aesirx-analytics";
+const CustomEvent = () => {
+  const AnalyticsStore = useContext(AnalyticsContext);
+  const initTrackEvent = async () => {
+    await trackEvent(endPoint, AnalyticsStore.event_uuid, AnalyticsStore.visitor_uuid, referrer, {
+      event_name: "Submit",
+      event_type: "submit",
+      attributes: attributes,
+    });
+  };
+  return (
+    <button onClick={() => {initTrackEvent();}}> Search </button>
+  );
+})
+```
+
+(`endPoint` is the link to your 1st party server which must be installed)
+
+(`referrer` is the referrer domain)
