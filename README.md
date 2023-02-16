@@ -130,11 +130,11 @@ trackEvent(
     event_type: "<event_type>",
     attributes: [
       {
-        name: "<name-1>"
+        name: "<name-1>",
         value: "<value-1>"
       },
       {
-        name: "<name-2>"
+        name: "<name-2>",
         value: "<value-2>"
       },
     ],
@@ -154,11 +154,11 @@ const CustomEvent = () => {
       event_type: "submit",
       attributes: [
         {
-          name: "<name-1>"
+          name: "<name-1>",
           value: "<value-1>"
         },
         {
-          name: "<name-2>"
+          name: "<name-2>",
           value: "<value-2>"
         },
       ],
@@ -167,7 +167,7 @@ const CustomEvent = () => {
   return (
     <button onClick={() => {initTrackEvent();}}> Search </button>
   );
-})
+}
 ```
 
 #### In NextJS:
@@ -182,11 +182,11 @@ const CustomEvent = () => {
       event_type: "submit",
       attributes: [
         {
-          name: "<name-1>"
+          name: "<name-1>",
           value: "<value-1>"
         },
         {
-          name: "<name-2>"
+          name: "<name-2>",
           value: "<value-2>"
         },
       ],
@@ -195,7 +195,7 @@ const CustomEvent = () => {
   return (
     <button onClick={() => {initTrackEvent();}}> Search </button>
   );
-})
+}
 ```
 
 (`endPoint` is the link to your 1st party server which must be installed)
