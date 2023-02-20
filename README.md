@@ -126,9 +126,18 @@ trackEvent(
   visitor_uuid, 
   "https://aesirx.io",
   {
-    event_name: element.dataset.aesirxEventName,
-    event_type: element.dataset.aesirxEventType,
-    attributes: attribute,
+    event_name: "<event_name>",
+    event_type: "<event_type>",
+    attributes: [
+      {
+        name: "<name-1>",
+        value: "<value-1>"
+      },
+      {
+        name: "<name-2>",
+        value: "<value-2>"
+      },
+    ],
   }
 );
 ```
@@ -143,13 +152,22 @@ const CustomEvent = () => {
     await trackEvent(endPoint, AnalyticsStore.event_uuid, AnalyticsStore.visitor_uuid, referrer, {
       event_name: "Submit",
       event_type: "submit",
-      attributes: attributes,
+      attributes: [
+        {
+          name: "<name-1>",
+          value: "<value-1>"
+        },
+        {
+          name: "<name-2>",
+          value: "<value-2>"
+        },
+      ],
     });
   };
   return (
     <button onClick={() => {initTrackEvent();}}> Search </button>
   );
-})
+}
 ```
 
 #### In NextJS:
@@ -162,13 +180,22 @@ const CustomEvent = () => {
     await trackEvent(endPoint, AnalyticsStore.event_uuid, AnalyticsStore.visitor_uuid, referrer, {
       event_name: "Submit",
       event_type: "submit",
-      attributes: attributes,
+      attributes: [
+        {
+          name: "<name-1>",
+          value: "<value-1>"
+        },
+        {
+          name: "<name-2>",
+          value: "<value-2>"
+        },
+      ],
     });
   };
   return (
     <button onClick={() => {initTrackEvent();}}> Search </button>
   );
-})
+}
 ```
 
 (`endPoint` is the link to your 1st party server which must be installed)
