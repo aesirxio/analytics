@@ -125,17 +125,18 @@ const insertParam = (key, value) => {
 
 const replaceUrl = () => {
   const urlParams = new URLSearchParams(window.location.search);
-  const event_id = urlParams.get('event_id');
-  const uuid = urlParams.get('uuid');
+  const event_uuid = urlParams.get('event_uuid');
+  const visitor_uuid = urlParams.get('visitor_uuid');
 
   let anchors = document.getElementsByTagName('a');
+
   for (let i = 0; i < anchors.length; i++) {
-    const eventIdParams = getParameterByName('event_id', anchors[i].href);
-    const uuidParams = getParameterByName('uuid', anchors[i].href);
+    const eventIdParams = getParameterByName('event_uuid', anchors[i].href);
+    const visitorIdParams = getParameterByName('visitor_uuid', anchors[i].href);
     if (anchors[i].href) {
       const url = new URL(anchors[i].href);
-      !eventIdParams && event_id && url.searchParams.append('event_id', event_id);
-      !uuidParams && uuid && url.searchParams.append('uuid', uuid);
+      !eventIdParams && event_uuid && url.searchParams.append('event_uuid', event_uuid);
+      !visitorIdParams && visitor_uuid && url.searchParams.append('visitor_uuid', visitor_uuid);
       anchors[i].href = url.href;
     }
   }
