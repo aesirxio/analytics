@@ -1,12 +1,17 @@
 import { trackerService } from './services';
 import Bowser from 'bowser';
 
-const createRequest = (endpoint: any, task: any) => {
+const createRequest = (endpoint: string, task: string) => {
   return `${endpoint}/visitor/v1/${task}`;
 };
 
 /* FUNCTION */
-const initTracker = async (endpoint: any, url?: any, referrer?: any, user_agent?: any) => {
+const initTracker = async (
+  endpoint: string,
+  url?: string,
+  referrer?: string,
+  user_agent?: string
+) => {
   const { document } = window;
   const { pathname, search, origin } = location;
   url = `${origin}${pathname}${search}`;
@@ -47,10 +52,10 @@ const initTracker = async (endpoint: any, url?: any, referrer?: any, user_agent?
 };
 
 const startTracker = async (
-  endpoint: any,
-  event_uuid?: any,
-  visitor_uuid?: any,
-  referrer?: any
+  endpoint: string,
+  event_uuid?: string,
+  visitor_uuid?: string,
+  referrer?: string
 ) => {
   const { location, document } = window;
   referrer = referrer
@@ -79,7 +84,7 @@ const startTracker = async (
   return responseStart;
 };
 
-const endTracker = async (endpoint: any, event_uuid?: any, visitor_uuid?: any) => {
+const endTracker = async (endpoint: string, event_uuid?: string, visitor_uuid?: string) => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const responseEnd = await trackerService(createRequest(endpoint, 'end'), {
@@ -100,11 +105,11 @@ const endTracker = async (endpoint: any, event_uuid?: any, visitor_uuid?: any) =
 };
 
 const trackEvent = async (
-  endpoint: any,
-  event_uuid: any,
-  visitor_uuid: any,
-  referrer?: any,
-  data?: any
+  endpoint: string,
+  event_uuid: string,
+  visitor_uuid: string,
+  referrer?: string,
+  data?: object
 ) => {
   const { location, document } = window;
   referrer = referrer

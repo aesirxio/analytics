@@ -12,7 +12,7 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
   const endPoint = process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL;
   const [prevRoute, setPrevRoute] = useState<string>(router.asPath);
   const handleStartTracker = useCallback(
-    async (prevRoute: any) => {
+    async (prevRoute: string) => {
       const referrer = prevRoute ? prevRoute : '';
       const responseStart = await startTracker(
         endPoint,

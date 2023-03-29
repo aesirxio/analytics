@@ -5,7 +5,6 @@
   "author": "AesirX",
   "repository": "https://gitlab.redweb.dk/aesirx/analytics",
   "main": "dist/index.js",
-  "module": "dist/esm/index.js",
   "dependencies": {
     "bowser": "^2.11.0",
     "cross-env": "^7.0.3",
@@ -16,7 +15,7 @@
   },
   "scripts": {
     "clean": "rimraf lib",
-    "build": "tsup --format esm,cjs,iife --legacy-output",
+    "build": "tsup",
     "lint": "eslint --fix \"src/**/\"",
     "lint:check": "eslint \"src/**/\"",
     "lint:nowarns": "eslint --quiet \"src/**/\"",

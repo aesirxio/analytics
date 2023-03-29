@@ -1,13 +1,13 @@
 /* SERVICES */
-let cache: any;
-const assign = (a: any, b: any) => {
+let cache: string;
+const assign = (a: {}, b: {}) => {
   Object.keys(b).forEach((key) => {
     if (b[key] !== undefined) a[key] = b[key];
   });
   return a;
 };
 
-const trackerService = async (endpoint: any, payload: any) => {
+const trackerService = async (endpoint: string, payload: object) => {
   const fetchData = await fetch(endpoint, {
     method: 'POST',
     body: JSON.stringify(payload),
