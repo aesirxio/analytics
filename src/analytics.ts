@@ -4,7 +4,7 @@ const AesirAnalytics = () => {
   const hook = (_this: object, method: string, callback: Function) => {
     const orig = _this[method];
 
-    return (...args: (string | object)[]) => {
+    return (...args: []) => {
       callback.apply(null, args);
 
       return orig.apply(_this, args);
@@ -87,7 +87,7 @@ const AesirAnalytics = () => {
 
   /* Handle events */
 
-  const addEvents = (node: HTMLInputElement) => {
+  const addEvents = (node: Document) => {
     const elements = node.querySelectorAll(eventSelect);
     Array.prototype.forEach.call(elements, addEvent);
   };
