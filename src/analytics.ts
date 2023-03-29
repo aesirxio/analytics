@@ -1,7 +1,7 @@
-import { endTracker, initTracker, startTracker, trackEvent } from './utils';
+import { endTracker, initTracker, insertParam, startTracker, trackEvent } from './utils';
 
 const AesirAnalytics = () => {
-  const hook = (_this: object, method: string, callback: Function) => {
+  const hook = (_this: object, method: string, callback: any) => {
     const orig = _this[method];
 
     return (...args: []) => {
@@ -96,7 +96,7 @@ const AesirAnalytics = () => {
     element.addEventListener(
       'click',
       () => {
-        let attribute: object[] = [];
+        const attribute: object[] = [];
         Object.keys(element.dataset).forEach((key) => {
           if (key.startsWith('aesirxEventAttribute')) {
             attribute.push({
@@ -117,18 +117,13 @@ const AesirAnalytics = () => {
 
   update();
 };
-const insertParam = (key: string, value: string) => {
-  const url = new URL(window.location.href);
-  url.searchParams.set(key, value);
-  window.history.pushState({ path: url.href }, '', url.href);
-};
 
 const replaceUrl = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const event_uuid = urlParams.get('event_uuid');
   const visitor_uuid = urlParams.get('visitor_uuid');
 
-  let anchors = document.getElementsByTagName('a');
+  const anchors = document.getElementsByTagName('a');
 
   for (let i = 0; i < anchors.length; i++) {
     const eventIdParams = getParameterByName('event_uuid', anchors[i].href);
@@ -144,7 +139,7 @@ const replaceUrl = () => {
 
 const getParameterByName = (name: string, url = window.location.href) => {
   if (url) {
-    let params = new URL(url);
+    const params = new URL(url);
     if (params.origin === window.location.origin) {
       return params.searchParams.get(name);
     }

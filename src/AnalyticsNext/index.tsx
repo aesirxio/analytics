@@ -4,7 +4,13 @@ import { AnalyticsContextProvider } from '../utils/AnalyticsContextProvider';
 import AnalyticsHandle from './handle';
 
 interface AnalyticsReact {
-  router: { asPath: string; events: { on: Function; off: Function } };
+  router: {
+    asPath: string;
+    events: { on: () => void; off: () => void };
+    replace: any;
+    query: any;
+    push: any;
+  };
   children?: ReactNode;
 }
 

@@ -25,14 +25,14 @@ const initTracker = async (
   const domain = `${origin}`;
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  let attributes = [];
-  for (var key of urlParams.keys()) {
+  const attributes = [];
+  for (const key of urlParams.keys()) {
     if (key.startsWith('utm_')) {
       urlParams.get(key) && attributes.push({ name: key, value: urlParams.get(key) });
     }
   }
   if (!urlParams.get('event_uuid') && !urlParams.get('visitor_uuid')) {
-    let ip = '';
+    const ip = '';
     const response = await trackerService(createRequest(endpoint, 'init'), {
       url: url,
       referrer: referrer,
@@ -139,4 +139,10 @@ const trackEvent = async (
   return responseStart;
 };
 
-export { initTracker, startTracker, endTracker, trackEvent };
+const insertParam = (key: string, value: string) => {
+  const url = new URL(window.location.href);
+  url.searchParams.set(key, value);
+  window.history.pushState({ path: url.href }, '', url.href);
+};
+
+export { initTracker, startTracker, endTracker, trackEvent, insertParam };

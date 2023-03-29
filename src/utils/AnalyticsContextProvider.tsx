@@ -3,7 +3,7 @@
  * @license     GNU General Public License version 3, see LICENSE.
  */
 
-import React, { ReactNode, useState } from 'react';
+import React, { Dispatch, ReactNode, SetStateAction, useState } from 'react';
 
 interface Props {
   children?: ReactNode;
@@ -14,10 +14,10 @@ interface AnalyticsContextType {
   visitor_uuid: string;
   event_uuid_start: string;
   visitor_uuid_start: string;
-  setEventID: Function;
-  setUUID: Function;
-  setEventIDStart: Function;
-  setUUIDStart: Function;
+  setEventID: Dispatch<SetStateAction<string>>;
+  setUUID: Dispatch<SetStateAction<string>>;
+  setEventIDStart: Dispatch<SetStateAction<string>>;
+  setUUIDStart: Dispatch<SetStateAction<string>>;
 }
 
 export const AnalyticsContext = React.createContext<AnalyticsContextType>({

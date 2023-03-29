@@ -3,7 +3,13 @@ import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
 import { initTracker, startTracker, endTracker } from '../utils/index';
 
 interface AnalyticsHandle {
-  router: { asPath: string; events: { on: Function; off: Function } };
+  router: {
+    asPath: string;
+    events: { on: () => void; off: () => void };
+    replace: any;
+    query: any;
+    push: any;
+  };
   children?: ReactNode;
 }
 
