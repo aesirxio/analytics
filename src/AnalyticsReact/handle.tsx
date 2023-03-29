@@ -1,10 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
 import { initTracker, startTracker, endTracker } from '../utils/index';
-const AnalyticsHandle = ({ pathname, children }) => {
+
+interface AnalyticsHandle {
+  pathname: string;
+  children?: ReactNode;
+}
+
+const AnalyticsHandle = ({ pathname, children }: AnalyticsHandle) => {
   const AnalyticsStore = React.useContext(AnalyticsContext);
   const endPoint = process.env.REACT_APP_ENDPOINT_ANALYTICS_URL;
-  const [prevRoute, setPrevRoute] = useState();
+  const [prevRoute, setPrevRoute] = useState<string>(null);
   useEffect(() => {
     const init = async () => {
       if (AnalyticsStore.visitor_uuid_start) {

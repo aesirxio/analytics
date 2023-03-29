@@ -1,13 +1,18 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
 import { initTracker, startTracker, endTracker } from '../utils/index';
 
-const AnalyticsHandle = ({ router, children }) => {
+interface AnalyticsHandle {
+  router: { asPath: string; events: { on: Function; off: Function } };
+  children?: ReactNode;
+}
+
+const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
   const AnalyticsStore = React.useContext(AnalyticsContext);
   const endPoint = process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL;
-  const [prevRoute, setPrevRoute] = useState(router.asPath);
+  const [prevRoute, setPrevRoute] = useState<string>(router.asPath);
   const handleStartTracker = useCallback(
-    async (prevRoute) => {
+    async (prevRoute: any) => {
       const referrer = prevRoute ? prevRoute : '';
       const responseStart = await startTracker(
         endPoint,
@@ -28,7 +33,7 @@ const AnalyticsHandle = ({ router, children }) => {
         responseInit.event_uuid && AnalyticsStore.setEventID(responseInit.event_uuid);
         AnalyticsStore.setUUID(responseInit.visitor_uuid);
       } else {
-        await handleStartTracker();
+        await handleStartTracker(prevRoute);
       }
     };
     init();

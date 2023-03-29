@@ -1,12 +1,12 @@
 import { trackerService } from './services';
 import Bowser from 'bowser';
 
-const createRequest = (endpoint, task) => {
+const createRequest = (endpoint: any, task: any) => {
   return `${endpoint}/visitor/v1/${task}`;
 };
 
 /* FUNCTION */
-const initTracker = async (endpoint, url, referrer, user_agent) => {
+const initTracker = async (endpoint: any, url?: any, referrer?: any, user_agent?: any) => {
   const { document } = window;
   const { pathname, search, origin } = location;
   url = `${origin}${pathname}${search}`;
@@ -15,7 +15,7 @@ const initTracker = async (endpoint, url, referrer, user_agent) => {
   const browser = Bowser.parse(window.navigator.userAgent);
   const browser_name = browser?.browser?.name;
   const browser_version = browser?.browser?.version;
-  const lang = window.navigator.userLanguage || window.navigator.language;
+  const lang = window.navigator['userLanguage'] || window.navigator.language;
   const device = browser?.platform?.model ?? browser?.platform?.type;
   const domain = `${origin}`;
   const queryString = window.location.search;
@@ -46,7 +46,12 @@ const initTracker = async (endpoint, url, referrer, user_agent) => {
   }
 };
 
-const startTracker = async (endpoint, event_uuid, visitor_uuid, referrer) => {
+const startTracker = async (
+  endpoint: any,
+  event_uuid?: any,
+  visitor_uuid?: any,
+  referrer?: any
+) => {
   const { location, document } = window;
   referrer = referrer
     ? location.protocol + '//' + location.host + referrer
@@ -74,7 +79,7 @@ const startTracker = async (endpoint, event_uuid, visitor_uuid, referrer) => {
   return responseStart;
 };
 
-const endTracker = async (endpoint, event_uuid, visitor_uuid) => {
+const endTracker = async (endpoint: any, event_uuid?: any, visitor_uuid?: any) => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const responseEnd = await trackerService(createRequest(endpoint, 'end'), {
@@ -94,7 +99,13 @@ const endTracker = async (endpoint, event_uuid, visitor_uuid) => {
   return responseEnd;
 };
 
-const trackEvent = async (endpoint, event_uuid, visitor_uuid, referrer, data) => {
+const trackEvent = async (
+  endpoint: any,
+  event_uuid: any,
+  visitor_uuid: any,
+  referrer?: any,
+  data?: any
+) => {
   const { location, document } = window;
   referrer = referrer
     ? location.protocol + '//' + location.host + referrer

@@ -1,10 +1,10 @@
 import { endTracker, initTracker, startTracker, trackEvent } from './utils';
 
 const AesirAnalytics = () => {
-  const hook = (_this, method, callback) => {
+  const hook = (_this: any, method: any, callback: any) => {
     const orig = _this[method];
 
-    return (...args) => {
+    return (...args: any) => {
       callback.apply(null, args);
 
       return orig.apply(_this, args);
@@ -13,7 +13,7 @@ const AesirAnalytics = () => {
 
   /* Handle history changes */
 
-  const handlePush = async (url) => {
+  const handlePush = async (url: any) => {
     if (!url) return;
     const { pathname, search, origin } = location;
     url = `${origin}${pathname}${search}`;
@@ -33,12 +33,12 @@ const AesirAnalytics = () => {
 
   /* Global */
 
-  if (!window.tracker) {
-    const tracker = (eventValue) => eventValue;
+  if (!window['tracker']) {
+    const tracker = (eventValue: any) => eventValue;
     tracker.initTracker = initTracker;
     tracker.startTracker = startTracker;
 
-    window.tracker = tracker;
+    window['tracker'] = tracker;
   }
 
   /* Start */
@@ -46,7 +46,7 @@ const AesirAnalytics = () => {
   history.pushState = hook(history, 'pushState', handlePush);
   history.replaceState = hook(history, 'replaceState', handlePush);
 
-  const hostUrl = window.aesirx1stparty ? window.aesirx1stparty : '';
+  const hostUrl = window['aesirx1stparty'] ? window['aesirx1stparty'] : '';
 
   const root = hostUrl ? hostUrl.replace(/\/$/, '') : '';
 
@@ -87,16 +87,16 @@ const AesirAnalytics = () => {
 
   /* Handle events */
 
-  const addEvents = (node) => {
+  const addEvents = (node: any) => {
     const elements = node.querySelectorAll(eventSelect);
     Array.prototype.forEach.call(elements, addEvent);
   };
 
-  const addEvent = (element) => {
+  const addEvent = (element: any) => {
     element.addEventListener(
       'click',
       () => {
-        let attribute = [];
+        let attribute: any[] = [];
         Object.keys(element.dataset).forEach((key) => {
           if (key.startsWith('aesirxEventAttribute')) {
             attribute.push({
@@ -117,7 +117,7 @@ const AesirAnalytics = () => {
 
   update();
 };
-const insertParam = (key, value) => {
+const insertParam = (key: any, value: any) => {
   const url = new URL(window.location.href);
   url.searchParams.set(key, value);
   window.history.pushState({ path: url.href }, '', url.href);
@@ -142,7 +142,7 @@ const replaceUrl = () => {
   }
 };
 
-const getParameterByName = (name, url = window.location.href) => {
+const getParameterByName = (name: any, url = window.location.href) => {
   if (url) {
     let params = new URL(url);
     if (params.origin === window.location.origin) {

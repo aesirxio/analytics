@@ -1,0 +1,20 @@
+import React, { ReactNode } from 'react';
+
+import { AnalyticsContextProvider } from '../utils/AnalyticsContextProvider';
+import AnalyticsHandle from './handle';
+
+interface AnalyticsReact {
+  router: { asPath: string; events: { on: Function; off: Function } };
+  children?: ReactNode;
+}
+
+const AnalyticsNext = ({ router, children }: AnalyticsReact) => {
+  return (
+    <>
+      <AnalyticsContextProvider>
+        <AnalyticsHandle router={router}>{children}</AnalyticsHandle>
+      </AnalyticsContextProvider>
+    </>
+  );
+};
+export default AnalyticsNext;
