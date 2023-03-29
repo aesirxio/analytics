@@ -1,7 +1,7 @@
 import { endTracker, initTracker, insertParam, startTracker, trackEvent } from './utils';
 
 const AesirAnalytics = () => {
-  const hook = (_this: object, method: string, callback: any) => {
+  const hook = (_this: object, method: string, callback: (_: string) => void) => {
     const orig = _this[method];
 
     return (...args: []) => {

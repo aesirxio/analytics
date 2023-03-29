@@ -5,7 +5,7 @@ import { initTracker, startTracker, endTracker } from '../utils/index';
 interface AnalyticsHandle {
   router: {
     asPath: string;
-    events: { on: () => void; off: () => void };
+    events: { on: (_: string, __: () => void) => void; off: (_: string, __: () => void) => void };
     replace: any;
     query: any;
     push: any;

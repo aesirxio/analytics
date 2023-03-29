@@ -6,7 +6,7 @@ import AnalyticsHandle from './handle';
 interface AnalyticsReact {
   router: {
     asPath: string;
-    events: { on: () => void; off: () => void };
+    events: { on: (_: string, __: () => void) => void; off: (_: string, __: () => void) => void };
     replace: any;
     query: any;
     push: any;
