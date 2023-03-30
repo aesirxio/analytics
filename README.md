@@ -1,6 +1,6 @@
 # AesirX Analytics JS Collector
 
-A powerful and compliant web Analytics platform (1st-party alternative to Google Analytics) that only collects 1st-party data to deliver meaningful customer insights for your organization. 
+A powerful and compliant web Analytics platform (1st-party alternative to Google Analytics) that only collects 1st-party data to deliver meaningful customer insights for your organization.
 
 AesirX Analytics comes with a locally hosted JavaScript solution that gathers and stores data legally and compliantly in accordance with GDPR and other regional legislation including storage of citizens’ data in-country and 1st-party.
 
@@ -25,7 +25,6 @@ Follow the instructions in: [https://github.com/aesirxio/analytics-1stparty](htt
 
 (`https://example.com` is the link to your 1st party server which must be installed)
 
-
 #### Usage in ReactJS
 
 `npm i aesirx-analytics`
@@ -44,18 +43,20 @@ Create AnalyticsContainer component:
 
 ```
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { AnalyticsReact } from 'aesirx-analytics';
 const AnalyticsContainer = ({children}) => {
   const location = useLocation();
-  return <AnalyticsReact pathname={location.pathname}>{children}</AnalyticsReact>;
+  let history = useHistory();
+  return <AnalyticsReact location={location} history={history}>{children}</AnalyticsReact>;
 };
 
 export default AnalyticsContainer;
 ```
 
 ###### Wrap your component in `<AnalyticsContainer><[YOUR-COMPONENT]/></AnalyticsContainer>`
-###### `<AnalyticsContainer>` need to using inside `<Router>` component 
+
+###### `<AnalyticsContainer>` need to using inside `<Router>` component
 
 #### Usage in NextJS
 
@@ -85,10 +86,12 @@ import { AnalyticsNext } from "aesirx-analytics";
 ## Track events:
 
 #### In SSR Site:
+
 To track events, simply add special data-attribute to the element you want to track.
 For example, you might have a button with the following code:
+
 ```
-<button class="button" 
+<button class="button"
     data-aesirx-event-name="sign up"
     data-aesirx-event-type="login"
     data-aesirx-event-attribute-a="value-a"
@@ -97,17 +100,22 @@ For example, you might have a button with the following code:
   Sign Up
 </button>
 ```
+
 Add data-attribute with the following format:
+
 ```
 data-aesirx-event-name="<event-name>"
 data-aesirx-event-type="<event-type>"
 data-aesirx-event-attribute-<attribute-name-1>="<attribute-value-1>"
 data-aesirx-event-attribute-<attribute-name-2>="<attribute-value-1>"
 ```
+
 ##### Or you can use your own Javascript to Track events:
+
 ```
 window.trackEvent(endpoint, event_uuid, visitor_uuid, referrer, data)
 ```
+
 (`endpoint` is the link to your 1st party server which must be installed)
 
 (`event_uuid` is the params get from url - it will auto generated)
@@ -118,12 +126,13 @@ window.trackEvent(endpoint, event_uuid, visitor_uuid, referrer, data)
 
 (`data` is the data you want to track)
 
-For example: 
+For example:
+
 ```
 trackEvent(
   "https://example.com",
-  event_uuid, 
-  visitor_uuid, 
+  event_uuid,
+  visitor_uuid,
   "https://aesirx.io",
   {
     event_name: "<event_name>",

@@ -6,7 +6,7 @@
     "declarationMap": true,
     "declarationDir": "types",
     "module": "ESNext",
-    "target": "ES6",
+    "target": "es2020",
     "noImplicitAny": true,
     "noImplicitThis": true,
     "removeComments": false,
@@ -15,10 +15,10 @@
     "pretty": true,
     "allowJs": true,
     "jsx": "react",
-    "lib": ["es2016", "dom", "dom.iterable"],
+    "lib": ["es2020", "dom", "dom.iterable"],
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*"],
-  "exclude": ["./node_modules/**/*", "./dist/**/*", "./src/analytics.ts"]
+  "exclude": ["./node_modules/**/*", "./dist/**/*"]
 }

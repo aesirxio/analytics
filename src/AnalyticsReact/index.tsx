@@ -4,14 +4,17 @@ import { AnalyticsContextProvider } from '../utils/AnalyticsContextProvider';
 import AnalyticsHandle from './handle';
 
 interface AnalyticsReact {
-  pathname: string;
+  location: { search: string; pathname: string };
+  history: { push: (_: object) => void };
   children?: ReactNode;
 }
 
-const AnalyticsReact = ({ pathname, children }: AnalyticsReact) => {
+const AnalyticsReact = ({ location, history, children }: AnalyticsReact) => {
   return (
     <AnalyticsContextProvider>
-      <AnalyticsHandle pathname={pathname}>{children}</AnalyticsHandle>
+      <AnalyticsHandle location={location} history={history}>
+        {children}
+      </AnalyticsHandle>
     </AnalyticsContextProvider>
   );
 };
