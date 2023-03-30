@@ -34,10 +34,18 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
 
   useEffect(() => {
     const init = async () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const event_uuid = urlParams.get('event_uuid');
+      const visitor_uuid = urlParams.get('visitor_uuid');
       if (!AnalyticsStore.event_uuid && !AnalyticsStore.visitor_uuid) {
-        const responseInit = await initTracker(endPoint);
-        responseInit.event_uuid && AnalyticsStore.setEventID(responseInit.event_uuid);
-        AnalyticsStore.setUUID(responseInit.visitor_uuid);
+        if (event_uuid && visitor_uuid) {
+          AnalyticsStore.setEventID(event_uuid);
+          AnalyticsStore.setUUID(visitor_uuid);
+        } else {
+          const responseInit = await initTracker(endPoint);
+          responseInit?.event_uuid && AnalyticsStore.setEventID(responseInit?.event_uuid);
+          AnalyticsStore.setUUID(responseInit?.visitor_uuid);
+        }
       } else {
         await handleStartTracker(prevRoute);
       }
@@ -47,7 +55,8 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
 
   useEffect(() => {
     const handleRouteChange = async () => {
-      if (AnalyticsStore.visitor_uuid_start) {
+      const { event_uuid, visitor_uuid } = router.query;
+      if (AnalyticsStore.visitor_uuid_start && !event_uuid && !visitor_uuid) {
         await endTracker(
           endPoint,
           AnalyticsStore.event_uuid_start,
@@ -58,7 +67,19 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
       setPrevRoute(router.asPath);
     };
     router.events.on('routeChangeComplete', handleRouteChange);
-
+    router.replace(
+      {
+        query: {
+          ...router.query,
+          event_uuid: AnalyticsStore.event_uuid,
+          visitor_uuid: AnalyticsStore.visitor_uuid,
+        },
+      },
+      undefined,
+      {
+        shallow: true,
+      }
+    );
     return () => {
       router.events.off('routeChangeComplete', handleRouteChange);
     };
