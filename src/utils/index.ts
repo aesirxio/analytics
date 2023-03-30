@@ -1,12 +1,17 @@
 import { trackerService } from './services';
 import Bowser from 'bowser';
 
-const createRequest = (endpoint, task) => {
+const createRequest = (endpoint: string, task: string) => {
   return `${endpoint}/visitor/v1/${task}`;
 };
 
 /* FUNCTION */
-const initTracker = async (endpoint, url, referrer, user_agent) => {
+const initTracker = async (
+  endpoint: string,
+  url?: string,
+  referrer?: string,
+  user_agent?: string
+) => {
   const { document } = window;
   const { pathname, search, origin } = location;
   url = `${origin}${pathname}${search}`;
@@ -15,19 +20,19 @@ const initTracker = async (endpoint, url, referrer, user_agent) => {
   const browser = Bowser.parse(window.navigator.userAgent);
   const browser_name = browser?.browser?.name;
   const browser_version = browser?.browser?.version;
-  const lang = window.navigator.userLanguage || window.navigator.language;
+  const lang = window.navigator['userLanguage'] || window.navigator.language;
   const device = browser?.platform?.model ?? browser?.platform?.type;
   const domain = `${origin}`;
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  let attributes = [];
-  for (var key of urlParams.keys()) {
+  const attributes = [];
+  for (const key of urlParams.keys()) {
     if (key.startsWith('utm_')) {
       urlParams.get(key) && attributes.push({ name: key, value: urlParams.get(key) });
     }
   }
   if (!urlParams.get('event_uuid') && !urlParams.get('visitor_uuid')) {
-    let ip = '';
+    const ip = '';
     const response = await trackerService(createRequest(endpoint, 'init'), {
       url: url,
       referrer: referrer,
@@ -46,7 +51,12 @@ const initTracker = async (endpoint, url, referrer, user_agent) => {
   }
 };
 
-const startTracker = async (endpoint, event_uuid, visitor_uuid, referrer) => {
+const startTracker = async (
+  endpoint: string,
+  event_uuid?: string,
+  visitor_uuid?: string,
+  referrer?: string
+) => {
   const { location, document } = window;
   referrer = referrer
     ? location.protocol + '//' + location.host + referrer
@@ -74,7 +84,7 @@ const startTracker = async (endpoint, event_uuid, visitor_uuid, referrer) => {
   return responseStart;
 };
 
-const endTracker = async (endpoint, event_uuid, visitor_uuid) => {
+const endTracker = async (endpoint: string, event_uuid?: string, visitor_uuid?: string) => {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const responseEnd = await trackerService(createRequest(endpoint, 'end'), {
@@ -94,7 +104,13 @@ const endTracker = async (endpoint, event_uuid, visitor_uuid) => {
   return responseEnd;
 };
 
-const trackEvent = async (endpoint, event_uuid, visitor_uuid, referrer, data) => {
+const trackEvent = async (
+  endpoint: string,
+  event_uuid: string,
+  visitor_uuid: string,
+  referrer?: string,
+  data?: object
+) => {
   const { location, document } = window;
   referrer = referrer
     ? location.protocol + '//' + location.host + referrer
@@ -123,4 +139,10 @@ const trackEvent = async (endpoint, event_uuid, visitor_uuid, referrer, data) =>
   return responseStart;
 };
 
-export { initTracker, startTracker, endTracker, trackEvent };
+const insertParam = (key: string, value: string) => {
+  const url = new URL(window.location.href);
+  url.searchParams.set(key, value);
+  window.history.pushState({ path: url.href }, '', url.href);
+};
+
+export { initTracker, startTracker, endTracker, trackEvent, insertParam };

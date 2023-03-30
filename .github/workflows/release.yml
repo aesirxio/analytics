@@ -1,9 +1,9 @@
-name: "release"
+name: 'release'
 
 on:
   push:
     tags:
-      - "*"
+      - '*'
 
 jobs:
   publish:
@@ -26,5 +26,5 @@ jobs:
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/analytics.js"
+          artifacts: 'dist/analytics.js'
           generateReleaseNotes: true
