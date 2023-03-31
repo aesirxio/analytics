@@ -70,7 +70,9 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
     const urlParams = new URLSearchParams(window.location.search);
     const event_uuid = urlParams.get('event_uuid');
     const visitor_uuid = urlParams.get('visitor_uuid');
-    if (!event_uuid && !visitor_uuid) {
+    const state = urlParams.get('state');
+    const code = urlParams.get('code');
+    if (!event_uuid && !visitor_uuid && !state && !code) {
       router.push(
         {
           query: {
