@@ -67,19 +67,25 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
       setPrevRoute(router.asPath);
     };
     router.events.on('routeChangeComplete', handleRouteChange);
-    router.replace(
-      {
-        query: {
-          ...router.query,
-          event_uuid: AnalyticsStore.event_uuid,
-          visitor_uuid: AnalyticsStore.visitor_uuid,
+    const urlParams = new URLSearchParams(window.location.search);
+    const event_uuid = urlParams.get('event_uuid');
+    const visitor_uuid = urlParams.get('visitor_uuid');
+    if (!event_uuid && !visitor_uuid) {
+      router.push(
+        {
+          query: {
+            ...router.query,
+            event_uuid: AnalyticsStore.event_uuid,
+            visitor_uuid: AnalyticsStore.visitor_uuid,
+          },
         },
-      },
-      undefined,
-      {
-        shallow: true,
-      }
-    );
+        undefined,
+        {
+          shallow: true,
+        }
+      );
+    }
+
     return () => {
       router.events.off('routeChangeComplete', handleRouteChange);
     };
