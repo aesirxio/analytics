@@ -7,7 +7,7 @@
   "main": "dist/index.js",
   "dependencies": {
     "bowser": "^2.11.0",
-    "query-string": "^7.1.1"
+    "query-string": "^8.1.0"
   },
   "scripts": {
     "clean": "rimraf lib",
