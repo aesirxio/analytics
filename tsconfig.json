@@ -5,6 +5,7 @@
     "declaration": true,
     "declarationMap": true,
     "declarationDir": "types",
+    "module": "ESNext",
     "target": "es2020",
     "noImplicitAny": true,
     "noImplicitThis": true,
