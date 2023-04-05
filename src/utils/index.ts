@@ -127,4 +127,24 @@ const insertParam = (key: string, value: string) => {
   window.history.pushState({ path: url.href }, '', url.href);
 };
 
-export { initTracker, startTracker, endTracker, trackEvent, insertParam };
+// Replace for NextJS, ReactJS
+const getParameterByName = (name: string, url = window.location.href) => {
+  if (url) {
+    const params = new URL(url);
+    return params.searchParams.get(name);
+  }
+  return;
+};
+const replaceUrl = (visitor_uuid: string) => {
+  const anchors = document.getElementsByTagName('a');
+  for (let i = 0; i < anchors.length; i++) {
+    const visitorIdParams = getParameterByName('visitor_uuid', anchors[i].href);
+    if (anchors[i].href) {
+      const url = new URL(anchors[i].href);
+      !visitorIdParams && visitor_uuid && url.searchParams.append('visitor_uuid', visitor_uuid);
+      anchors[i].href = url.href;
+    }
+  }
+};
+
+export { initTracker, startTracker, endTracker, trackEvent, insertParam, replaceUrl };

@@ -1,6 +1,6 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
-import { initTracker, startTracker, endTracker } from '../utils/index';
+import { initTracker, startTracker, endTracker, replaceUrl } from '../utils/index';
 
 interface AnalyticsHandle {
   router: {
@@ -48,7 +48,6 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
   useEffect(() => {
     const handleRouteChange = async () => {
       const { visitor_uuid } = router.query;
-      console.log('AnalyticsStore', AnalyticsStore);
       if (AnalyticsStore.visitor_uuid_start && !visitor_uuid) {
         await endTracker(
           endPoint,
@@ -78,7 +77,7 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
         }
       );
     }
-
+    visitor_uuid && replaceUrl(visitor_uuid);
     return () => {
       router.events.off('routeChangeComplete', handleRouteChange);
     };

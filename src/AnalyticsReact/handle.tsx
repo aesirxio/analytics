@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import qs from 'query-string';
 import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
-import { initTracker, startTracker, endTracker } from '../utils/index';
+import { initTracker, startTracker, endTracker, replaceUrl } from '../utils/index';
 
 interface AnalyticsHandle {
   location: { search: string; pathname: string };
@@ -52,6 +52,8 @@ const AnalyticsHandle = ({ location, history, children }: AnalyticsHandle) => {
         responseStart.event_uuid && AnalyticsStore.setEventIDStart(responseStart.event_uuid);
         responseStart.visitor_uuid && AnalyticsStore.setUUIDStart(responseStart.visitor_uuid);
         setPrevRoute(location.pathname);
+
+        replaceUrl(AnalyticsStore.visitor_uuid);
       }
     };
     init();
