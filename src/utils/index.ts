@@ -31,7 +31,7 @@ const initTracker = async (
       urlParams.get(key) && attributes.push({ name: key, value: urlParams.get(key) });
     }
   }
-  if (!urlParams.get('event_uuid') && !urlParams.get('visitor_uuid')) {
+  if (!urlParams.get('visitor_uuid')) {
     const ip = '';
     const response = await trackerService(createRequest(endpoint, 'init'), {
       url: url,
@@ -53,7 +53,7 @@ const initTracker = async (
 
 const startTracker = async (
   endpoint: string,
-  event_uuid?: string,
+  // event_uuid?: string,
   visitor_uuid?: string,
   referrer?: string
 ) => {
@@ -65,15 +65,15 @@ const startTracker = async (
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const responseStart = await trackerService(createRequest(endpoint, 'start'), {
-    ...(urlParams.get('event_uuid') && {
-      event_uuid: urlParams.get('event_uuid'),
-    }),
+    // ...(urlParams.get('event_uuid') && {
+    //   event_uuid: urlParams.get('event_uuid'),
+    // }),
     ...(urlParams.get('visitor_uuid') && {
       visitor_uuid: urlParams.get('visitor_uuid'),
     }),
-    ...(event_uuid && {
-      event_uuid: event_uuid,
-    }),
+    // ...(event_uuid && {
+    //   event_uuid: event_uuid,
+    // }),
     ...(visitor_uuid && {
       visitor_uuid: visitor_uuid,
     }),
@@ -119,15 +119,15 @@ const trackEvent = async (
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const responseStart = await trackerService(createRequest(endpoint, 'start'), {
-    ...(urlParams.get('event_uuid') && {
-      event_uuid: urlParams.get('event_uuid'),
-    }),
+    // ...(urlParams.get('event_uuid') && {
+    //   event_uuid: urlParams.get('event_uuid'),
+    // }),
     ...(urlParams.get('visitor_uuid') && {
       visitor_uuid: urlParams.get('visitor_uuid'),
     }),
-    ...(event_uuid && {
-      event_uuid: event_uuid,
-    }),
+    // ...(event_uuid && {
+    //   event_uuid: event_uuid,
+    // }),
     ...(visitor_uuid && {
       visitor_uuid: visitor_uuid,
     }),
