@@ -35,7 +35,7 @@ const initTracker = async (
     const ip = '';
     const response = await trackerService(createRequest(endpoint, 'init'), {
       url: url,
-      referrer: referrer,
+      referer: referrer,
       user_agent: user_agent,
       ip: ip,
       domain: domain,
@@ -66,7 +66,7 @@ const startTracker = async (endpoint: string, visitor_uuid?: string, referrer?: 
     ...(visitor_uuid && {
       visitor_uuid: visitor_uuid,
     }),
-    referrer: referrer === '/' ? '' : referrer,
+    referer: referrer === '/' ? '' : referrer,
     url: url,
   });
 
@@ -93,7 +93,7 @@ const trackEvent = async (
     ...(visitor_uuid && {
       visitor_uuid: visitor_uuid,
     }),
-    referrer: referrer === '/' ? '' : referrer,
+    referer: referrer === '/' ? '' : referrer,
     url: url,
     ...data,
   });
