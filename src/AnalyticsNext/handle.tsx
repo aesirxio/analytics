@@ -19,8 +19,8 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
   const [prevRoute, setPrevRoute] = useState<string>(router.asPath);
   const handleStartTracker = useCallback(
     async (prevRoute: string) => {
-      const referrer = prevRoute ? prevRoute : '';
-      const responseStart = await startTracker(endPoint, AnalyticsStore.visitor_uuid, referrer);
+      const referer = prevRoute ? prevRoute : '';
+      const responseStart = await startTracker(endPoint, AnalyticsStore.visitor_uuid, referer);
       responseStart.event_uuid && AnalyticsStore.setEventIDStart(responseStart.event_uuid);
       responseStart.visitor_uuid && AnalyticsStore.setUUIDStart(responseStart.visitor_uuid);
     },
