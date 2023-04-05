@@ -51,12 +51,7 @@ const initTracker = async (
   }
 };
 
-const startTracker = async (
-  endpoint: string,
-  // event_uuid?: string,
-  visitor_uuid?: string,
-  referrer?: string
-) => {
+const startTracker = async (endpoint: string, visitor_uuid?: string, referrer?: string) => {
   const { location, document } = window;
   referrer = referrer
     ? location.protocol + '//' + location.host + referrer
@@ -65,15 +60,9 @@ const startTracker = async (
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const responseStart = await trackerService(createRequest(endpoint, 'start'), {
-    // ...(urlParams.get('event_uuid') && {
-    //   event_uuid: urlParams.get('event_uuid'),
-    // }),
     ...(urlParams.get('visitor_uuid') && {
       visitor_uuid: urlParams.get('visitor_uuid'),
     }),
-    // ...(event_uuid && {
-    //   event_uuid: event_uuid,
-    // }),
     ...(visitor_uuid && {
       visitor_uuid: visitor_uuid,
     }),
@@ -106,7 +95,6 @@ const endTracker = async (endpoint: string, event_uuid?: string, visitor_uuid?: 
 
 const trackEvent = async (
   endpoint: string,
-  event_uuid: string,
   visitor_uuid: string,
   referrer?: string,
   data?: object
@@ -119,15 +107,9 @@ const trackEvent = async (
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const responseStart = await trackerService(createRequest(endpoint, 'start'), {
-    // ...(urlParams.get('event_uuid') && {
-    //   event_uuid: urlParams.get('event_uuid'),
-    // }),
     ...(urlParams.get('visitor_uuid') && {
       visitor_uuid: urlParams.get('visitor_uuid'),
     }),
-    // ...(event_uuid && {
-    //   event_uuid: event_uuid,
-    // }),
     ...(visitor_uuid && {
       visitor_uuid: visitor_uuid,
     }),

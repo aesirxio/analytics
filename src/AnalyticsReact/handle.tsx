@@ -22,22 +22,18 @@ const AnalyticsHandle = ({ location, history, children }: AnalyticsHandle) => {
           AnalyticsStore.visitor_uuid_start
         );
       }
-      if (!AnalyticsStore.event_uuid && !AnalyticsStore.visitor_uuid) {
+      if (!AnalyticsStore.visitor_uuid) {
         const urlParams = new URLSearchParams(window.location.search);
-        // const event_uuid = urlParams.get('event_uuid');
         const visitor_uuid = urlParams.get('visitor_uuid');
         if (visitor_uuid) {
-          // AnalyticsStore.setEventID(event_uuid);
           AnalyticsStore.setUUID(visitor_uuid);
         } else {
           const responseInit = await initTracker(endPoint);
-          // responseInit.event_uuid && AnalyticsStore.setEventID(responseInit.event_uuid);
           responseInit.visitor_uuid && AnalyticsStore.setUUID(responseInit.visitor_uuid);
           // Add Params to URL
           const queryParams = qs.parse(location.search);
           const newQueries = {
             ...queryParams,
-            // event_uuid: responseInit.event_uuid,
             visitor_uuid: responseInit.visitor_uuid,
           };
           history.push({ search: qs.stringify(newQueries) });
@@ -47,19 +43,13 @@ const AnalyticsHandle = ({ location, history, children }: AnalyticsHandle) => {
         const queryParams = qs.parse(location.search);
         const newQueries = {
           ...queryParams,
-          // event_uuid: AnalyticsStore.event_uuid,
           visitor_uuid: AnalyticsStore.visitor_uuid,
         };
         history.push({ search: qs.stringify(newQueries) });
 
         const referrer = prevRoute ? prevRoute : '';
-        const responseStart = await startTracker(
-          endPoint,
-          // AnalyticsStore.event_uuid,
-          AnalyticsStore.visitor_uuid,
-          referrer
-        );
-        // responseStart.event_uuid && AnalyticsStore.setEventIDStart(responseStart.event_uuid);
+        const responseStart = await startTracker(endPoint, AnalyticsStore.visitor_uuid, referrer);
+        responseStart.event_uuid && AnalyticsStore.setEventIDStart(responseStart.event_uuid);
         responseStart.visitor_uuid && AnalyticsStore.setUUIDStart(responseStart.visitor_uuid);
         setPrevRoute(location.pathname);
       }

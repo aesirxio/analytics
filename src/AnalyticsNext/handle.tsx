@@ -20,13 +20,8 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
   const handleStartTracker = useCallback(
     async (prevRoute: string) => {
       const referrer = prevRoute ? prevRoute : '';
-      const responseStart = await startTracker(
-        endPoint,
-        // AnalyticsStore.event_uuid,
-        AnalyticsStore.visitor_uuid,
-        referrer
-      );
-      // responseStart.event_uuid && AnalyticsStore.setEventIDStart(responseStart.event_uuid);
+      const responseStart = await startTracker(endPoint, AnalyticsStore.visitor_uuid, referrer);
+      responseStart.event_uuid && AnalyticsStore.setEventIDStart(responseStart.event_uuid);
       responseStart.visitor_uuid && AnalyticsStore.setUUIDStart(responseStart.visitor_uuid);
     },
     [AnalyticsStore, endPoint]
@@ -35,15 +30,12 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
   useEffect(() => {
     const init = async () => {
       const urlParams = new URLSearchParams(window.location.search);
-      // const event_uuid = urlParams.get('event_uuid');
       const visitor_uuid = urlParams.get('visitor_uuid');
-      if (!AnalyticsStore.event_uuid && !AnalyticsStore.visitor_uuid) {
+      if (!AnalyticsStore.visitor_uuid) {
         if (visitor_uuid) {
-          // AnalyticsStore.setEventID(event_uuid);
           AnalyticsStore.setUUID(visitor_uuid);
         } else {
           const responseInit = await initTracker(endPoint);
-          // responseInit?.event_uuid && AnalyticsStore.setEventID(responseInit?.event_uuid);
           responseInit?.visitor_uuid && AnalyticsStore.setUUID(responseInit?.visitor_uuid);
         }
       } else {
@@ -56,6 +48,7 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
   useEffect(() => {
     const handleRouteChange = async () => {
       const { visitor_uuid } = router.query;
+      console.log('AnalyticsStore', AnalyticsStore);
       if (AnalyticsStore.visitor_uuid_start && !visitor_uuid) {
         await endTracker(
           endPoint,
@@ -68,7 +61,6 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
     };
     router.events.on('routeChangeComplete', handleRouteChange);
     const urlParams = new URLSearchParams(window.location.search);
-    // const event_uuid = urlParams.get('event_uuid');
     const visitor_uuid = urlParams.get('visitor_uuid');
     const state = urlParams.get('state');
     const code = urlParams.get('code');
@@ -77,7 +69,6 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
         {
           query: {
             ...router.query,
-            // event_uuid: AnalyticsStore.event_uuid,
             visitor_uuid: AnalyticsStore.visitor_uuid,
           },
         },

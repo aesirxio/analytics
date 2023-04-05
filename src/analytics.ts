@@ -62,7 +62,6 @@ const AesirAnalytics = () => {
     if (document.readyState === 'complete') {
       const responseInit = await initTracker(root);
       if (responseInit) {
-        // responseInit.event_uuid && insertParam('event_uuid', responseInit.event_uuid);
         responseInit.visitor_uuid && insertParam('visitor_uuid', responseInit.visitor_uuid);
         replaceUrl();
       }
@@ -120,17 +119,14 @@ const AesirAnalytics = () => {
 
 const replaceUrl = () => {
   const urlParams = new URLSearchParams(window.location.search);
-  // const event_uuid = urlParams.get('event_uuid');
   const visitor_uuid = urlParams.get('visitor_uuid');
 
   const anchors = document.getElementsByTagName('a');
 
   for (let i = 0; i < anchors.length; i++) {
-    // const eventIdParams = getParameterByName('event_uuid', anchors[i].href);
     const visitorIdParams = getParameterByName('visitor_uuid', anchors[i].href);
     if (anchors[i].href) {
       const url = new URL(anchors[i].href);
-      // !eventIdParams && event_uuid && url.searchParams.append('event_uuid', event_uuid);
       !visitorIdParams && visitor_uuid && url.searchParams.append('visitor_uuid', visitor_uuid);
       anchors[i].href = url.href;
     }
