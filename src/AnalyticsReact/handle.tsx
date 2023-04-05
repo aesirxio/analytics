@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import qs from 'query-string';
 import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
-import { initTracker, startTracker, replaceUrl } from '../utils/index';
+import { initTracker, startTracker, replaceUrl, endTracker } from '../utils/index';
 
 interface AnalyticsHandle {
   location: { search: string; pathname: string };
@@ -15,6 +15,14 @@ const AnalyticsHandle = ({ location, history, children }: AnalyticsHandle) => {
   const [prevRoute, setPrevRoute] = useState<string>(null);
   useEffect(() => {
     const init = async () => {
+      if (AnalyticsStore.visitor_uuid_start) {
+        await endTracker(
+          endPoint,
+          AnalyticsStore.event_uuid_start,
+          AnalyticsStore.visitor_uuid_start
+        );
+      }
+
       if (!AnalyticsStore.visitor_uuid) {
         const urlParams = new URLSearchParams(window.location.search);
         const visitor_uuid = urlParams.get('visitor_uuid');
@@ -40,8 +48,8 @@ const AnalyticsHandle = ({ location, history, children }: AnalyticsHandle) => {
         };
         history.push({ search: qs.stringify(newQueries) });
 
-        const referrer = prevRoute ? prevRoute : '';
-        const responseStart = await startTracker(endPoint, AnalyticsStore.visitor_uuid, referrer);
+        const referer = prevRoute ? prevRoute : '';
+        const responseStart = await startTracker(endPoint, AnalyticsStore.visitor_uuid, referer);
         responseStart.event_uuid && AnalyticsStore.setEventIDStart(responseStart.event_uuid);
         responseStart.visitor_uuid && AnalyticsStore.setUUIDStart(responseStart.visitor_uuid);
         setPrevRoute(location.pathname);

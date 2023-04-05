@@ -113,14 +113,14 @@ data-aesirx-event-attribute-<attribute-name-2>="<attribute-value-1>"
 ##### Or you can use your own Javascript to Track events:
 
 ```
-window.trackEvent(endpoint, visitor_uuid, referrer, data)
+window.trackEvent(endpoint, visitor_uuid, referer, data)
 ```
 
 (`endpoint` is the link to your 1st party server which must be installed)
 
 (`visitor_uuid` is the params get from url - it will auto generated)
 
-(`referrer` is the referrer domain)
+(`referer` is the referer domain)
 
 (`data` is the data you want to track)
 
@@ -155,7 +155,7 @@ import { trackEvent, AnalyticsContext } from "aesirx-analytics";
 const CustomEvent = () => {
   const AnalyticsStore = useContext(AnalyticsContext);
   const initTrackEvent = async () => {
-    await trackEvent(endPoint, AnalyticsStore.visitor_uuid, referrer, {
+    await trackEvent(endPoint, AnalyticsStore.visitor_uuid, referer, {
       event_name: "Submit",
       event_type: "submit",
       attributes: [
@@ -183,7 +183,7 @@ import { trackEvent, AnalyticsContext } from "aesirx-analytics";
 const CustomEvent = () => {
   const AnalyticsStore = useContext(AnalyticsContext);
   const initTrackEvent = async () => {
-    await trackEvent(endPoint, AnalyticsStore.visitor_uuid, referrer, {
+    await trackEvent(endPoint, AnalyticsStore.visitor_uuid, referer, {
       event_name: "Submit",
       event_type: "submit",
       attributes: [
@@ -206,4 +206,4 @@ const CustomEvent = () => {
 
 (`endPoint` is the link to your 1st party server which must be installed)
 
-(`referrer` is the referrer domain)
+(`referer` is the referer domain)

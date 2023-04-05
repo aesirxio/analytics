@@ -1,6 +1,6 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
-import { initTracker, startTracker, replaceUrl } from '../utils/index';
+import { initTracker, startTracker, replaceUrl, endTracker } from '../utils/index';
 
 interface AnalyticsHandle {
   router: {
@@ -19,8 +19,8 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
   const [prevRoute, setPrevRoute] = useState<string>(router.asPath);
   const handleStartTracker = useCallback(
     async (prevRoute: string) => {
-      const referrer = prevRoute ? prevRoute : '';
-      const responseStart = await startTracker(endPoint, AnalyticsStore.visitor_uuid, referrer);
+      const referer = prevRoute ? prevRoute : '';
+      const responseStart = await startTracker(endPoint, AnalyticsStore.visitor_uuid, referer);
       responseStart.event_uuid && AnalyticsStore.setEventIDStart(responseStart.event_uuid);
       responseStart.visitor_uuid && AnalyticsStore.setUUIDStart(responseStart.visitor_uuid);
     },
@@ -49,6 +49,11 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
     const handleRouteChange = async () => {
       const { visitor_uuid } = router.query;
       if (AnalyticsStore.visitor_uuid_start && !visitor_uuid) {
+        await endTracker(
+          endPoint,
+          AnalyticsStore.event_uuid_start,
+          AnalyticsStore.visitor_uuid_start
+        );
         await handleStartTracker(prevRoute);
       }
       setPrevRoute(router.asPath);
