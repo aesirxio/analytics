@@ -1,4 +1,11 @@
-import { endTracker, initTracker, insertParam, startTracker, trackEvent } from './utils';
+import {
+  endTracker,
+  initTracker,
+  insertParam,
+  replaceUrl,
+  startTracker,
+  trackEvent,
+} from './utils';
 
 const AesirAnalytics = () => {
   const hook = (_this: object, method: string, callback: (_: string) => void) => {
@@ -63,14 +70,15 @@ const AesirAnalytics = () => {
       const responseInit = await initTracker(root);
       if (responseInit) {
         responseInit.visitor_uuid && insertParam('visitor_uuid', responseInit.visitor_uuid);
-        replaceUrl();
       }
       const responseStart = await startTracker(root);
       if (responseStart) {
         responseStart.event_uuid && insertParam('event_uuid_start', responseStart.event_uuid);
         responseStart.visitor_uuid && insertParam('visitor_uuid_start', responseStart.visitor_uuid);
-        replaceUrl();
       }
+      const urlParams = new URLSearchParams(window.location.search);
+      const visitor_uuid = urlParams.get('visitor_uuid');
+      visitor_uuid && replaceUrl(visitor_uuid);
 
       if (dataEvents) {
         addEvents(document);
@@ -104,7 +112,7 @@ const AesirAnalytics = () => {
             });
           }
         });
-        trackEvent(root, '', '', '', {
+        trackEvent(root, '', '', {
           event_name: element.dataset.aesirxEventName,
           event_type: element.dataset.aesirxEventType,
           attributes: attribute,
@@ -115,32 +123,6 @@ const AesirAnalytics = () => {
   };
 
   update();
-};
-
-const replaceUrl = () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const visitor_uuid = urlParams.get('visitor_uuid');
-
-  const anchors = document.getElementsByTagName('a');
-
-  for (let i = 0; i < anchors.length; i++) {
-    const visitorIdParams = getParameterByName('visitor_uuid', anchors[i].href);
-    if (anchors[i].href) {
-      const url = new URL(anchors[i].href);
-      !visitorIdParams && visitor_uuid && url.searchParams.append('visitor_uuid', visitor_uuid);
-      anchors[i].href = url.href;
-    }
-  }
-};
-
-const getParameterByName = (name: string, url = window.location.href) => {
-  if (url) {
-    const params = new URL(url);
-    if (params.origin === window.location.origin) {
-      return params.searchParams.get(name);
-    }
-  }
-  return;
 };
 
 AesirAnalytics();
