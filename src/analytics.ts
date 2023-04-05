@@ -1,11 +1,4 @@
-import {
-  endTracker,
-  initTracker,
-  insertParam,
-  replaceUrl,
-  startTracker,
-  trackEvent,
-} from './utils';
+import { initTracker, insertParam, replaceUrl, startTracker, trackEvent } from './utils';
 
 const AesirAnalytics = () => {
   const hook = (_this: object, method: string, callback: (_: string) => void) => {
@@ -87,10 +80,6 @@ const AesirAnalytics = () => {
   };
 
   document.addEventListener('readystatechange', update, true);
-
-  window.addEventListener('beforeunload', async () => {
-    await endTracker(root);
-  });
 
   /* Handle events */
 
