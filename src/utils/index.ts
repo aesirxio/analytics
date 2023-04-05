@@ -35,7 +35,7 @@ const initTracker = async (
     const ip = '';
     const response = await trackerService(createRequest(endpoint, 'init'), {
       url: url,
-      referrer: referrer,
+      referer: referrer,
       user_agent: user_agent,
       ip: ip,
       domain: domain,
@@ -66,31 +66,11 @@ const startTracker = async (endpoint: string, visitor_uuid?: string, referrer?: 
     ...(visitor_uuid && {
       visitor_uuid: visitor_uuid,
     }),
-    referrer: referrer === '/' ? '' : referrer,
+    referer: referrer === '/' ? '' : referrer,
     url: url,
   });
 
   return responseStart;
-};
-
-const endTracker = async (endpoint: string, event_uuid?: string, visitor_uuid?: string) => {
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const responseEnd = await trackerService(createRequest(endpoint, 'end'), {
-    ...(urlParams.get('event_uuid_start') && {
-      event_uuid: urlParams.get('event_uuid_start'),
-    }),
-    ...(urlParams.get('visitor_uuid_start') && {
-      visitor_uuid: urlParams.get('visitor_uuid_start'),
-    }),
-    ...(event_uuid && {
-      event_uuid: event_uuid,
-    }),
-    ...(visitor_uuid && {
-      visitor_uuid: visitor_uuid,
-    }),
-  });
-  return responseEnd;
 };
 
 const trackEvent = async (
@@ -113,7 +93,7 @@ const trackEvent = async (
     ...(visitor_uuid && {
       visitor_uuid: visitor_uuid,
     }),
-    referrer: referrer === '/' ? '' : referrer,
+    referer: referrer === '/' ? '' : referrer,
     url: url,
     ...data,
   });
@@ -147,4 +127,4 @@ const replaceUrl = (visitor_uuid: string) => {
   }
 };
 
-export { initTracker, startTracker, endTracker, trackEvent, insertParam, replaceUrl };
+export { initTracker, startTracker, trackEvent, insertParam, replaceUrl };

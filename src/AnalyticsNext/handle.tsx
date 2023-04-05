@@ -1,6 +1,6 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
-import { initTracker, startTracker, endTracker, replaceUrl } from '../utils/index';
+import { initTracker, startTracker, replaceUrl } from '../utils/index';
 
 interface AnalyticsHandle {
   router: {
@@ -49,11 +49,6 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
     const handleRouteChange = async () => {
       const { visitor_uuid } = router.query;
       if (AnalyticsStore.visitor_uuid_start && !visitor_uuid) {
-        await endTracker(
-          endPoint,
-          AnalyticsStore.event_uuid_start,
-          AnalyticsStore.visitor_uuid_start
-        );
         await handleStartTracker(prevRoute);
       }
       setPrevRoute(router.asPath);
