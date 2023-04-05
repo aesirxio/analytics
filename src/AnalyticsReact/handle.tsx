@@ -48,8 +48,8 @@ const AnalyticsHandle = ({ location, history, children }: AnalyticsHandle) => {
         };
         history.push({ search: qs.stringify(newQueries) });
 
-        const referrer = prevRoute ? prevRoute : '';
-        const responseStart = await startTracker(endPoint, AnalyticsStore.visitor_uuid, referrer);
+        const referer = prevRoute ? prevRoute : '';
+        const responseStart = await startTracker(endPoint, AnalyticsStore.visitor_uuid, referer);
         responseStart.event_uuid && AnalyticsStore.setEventIDStart(responseStart.event_uuid);
         responseStart.visitor_uuid && AnalyticsStore.setUUIDStart(responseStart.visitor_uuid);
         setPrevRoute(location.pathname);
