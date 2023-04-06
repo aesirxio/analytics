@@ -39,8 +39,7 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
           responseInit?.visitor_uuid && AnalyticsStore.setUUID(responseInit?.visitor_uuid);
         }
       } else {
-        visitor_uuid && setPrevRoute(removeParam('visitor_uuid', router.asPath));
-        await handleStartTracker(prevRoute);
+        await handleStartTracker(removeParam('visitor_uuid', router.asPath));
       }
     };
     init();

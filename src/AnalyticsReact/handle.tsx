@@ -12,7 +12,7 @@ interface AnalyticsHandle {
 const AnalyticsHandle = ({ location, history, children }: AnalyticsHandle) => {
   const AnalyticsStore = React.useContext(AnalyticsContext);
   const endPoint = process.env.REACT_APP_ENDPOINT_ANALYTICS_URL;
-  const [prevRoute, setPrevRoute] = useState<string>(null);
+  const [prevRoute, setPrevRoute] = useState<string>(location.pathname);
   useEffect(() => {
     const init = async () => {
       if (AnalyticsStore.visitor_uuid_start) {
