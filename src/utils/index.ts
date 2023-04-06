@@ -9,13 +9,13 @@ const createRequest = (endpoint: string, task: string) => {
 const initTracker = async (
   endpoint: string,
   url?: string,
-  referrer?: string,
+  referer?: string,
   user_agent?: string
 ) => {
   const { document } = window;
   const { pathname, search, origin } = location;
   url = `${origin}${pathname}${search}`;
-  referrer = document.referrer;
+  referer = document.referrer;
   user_agent = window.navigator.userAgent;
   const browser = Bowser.parse(window.navigator.userAgent);
   const browser_name = browser?.browser?.name;
@@ -35,7 +35,7 @@ const initTracker = async (
     const ip = '';
     const response = await trackerService(createRequest(endpoint, 'init'), {
       url: url,
-      referer: referrer,
+      referer: referer,
       user_agent: user_agent,
       ip: ip,
       domain: domain,
@@ -51,10 +51,10 @@ const initTracker = async (
   }
 };
 
-const startTracker = async (endpoint: string, visitor_uuid?: string, referrer?: string) => {
+const startTracker = async (endpoint: string, visitor_uuid?: string, referer?: string) => {
   const { location, document } = window;
-  referrer = referrer
-    ? location.protocol + '//' + location.host + referrer
+  referer = referer
+    ? location.protocol + '//' + location.host + referer
     : document.referrer.split('?')[0];
   const url = location.protocol + '//' + location.host + location.pathname;
   const queryString = window.location.search;
@@ -66,7 +66,7 @@ const startTracker = async (endpoint: string, visitor_uuid?: string, referrer?: 
     ...(visitor_uuid && {
       visitor_uuid: visitor_uuid,
     }),
-    referer: referrer === '/' ? '' : referrer,
+    referer: referer === '/' ? '' : referer,
     url: url,
   });
 
@@ -76,12 +76,12 @@ const startTracker = async (endpoint: string, visitor_uuid?: string, referrer?: 
 const trackEvent = async (
   endpoint: string,
   visitor_uuid: string,
-  referrer?: string,
+  referer?: string,
   data?: object
 ) => {
   const { location, document } = window;
-  referrer = referrer
-    ? location.protocol + '//' + location.host + referrer
+  referer = referer
+    ? location.protocol + '//' + location.host + referer
     : document.referrer.split('?')[0];
   const url = location.protocol + '//' + location.host + location.pathname;
   const queryString = window.location.search;
@@ -93,7 +93,7 @@ const trackEvent = async (
     ...(visitor_uuid && {
       visitor_uuid: visitor_uuid,
     }),
-    referer: referrer === '/' ? '' : referrer,
+    referer: referer === '/' ? '' : referer,
     url: url,
     ...data,
   });
@@ -127,6 +127,26 @@ const replaceUrl = (visitor_uuid: string) => {
   }
 };
 
+const endTracker = async (endpoint: string, event_uuid?: string, visitor_uuid?: string) => {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const responseEnd = await trackerService(createRequest(endpoint, 'end'), {
+    ...(urlParams.get('event_uuid_start') && {
+      event_uuid: urlParams.get('event_uuid_start'),
+    }),
+    ...(urlParams.get('visitor_uuid_start') && {
+      visitor_uuid: urlParams.get('visitor_uuid_start'),
+    }),
+    ...(event_uuid && {
+      event_uuid: event_uuid,
+    }),
+    ...(visitor_uuid && {
+      visitor_uuid: visitor_uuid,
+    }),
+  });
+  return responseEnd;
+};
+
 function removeParam(key: string, sourceURL: string) {
   let rtn = sourceURL.split('?')[0],
     param,
@@ -145,4 +165,4 @@ function removeParam(key: string, sourceURL: string) {
   return rtn;
 }
 
-export { initTracker, startTracker, trackEvent, insertParam, replaceUrl, removeParam };
+export { initTracker, startTracker, trackEvent, insertParam, replaceUrl, endTracker, removeParam };
