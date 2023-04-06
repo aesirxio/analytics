@@ -19,7 +19,7 @@ const initTracker = async (
   user_agent = window.navigator.userAgent;
   const browser = Bowser.parse(window.navigator.userAgent);
   const browser_name = browser?.browser?.name;
-  const browser_version = browser?.browser?.version;
+  const browser_version = browser?.browser?.version ?? '0';
   const lang = window.navigator['userLanguage'] || window.navigator.language;
   const device = browser?.platform?.model ?? browser?.platform?.type;
   const domain = `${origin}`;
@@ -31,6 +31,7 @@ const initTracker = async (
       urlParams.get(key) && attributes.push({ name: key, value: urlParams.get(key) });
     }
   }
+  console.log('referer', referer);
   if (!urlParams.get('visitor_uuid')) {
     const ip = '';
     const response = await trackerService(createRequest(endpoint, 'init'), {
