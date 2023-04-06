@@ -5,7 +5,7 @@ import { initTracker, startTracker, replaceUrl, endTracker } from '../utils/inde
 
 interface AnalyticsHandle {
   location: { search: string; pathname: string };
-  history: { push: (_: object) => void };
+  history: { replace: (_: object) => void };
   children?: ReactNode;
 }
 
@@ -37,7 +37,7 @@ const AnalyticsHandle = ({ location, history, children }: AnalyticsHandle) => {
             ...queryParams,
             visitor_uuid: responseInit.visitor_uuid,
           };
-          history.push({ search: qs.stringify(newQueries) });
+          history.replace({ search: qs.stringify(newQueries) });
         }
       } else {
         // Add Params to URL
@@ -46,7 +46,7 @@ const AnalyticsHandle = ({ location, history, children }: AnalyticsHandle) => {
           ...queryParams,
           visitor_uuid: AnalyticsStore.visitor_uuid,
         };
-        history.push({ search: qs.stringify(newQueries) });
+        history.replace({ search: qs.stringify(newQueries) });
 
         const referer = prevRoute ? prevRoute : '';
         const responseStart = await startTracker(endPoint, AnalyticsStore.visitor_uuid, referer);
