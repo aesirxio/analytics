@@ -9,14 +9,12 @@ describe('Analytics', () => {
   it('Init Tracker', async () => {
     const response = await initTracker(endPoint);
     visitor_uuid = response?.visitor_uuid;
-
     expect(response).not.toBe(false);
   });
   it('Start Tracker', async () => {
-    console.log('visitor_uuidstart,', visitor_uuid);
-    const response = await startTracker(endPoint, visitor_uuid, '');
+    const referrer = `/`;
+    const response = await startTracker(endPoint, visitor_uuid, referrer);
     event_uuid_start = response?.event_uuid;
-
     expect(response).not.toBe(false);
   });
   it('End Tracker', async () => {

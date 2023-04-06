@@ -6,6 +6,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      ENDPOINT_ANALYTICS_URL: ${{ secrets.ENDPOINT_ANALYTICS_URL }}
 
     steps:
       - uses: actions/checkout@v3
@@ -14,10 +16,12 @@ jobs:
           node-version: 16.x
 
       - name: Install dependencies
-        run: yarn install
-
-      - name: Run Build
-        run: CI=false yarn run build
+         run: yarn install --frozen-lockfile
 
       - name: Run Prettier
-        run: yarn run format:check
+        run: yarn format:check
+
+      - name: Run Build
+        run: |
+          export NODE_OPTIONS="--max_old_space_size=4096"
+          CI=false yarn build

@@ -13,7 +13,6 @@ export default {
   globals: {
     'ts-jest': {
       babel: true,
-      // useESM: true,
       tsConfig: 'tsconfig.json',
     },
     fetch,

@@ -31,7 +31,6 @@ const initTracker = async (
       urlParams.get(key) && attributes.push({ name: key, value: urlParams.get(key) });
     }
   }
-  console.log('referer', referer);
   if (!urlParams.get('visitor_uuid')) {
     const ip = '';
     const response = await trackerService(createRequest(endpoint, 'init'), {
