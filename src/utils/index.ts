@@ -53,7 +53,7 @@ const initTracker = async (
 
 const startTracker = async (endpoint: string, visitor_uuid?: string, referer?: string) => {
   const { location, document } = window;
-  const { pathname, search, origin } = location;
+  const { pathname, origin } = location;
   referer = referer
     ? location.protocol + '//' + location.host + referer
     : document.referrer
