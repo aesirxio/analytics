@@ -1,6 +1,6 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
-import { initTracker, startTracker, replaceUrl } from '../utils/index';
+import { initTracker, startTracker, replaceUrl, removeParam } from '../utils/index';
 
 interface AnalyticsHandle {
   router: {
@@ -16,7 +16,7 @@ interface AnalyticsHandle {
 const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
   const AnalyticsStore = React.useContext(AnalyticsContext);
   const endPoint = process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL;
-  const [prevRoute, setPrevRoute] = useState<string>(router.asPath);
+  const [prevRoute, setPrevRoute] = useState<string>('');
   const handleStartTracker = useCallback(
     async (prevRoute: string) => {
       const referrer = prevRoute ? prevRoute : '';
@@ -39,6 +39,7 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
           responseInit?.visitor_uuid && AnalyticsStore.setUUID(responseInit?.visitor_uuid);
         }
       } else {
+        visitor_uuid && setPrevRoute(removeParam('visitor_uuid', router.asPath));
         await handleStartTracker(prevRoute);
       }
     };
@@ -48,10 +49,10 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
   useEffect(() => {
     const handleRouteChange = async () => {
       const { visitor_uuid } = router.query;
+      visitor_uuid && setPrevRoute(removeParam('visitor_uuid', router.asPath));
       if (AnalyticsStore.visitor_uuid_start && !visitor_uuid) {
         await handleStartTracker(prevRoute);
       }
-      setPrevRoute(router.asPath);
     };
     router.events.on('routeChangeComplete', handleRouteChange);
     const urlParams = new URLSearchParams(window.location.search);
@@ -59,7 +60,7 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
     const state = urlParams.get('state');
     const code = urlParams.get('code');
     if (!visitor_uuid && !state && !code) {
-      router.push(
+      router.replace(
         {
           query: {
             ...router.query,

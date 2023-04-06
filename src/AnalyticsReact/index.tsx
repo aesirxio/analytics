@@ -5,7 +5,7 @@ import AnalyticsHandle from './handle';
 
 interface AnalyticsReact {
   location: { search: string; pathname: string };
-  history: { push: (_: object) => void };
+  history: { replace: (_: object) => void };
   children?: ReactNode;
 }
 
