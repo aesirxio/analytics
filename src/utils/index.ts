@@ -53,9 +53,12 @@ const initTracker = async (
 
 const startTracker = async (endpoint: string, visitor_uuid?: string, referer?: string) => {
   const { location, document } = window;
+  const { pathname, origin } = location;
   referer = referer
     ? location.protocol + '//' + location.host + referer
-    : document.referrer.split('?')[0];
+    : document.referrer
+    ? document.referrer.split('?')[0]
+    : `${origin}${pathname}`;
   const url = location.protocol + '//' + location.host + location.pathname;
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
