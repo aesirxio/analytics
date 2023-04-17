@@ -13,6 +13,7 @@
   },
   "scripts": {
     "clean": "rimraf lib",
+    "dev": "tsup --watch --onSuccess 'yalc push --changed --no-scripts'",
     "build": "tsup",
     "lint": "eslint --fix \"src/**/\"",
     "lint:check": "eslint \"src/**/\"",

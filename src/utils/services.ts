@@ -8,13 +8,22 @@ const assign = (a: {}, b: {}) => {
 };
 
 const trackerService = async (endpoint: string, payload: object) => {
-  const fetchData = await fetch(endpoint, {
-    method: 'POST',
-    body: JSON.stringify(payload),
-    headers: assign({ 'Content-Type': 'application/json' }, { ['x-tracker-cache']: cache }),
-  });
-  const response = await fetchData.json();
-  return response;
+  try {
+    const fetchData = await fetch(endpoint, {
+      method: 'POST',
+      body: JSON.stringify(payload),
+      headers: assign({ 'Content-Type': 'application/json' }, { ['x-tracker-cache']: cache }),
+    });
+    const response = await fetchData.json();
+    if (response.error) {
+      window.alert('Analytics Error: ' + response.error);
+      throw response.error;
+    } else {
+      return response;
+    }
+  } catch (error) {
+    throw error;
+  }
 };
 
 export { trackerService };
