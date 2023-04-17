@@ -16,7 +16,6 @@ const trackerService = async (endpoint: string, payload: object) => {
     });
     const response = await fetchData.json();
     if (response.error) {
-      window.alert('Analytics Error: ' + response.error);
       throw response.error;
     } else {
       return response;
