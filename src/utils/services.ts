@@ -14,7 +14,11 @@ const trackerService = async (endpoint: string, payload: object) => {
     headers: assign({ 'Content-Type': 'application/json' }, { ['x-tracker-cache']: cache }),
   });
   const response = await fetchData.json();
-  return response;
+  if (response.error) {
+    throw response.error;
+  } else {
+    return response;
+  }
 };
 
 export { trackerService };

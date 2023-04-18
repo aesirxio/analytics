@@ -33,21 +33,26 @@ const initTracker = async (
   }
   if (!urlParams.get('visitor_uuid')) {
     const ip = '';
-    const response = await trackerService(createRequest(endpoint, 'init'), {
-      url: url,
-      referer: referer,
-      user_agent: user_agent,
-      ip: ip,
-      domain: domain,
-      browser_name: browser_name,
-      browser_version: browser_version,
-      lang: lang,
-      device: device,
-      event_name: 'visit',
-      event_type: 'action',
-      attributes: attributes,
-    });
-    return response;
+    try {
+      const response = await trackerService(createRequest(endpoint, 'init'), {
+        url: url,
+        referer: referer,
+        user_agent: user_agent,
+        ip: ip,
+        domain: domain,
+        browser_name: browser_name,
+        browser_version: browser_version,
+        lang: lang,
+        device: device,
+        event_name: 'visit',
+        event_type: 'action',
+        attributes: attributes,
+      });
+      return response;
+    } catch (error) {
+      window.alert('Analytics Error: ' + error);
+      throw error;
+    }
   }
 };
 
