@@ -21,7 +21,6 @@ const trackerService = async (endpoint: string, payload: object) => {
       return response;
     }
   } catch (error) {
-    window.alert('Analytics Error: ' + error);
     throw error;
   }
 };
