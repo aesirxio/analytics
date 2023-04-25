@@ -1,5 +1,5 @@
 import {
-  endTracker,
+  endTrackerVisibilityState,
   initTracker,
   insertParam,
   replaceUrl,
@@ -88,9 +88,7 @@ const AesirAnalytics = () => {
 
   document.addEventListener('readystatechange', update, true);
 
-  window.addEventListener('beforeunload', async () => {
-    await endTracker(root, window['event_uuid_start'], window['visitor_uuid_start']);
-  });
+  endTrackerVisibilityState(root);
 
   /* Handle events */
 
