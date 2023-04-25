@@ -62,7 +62,7 @@ const startTracker = async (endpoint: string, visitor_uuid?: string, referer?: s
   referer = referer
     ? location.protocol + '//' + location.host + referer
     : document.referrer
-    ? document.referrer.split('?')[0]
+    ? removeParam('visitor_uuid', document.referrer)
     : `${origin}${pathname}`;
   const url = location.protocol + '//' + location.host + location.pathname;
   const queryString = window.location.search;
@@ -135,25 +135,33 @@ const replaceUrl = (visitor_uuid: string) => {
   }
 };
 
-const endTracker = async (endpoint: string, event_uuid?: string, visitor_uuid?: string) => {
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const responseEnd = await trackerService(createRequest(endpoint, 'end'), {
-    ...(urlParams.get('event_uuid_start') && {
-      event_uuid: urlParams.get('event_uuid_start'),
-    }),
-    ...(urlParams.get('visitor_uuid_start') && {
-      visitor_uuid: urlParams.get('visitor_uuid_start'),
-    }),
-    ...(event_uuid && {
-      event_uuid: event_uuid,
-    }),
-    ...(visitor_uuid && {
-      visitor_uuid: visitor_uuid,
-    }),
+const endTracker = (endPoint: string, event_uuid: string, visitor_uuid: string) => {
+  if(event_uuid && visitor_uuid) {
+    const body = {
+      event_uuid: event_uuid, visitor_uuid: visitor_uuid
+    }
+    const headers = {"type": 'application/json', };
+    const blob = new Blob([JSON.stringify(body)], headers);
+    navigator.sendBeacon(createRequest(endPoint, 'end'), blob);
+  }
+}
+
+const endTrackerVisibilityState = (endPoint: string) => {
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === 'hidden') {
+      endTracker(endPoint, window['event_uuid_start'], window['visitor_uuid_start']);
+    }
   });
-  return responseEnd;
-};
+  window.addEventListener(
+    "pagehide",
+    (event) => {
+      if (event.persisted) {
+        endTracker(endPoint, window['event_uuid_start'], window['visitor_uuid_start']);
+      }
+    },
+    false
+  );
+}
 
 function removeParam(key: string, sourceURL: string) {
   let rtn = sourceURL.split('?')[0],
@@ -173,4 +181,4 @@ function removeParam(key: string, sourceURL: string) {
   return rtn;
 }
 
-export { initTracker, startTracker, trackEvent, insertParam, replaceUrl, endTracker, removeParam };
+export { initTracker, startTracker, trackEvent, insertParam, replaceUrl, endTracker, endTrackerVisibilityState, removeParam };

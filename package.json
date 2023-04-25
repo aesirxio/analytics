@@ -41,10 +41,6 @@
       "last 1 safari version"
     ]
   },
-  "peerDependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.1"
-  },
   "devDependencies": {
     "@babel/preset-env": "^7.21.4",
     "@babel/preset-typescript": "^7.21.4",

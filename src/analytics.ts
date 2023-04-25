@@ -1,5 +1,5 @@
 import {
-  endTracker,
+  endTrackerVisibilityState,
   initTracker,
   insertParam,
   replaceUrl,
@@ -73,8 +73,8 @@ const AesirAnalytics = () => {
       }
       const responseStart = await startTracker(root);
       if (responseStart) {
-        responseStart.event_uuid && insertParam('event_uuid_start', responseStart.event_uuid);
-        responseStart.visitor_uuid && insertParam('visitor_uuid_start', responseStart.visitor_uuid);
+        window['event_uuid_start'] = responseStart.event_uuid;
+        window['visitor_uuid_start'] = responseStart.visitor_uuid;
       }
       const urlParams = new URLSearchParams(window.location.search);
       const visitor_uuid = urlParams.get('visitor_uuid');
@@ -88,9 +88,7 @@ const AesirAnalytics = () => {
 
   document.addEventListener('readystatechange', update, true);
 
-  window.addEventListener('beforeunload', async () => {
-    await endTracker(root);
-  });
+  endTrackerVisibilityState(root);
 
   /* Handle events */
 
