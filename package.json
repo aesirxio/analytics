@@ -1,6 +1,6 @@
 {
   "name": "aesirx-analytics",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "license": "GPL-3.0-only",
   "author": "AesirX",
   "repository": "https://gitlab.redweb.dk/aesirx/analytics",
@@ -9,7 +9,8 @@
   "type": "module",
   "dependencies": {
     "bowser": "^2.11.0",
-    "query-string": "^7.1.1"
+    "query-string": "^7.1.1",
+    "react": "^18.2.0"
   },
   "scripts": {
     "clean": "rimraf lib",
