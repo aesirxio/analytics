@@ -60,25 +60,43 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
     const state = urlParams.get('state');
     const code = urlParams.get('code');
     if (!visitor_uuid && !state && !code) {
-      router.replace(
-        {
-          query: {
-            ...router.query,
-            visitor_uuid: AnalyticsStore.visitor_uuid,
-          },
-        },
-        undefined,
-        {
-          shallow: true,
+      if(AnalyticsStore.visitor_uuid) {
+        if(router.asPath.includes("?")) {
+          if(Object.keys(router.query).length) {
+            router.replace(
+              {
+                query: {
+                  ...router.query,
+                  visitor_uuid: AnalyticsStore.visitor_uuid,
+                },
+              },
+              undefined,
+              {
+                shallow: true,
+              }
+            );
+          }
+        } else {
+          router.replace(
+            {
+              query: {
+                ...router.query,
+                visitor_uuid: AnalyticsStore.visitor_uuid,
+              },
+            },
+            undefined,
+            {
+              shallow: true,
+            }
+          );
         }
-      );
+      }
     }
     visitor_uuid && replaceUrl(visitor_uuid);
     return () => {
       router.events.off('routeChangeComplete', handleRouteChange);
     };
-  }, [router.events, AnalyticsStore.visitor_uuid_start, router.asPath]);
-
+  }, [router.events, AnalyticsStore.visitor_uuid, router.asPath, router.query]);
   useEffect(() => {
     const init = async () => {
       endTrackerVisibilityState(endPoint);
