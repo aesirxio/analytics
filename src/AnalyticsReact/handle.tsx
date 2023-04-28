@@ -16,7 +16,7 @@ const AnalyticsHandle = ({ location, history, children }: AnalyticsHandle) => {
   useEffect(() => {
     const init = async () => {
       if (AnalyticsStore.visitor_uuid_start) {
-        endTracker(endPoint, AnalyticsStore.event_uuid_start, AnalyticsStore.visitor_uuid_start);
+        endTracker(endPoint,  window['event_uuid_start'], AnalyticsStore.visitor_uuid_start);
       }
 
       if (!AnalyticsStore.visitor_uuid) {
@@ -45,6 +45,7 @@ const AnalyticsHandle = ({ location, history, children }: AnalyticsHandle) => {
         history.replace({ search: qs.stringify(newQueries) });
 
         const referer = prevRoute ? prevRoute : '';
+        window['referer'] = referer;
         const responseStart = await startTracker(endPoint, AnalyticsStore.visitor_uuid, referer);
         responseStart.event_uuid && AnalyticsStore.setEventIDStart(responseStart.event_uuid);
         responseStart.visitor_uuid && AnalyticsStore.setUUIDStart(responseStart.visitor_uuid);
@@ -65,11 +66,12 @@ const AnalyticsHandle = ({ location, history, children }: AnalyticsHandle) => {
 
   useEffect(() => {
     const init = async () => {
+      window['visitor_uuid'] = AnalyticsStore.visitor_uuid;
       window['event_uuid_start'] = AnalyticsStore.event_uuid_start
       window['visitor_uuid_start'] = AnalyticsStore.visitor_uuid_start
     };
     init();
-  }, [AnalyticsStore.event_uuid_start, AnalyticsStore.visitor_uuid_start]);
+  }, [AnalyticsStore.visitor_uuid, AnalyticsStore.event_uuid_start, AnalyticsStore.visitor_uuid_start]);
 
   return <>{children}</>;
 };

@@ -147,9 +147,13 @@ const endTracker = (endPoint: string, event_uuid: string, visitor_uuid: string) 
 }
 
 const endTrackerVisibilityState = (endPoint: string) => {
-  document.addEventListener("visibilitychange", () => {
+  document.addEventListener("visibilitychange", async () => {
     if (document.visibilityState === 'hidden') {
       endTracker(endPoint, window['event_uuid_start'], window['visitor_uuid_start']);
+    }
+    if (document.visibilityState === 'visible') {
+      const response = await startTracker(endPoint, window['visitor_uuid'], window['referer']);
+      window['event_uuid_start'] = response?.event_uuid;
     }
   });
   window.addEventListener(
