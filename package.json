@@ -13,7 +13,6 @@
     "react": "^18.2.0"
   },
   "scripts": {
-    "clean": "rimraf lib",
     "dev": "tsup --watch --onSuccess 'yalc push --changed --no-scripts'",
     "build": "tsup",
     "lint": "eslint --fix \"src/**/\"",
@@ -43,13 +42,13 @@
     ]
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.21.4",
-    "@babel/preset-typescript": "^7.21.4",
+    "@babel/preset-env": "^7.21.5",
+    "@babel/preset-typescript": "^7.21.5",
     "@jest/globals": "^29.5.0",
     "@types/jest": "^29.5.0",
-    "@types/node": "^18.15.11",
+    "@types/node": "^20.1.4",
     "@types/react": "^18.0.30",
-    "@types/react-dom": "^18.0.11",
+    "@types/react-dom": "^18.2.4",
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.0",
     "dotenv": "^16.0.3",
@@ -59,7 +58,6 @@
     "jest-environment-jsdom": "^29.4.3",
     "node-fetch": "^3.3.1",
     "prettier": "^2.8.4",
-    "rimraf": "^4.4.1",
     "ts-jest": "^29.0.5",
     "tsup": "^6.7.0",
     "typescript": "^5.0.3"
