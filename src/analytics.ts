@@ -6,6 +6,7 @@ import {
   startTracker,
   trackEvent,
 } from './utils';
+import { addToCartAnalytics, checkoutAnalytics, searchAnalytics } from './utils/woocommerce';
 
 const AesirAnalytics = () => {
   const hook = (_this: object, method: string, callback: (_: string) => void) => {
@@ -123,4 +124,15 @@ const AesirAnalytics = () => {
   update();
 };
 
+const WoocommerceAnalytics = () => {
+  addToCartAnalytics();
+  searchAnalytics();
+  checkoutAnalytics();
+};
+
 AesirAnalytics();
+
+const isWoocommerce = window['isWoocommerce'] ? window['isWoocommerce'] : false;
+if (isWoocommerce) {
+  WoocommerceAnalytics();
+}

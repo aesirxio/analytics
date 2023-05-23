@@ -94,7 +94,7 @@ const trackEvent = async (
   const url = location.protocol + '//' + location.host + location.pathname;
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const responseStart = await trackerService(createRequest(endpoint, 'start'), {
+  const body = {
     ...(urlParams.get('visitor_uuid') && {
       visitor_uuid: urlParams.get('visitor_uuid'),
     }),
@@ -104,7 +104,10 @@ const trackEvent = async (
     referer: referer === '/' ? '' : referer,
     url: url,
     ...data,
-  });
+  }
+  const headers = {"type": 'application/json', };
+  const blob = new Blob([JSON.stringify(body)], headers);
+  const responseStart = navigator.sendBeacon(createRequest(endpoint, 'start'), blob);
 
   return responseStart;
 };
