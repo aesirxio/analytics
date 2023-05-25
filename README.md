@@ -22,6 +22,7 @@ Follow the instructions in: [https://github.com/aesirxio/analytics-1stparty](htt
 <script>window.aesirx1stparty = "https://example.com"</script>
 <script async defer src="YOUR_PROJECT_PATH/analytics.js"></script>
 ```
+
 (`https://example.com` is the link to your 1st party server which must be installed)
 
 #### Usage in ReactJS
