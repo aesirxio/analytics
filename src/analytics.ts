@@ -6,6 +6,7 @@ import {
   startTracker,
   trackEvent,
 } from './utils';
+import { addToCartAnalytics, checkoutAnalytics, searchAnalytics } from './utils/woocommerce';
 
 const AesirAnalytics = () => {
   const hook = (_this: object, method: string, callback: (_: string) => void) => {
@@ -123,4 +124,18 @@ const AesirAnalytics = () => {
   update();
 };
 
+const WoocommerceAnalytics = () => {
+  addToCartAnalytics();
+  searchAnalytics();
+  checkoutAnalytics();
+};
+
 AesirAnalytics();
+document.addEventListener('DOMContentLoaded', () => {
+  if (
+    document.body.classList.contains('woocommerce-js') ||
+    document.body.classList.contains('woocommerce-no-js')
+  ) {
+    WoocommerceAnalytics();
+  }
+});
