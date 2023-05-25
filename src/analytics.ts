@@ -131,8 +131,11 @@ const WoocommerceAnalytics = () => {
 };
 
 AesirAnalytics();
-
-const isWoocommerce = window['isWoocommerce'] ? window['isWoocommerce'] : false;
-if (isWoocommerce) {
-  WoocommerceAnalytics();
-}
+document.addEventListener('DOMContentLoaded', () => {
+  if (
+    document.body.classList.contains('woocommerce-js') ||
+    document.body.classList.contains('woocommerce-no-js')
+  ) {
+    WoocommerceAnalytics();
+  }
+});

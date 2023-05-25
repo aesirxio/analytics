@@ -22,7 +22,6 @@ Follow the instructions in: [https://github.com/aesirxio/analytics-1stparty](htt
 <script>window.aesirx1stparty = "https://example.com"</script>
 <script async defer src="YOUR_PROJECT_PATH/analytics.js"></script>
 ```
-if your site using Woocommerce plugin (Wordpress site) please add this script ```<script>window.isWoocommerce = true</script>```
 (`https://example.com` is the link to your 1st party server which must be installed)
 
 #### Usage in ReactJS
