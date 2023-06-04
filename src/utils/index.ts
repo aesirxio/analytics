@@ -22,7 +22,7 @@ const initTracker = async (
   const browser_version = browser?.browser?.version ?? '0';
   const lang = window.navigator['userLanguage'] || window.navigator.language;
   const device = browser?.platform?.model ?? browser?.platform?.type;
-  const domain = location?.host?.replace(/^www\./,'');
+  const domain = location?.host?.replace(/^www\./, '');
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const attributes = [];
@@ -50,8 +50,7 @@ const initTracker = async (
       });
       return response;
     } catch (error) {
-      window.alert('Analytics Error: ' + error);
-      throw error;
+      /* empty */
     }
   }
 };
@@ -104,8 +103,8 @@ const trackEvent = async (
     referer: referer === '/' ? '' : referer,
     url: url,
     ...data,
-  }
-  const headers = {"type": 'application/json', };
+  };
+  const headers = { type: 'application/json' };
   const blob = new Blob([JSON.stringify(body)], headers);
   const responseStart = navigator.sendBeacon(createRequest(endpoint, 'start'), blob);
 
@@ -139,18 +138,19 @@ const replaceUrl = (visitor_uuid: string) => {
 };
 
 const endTracker = (endPoint: string, event_uuid: string, visitor_uuid: string) => {
-  if(event_uuid && visitor_uuid) {
+  if (event_uuid && visitor_uuid) {
     const body = {
-      event_uuid: event_uuid, visitor_uuid: visitor_uuid
-    }
-    const headers = {"type": 'application/json', };
+      event_uuid: event_uuid,
+      visitor_uuid: visitor_uuid,
+    };
+    const headers = { type: 'application/json' };
     const blob = new Blob([JSON.stringify(body)], headers);
     navigator.sendBeacon(createRequest(endPoint, 'end'), blob);
   }
-}
+};
 
 const endTrackerVisibilityState = (endPoint: string) => {
-  document.addEventListener("visibilitychange", async () => {
+  document.addEventListener('visibilitychange', async () => {
     if (document.visibilityState === 'hidden') {
       endTracker(endPoint, window['event_uuid_start'], window['visitor_uuid_start']);
     }
@@ -160,7 +160,7 @@ const endTrackerVisibilityState = (endPoint: string) => {
     }
   });
   window.addEventListener(
-    "pagehide",
+    'pagehide',
     (event) => {
       if (event.persisted) {
         endTracker(endPoint, window['event_uuid_start'], window['visitor_uuid_start']);
@@ -168,7 +168,7 @@ const endTrackerVisibilityState = (endPoint: string) => {
     },
     false
   );
-}
+};
 
 function removeParam(key: string, sourceURL: string) {
   let rtn = sourceURL.split('?')[0],
@@ -188,4 +188,13 @@ function removeParam(key: string, sourceURL: string) {
   return rtn;
 }
 
-export { initTracker, startTracker, trackEvent, insertParam, replaceUrl, endTracker, endTrackerVisibilityState, removeParam };
+export {
+  initTracker,
+  startTracker,
+  trackEvent,
+  insertParam,
+  replaceUrl,
+  endTracker,
+  endTrackerVisibilityState,
+  removeParam,
+};
