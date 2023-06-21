@@ -50,6 +50,7 @@ const initTracker = async (
       });
       return response;
     } catch (error) {
+      console.error('Analytics Error: ', error);
       /* empty */
     }
   }
