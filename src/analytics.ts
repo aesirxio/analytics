@@ -72,12 +72,14 @@ const AesirAnalytics = () => {
       if (responseInit) {
         responseInit.visitor_uuid && insertParam('visitor_uuid', responseInit.visitor_uuid);
       }
-      const responseStart = await startTracker(root);
-      if (responseStart) {
-        window['event_uuid_start'] = responseStart.event_uuid;
-        window['visitor_uuid_start'] = responseStart.visitor_uuid;
-      }
       const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('visitor_uuid')) {
+        const responseStart = await startTracker(root);
+        if (responseStart) {
+          window['event_uuid_start'] = responseStart.event_uuid;
+          window['visitor_uuid_start'] = responseStart.visitor_uuid;
+        }
+      }
       const visitor_uuid = urlParams.get('visitor_uuid');
       visitor_uuid && replaceUrl(visitor_uuid);
 

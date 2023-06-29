@@ -1,6 +1,13 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
-import { initTracker, startTracker, replaceUrl, removeParam, endTracker, endTrackerVisibilityState } from '../utils/index';
+import {
+  initTracker,
+  startTracker,
+  replaceUrl,
+  removeParam,
+  endTracker,
+  endTrackerVisibilityState,
+} from '../utils/index';
 
 interface AnalyticsHandle {
   router: {
@@ -51,7 +58,7 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
       const { visitor_uuid } = router.query;
       visitor_uuid && setPrevRoute(removeParam('visitor_uuid', router.asPath));
       if (AnalyticsStore.visitor_uuid_start && !visitor_uuid) {
-        endTracker(endPoint, window['event_uuid_start'],AnalyticsStore.visitor_uuid_start);
+        endTracker(endPoint, window['event_uuid_start'], AnalyticsStore.visitor_uuid_start);
         await handleStartTracker(prevRoute);
       }
     };
@@ -61,9 +68,9 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
     const state = urlParams.get('state');
     const code = urlParams.get('code');
     if (!visitor_uuid && !state && !code) {
-      if(AnalyticsStore.visitor_uuid) {
-        if(router.asPath.includes("?")) {
-          if(Object.keys(router.query).length) {
+      if (AnalyticsStore.visitor_uuid) {
+        if (router.asPath.includes('?')) {
+          if (Object.keys(router.query).length) {
             router.replace(
               {
                 query: {
@@ -108,8 +115,8 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
   useEffect(() => {
     const init = async () => {
       window['visitor_uuid'] = AnalyticsStore.visitor_uuid;
-      window['event_uuid_start'] = AnalyticsStore.event_uuid_start
-      window['visitor_uuid_start'] = AnalyticsStore.visitor_uuid_start
+      window['event_uuid_start'] = AnalyticsStore.event_uuid_start;
+      window['visitor_uuid_start'] = AnalyticsStore.visitor_uuid_start;
     };
     init();
   }, [AnalyticsStore.event_uuid_start, AnalyticsStore.visitor_uuid_start]);

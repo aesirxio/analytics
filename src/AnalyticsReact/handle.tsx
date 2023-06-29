@@ -1,7 +1,13 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 import qs from 'query-string';
 import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
-import { initTracker, startTracker, replaceUrl, endTracker, endTrackerVisibilityState } from '../utils/index';
+import {
+  initTracker,
+  startTracker,
+  replaceUrl,
+  endTracker,
+  endTrackerVisibilityState,
+} from '../utils/index';
 
 interface AnalyticsHandle {
   location: { search: string; pathname: string };
@@ -16,7 +22,7 @@ const AnalyticsHandle = ({ location, history, children }: AnalyticsHandle) => {
   useEffect(() => {
     const init = async () => {
       if (AnalyticsStore.visitor_uuid_start) {
-        endTracker(endPoint,  window['event_uuid_start'], AnalyticsStore.visitor_uuid_start);
+        endTracker(endPoint, window['event_uuid_start'], AnalyticsStore.visitor_uuid_start);
       }
 
       if (!AnalyticsStore.visitor_uuid) {
@@ -67,11 +73,15 @@ const AnalyticsHandle = ({ location, history, children }: AnalyticsHandle) => {
   useEffect(() => {
     const init = async () => {
       window['visitor_uuid'] = AnalyticsStore.visitor_uuid;
-      window['event_uuid_start'] = AnalyticsStore.event_uuid_start
-      window['visitor_uuid_start'] = AnalyticsStore.visitor_uuid_start
+      window['event_uuid_start'] = AnalyticsStore.event_uuid_start;
+      window['visitor_uuid_start'] = AnalyticsStore.visitor_uuid_start;
     };
     init();
-  }, [AnalyticsStore.visitor_uuid, AnalyticsStore.event_uuid_start, AnalyticsStore.visitor_uuid_start]);
+  }, [
+    AnalyticsStore.visitor_uuid,
+    AnalyticsStore.event_uuid_start,
+    AnalyticsStore.visitor_uuid_start,
+  ]);
 
   return <>{children}</>;
 };
