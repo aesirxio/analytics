@@ -156,8 +156,11 @@ const endTrackerVisibilityState = (endPoint: string) => {
       endTracker(endPoint, window['event_uuid_start'], window['visitor_uuid_start']);
     }
     if (document.visibilityState === 'visible') {
-      const response = await startTracker(endPoint, window['visitor_uuid'], window['referer']);
-      window['event_uuid_start'] = response?.event_uuid;
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('visitor_uuid') || window['visitor_uuid']) {
+        const response = await startTracker(endPoint, window['visitor_uuid'], window['referer']);
+        window['event_uuid_start'] = response?.event_uuid;
+      }
     }
   });
   window.addEventListener(
