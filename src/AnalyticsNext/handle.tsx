@@ -10,13 +10,7 @@ import {
 } from '../utils/index';
 
 interface AnalyticsHandle {
-  router: {
-    asPath: string;
-    events: { on: (_: string, __: () => void) => void; off: (_: string, __: () => void) => void };
-    replace: any;
-    query: any;
-    push: any;
-  };
+  router: any;
   children?: ReactNode;
 }
 
