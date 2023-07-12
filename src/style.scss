@@ -4,8 +4,9 @@
 $enable-important-utilities: false;
 $prefix: aesirx-;
 $toast-background-color: var(--aesirx-white);
-$toast-max-width: none;
+$toast-max-width: 60vw;
 $toast-border-radius: 1rem;
+$toast-font-size: 1rem;
 $form-check-input-checked-bg-color: var(--aesirx-success);
 
 // 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
@@ -22,8 +23,6 @@ $form-check-input-checked-bg-color: var(--aesirx-success);
 .aesirx {
   // 6. Optionally include any other parts as needed
   @import 'bootstrap/scss/utilities';
-  @import 'bootstrap/scss/reboot';
-  @import 'bootstrap/scss/type';
   @import 'bootstrap/scss/containers';
   @import 'bootstrap/scss/grid';
   @import 'bootstrap/scss/offcanvas';

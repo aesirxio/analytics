@@ -1,13 +1,15 @@
 /* eslint-disable no-case-declarations */
-import { agreeConsents, getSignature, getWeb3ID } from '../utils/consent';
+import { agreeConsents, getSignature } from '../utils/consent';
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import useConsentStatus from '../Hooks/useConsentStatus';
 import '../style.scss';
-import TermsComponent from './Terms';
+import { TermsComponent } from './Terms';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/scss/main.scss';
 
 const ConsentComponent = ({ endpoint }: any) => {
-  const [uuid, level, provider, show, setShow, setLevel] = useConsentStatus(endpoint);
+  const [uuid, level, provider, show, setShow] = useConsentStatus(endpoint);
   const [consents, setConsents] = useState<number[]>([1, 2]);
   const [loading, setLoading] = useState('done');
 
@@ -26,17 +28,10 @@ const ConsentComponent = ({ endpoint }: any) => {
         const address = await provider.connect();
         setLoading('sign');
         const signature = await getSignature(endpoint, address, provider);
-        const web3id = await getWeb3ID(address, provider);
-
-        let level = 2;
-
-        if (web3id) {
-          level = 4;
-        }
 
         setLoading('saving');
-        setLevel(level);
-        await agreeConsents(endpoint, level, uuid, consents, address, signature, web3id);
+
+        await agreeConsents(endpoint, level, uuid, consents, address, signature);
       } else {
         setLoading('saving');
         consents.forEach(async (consent) => {
@@ -51,6 +46,7 @@ const ConsentComponent = ({ endpoint }: any) => {
       setLoading('done');
     } catch (error) {
       console.log(error);
+      toast.error(error.message);
       setShow(false);
       setLoading('done');
     }
@@ -62,72 +58,86 @@ const ConsentComponent = ({ endpoint }: any) => {
     setShow(false);
   };
 
+  console.log('level', uuid, level);
+
   return (
     <div className="aesirx">
+      <ToastContainer />
       <div className={`offcanvas-backdrop fade ${show ? 'show' : 'd-none'}`} />
       <div tabIndex={-1} className={`toast-container position-fixed bottom-0 end-0 p-3`}>
         <div className={`toast ${show ? 'show' : ''}`}>
           <div className="toast-body p-3">
-            <span className="fs-5">We need your permission to share your personal data.</span>
-            <div className={``}>
-              <TermsComponent level={level} />
+            {level ? (
+              <>
+                <TermsComponent level={level} />
 
-              <Form>
-                <Form.Check
-                  checked={consents.includes(1)}
-                  type="switch"
-                  label="Personal data share consent."
-                  value={1}
-                  onChange={handleChange}
-                />
-                <Form.Check
-                  checked={consents.includes(2)}
-                  type="switch"
-                  label="Personal data cross site share consent."
-                  value={2}
-                  onChange={handleChange}
-                />
-                <div className="d-flex mt-2 justify-content-end">
-                  {loading === 'done' ? (
-                    <>
-                      <Button variant="success" onClick={handleAgree} className="me-1">
-                        Allow
+                <Form>
+                  <Form.Check
+                    checked={consents.includes(1)}
+                    type="switch"
+                    label="Personal data share consent."
+                    value={1}
+                    onChange={handleChange}
+                    className="d-none"
+                  />
+                  <Form.Check
+                    checked={consents.includes(2)}
+                    type="switch"
+                    label="Personal data cross site share consent."
+                    value={2}
+                    onChange={handleChange}
+                    className="d-none"
+                  />
+                  <div className="d-flex mt-2 justify-content-end">
+                    {loading === 'done' ? (
+                      <>
+                        <Button variant="success" onClick={handleAgree} className="me-1">
+                          Yes, I Consent
+                        </Button>
+                        <Button variant="secondary" onClick={handleNotAllow}>
+                          Reject Consent
+                        </Button>
+                      </>
+                    ) : loading === 'connect' ? (
+                      <Button variant="primary" disabled>
+                        <span
+                          className="spinner-border spinner-border-sm me-1"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Please connect your Concordium wallet
                       </Button>
-                      <Button variant="secondary" onClick={handleNotAllow}>
-                        Don&apos;t allow
+                    ) : loading === 'sign' ? (
+                      <Button variant="primary" disabled>
+                        <span
+                          className="spinner-border spinner-border-sm me-1"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Please sign the message on your wallet twice and wait for it to be saved.
                       </Button>
-                    </>
-                  ) : loading === 'connect' ? (
-                    <Button variant="primary" disabled>
-                      <span
-                        className="spinner-border spinner-border-sm me-1"
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
-                      Please connect your Concordium wallet
-                    </Button>
-                  ) : loading === 'sign' ? (
-                    <Button variant="primary" disabled>
-                      <span
-                        className="spinner-border spinner-border-sm me-1"
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
-                      Please sign the message on your wallet twice and wait for it to be saved.
-                    </Button>
-                  ) : (
-                    <Button variant="primary" disabled>
-                      <span
-                        className="spinner-border spinner-border-sm me-1"
-                        role="status"
-                        aria-hidden="true"
-                      ></span>
-                      Saving...
-                    </Button>
-                  )}
-                </div>
-              </Form>
-            </div>
+                    ) : (
+                      <Button variant="primary" disabled>
+                        <span
+                          className="spinner-border spinner-border-sm me-1"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Saving...
+                      </Button>
+                    )}
+                  </div>
+                </Form>
+
+                <p className="fw-bold">
+                  * We do not collect any personal data, only user insights.
+                </p>
+
+                <TermsComponent level={level} upgrade={true} />
+              </>
+            ) : (
+              <>Loading...</>
+            )}
           </div>
         </div>
       </div>

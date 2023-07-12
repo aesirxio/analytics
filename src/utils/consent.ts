@@ -66,29 +66,6 @@ const getSignature = async (
   }
 };
 
-const getWeb3ID = async (address: string, provider: any) => {
-  try {
-    const signature = await getWeb3IdSignature(address, provider);
-
-    return (
-      await axios.get(
-        `${WEB3ID_BACKEND}/preregistration/account/${address}/?signature=${signature}&network=mainnet`
-      )
-    )?.data?.objForm?.id;
-  } catch (error) {
-    return '';
-  }
-};
-
-const getWeb3IdSignature = async (address: string, provider: any) => {
-  try {
-    const nonce = (await axios.get(`${WEB3ID_BACKEND}/account/${address}/nonce`)).data.nonce;
-    return getSignedNonce(nonce, address, provider);
-  } catch (error) {
-    throw error;
-  }
-};
-
 const getSignedNonce = async (nonce: string, address: string, provider: any) => {
   const signature = await provider.signMessage(address, String(nonce));
 
@@ -98,4 +75,4 @@ const getSignedNonce = async (nonce: string, address: string, provider: any) => 
   ).toString('base64');
 };
 
-export { agreeConsents, getConsents, getSignature, getWeb3ID };
+export { agreeConsents, getConsents, getSignature };
