@@ -6,7 +6,7 @@ import { detectConcordiumProvider } from '@concordium/browser-wallet-api-helpers
 const useConsentStatus = (endpoint?: string) => {
   const [show, setShow] = useState(false);
 
-  const [wallet, setWallet] = useState(false);
+  const [level, setLevel] = useState(1);
   const [provider, setProvider] = useState(null);
 
   const analyticsContext = useContext(AnalyticsContext);
@@ -26,7 +26,7 @@ const useConsentStatus = (endpoint?: string) => {
           setShow(true);
           sessionStorage.removeItem('aesirx-analytics-allow');
         } else {
-          if (wallet) {
+          if (level > 1) {
             sessionStorage.setItem('aesirx-analytics-uuid', analyticsContext.visitor_uuid);
             sessionStorage.setItem('aesirx-analytics-allow', '1');
           }
@@ -52,7 +52,7 @@ const useConsentStatus = (endpoint?: string) => {
         const provider = await detectConcordiumProvider();
         if (provider) {
           setProvider(provider);
-          setWallet(true);
+          setLevel(2);
         }
       } catch (error) {
         console.error(error);
@@ -60,7 +60,7 @@ const useConsentStatus = (endpoint?: string) => {
     })();
   }, []);
 
-  return [analyticsContext.visitor_uuid, wallet, provider, show, setShow];
+  return [analyticsContext.visitor_uuid, level, provider, show, setShow, setLevel];
 };
 
 export default useConsentStatus;

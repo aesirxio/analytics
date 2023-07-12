@@ -7,7 +7,7 @@ import '../style.scss';
 import TermsComponent from './Terms';
 
 const ConsentComponent = ({ endpoint }: any) => {
-  const [uuid, wallet, provider, show, setShow] = useConsentStatus(endpoint);
+  const [uuid, level, provider, show, setShow, setLevel] = useConsentStatus(endpoint);
   const [consents, setConsents] = useState<number[]>([1, 2]);
   const [loading, setLoading] = useState('done');
 
@@ -21,7 +21,7 @@ const ConsentComponent = ({ endpoint }: any) => {
 
   const handleAgree = async () => {
     try {
-      if (wallet) {
+      if (level > 1) {
         setLoading('connect');
         const address = await provider.connect();
         setLoading('sign');
@@ -33,7 +33,9 @@ const ConsentComponent = ({ endpoint }: any) => {
         if (web3id) {
           level = 4;
         }
+
         setLoading('saving');
+        setLevel(level);
         await agreeConsents(endpoint, level, uuid, consents, address, signature, web3id);
       } else {
         setLoading('saving');
@@ -68,7 +70,7 @@ const ConsentComponent = ({ endpoint }: any) => {
           <div className="toast-body p-3">
             <span className="fs-5">We need your permission to share your personal data.</span>
             <div className={``}>
-              <TermsComponent wallet={wallet} />
+              <TermsComponent level={level} />
 
               <Form>
                 <Form.Check
