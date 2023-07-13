@@ -55,6 +55,12 @@ const useConsentStatus = (endpoint?: string) => {
         const provider = await detectConcordiumProvider(100);
 
         if (provider) {
+          provider.on('accountDisconnected', () => {
+            setLevel(3);
+          });
+
+          provider.on('accountChanged', () => setLevel(4));
+
           l = 3;
           let web3ID = '';
           const accountAddress = await provider.getMostRecentlySelectedAccount();
@@ -78,7 +84,7 @@ const useConsentStatus = (endpoint?: string) => {
         console.error(error);
       }
     })();
-  }, []);
+  }, [level]);
 
   const handleLevel = useCallback(
     async (_level: number) => {
