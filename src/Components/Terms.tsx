@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import bg from '../Assets/bg.jpg';
+import bg from '../Assets/bg.png';
 import aesirx from '../Assets/aesirx.svg';
 import web3id from '../Assets/web3id.svg';
 import concordium from '../Assets/concordium.svg';
