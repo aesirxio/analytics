@@ -9,7 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/scss/main.scss';
 
 const ConsentComponent = ({ endpoint }: any) => {
-  const [uuid, level, provider, show, setShow] = useConsentStatus(endpoint);
+  const [uuid, level, provider, show, setShow, web3ID, handleLevel] = useConsentStatus(endpoint);
   const [consents, setConsents] = useState<number[]>([1, 2]);
   const [loading, setLoading] = useState('done');
 
@@ -27,11 +27,11 @@ const ConsentComponent = ({ endpoint }: any) => {
         setLoading('connect');
         const address = await provider.connect();
         setLoading('sign');
-        const signature = await getSignature(endpoint, address, provider);
+        const signature = await getSignature(endpoint, address, provider, 'Give consent:{}');
 
         setLoading('saving');
 
-        await agreeConsents(endpoint, level, uuid, consents, address, signature);
+        await agreeConsents(endpoint, level, uuid, consents, address, signature, web3ID);
       } else {
         setLoading('saving');
         consents.forEach(async (consent) => {
@@ -46,9 +46,10 @@ const ConsentComponent = ({ endpoint }: any) => {
       setLoading('done');
     } catch (error) {
       console.log(error);
-      toast.error(error.message);
+
       setShow(false);
       setLoading('done');
+      toast.error(error.message);
     }
   };
 
@@ -58,7 +59,7 @@ const ConsentComponent = ({ endpoint }: any) => {
     setShow(false);
   };
 
-  console.log('level', uuid, level);
+  console.log('level', uuid, level, web3ID);
 
   return (
     <div className="aesirx">
@@ -92,7 +93,7 @@ const ConsentComponent = ({ endpoint }: any) => {
                     {loading === 'done' ? (
                       <>
                         <Button variant="success" onClick={handleAgree} className="me-1">
-                          Yes, I Consent
+                          Yes, I consent
                         </Button>
                         <Button variant="secondary" onClick={handleNotAllow}>
                           Reject Consent
@@ -133,7 +134,7 @@ const ConsentComponent = ({ endpoint }: any) => {
                   * We do not collect any personal data, only user insights.
                 </p>
 
-                <TermsComponent level={level} upgrade={true} />
+                <TermsComponent level={level} upgrade={true} handleLevel={handleLevel} />
               </>
             ) : (
               <>Loading...</>

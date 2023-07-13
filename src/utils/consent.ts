@@ -1,6 +1,5 @@
 /* eslint-disable no-useless-catch */
 import axios from 'axios';
-import { WEB3ID_BACKEND } from './config';
 
 const agreeConsents = async (
   endpoint: string,
@@ -19,7 +18,7 @@ const agreeConsents = async (
       case 1:
         await axios.post(`${url}/${consent}`);
         break;
-      case 2:
+      case 3:
         await axios.post(`${url}/${network}/${wallet}`, {
           signature: signature,
           consent: consent,
@@ -54,11 +53,13 @@ const getSignature = async (
   endpoint: string,
   address: string,
   provider: any,
+  text: string,
   network = 'concordium'
 ) => {
   try {
-    const nonce = (await axios.post(`${endpoint}/wallet/v1/${network}/${address}/nonce`))?.data
-      .nonce;
+    const nonce = (
+      await axios.post(`${endpoint}/wallet/v1/${network}/${address}/nonce`, { text: text })
+    )?.data.nonce;
 
     return getSignedNonce(nonce, address, provider);
   } catch (error) {
