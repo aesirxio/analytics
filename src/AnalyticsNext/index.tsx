@@ -1,10 +1,11 @@
 import React, { ReactNode } from 'react';
 
-import { AnalyticsContextProvider } from '../utils/AnalyticsContextProvider';
+import AnalyticsContextProvider from '../utils/AnalyticsContextProvider';
 import AnalyticsHandle from './handle';
+import { NextRouter } from 'next/router';
 
 interface AnalyticsNext {
-  router: any;
+  router: NextRouter;
   children?: ReactNode;
 }
 

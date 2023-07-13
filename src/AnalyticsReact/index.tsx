@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 
-import { AnalyticsContextProvider } from '../utils/AnalyticsContextProvider';
+import AnalyticsContextProvider from '../utils/AnalyticsContextProvider';
 import AnalyticsHandle from './handle';
 
 interface AnalyticsReact {

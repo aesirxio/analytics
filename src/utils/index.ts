@@ -57,6 +57,12 @@ const initTracker = async (
 };
 
 const startTracker = async (endpoint: string, visitor_uuid?: string, referer?: string) => {
+  const allow = sessionStorage.getItem('aesirx-analytics-allow');
+
+  if (allow === '0') {
+    return null;
+  }
+
   const { location, document } = window;
   const { pathname, origin } = location;
   referer = referer
@@ -87,6 +93,12 @@ const trackEvent = async (
   referer?: string,
   data?: object
 ) => {
+  const allow = sessionStorage.getItem('aesirx-analytics-allow');
+
+  if (allow === '0') {
+    return null;
+  }
+
   const { location, document } = window;
   referer = referer
     ? location.protocol + '//' + location.host + referer

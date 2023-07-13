@@ -7,6 +7,44 @@ import {
   trackEvent,
 } from './utils';
 import { addToCartAnalytics, checkoutAnalytics, searchAnalytics } from './utils/woocommerce';
+import React, { useEffect, useState } from 'react';
+
+import { createRoot } from 'react-dom/client';
+import { AnalyticsContext } from './utils/AnalyticsContextProvider';
+import ConsentComponent from './Components/Consent';
+import { Buffer } from 'buffer';
+
+window.Buffer = Buffer;
+
+const ConsentPopup = () => {
+  const [UUID, setUUID] = useState('');
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('visitor_uuid')) {
+      setUUID(urlParams.get('visitor_uuid') ?? '');
+    }
+  }, []);
+
+  return (
+    <AnalyticsContext.Provider
+      value={{
+        visitor_uuid: UUID,
+        event_uuid_start: undefined,
+        visitor_uuid_start: undefined,
+        setUUID: setUUID,
+        setEventIDStart: undefined,
+        setUUIDStart: undefined,
+      }}
+    >
+      <ConsentComponent endpoint={window['aesirx1stparty'] ?? ''} />
+    </AnalyticsContext.Provider>
+  );
+};
+
+const container = document.body.appendChild(document.createElement('DIV'));
+
+const rootElement = createRoot(container);
 
 const AesirAnalytics = () => {
   const hook = (_this: object, method: string, callback: (_: string) => void) => {
@@ -73,15 +111,19 @@ const AesirAnalytics = () => {
         responseInit.visitor_uuid && insertParam('visitor_uuid', responseInit.visitor_uuid);
       }
       const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('visitor_uuid')) {
+
+      const visitor_uuid = urlParams.get('visitor_uuid');
+
+      if (visitor_uuid) {
         const responseStart = await startTracker(root);
         if (responseStart) {
           window['event_uuid_start'] = responseStart.event_uuid;
           window['visitor_uuid_start'] = responseStart.visitor_uuid;
         }
+
+        replaceUrl(visitor_uuid);
+        rootElement.render(<ConsentPopup />);
       }
-      const visitor_uuid = urlParams.get('visitor_uuid');
-      visitor_uuid && replaceUrl(visitor_uuid);
 
       if (dataEvents) {
         addEvents(document);
