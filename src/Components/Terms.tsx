@@ -54,7 +54,8 @@ const TermsComponent = ({ children, level, handleLevel }: any) => {
             <Fragment key={key}>
               <div className="rounded-top d-flex justify-content-between bg-light p-3 fw-bold">
                 <div>{term.name}</div>
-                <div>
+                <div className="d-flex align-items-center">
+                  <div className={`status-tier tier-${term.level} rounded-circle`}></div>
                   {term.tier} - {term.levelname}
                 </div>
               </div>
@@ -91,7 +92,7 @@ const TermsComponent = ({ children, level, handleLevel }: any) => {
                     </div>
                   </div>
 
-                  <div className="d-flex align-items-center justify-content-between">
+                  <div className="d-flex align-items-center justify-content-between flex-wrap">
                     <div className="me-2">
                       <img src={privacy} alt={term.name} /> Shield of Privacy
                     </div>
