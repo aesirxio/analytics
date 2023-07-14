@@ -3,9 +3,7 @@
  * @license     GNU General Public License version 3, see LICENSE.
  */
 
-import React, { Dispatch, ReactNode, SetStateAction, Suspense, useState } from 'react';
-
-const ConsentComponent = React.lazy(() => import('../Components/Consent'));
+import React, { Dispatch, ReactNode, SetStateAction, useState } from 'react';
 
 interface Props {
   children?: ReactNode;
@@ -45,15 +43,6 @@ const AnalyticsContextProvider: React.FC<Props> = ({ children }) => {
       }}
     >
       {children}
-      <Suspense fallback={<></>}>
-        <ConsentComponent
-          endpoint={
-            process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL
-              ? process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL
-              : process.env.REACT_APP_ENDPOINT_ANALYTICS_URL
-          }
-        />
-      </Suspense>
     </AnalyticsContext.Provider>
   );
 };
