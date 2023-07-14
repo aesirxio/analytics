@@ -27,7 +27,7 @@ const ConsentComponent = ({ endpoint }: any) => {
 
   const handleAgree = async () => {
     try {
-      if (level > 1) {
+      if (level > 2) {
         setLoading('connect');
         const address = await provider.connect();
         setLoading('sign');
