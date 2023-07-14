@@ -21,20 +21,33 @@ const terms = [
     logos: [aesirx],
   },
   {
-    level: 3,
+    level: 2,
     tier: 'Tier 2',
+    name: 'AesirX WEB3 ID',
+    levelname: 'Medium',
+    content:
+      'Ideal for personalized online experiences & secure consent management across sessions & platforms.',
+    term: 'You consent to data use across multiple sess`ions.',
+    upgrade: 'Upgrade to Tier 3 Consent - High ',
+    upgradetext:
+      '& add on Wallet-Based Decentralized Consent to give explicit consent for data collection & processing for the most secure, private & personalized experience.',
+    logos: [aesirx, web3id],
+  },
+  {
+    level: 3,
+    tier: 'Tier 3',
     name: 'Decentralized Wallet',
     levelname: 'High',
     content: 'Utilize your Web3 Wallet for greater control over your data.',
     term: 'You consent for your data to be used, which can be revoked at any time you choose.',
-    upgrade: 'Upgrade to Tier 3 Consent - Super Advanced (our highest tier!)',
+    upgrade: 'Upgrade to Tier 4 Consent - Super Advanced (our highest tier!)',
     upgradetext:
       ' & add on AesirX WEB3 ID to give explicit consent for data collection & processing for the most secure, private & personalized experience.',
     logos: [aesirx, web3id],
   },
   {
     level: 4,
-    tier: 'Tier 3',
+    tier: 'Tier 4',
     name: 'Combined Wallet + AesirX WEB3 ID',
     levelname: 'Super Advanced',
     content:

@@ -51,7 +51,7 @@ const useConsentStatus = (endpoint?: string) => {
   useEffect(() => {
     (async () => {
       try {
-        let l = 1;
+        let l = level;
         const provider = await detectConcordiumProvider(100);
 
         if (provider) {
@@ -80,7 +80,7 @@ const useConsentStatus = (endpoint?: string) => {
           setWeb3ID(web3ID);
         }
       } catch (error) {
-        setLevel(1);
+        setLevel(level ?? 1);
         console.error(error);
       }
     })();
@@ -88,7 +88,9 @@ const useConsentStatus = (endpoint?: string) => {
 
   const handleLevel = useCallback(
     async (_level: number) => {
-      if (_level === 3) {
+      if (_level === 2) {
+        setLevel(_level);
+      } else if (_level === 3) {
         try {
           await detectConcordiumProvider(100);
           setLevel(_level);
