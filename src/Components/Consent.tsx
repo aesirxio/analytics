@@ -6,7 +6,7 @@ import useConsentStatus from '../Hooks/useConsentStatus';
 import '../style.scss';
 import { TermsComponent } from './Terms';
 import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/scss/main.scss';
+
 import yes from '../Assets/yes.svg';
 import no from '../Assets/no.svg';
 
