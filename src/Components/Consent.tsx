@@ -112,7 +112,11 @@ const ConsentComponent = ({ endpoint }: any) => {
                         </Button>
                       </>
                     ) : loading === 'connect' ? (
-                      <Button variant="success" disabled className="d-flex align-items-center">
+                      <Button
+                        variant="success"
+                        disabled
+                        className="d-flex align-items-center text-white"
+                      >
                         <span
                           className="spinner-border spinner-border-sm me-1"
                           role="status"
@@ -121,7 +125,11 @@ const ConsentComponent = ({ endpoint }: any) => {
                         Please connect your Concordium wallet
                       </Button>
                     ) : loading === 'sign' ? (
-                      <Button variant="success" disabled className="d-flex align-items-center">
+                      <Button
+                        variant="success"
+                        disabled
+                        className="d-flex align-items-center text-white"
+                      >
                         <span
                           className="spinner-border spinner-border-sm me-1"
                           role="status"
@@ -130,7 +138,11 @@ const ConsentComponent = ({ endpoint }: any) => {
                         Please sign the message on your wallet twice and wait for it to be saved.
                       </Button>
                     ) : (
-                      <Button variant="success" disabled className="d-flex align-items-center">
+                      <Button
+                        variant="success"
+                        disabled
+                        className="d-flex align-items-center text-white"
+                      >
                         <span
                           className="spinner-border spinner-border-sm me-1"
                           role="status"
