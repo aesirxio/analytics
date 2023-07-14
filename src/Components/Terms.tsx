@@ -66,8 +66,8 @@ const TermsComponent = ({ children, level, handleLevel }: any) => {
                 <img className="position-absolute h-100 w-100 object-fit-cover" src={bg} />
                 <div className="position-relative p-3">
                   <div className="d-flex align-items-center">
-                    {term.logos.map((logo) => (
-                      <Fragment key={key}>
+                    {term.logos.map((logo, i) => (
+                      <Fragment key={i}>
                         <img className="me-2" src={logo} alt={term.levelname} />
                       </Fragment>
                     ))}
