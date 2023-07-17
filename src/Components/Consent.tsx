@@ -43,8 +43,8 @@ const ConsentComponent = ({ endpoint }: any) => {
         });
       }
 
-      sessionStorage.setItem('aesirx-analytics-uuid', uuid);
-      sessionStorage.setItem('aesirx-analytics-allow', '1');
+      localStorage.setItem('aesirx-analytics-uuid', uuid);
+      localStorage.setItem('aesirx-analytics-allow', '1');
 
       setShow(false);
       setLoading('done');
@@ -58,8 +58,8 @@ const ConsentComponent = ({ endpoint }: any) => {
   };
 
   const handleNotAllow = () => {
-    sessionStorage.setItem('aesirx-analytics-uuid', uuid);
-    sessionStorage.setItem('aesirx-analytics-allow', '0');
+    localStorage.setItem('aesirx-analytics-uuid', uuid);
+    localStorage.setItem('aesirx-analytics-allow', '0');
     setShow(false);
   };
 
