@@ -2042,10 +2042,10 @@ acorn@^8.1.0, acorn@^8.8.1, acorn@^8.8.2, acorn@^8.9.0:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.10.0.tgz#8be5b3907a67221a81ab23c7889c4c5526b62ec5"
   integrity sha512-F0SAmZ8iUtS//m8DmCTA0jlh6TDKkHQyK6xc6V4KDTyZKA9dnvX9/3sRTVQrWm79glUAZbnmmNcdYwUIHWVybw==
 
-aesirx-sso@1.0.11:
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/aesirx-sso/-/aesirx-sso-1.0.11.tgz#e2b6ab11b582b75efa2e0d7f0e8afb1a3a5728eb"
-  integrity sha512-BFSxLbHx7cLfRaQqQXpElgRKAtNe2xQmb9RqstlthDardFV9zv5quJFietIpv1G38qgvxgrbWB9RpdVbiFJfgw==
+aesirx-sso@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/aesirx-sso/-/aesirx-sso-1.1.1.tgz#7ab63e0ca63ad40ee7f024d22ce127720a310548"
+  integrity sha512-T5Ncso9AajMKyHu5LJH5fTdppsmQWE3z14U9hJvJovXK8tviQQttmMlqxyKHuyfLAwA180OEx4pccSVPh626pw==
   dependencies:
     cross-env "^7.0.3"
     dotenv "^16.0.3"
