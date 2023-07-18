@@ -9,6 +9,7 @@ const agreeConsents = async (
   wallet?: string,
   signature?: string,
   web3id?: string,
+  jwt?: string,
   network = 'concordium'
 ) => {
   const url = `${endpoint}/consent/v1/level${level}/${uuid}`;
@@ -17,6 +18,18 @@ const agreeConsents = async (
     switch (level) {
       case 1:
         await axios.post(`${url}/${consent}`);
+        break;
+      case 2:
+        await axios.post(
+          `${url}`,
+          { consent: [1, 2] },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + jwt,
+            },
+          }
+        );
         break;
       case 3:
         await axios.post(`${url}/${network}/${wallet}`, {

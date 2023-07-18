@@ -60,4 +60,30 @@ $success: #1ab394;
       background-color: #c8192e;
     }
   }
+  .ssoBtnWrapper {
+    position: relative;
+    border-radius: 0.5rem;
+    min-width: 120px;
+    .position-fixed {
+      position: absolute !important;
+      background: transparent !important;
+      & > span {
+        width: 25.7143px !important;
+        height: 25.7143px !important;
+        & > span {
+          width: 2.85714px !important;
+          height: 2.85714px !important;
+          top: 8.57143px !important;
+          background-color: rgb(255, 255, 255) !important;
+          + span {
+            width: 20px !important;
+            height: 20px !important;
+            border: 2.85714px solid rgb(255, 255, 255) !important;
+            background: transparent !important;
+            top: 0 !important;
+          }
+        }
+      }
+    }
+  }
 }
