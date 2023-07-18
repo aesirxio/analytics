@@ -11,6 +11,7 @@ import yes from '../Assets/yes.svg';
 import no from '../Assets/no.svg';
 
 import ContentLoader from 'react-content-loader';
+import { SSOButton, SSOContextProvider } from 'aesirx-sso';
 
 const ConsentComponent = ({ endpoint }: any) => {
   const [uuid, level, provider, show, setShow, web3ID, handleLevel] = useConsentStatus(endpoint);
@@ -57,6 +58,20 @@ const ConsentComponent = ({ endpoint }: any) => {
     }
   };
 
+  const onGetData = async (response: any) => {
+    try {
+      setLoading('saving');
+      await agreeConsents(endpoint, level, uuid, consents, null, null, null, response?.jwt);
+      setShow(false);
+      setLoading('done');
+    } catch (error) {
+      console.log(error);
+      setShow(false);
+      setLoading('done');
+      toast.error(error.message);
+    }
+  };
+
   const handleNotAllow = () => {
     localStorage.setItem('aesirx-analytics-uuid', uuid);
     localStorage.setItem('aesirx-analytics-allow', '0');
@@ -71,111 +86,130 @@ const ConsentComponent = ({ endpoint }: any) => {
       <div className={`offcanvas-backdrop fade ${show ? 'show' : 'd-none'}`} />
       <div tabIndex={-1} className={`toast-container position-fixed bottom-0 end-0 p-3`}>
         <div className={`toast ${show ? 'show' : ''}`}>
-          <div className="toast-body p-0">
-            {level ? (
-              <TermsComponent level={level} handleLevel={handleLevel}>
-                <Form>
-                  <Form.Check
-                    checked={consents.includes(1)}
-                    type="switch"
-                    label="Personal data share consent."
-                    value={1}
-                    onChange={handleChange}
-                    className="d-none"
-                  />
-                  <Form.Check
-                    checked={consents.includes(2)}
-                    type="switch"
-                    label="Personal data cross site share consent."
-                    value={2}
-                    onChange={handleChange}
-                    className="d-none"
-                  />
-                  <div className="d-flex mt-2 justify-content-end">
-                    {loading === 'done' ? (
-                      <>
+          <SSOContextProvider>
+            <div className="toast-body p-0">
+              {level ? (
+                <TermsComponent level={level} handleLevel={handleLevel}>
+                  <Form>
+                    <Form.Check
+                      checked={consents.includes(1)}
+                      type="switch"
+                      label="Personal data share consent."
+                      value={1}
+                      onChange={handleChange}
+                      className="d-none"
+                    />
+                    <Form.Check
+                      checked={consents.includes(2)}
+                      type="switch"
+                      label="Personal data cross site share consent."
+                      value={2}
+                      onChange={handleChange}
+                      className="d-none"
+                    />
+                    <div className="d-flex mt-2 justify-content-end">
+                      {loading === 'done' ? (
+                        <>
+                          {level === 2 ? (
+                            <div className="ssoBtnWrapper me-1 bg-success">
+                              <SSOButton
+                                className="btn btn-success text-white d-flex align-items-center"
+                                text={
+                                  <>
+                                    <img src={yes} className="me-2" />
+                                    Yes, I consent
+                                  </>
+                                }
+                                ssoState={'noscopes'}
+                                onGetData={onGetData}
+                              />
+                            </div>
+                          ) : (
+                            <Button
+                              variant="success"
+                              onClick={handleAgree}
+                              className="me-1 text-white d-flex align-items-center"
+                            >
+                              <img src={yes} className="me-2" />
+                              Yes, I consent
+                            </Button>
+                          )}
+
+                          <Button
+                            variant="secondary"
+                            onClick={handleNotAllow}
+                            className="text-white d-flex align-items-center"
+                          >
+                            <img src={no} className="me-2" />
+                            Reject Consent
+                          </Button>
+                        </>
+                      ) : loading === 'connect' ? (
                         <Button
                           variant="success"
-                          onClick={handleAgree}
-                          className="me-1 text-white d-flex align-items-center"
+                          disabled
+                          className="d-flex align-items-center text-white"
                         >
-                          <img src={yes} className="me-2" />
-                          Yes, I consent
+                          <span
+                            className="spinner-border spinner-border-sm me-1"
+                            role="status"
+                            aria-hidden="true"
+                          ></span>
+                          Please connect your Concordium wallet
                         </Button>
+                      ) : loading === 'sign' ? (
                         <Button
-                          variant="secondary"
-                          onClick={handleNotAllow}
-                          className="text-white d-flex align-items-center"
+                          variant="success"
+                          disabled
+                          className="d-flex align-items-center text-white"
                         >
-                          <img src={no} className="me-2" />
-                          Reject Consent
+                          <span
+                            className="spinner-border spinner-border-sm me-1"
+                            role="status"
+                            aria-hidden="true"
+                          ></span>
+                          Please sign the message on your wallet twice and wait for it to be saved.
                         </Button>
-                      </>
-                    ) : loading === 'connect' ? (
-                      <Button
-                        variant="success"
-                        disabled
-                        className="d-flex align-items-center text-white"
-                      >
-                        <span
-                          className="spinner-border spinner-border-sm me-1"
-                          role="status"
-                          aria-hidden="true"
-                        ></span>
-                        Please connect your Concordium wallet
-                      </Button>
-                    ) : loading === 'sign' ? (
-                      <Button
-                        variant="success"
-                        disabled
-                        className="d-flex align-items-center text-white"
-                      >
-                        <span
-                          className="spinner-border spinner-border-sm me-1"
-                          role="status"
-                          aria-hidden="true"
-                        ></span>
-                        Please sign the message on your wallet twice and wait for it to be saved.
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="success"
-                        disabled
-                        className="d-flex align-items-center text-white"
-                      >
-                        <span
-                          className="spinner-border spinner-border-sm me-1"
-                          role="status"
-                          aria-hidden="true"
-                        ></span>
-                        Saving...
-                      </Button>
-                    )}
-                  </div>
-                </Form>
-              </TermsComponent>
-            ) : (
-              <div className="p-4">
-                <ContentLoader
-                  speed={2}
-                  width={340}
-                  height={84}
-                  viewBox="0 0 340 84"
-                  backgroundColor="#f3f3f3"
-                  foregroundColor="#ecebeb"
-                >
-                  <rect x="0" y="0" rx="3" ry="3" width="67" height="11" />
-                  <rect x="76" y="0" rx="3" ry="3" width="140" height="11" />
-                  <rect x="127" y="48" rx="3" ry="3" width="53" height="11" />
-                  <rect x="187" y="48" rx="3" ry="3" width="72" height="11" />
-                  <rect x="18" y="48" rx="3" ry="3" width="100" height="11" />
-                  <rect x="0" y="71" rx="3" ry="3" width="37" height="11" />
-                  <rect x="18" y="23" rx="3" ry="3" width="140" height="11" />
-                  <rect x="166" y="23" rx="3" ry="3" width="173" height="11" />
-                </ContentLoader>
-              </div>
-            )}
-          </div>
+                      ) : (
+                        <Button
+                          variant="success"
+                          disabled
+                          className="d-flex align-items-center text-white"
+                        >
+                          <span
+                            className="spinner-border spinner-border-sm me-1"
+                            role="status"
+                            aria-hidden="true"
+                          ></span>
+                          Saving...
+                        </Button>
+                      )}
+                    </div>
+                  </Form>
+                </TermsComponent>
+              ) : (
+                <div className="p-4">
+                  <ContentLoader
+                    speed={2}
+                    width={340}
+                    height={84}
+                    viewBox="0 0 340 84"
+                    backgroundColor="#f3f3f3"
+                    foregroundColor="#ecebeb"
+                  >
+                    <rect x="0" y="0" rx="3" ry="3" width="67" height="11" />
+                    <rect x="76" y="0" rx="3" ry="3" width="140" height="11" />
+                    <rect x="127" y="48" rx="3" ry="3" width="53" height="11" />
+                    <rect x="187" y="48" rx="3" ry="3" width="72" height="11" />
+                    <rect x="18" y="48" rx="3" ry="3" width="100" height="11" />
+                    <rect x="0" y="71" rx="3" ry="3" width="37" height="11" />
+                    <rect x="18" y="23" rx="3" ry="3" width="140" height="11" />
+                    <rect x="166" y="23" rx="3" ry="3" width="173" height="11" />
+                  </ContentLoader>
+                </div>
+              )}
+            </div>
+          </SSOContextProvider>
         </div>
       </div>
     </div>
