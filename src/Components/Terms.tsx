@@ -27,7 +27,7 @@ const terms = [
     levelname: 'Medium',
     content:
       'Ideal for personalized online experiences & secure consent management across sessions & platforms.',
-    term: 'You consent to data use across multiple sess`ions.',
+    term: 'You consent to data use across multiple sessions.',
     upgrade: 'Upgrade to Tier 3 Consent - High ',
     upgradetext:
       '& add on Wallet-Based Decentralized Consent to give explicit consent for data collection & processing for the most secure, private & personalized experience.',
