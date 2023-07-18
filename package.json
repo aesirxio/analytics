@@ -6,6 +6,7 @@
   "repository": "https://gitlab.redweb.dk/aesirx/analytics",
   "main": "dist/index.js",
   "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "module",
   "dependencies": {
     "@concordium/browser-wallet-api-helpers": "^2",
