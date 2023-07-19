@@ -1,10 +1,11 @@
-import React, { ReactNode, Suspense } from 'react';
+import React, { ReactNode } from 'react';
 
 import AnalyticsContextProvider from '../utils/AnalyticsContextProvider';
 import AnalyticsHandle from './handle';
 import { NextRouter } from 'next/router';
+import dynamic from 'next/dynamic';
 
-const ConsentComponent = React.lazy(() => import('../Components/Consent'));
+const ConsentComponent = dynamic(() => import('../Components/Consent'), { ssr: false });
 
 interface AnalyticsNext {
   router: NextRouter;
@@ -17,9 +18,7 @@ const AnalyticsNext = ({ router, children }: AnalyticsNext) => {
       <AnalyticsContextProvider>
         <AnalyticsHandle router={router}>
           {children}
-          <Suspense fallback={<></>}>
-            <ConsentComponent endpoint={process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL} />
-          </Suspense>
+          <ConsentComponent endpoint={process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL} />
         </AnalyticsHandle>
       </AnalyticsContextProvider>
     </>
