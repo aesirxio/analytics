@@ -81,7 +81,7 @@ const ConsentComponent = ({ endpoint }: any) => {
   console.log('level', uuid, level, web3ID);
 
   return (
-    <div className="aesirx">
+    <div className="aesirxconsent">
       <ToastContainer />
       <div className={`offcanvas-backdrop fade ${show ? 'show' : 'd-none'}`} />
       <div tabIndex={-1} className={`toast-container position-fixed bottom-0 end-0 p-3`}>
