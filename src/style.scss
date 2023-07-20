@@ -86,4 +86,49 @@ $success: #1ab394;
       }
     }
   }
+  .revoke-toast {
+    width: auto;
+    &.expand {
+      width: 480px;
+    }
+    .toast-body {
+      .revoke-wrapper {
+        border-radius: 0.5rem;
+        position: relative;
+        overflow: hidden;
+        .cover-img {
+          z-index: -1;
+          position: absolute;
+          object-fit: cover;
+          top: 0;
+          left: 0;
+        }
+        .revoke-small {
+          cursor: pointer;
+          padding: 11.5px 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #fff;
+          img {
+            margin-right: 5px;
+          }
+        }
+        .text {
+          font-weight: 500;
+        }
+      }
+    }
+  }
+  .read-more {
+    text-align: right;
+    .read-more-btn {
+      display: inline-block;
+      color: #132342;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      padding-top: 10px;
+    }
+  }
 }

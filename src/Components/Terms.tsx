@@ -1,10 +1,11 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import bg from '../Assets/bg.png';
 import aesirx from '../Assets/aesirx.svg';
 import web3id from '../Assets/web3id.svg';
 import concordium from '../Assets/concordium.svg';
 import upgrade from '../Assets/upgrade.svg';
 import privacy from '../Assets/privacy.svg';
+import arrow from '../Assets/arrow.svg';
 
 const terms = [
   {
@@ -59,6 +60,10 @@ const terms = [
 ];
 
 const TermsComponent = ({ children, level, handleLevel }: any) => {
+  const handleReadmore = () => {
+    setShowReadmore(true);
+  };
+  const [showReadmore, setShowReadmore] = useState(false);
   return (
     <>
       {terms.map(
@@ -75,36 +80,46 @@ const TermsComponent = ({ children, level, handleLevel }: any) => {
               <div className="p-3 bg-white">
                 <span className="fw-bold">{term.content}</span>{' '}
                 <span className="fw-light">{term.term}</span>
+                {!showReadmore && (
+                  <div className="read-more">
+                    <div className="read-more-btn" onClick={handleReadmore}>
+                      Read more <img src={arrow} className="ms-1" />
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="rounded-bottom position-relative overflow-hidden text-white">
                 <img className="position-absolute h-100 w-100 object-fit-cover" src={bg} />
                 <div className="position-relative p-3">
-                  <div className="d-flex align-items-center">
-                    {term.logos.map((logo, i) => (
-                      <Fragment key={i}>
-                        <img className="me-2" src={logo} alt={term.levelname} />
-                      </Fragment>
-                    ))}
-                  </div>
-                  <div className="d-flex align-items-start my-3">
-                    <img src={upgrade} />
-                    <div className="ms-3">
-                      {term.upgrade && (
-                        <a
-                          className="text-white"
-                          href="#"
-                          onClick={() => handleLevel(terms[key + 1].level)}
-                        >
-                          {term.upgrade}
-                        </a>
-                      )}
-                      {term.upgradetext}
-                      <div className="fst-italic">
-                        We do not collect any personal data, only user insights.
+                  {showReadmore && (
+                    <>
+                      <div className="d-flex align-items-center">
+                        {term.logos.map((logo, i) => (
+                          <Fragment key={i}>
+                            <img className="me-2" src={logo} alt={term.levelname} />
+                          </Fragment>
+                        ))}
                       </div>
-                    </div>
-                  </div>
-
+                      <div className="d-flex align-items-start my-3">
+                        <img src={upgrade} />
+                        <div className="ms-3">
+                          {term.upgrade && (
+                            <a
+                              className="text-white"
+                              href="#"
+                              onClick={() => handleLevel(terms[key + 1].level)}
+                            >
+                              {term.upgrade}
+                            </a>
+                          )}
+                          {term.upgradetext}
+                          <div className="fst-italic">
+                            We do not collect any personal data, only user insights.
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
                   <div className="d-flex align-items-center justify-content-between flex-wrap">
                     <div className="me-2">
                       <img src={privacy} alt={term.name} /> Shield of Privacy
