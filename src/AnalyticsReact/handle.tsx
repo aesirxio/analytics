@@ -1,13 +1,6 @@
-import React, { ReactNode, useEffect, useState } from 'react';
-import qs from 'query-string';
+import React, { ReactNode, useEffect } from 'react';
 import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
-import {
-  initTracker,
-  startTracker,
-  replaceUrl,
-  endTracker,
-  endTrackerVisibilityState,
-} from '../utils/index';
+import { startTracker, endTracker, endTrackerVisibilityState } from '../utils/index';
 
 interface AnalyticsHandle {
   location: { search: string; pathname: string };
@@ -18,50 +11,20 @@ interface AnalyticsHandle {
 const AnalyticsHandle = ({ location, history, children }: AnalyticsHandle) => {
   const AnalyticsStore = React.useContext(AnalyticsContext);
   const endPoint = process.env.REACT_APP_ENDPOINT_ANALYTICS_URL;
-  const [prevRoute, setPrevRoute] = useState<string>(location.pathname);
   useEffect(() => {
     const init = async () => {
-      if (AnalyticsStore.visitor_uuid_start) {
-        endTracker(endPoint, window['event_uuid_start'], AnalyticsStore.visitor_uuid_start);
-      }
-
       if (!AnalyticsStore.visitor_uuid) {
-        const urlParams = new URLSearchParams(window.location.search);
-        const visitor_uuid = urlParams.get('visitor_uuid');
-        if (visitor_uuid) {
-          AnalyticsStore.setUUID(visitor_uuid);
-        } else {
-          const responseInit = await initTracker(endPoint);
-          responseInit.visitor_uuid && AnalyticsStore.setUUID(responseInit.visitor_uuid);
-          // Add Params to URL
-          const queryParams = qs.parse(location.search);
-          const newQueries = {
-            ...queryParams,
-            visitor_uuid: responseInit.visitor_uuid,
-          };
-          history.replace({ search: qs.stringify(newQueries) });
-        }
-      } else {
-        // Add Params to URL
-        const queryParams = qs.parse(location.search);
-        const newQueries = {
-          ...queryParams,
-          visitor_uuid: AnalyticsStore.visitor_uuid,
-        };
-        history.replace({ search: qs.stringify(newQueries) });
-
-        const referer = prevRoute ? prevRoute : '';
+        const referer = location.pathname ? location.pathname : '';
         window['referer'] = referer;
-        const responseStart = await startTracker(endPoint, AnalyticsStore.visitor_uuid, referer);
-        responseStart.event_uuid && AnalyticsStore.setEventIDStart(responseStart.event_uuid);
-        responseStart.visitor_uuid && AnalyticsStore.setUUIDStart(responseStart.visitor_uuid);
-        setPrevRoute(location.pathname);
-
-        replaceUrl(AnalyticsStore.visitor_uuid);
+        const responseStart = await startTracker(endPoint, '', referer);
+        responseStart.event_uuid && AnalyticsStore.setEventID(responseStart.event_uuid);
+        responseStart.visitor_uuid && AnalyticsStore.setUUID(responseStart.visitor_uuid);
+      } else {
+        endTracker(endPoint, window['event_uuid'], AnalyticsStore.visitor_uuid);
       }
     };
     init();
-  }, [location.pathname, AnalyticsStore.visitor_uuid, history]);
+  }, [location.pathname, history]);
 
   useEffect(() => {
     const init = async () => {
@@ -72,16 +35,11 @@ const AnalyticsHandle = ({ location, history, children }: AnalyticsHandle) => {
 
   useEffect(() => {
     const init = async () => {
+      window['event_uuid'] = AnalyticsStore.event_uuid;
       window['visitor_uuid'] = AnalyticsStore.visitor_uuid;
-      window['event_uuid_start'] = AnalyticsStore.event_uuid_start;
-      window['visitor_uuid_start'] = AnalyticsStore.visitor_uuid_start;
     };
     init();
-  }, [
-    AnalyticsStore.visitor_uuid,
-    AnalyticsStore.event_uuid_start,
-    AnalyticsStore.visitor_uuid_start,
-  ]);
+  }, [AnalyticsStore.event_uuid, AnalyticsStore.visitor_uuid]);
 
   return <>{children}</>;
 };

@@ -49,8 +49,8 @@ const ConsentComponent = ({ endpoint }: any) => {
         });
       }
 
-      localStorage.setItem('aesirx-analytics-uuid', uuid);
-      localStorage.setItem('aesirx-analytics-allow', '1');
+      sessionStorage.setItem('aesirx-analytics-uuid', uuid);
+      sessionStorage.setItem('aesirx-analytics-allow', '1');
 
       setShow(false);
       setLoading('done');
@@ -66,7 +66,7 @@ const ConsentComponent = ({ endpoint }: any) => {
   const onGetData = async (response: any) => {
     try {
       setLoading('saving');
-      localStorage.setItem('aesirx-analytics-jwt', response?.jwt);
+      sessionStorage.setItem('aesirx-analytics-jwt', response?.jwt);
       await agreeConsents(endpoint, level, uuid, consents, null, null, null, response?.jwt);
       setShow(false);
       handleRevoke(true, level);
@@ -80,13 +80,13 @@ const ConsentComponent = ({ endpoint }: any) => {
   };
 
   const handleNotAllow = () => {
-    localStorage.setItem('aesirx-analytics-uuid', uuid);
-    localStorage.setItem('aesirx-analytics-allow', '0');
+    sessionStorage.setItem('aesirx-analytics-uuid', uuid);
+    sessionStorage.setItem('aesirx-analytics-allow', '0');
     setShow(false);
   };
 
   const handleRevokeBtn = async () => {
-    const levelRevoke = localStorage.getItem('aesirx-analytics-revoke');
+    const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');
     try {
       if (levelRevoke) {
         if (parseInt(levelRevoke) > 2) {
@@ -120,10 +120,10 @@ const ConsentComponent = ({ endpoint }: any) => {
                 null,
                 null,
                 null,
-                localStorage.getItem('aesirx-analytics-jwt')
+                sessionStorage.getItem('aesirx-analytics-jwt')
               ));
           });
-          localStorage.removeItem('aesirx-analytics-jwt');
+          sessionStorage.removeItem('aesirx-analytics-jwt');
           setLoading('done');
         }
       }
@@ -146,8 +146,8 @@ const ConsentComponent = ({ endpoint }: any) => {
         <div
           className={`toast revoke-toast ${
             showRevoke ||
-            (localStorage.getItem('aesirx-analytics-revoke') &&
-              parseInt(localStorage.getItem('aesirx-analytics-revoke')) > 1)
+            (sessionStorage.getItem('aesirx-analytics-revoke') &&
+              parseInt(sessionStorage.getItem('aesirx-analytics-revoke')) > 1)
               ? 'show'
               : ''
           } ${showExpandRevoke ? 'expand' : ''}`}

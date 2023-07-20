@@ -1,13 +1,6 @@
-import {
-  endTrackerVisibilityState,
-  initTracker,
-  insertParam,
-  replaceUrl,
-  startTracker,
-  trackEvent,
-} from './utils';
+import { endTrackerVisibilityState, startTracker, trackEvent } from './utils';
 import { addToCartAnalytics, checkoutAnalytics, searchAnalytics } from './utils/woocommerce';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { createRoot } from 'react-dom/client';
 import { AnalyticsContext } from './utils/AnalyticsContextProvider';
@@ -17,24 +10,13 @@ import { Buffer } from 'buffer';
 window.Buffer = Buffer;
 
 const ConsentPopup = () => {
-  const [UUID, setUUID] = useState('');
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('visitor_uuid')) {
-      setUUID(urlParams.get('visitor_uuid') ?? '');
-    }
-  }, []);
-
   return (
     <AnalyticsContext.Provider
       value={{
-        visitor_uuid: UUID,
-        event_uuid_start: undefined,
-        visitor_uuid_start: undefined,
-        setUUID: setUUID,
-        setEventIDStart: undefined,
-        setUUIDStart: undefined,
+        event_uuid: undefined,
+        visitor_uuid: undefined,
+        setEventID: undefined,
+        setUUID: undefined,
       }}
     >
       <ConsentComponent endpoint={window['aesirx1stparty'] ?? ''} />
@@ -70,18 +52,12 @@ const AesirAnalytics = () => {
     } else {
       url = newUrl;
     }
-
-    // if (currentUrl !== currentRef) {
-    //   await initTracker();
-    //   startTracker();
-    // }
   };
 
   /* Global */
 
   if (!window['tracker']) {
     const tracker = (eventValue: string) => eventValue;
-    tracker.initTracker = initTracker;
     tracker.startTracker = startTracker;
 
     window['tracker'] = tracker;
@@ -106,24 +82,13 @@ const AesirAnalytics = () => {
 
   const update = async () => {
     if (document.readyState === 'complete') {
-      const responseInit = await initTracker(root);
-      if (responseInit) {
-        responseInit.visitor_uuid && insertParam('visitor_uuid', responseInit.visitor_uuid);
+      const responseStart = await startTracker(root);
+      if (responseStart) {
+        window['event_uuid'] = responseStart.event_uuid;
+        window['visitor_uuid'] = responseStart.visitor_uuid;
       }
-      const urlParams = new URLSearchParams(window.location.search);
 
-      const visitor_uuid = urlParams.get('visitor_uuid');
-
-      if (visitor_uuid) {
-        const responseStart = await startTracker(root);
-        if (responseStart) {
-          window['event_uuid_start'] = responseStart.event_uuid;
-          window['visitor_uuid_start'] = responseStart.visitor_uuid;
-        }
-
-        replaceUrl(visitor_uuid);
-        rootElement.render(<ConsentPopup />);
-      }
+      rootElement.render(<ConsentPopup />);
 
       if (dataEvents) {
         addEvents(document);
@@ -155,7 +120,7 @@ const AesirAnalytics = () => {
             });
           }
         });
-        trackEvent(root, '', '', {
+        trackEvent(root, '', {
           event_name: element.dataset.aesirxEventName,
           event_type: element.dataset.aesirxEventType,
           attributes: attribute,
