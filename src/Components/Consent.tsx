@@ -1,5 +1,5 @@
 /* eslint-disable no-case-declarations */
-import { agreeConsents, getSignature } from '../utils/consent';
+import { agreeConsents, getConsents, getSignature, revokeConsents } from '../utils/consent';
 import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import useConsentStatus from '../Hooks/useConsentStatus';
@@ -9,12 +9,15 @@ import { ToastContainer, toast } from 'react-toastify';
 
 import yes from '../Assets/yes.svg';
 import no from '../Assets/no.svg';
+import bg from '../Assets/bg.png';
+import privacy from '../Assets/privacy.svg';
 
 import ContentLoader from 'react-content-loader';
 import { SSOButton, SSOContextProvider } from 'aesirx-sso';
 
 const ConsentComponent = ({ endpoint }: any) => {
-  const [uuid, level, provider, show, setShow, web3ID, handleLevel] = useConsentStatus(endpoint);
+  const [uuid, level, provider, show, setShow, web3ID, handleLevel, showRevoke, handleRevoke] =
+    useConsentStatus(endpoint);
   const [consents, setConsents] = useState<number[]>([1, 2]);
   const [loading, setLoading] = useState('done');
 
@@ -37,6 +40,7 @@ const ConsentComponent = ({ endpoint }: any) => {
         setLoading('saving');
 
         await agreeConsents(endpoint, level, uuid, consents, address, signature, web3ID);
+        handleRevoke(true, level);
       } else {
         setLoading('saving');
         consents.forEach(async (consent) => {
@@ -63,6 +67,7 @@ const ConsentComponent = ({ endpoint }: any) => {
       setLoading('saving');
       await agreeConsents(endpoint, level, uuid, consents, null, null, null, response?.jwt);
       setShow(false);
+      handleRevoke(true, level);
       setLoading('done');
     } catch (error) {
       console.log(error);
@@ -78,12 +83,121 @@ const ConsentComponent = ({ endpoint }: any) => {
     setShow(false);
   };
 
+  const handleRevokeBtn = async () => {
+    const levelRevoke = localStorage.getItem('aesirx-analytics-revoke');
+    try {
+      if (levelRevoke) {
+        if (parseInt(levelRevoke) > 2) {
+          setLoading('connect');
+          const address = await provider.connect();
+          setLoading('sign');
+          const signature = await getSignature(endpoint, address, provider, 'Revoke consent:{}');
+          setLoading('saving');
+          const consentList = await getConsents(endpoint, uuid);
+          consentList.forEach(async (consent: any) => {
+            !consent?.expiration &&
+              (await revokeConsents(
+                endpoint,
+                levelRevoke,
+                consent?.consent_uuid,
+                address,
+                signature,
+                web3ID
+              ));
+          });
+          setLoading('done');
+        } else {
+          setLoading('saving');
+          const consentList = await getConsents(endpoint, uuid);
+          consentList.forEach(async (consent: any) => {
+            !consent?.expiration &&
+              (await revokeConsents(
+                endpoint,
+                levelRevoke,
+                consent?.consent_uuid,
+                null,
+                null,
+                null,
+                window['sso_response']?.jwt
+              ));
+          });
+          setLoading('done');
+        }
+      }
+      handleRevoke(false);
+    } catch (error) {
+      console.log(error);
+      setLoading('done');
+      handleRevoke(false);
+      toast.error(error.message);
+    }
+  };
+
   console.log('level', uuid, level, web3ID);
 
   return (
     <div className="aesirx">
       <ToastContainer />
       <div className={`offcanvas-backdrop fade ${show ? 'show' : 'd-none'}`} />
+      <div tabIndex={-1} className={`toast-container position-fixed bottom-0 end-0 p-3`}>
+        <div
+          className={`toast revoke-toast ${
+            showRevoke ||
+            (localStorage.getItem('aesirx-analytics-revoke') &&
+              parseInt(localStorage.getItem('aesirx-analytics-revoke')) > 1)
+              ? 'show'
+              : ''
+          }`}
+        >
+          <div className="toast-body p-0 ">
+            {loading === 'done' ? (
+              <div className="revoke-wrapper position-relative">
+                <img
+                  className="cover-img position-absolute h-100 w-100 object-fit-cover"
+                  src={bg}
+                />
+                <div className="text">
+                  <img src={privacy} alt="Shield of Privacy" /> Shield of Privacy
+                </div>
+                <Button
+                  variant="success"
+                  onClick={handleRevokeBtn}
+                  className="text-white d-flex align-items-center mx-auto"
+                >
+                  Revoke Consent
+                </Button>
+              </div>
+            ) : loading === 'connect' ? (
+              <Button variant="success" disabled className="d-flex align-items-center text-white">
+                <span
+                  className="spinner-border spinner-border-sm me-1"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Please connect your Concordium wallet
+              </Button>
+            ) : loading === 'sign' ? (
+              <Button variant="success" disabled className="d-flex align-items-center text-white">
+                <span
+                  className="spinner-border spinner-border-sm me-1"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Please sign the message on your wallet twice and wait for it to be saved.
+              </Button>
+            ) : (
+              <Button variant="success" disabled className="d-flex align-items-center text-white">
+                <span
+                  className="spinner-border spinner-border-sm me-1"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Saving...
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
       <div tabIndex={-1} className={`toast-container position-fixed bottom-0 end-0 p-3`}>
         <div className={`toast ${show ? 'show' : ''}`}>
           <SSOContextProvider>

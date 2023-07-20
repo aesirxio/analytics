@@ -89,4 +89,44 @@ const getSignedNonce = async (nonce: string, address: string, provider: any) => 
   ).toString('base64');
 };
 
-export { agreeConsents, getConsents, getSignature };
+const revokeConsents = async (
+  endpoint: string,
+  level: string,
+  uuid: string,
+  wallet?: string,
+  signature?: string,
+  web3id?: string,
+  jwt?: string,
+  network = 'concordium'
+) => {
+  const url = `${endpoint}/consent/v1/level${level}/revoke/${uuid}`;
+  try {
+    switch (level) {
+      case '2':
+        await axios.put(`${url}`, null, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + jwt,
+          },
+        });
+        break;
+      case '3':
+        await axios.put(`${url}/${network}/${wallet}`, {
+          signature: signature,
+        });
+        break;
+      case '4':
+        await axios.put(`${url}/${network}/${web3id}/${wallet}`, {
+          signature: signature,
+        });
+        break;
+
+      default:
+        break;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+export { agreeConsents, getConsents, getSignature, revokeConsents };

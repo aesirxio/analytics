@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 
 const useConsentStatus = (endpoint?: string) => {
   const [show, setShow] = useState(false);
+  const [showRevoke, setShowRevoke] = useState(false);
   const [level, setLevel] = useState<number>();
   const [provider, setProvider] = useState(null);
   const [web3ID, setWeb3ID] = useState<string>();
@@ -31,6 +32,7 @@ const useConsentStatus = (endpoint?: string) => {
           if (level > 1) {
             localStorage.setItem('aesirx-analytics-uuid', analyticsContext.visitor_uuid);
             localStorage.setItem('aesirx-analytics-allow', '1');
+            setShowRevoke(true);
           }
 
           consentList.forEach((consent: any) => {
@@ -120,7 +122,22 @@ const useConsentStatus = (endpoint?: string) => {
     [level]
   );
 
-  return [analyticsContext.visitor_uuid, level, provider, show, setShow, web3ID, handleLevel];
+  const handleRevoke = (status: boolean, level: string) => {
+    localStorage.setItem('aesirx-analytics-revoke', level ? level : '0');
+    setShowRevoke(status);
+  };
+
+  return [
+    analyticsContext.visitor_uuid,
+    level,
+    provider,
+    show,
+    setShow,
+    web3ID,
+    handleLevel,
+    showRevoke,
+    handleRevoke,
+  ];
 };
 
 export default useConsentStatus;
