@@ -95,7 +95,6 @@ $success: #1ab394;
         display: flex;
         align-items: center;
         justify-content: center;
-        padding: 35px 10px 10px 10px;
         overflow: hidden;
         .cover-img {
           z-index: -1;
@@ -104,10 +103,17 @@ $success: #1ab394;
           top: 0;
           left: 0;
         }
-        .text {
-          position: absolute;
-          top: 5px;
-          color: #fff;
+        .revoke-small {
+          cursor: pointer;
+          padding: 11.5px 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .revoke-btn {
+          img {
+            margin-right: 5px;
+          }
         }
       }
     }

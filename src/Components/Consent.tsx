@@ -20,6 +20,7 @@ const ConsentComponent = ({ endpoint }: any) => {
     useConsentStatus(endpoint);
   const [consents, setConsents] = useState<number[]>([1, 2]);
   const [loading, setLoading] = useState('done');
+  const [showExpandRevoke, setShowExpandRevoke] = useState(false);
 
   const handleChange = async ({ target: { value } }: any) => {
     if (consents.indexOf(parseInt(value)) === -1) {
@@ -152,20 +153,33 @@ const ConsentComponent = ({ endpoint }: any) => {
           <div className="toast-body p-0 ">
             {loading === 'done' ? (
               <div className="revoke-wrapper position-relative">
-                <img
-                  className="cover-img position-absolute h-100 w-100 object-fit-cover"
-                  src={bg}
-                />
-                <div className="text">
-                  <img src={privacy} alt="Shield of Privacy" /> Shield of Privacy
-                </div>
-                <Button
-                  variant="success"
-                  onClick={handleRevokeBtn}
-                  className="text-white d-flex align-items-center mx-auto"
-                >
-                  Revoke Consent
-                </Button>
+                {!showExpandRevoke && (
+                  <>
+                    <img
+                      className="cover-img position-absolute h-100 w-100 object-fit-cover"
+                      src={bg}
+                    />
+                    <div
+                      className="revoke-small"
+                      onClick={() => {
+                        setShowExpandRevoke(true);
+                      }}
+                    >
+                      <img src={privacy} alt="Shield of Privacy" />
+                    </div>
+                  </>
+                )}
+
+                {showExpandRevoke && (
+                  <Button
+                    variant="success"
+                    onClick={handleRevokeBtn}
+                    className="text-white d-flex align-items-center mx-auto revoke-btn"
+                  >
+                    <img src={privacy} alt="Shield of Privacy" />
+                    Revoke Consent
+                  </Button>
+                )}
               </div>
             ) : loading === 'connect' ? (
               <Button variant="success" disabled className="d-flex align-items-center text-white">
