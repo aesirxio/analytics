@@ -88,13 +88,13 @@ $success: #1ab394;
   }
   .revoke-toast {
     width: auto;
+    &.expand {
+      width: 480px;
+    }
     .toast-body {
       .revoke-wrapper {
         border-radius: 0.5rem;
         position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         overflow: hidden;
         .cover-img {
           z-index: -1;
@@ -109,11 +109,13 @@ $success: #1ab394;
           display: flex;
           align-items: center;
           justify-content: center;
-        }
-        .revoke-btn {
+          color: #fff;
           img {
             margin-right: 5px;
           }
+        }
+        .text {
+          font-weight: 500;
         }
       }
     }

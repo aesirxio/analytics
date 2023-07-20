@@ -66,6 +66,7 @@ const ConsentComponent = ({ endpoint }: any) => {
   const onGetData = async (response: any) => {
     try {
       setLoading('saving');
+      localStorage.setItem('aesirx-analytics-jwt', response?.jwt);
       await agreeConsents(endpoint, level, uuid, consents, null, null, null, response?.jwt);
       setShow(false);
       handleRevoke(true, level);
@@ -119,9 +120,10 @@ const ConsentComponent = ({ endpoint }: any) => {
                 null,
                 null,
                 null,
-                window['sso_response']?.jwt
+                localStorage.getItem('aesirx-analytics-jwt')
               ));
           });
+          localStorage.removeItem('aesirx-analytics-jwt');
           setLoading('done');
         }
       }
@@ -148,67 +150,107 @@ const ConsentComponent = ({ endpoint }: any) => {
               parseInt(localStorage.getItem('aesirx-analytics-revoke')) > 1)
               ? 'show'
               : ''
-          }`}
+          } ${showExpandRevoke ? 'expand' : ''}`}
         >
           <div className="toast-body p-0 ">
-            {loading === 'done' ? (
-              <div className="revoke-wrapper position-relative">
-                {!showExpandRevoke && (
-                  <>
+            <div className="revoke-wrapper position-relative">
+              {!showExpandRevoke && (
+                <>
+                  <img
+                    className="cover-img position-absolute h-100 w-100 object-fit-cover"
+                    src={bg}
+                  />
+                  <div
+                    className="revoke-small"
+                    onClick={() => {
+                      setShowExpandRevoke(true);
+                    }}
+                  >
+                    <img src={privacy} alt="Shield of Privacy" />
+                    Shield of Privacy
+                  </div>
+                </>
+              )}
+
+              {showExpandRevoke && (
+                <>
+                  <div className="p-3 bg-white text">
+                    You can revoke consent for your data to be used anytime. Go to{' '}
+                    <a
+                      href="https://nft.web3id.aesirx.io"
+                      className="text-success text-decoration-underline"
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      link
+                    </a>{' '}
+                    for more information.
+                  </div>
+                  <div className="rounded-bottom position-relative overflow-hidden text-white">
                     <img
                       className="cover-img position-absolute h-100 w-100 object-fit-cover"
                       src={bg}
                     />
-                    <div
-                      className="revoke-small"
-                      onClick={() => {
-                        setShowExpandRevoke(true);
-                      }}
-                    >
-                      <img src={privacy} alt="Shield of Privacy" />
+                    <div className="position-relative p-3">
+                      <div className="d-flex align-items-center justify-content-between flex-wrap">
+                        <div className="me-2">
+                          <img src={privacy} alt="Shield of Privacy" /> Shield of Privacy
+                        </div>
+                        {loading === 'done' ? (
+                          <Button
+                            variant="success"
+                            onClick={handleRevokeBtn}
+                            className="text-white d-flex align-items-center revoke-btn"
+                          >
+                            Revoke Consent
+                          </Button>
+                        ) : loading === 'connect' ? (
+                          <Button
+                            variant="success"
+                            disabled
+                            className="d-flex align-items-center text-white"
+                          >
+                            <span
+                              className="spinner-border spinner-border-sm me-1"
+                              role="status"
+                              aria-hidden="true"
+                            ></span>
+                            Please connect your Concordium wallet
+                          </Button>
+                        ) : loading === 'sign' ? (
+                          <Button
+                            variant="success"
+                            disabled
+                            className="d-flex align-items-center text-white"
+                          >
+                            <span
+                              className="spinner-border spinner-border-sm me-1"
+                              role="status"
+                              aria-hidden="true"
+                            ></span>
+                            Please sign the message on your wallet twice and wait for it to be
+                            saved.
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="success"
+                            disabled
+                            className="d-flex align-items-center text-white"
+                          >
+                            <span
+                              className="spinner-border spinner-border-sm me-1"
+                              role="status"
+                              aria-hidden="true"
+                            ></span>
+                            Saving...
+                          </Button>
+                        )}
+                      </div>
                     </div>
-                  </>
-                )}
-
-                {showExpandRevoke && (
-                  <Button
-                    variant="success"
-                    onClick={handleRevokeBtn}
-                    className="text-white d-flex align-items-center mx-auto revoke-btn"
-                  >
-                    <img src={privacy} alt="Shield of Privacy" />
-                    Revoke Consent
-                  </Button>
-                )}
-              </div>
-            ) : loading === 'connect' ? (
-              <Button variant="success" disabled className="d-flex align-items-center text-white">
-                <span
-                  className="spinner-border spinner-border-sm me-1"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                Please connect your Concordium wallet
-              </Button>
-            ) : loading === 'sign' ? (
-              <Button variant="success" disabled className="d-flex align-items-center text-white">
-                <span
-                  className="spinner-border spinner-border-sm me-1"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                Please sign the message on your wallet twice and wait for it to be saved.
-              </Button>
-            ) : (
-              <Button variant="success" disabled className="d-flex align-items-center text-white">
-                <span
-                  className="spinner-border spinner-border-sm me-1"
-                  role="status"
-                  aria-hidden="true"
-                ></span>
-                Saving...
-              </Button>
-            )}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
