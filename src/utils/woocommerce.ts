@@ -62,7 +62,7 @@ const addToCartAnalytics = () => {
     pushAttr(attributes, quantity, 'wooocommerce_quantity');
     pushAttr(attributes, variantID, 'wooocommerce_variant_id');
 
-    trackEvent(root, '', '', {
+    trackEvent(root, '', {
       event_name: 'Add to cart',
       event_type: 'submit',
       attributes: attributes,
@@ -89,7 +89,7 @@ const searchAnalytics = () => {
     const attributes = Array<AttributeType>();
     pushAttr(attributes, searchValue, 'wooocommerce_search');
 
-    trackEvent(root, '', '', {
+    trackEvent(root, '', {
       event_name: 'Search product',
       event_type: 'submit',
       attributes: attributes,
@@ -209,7 +209,7 @@ const checkoutAnalytics = () => {
         'mailpoet_woocommerce_checkout_optin'
       );
 
-      trackEvent(root, '', '', {
+      trackEvent(root, '', {
         event_name: 'Checkout',
         event_type: 'submit',
         attributes: attributes,

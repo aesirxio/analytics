@@ -1,99 +1,83 @@
 import { trackerService } from './services';
 import Bowser from 'bowser';
-
+import * as FingerprintJS from '@fingerprintjs/fingerprintjs';
 const createRequest = (endpoint: string, task: string) => {
   return `${endpoint}/visitor/v1/${task}`;
 };
+const createRequestV2 = (endpoint: string, task: string) => {
+  return `${endpoint}/visitor/v2/${task}`;
+};
 
-/* FUNCTION */
-const initTracker = async (
+const startTracker = async (
   endpoint: string,
   url?: string,
   referer?: string,
   user_agent?: string
 ) => {
-  const { document } = window;
-  const { pathname, search, origin } = location;
-  url = `${origin}${pathname}${search}`;
-  referer = document.referrer;
-  user_agent = window.navigator.userAgent;
-  const browser = Bowser.parse(window.navigator.userAgent);
-  const browser_name = browser?.browser?.name;
-  const browser_version = browser?.browser?.version ?? '0';
-  const lang = window.navigator['userLanguage'] || window.navigator.language;
-  const device = browser?.platform?.model ?? browser?.platform?.type;
-  const domain = location?.host?.replace(/^www\./, '');
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const attributes = [];
-  for (const key of urlParams.keys()) {
-    if (key.startsWith('utm_')) {
-      urlParams.get(key) && attributes.push({ name: key, value: urlParams.get(key) });
-    }
-  }
-  if (!urlParams.get('visitor_uuid')) {
-    const ip = '';
-    try {
-      const response = await trackerService(createRequest(endpoint, 'init'), {
-        url: url,
-        referer: referer,
-        user_agent: user_agent,
-        ip: ip,
-        domain: domain,
-        browser_name: browser_name,
-        browser_version: browser_version,
-        lang: lang,
-        device: device,
-        event_name: 'visit',
-        event_type: 'action',
-        attributes: attributes,
-      });
-      return response;
-    } catch (error) {
-      console.error('Analytics Error: ', error);
-      /* empty */
-    }
-  }
-};
-
-const startTracker = async (endpoint: string, visitor_uuid?: string, referer?: string) => {
-  const allow = localStorage.getItem('aesirx-analytics-allow');
+  const allow = sessionStorage.getItem('aesirx-analytics-allow');
 
   if (allow === '0') {
     return null;
   }
 
   const { location, document } = window;
-  const { pathname, origin } = location;
+  const { pathname, search, origin } = location;
+  url = `${origin}${pathname}${search}`;
   referer = referer
     ? location.protocol + '//' + location.host + referer
     : document.referrer
-    ? removeParam('visitor_uuid', document.referrer)
-    : `${origin}${pathname}`;
-  const url = location.protocol + '//' + location.host + location.pathname;
+    ? document.referrer
+    : '';
+  user_agent = window.navigator.userAgent;
+  const browser = Bowser.parse(window.navigator.userAgent);
+  const browser_name = browser?.browser?.name;
+  const browser_version = browser?.browser?.version ?? '0';
+  const lang = window.navigator['userLanguage'] || window.navigator.language;
+  const device = browser?.platform?.model ?? browser?.platform?.type;
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const responseStart = await trackerService(createRequest(endpoint, 'start'), {
-    ...(urlParams.get('visitor_uuid') && {
-      visitor_uuid: urlParams.get('visitor_uuid'),
-    }),
-    ...(visitor_uuid && {
-      visitor_uuid: visitor_uuid,
-    }),
-    referer: referer === '/' ? '' : referer,
-    url: url,
-  });
+  const ip = '';
 
-  return responseStart;
+  const fpPromise = FingerprintJS.load({ monitoring: false });
+  try {
+    const responseStart = fpPromise
+      .then((fp) => fp.get())
+      .then(async (result) => {
+        const fingerprint = result.visitorId;
+        const attributes = [];
+        for (const key of urlParams.keys()) {
+          if (key.startsWith('utm_')) {
+            urlParams.get(key) && attributes.push({ name: key, value: urlParams.get(key) });
+          }
+        }
+        return await trackerService(createRequestV2(endpoint, 'start'), {
+          fingerprint: fingerprint,
+          url: url,
+          ...(referer &&
+            referer !== url && {
+              referer: referer,
+            }),
+          user_agent: user_agent,
+          ip: ip,
+          browser_name: browser_name,
+          browser_version: browser_version,
+          lang: lang,
+          device: device,
+          ...(attributes?.length && {
+            event_name: 'visit',
+            event_type: 'action',
+            attributes: attributes,
+          }),
+        });
+      });
+    return responseStart;
+  } catch (error) {
+    console.error('Analytics Error: ', error);
+  }
 };
 
-const trackEvent = async (
-  endpoint: string,
-  visitor_uuid: string,
-  referer?: string,
-  data?: object
-) => {
-  const allow = localStorage.getItem('aesirx-analytics-allow');
+const trackEvent = async (endpoint: string, referer?: string, data?: object) => {
+  const allow = sessionStorage.getItem('aesirx-analytics-allow');
 
   if (allow === '0') {
     return null;
@@ -104,22 +88,38 @@ const trackEvent = async (
     ? location.protocol + '//' + location.host + referer
     : document.referrer.split('?')[0];
   const url = location.protocol + '//' + location.host + location.pathname;
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  const body = {
-    ...(urlParams.get('visitor_uuid') && {
-      visitor_uuid: urlParams.get('visitor_uuid'),
-    }),
-    ...(visitor_uuid && {
-      visitor_uuid: visitor_uuid,
-    }),
-    referer: referer === '/' ? '' : referer,
-    url: url,
-    ...data,
-  };
+  const user_agent = window.navigator.userAgent;
+  const browser = Bowser.parse(window.navigator.userAgent);
+  const browser_name = browser?.browser?.name;
+  const browser_version = browser?.browser?.version ?? '0';
+  const lang = window.navigator['userLanguage'] || window.navigator.language;
+  const device = browser?.platform?.model ?? browser?.platform?.type;
+  const ip = '';
+
+  const fpPromise = FingerprintJS.load({ monitoring: false });
+  const body = fpPromise
+    .then((fp) => fp.get())
+    .then(async (result) => {
+      const fingerprint = result.visitorId;
+      return {
+        fingerprint: fingerprint,
+        url: url,
+        ...(referer !== '/' &&
+          referer && {
+            referer: referer,
+          }),
+        user_agent: user_agent,
+        ip: ip,
+        browser_name: browser_name,
+        browser_version: browser_version,
+        lang: lang,
+        device: device,
+        ...data,
+      };
+    });
   const headers = { type: 'application/json' };
   const blob = new Blob([JSON.stringify(body)], headers);
-  const responseStart = navigator.sendBeacon(createRequest(endpoint, 'start'), blob);
+  const responseStart = navigator.sendBeacon(createRequestV2(endpoint, 'start'), blob);
 
   return responseStart;
 };
@@ -165,21 +165,18 @@ const endTracker = (endPoint: string, event_uuid: string, visitor_uuid: string) 
 const endTrackerVisibilityState = (endPoint: string) => {
   document.addEventListener('visibilitychange', async () => {
     if (document.visibilityState === 'hidden') {
-      endTracker(endPoint, window['event_uuid_start'], window['visitor_uuid_start']);
+      endTracker(endPoint, window['event_uuid'], window['visitor_uuid']);
     }
     if (document.visibilityState === 'visible') {
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('visitor_uuid') || window['visitor_uuid']) {
-        const response = await startTracker(endPoint, window['visitor_uuid'], window['referer']);
-        window['event_uuid_start'] = response?.event_uuid;
-      }
+      const response = await startTracker(endPoint);
+      window['event_uuid'] = response?.event_uuid;
     }
   });
   window.addEventListener(
     'pagehide',
     (event) => {
       if (event.persisted) {
-        endTracker(endPoint, window['event_uuid_start'], window['visitor_uuid_start']);
+        endTracker(endPoint, window['event_uuid'], window['visitor_uuid']);
       }
     },
     false
@@ -205,7 +202,6 @@ function removeParam(key: string, sourceURL: string) {
 }
 
 export {
-  initTracker,
   startTracker,
   trackEvent,
   insertParam,

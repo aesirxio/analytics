@@ -15,8 +15,8 @@ const useConsentStatus = (endpoint?: string) => {
   const analyticsContext = useContext(AnalyticsContext);
 
   useEffect(() => {
-    const allow = localStorage.getItem('aesirx-analytics-allow');
-    const currentUuid = localStorage.getItem('aesirx-analytics-uuid');
+    const allow = sessionStorage.getItem('aesirx-analytics-allow');
+    const currentUuid = sessionStorage.getItem('aesirx-analytics-uuid');
 
     if (
       analyticsContext.visitor_uuid &&
@@ -27,22 +27,22 @@ const useConsentStatus = (endpoint?: string) => {
 
         if (consentList?.length === 0) {
           setShow(true);
-          localStorage.removeItem('aesirx-analytics-allow');
+          sessionStorage.removeItem('aesirx-analytics-allow');
         } else {
           if (level > 1) {
-            localStorage.setItem('aesirx-analytics-uuid', analyticsContext.visitor_uuid);
-            localStorage.setItem('aesirx-analytics-allow', '1');
+            sessionStorage.setItem('aesirx-analytics-uuid', analyticsContext.visitor_uuid);
+            sessionStorage.setItem('aesirx-analytics-allow', '1');
             setShowRevoke(true);
           }
 
           consentList.forEach((consent: any) => {
             if (consent.expiration && new Date(consent.expiration) < new Date()) {
               setShow(true);
-              localStorage.removeItem('aesirx-analytics-allow');
+              sessionStorage.removeItem('aesirx-analytics-allow');
               return;
             } else {
-              localStorage.setItem('aesirx-analytics-uuid', analyticsContext.visitor_uuid);
-              localStorage.setItem('aesirx-analytics-allow', '1');
+              sessionStorage.setItem('aesirx-analytics-uuid', analyticsContext.visitor_uuid);
+              sessionStorage.setItem('aesirx-analytics-allow', '1');
             }
           });
         }
@@ -123,7 +123,7 @@ const useConsentStatus = (endpoint?: string) => {
   );
 
   const handleRevoke = (status: boolean, level: string) => {
-    localStorage.setItem('aesirx-analytics-revoke', level ? level : '0');
+    sessionStorage.setItem('aesirx-analytics-revoke', level ? level : '0');
     setShowRevoke(status);
   };
 
