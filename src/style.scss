@@ -4,12 +4,12 @@
 // 2. Include any default variable overrides here
 $enable-important-utilities: false;
 $enable-negative-margins: true;
-$prefix: aesirx-;
-$toast-background-color: var(--aesirx-white);
+$prefix: aesirxconsent-;
+$toast-background-color: var(--aesirxconsent-white);
 $toast-max-width: 617px;
 
 $toast-font-size: 1rem;
-$form-check-input-checked-bg-color: var(--aesirx-success);
+$form-check-input-checked-bg-color: var(--aesirxconsent-success);
 $toast-background-color: '';
 
 $border-radius: 0.5rem;
@@ -26,7 +26,7 @@ $success: #1ab394;
 @import 'bootstrap/scss/mixins';
 @import 'bootstrap/scss/root';
 
-.aesirx {
+.aesirxconsent {
   // 6. Optionally include any other parts as needed
   @import 'bootstrap/scss/utilities';
   @import 'bootstrap/scss/offcanvas';
@@ -41,7 +41,7 @@ $success: #1ab394;
   @import 'bootstrap/scss/utilities/api';
 
   .btn-success:hover {
-    color: var(--aesirx-white);
+    color: var(--aesirxconsent-white);
   }
   .status-tier {
     width: 18px;

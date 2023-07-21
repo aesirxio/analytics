@@ -11,7 +11,6 @@ export default defineConfig([
     clean: true,
     dts: true,
     format: ['esm'],
-    minify: env === 'development' ? false : 'terser',
     platform: 'browser',
     loader: {
       '.js': 'jsx',
@@ -21,8 +20,8 @@ export default defineConfig([
       ScssModulesPlugin({ localsConvention: 'dashes' }),
       sassPlugin({ type: 'style' }),
     ],
-    terserOptions: {
-      compress: { drop_console: true },
+    esbuildOptions(options) {
+      options.drop = ['console'];
     },
     outExtension() {
       return {
@@ -32,7 +31,7 @@ export default defineConfig([
   },
   {
     entry: ['src/analytics.tsx'],
-    minify: env === 'development' ? false : 'terser',
+    minify: env === 'production',
     format: ['iife'],
     platform: 'browser',
     esbuildPlugins: [
