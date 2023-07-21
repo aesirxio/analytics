@@ -9,12 +9,12 @@ import { Buffer } from 'buffer';
 
 window.Buffer = Buffer;
 
-const ConsentPopup = () => {
+const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
   return (
     <AnalyticsContext.Provider
       value={{
-        event_uuid: undefined,
-        visitor_uuid: undefined,
+        event_uuid: event_uuid,
+        visitor_uuid: visitor_uuid,
         setEventID: undefined,
         setUUID: undefined,
       }}
@@ -88,7 +88,12 @@ const AesirAnalytics = () => {
         window['visitor_uuid'] = responseStart.visitor_uuid;
       }
 
-      rootElement.render(<ConsentPopup />);
+      rootElement.render(
+        <ConsentPopup
+          event_uuid={responseStart.visitor_uuid}
+          visitor_uuid={responseStart.visitor_uuid}
+        />
+      );
 
       if (dataEvents) {
         addEvents(document);

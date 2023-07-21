@@ -28,8 +28,8 @@ export default defineConfig([
     format: ['iife'],
     platform: 'browser',
     esbuildPlugins: [inlineImage({ limit: -1 }), sassPlugin({ type: 'style' })],
-    terserOptions: {
-      compress: { drop_console: true },
+    esbuildOptions(options) {
+      options.drop = ['console'];
     },
     outExtension() {
       return {
