@@ -1,6 +1,6 @@
 {
   "name": "aesirx-analytics",
-  "version": "1.2.2",
+  "version": "2.0.0",
   "license": "GPL-3.0-only",
   "author": "AesirX",
   "repository": "https://gitlab.redweb.dk/aesirx/analytics",
@@ -26,7 +26,7 @@
     "react-toastify": "^9.1.3"
   },
   "scripts": {
-    "dev": "NODE_ENV=development tsup --watch --onSuccess 'yalc push --changed --no-scripts'",
+    "dev": "tsup --watch --onSuccess 'yalc push --changed --no-scripts'",
     "build": "tsup",
     "lint": "eslint --fix \"src/**/\"",
     "lint:check": "eslint \"src/**/\"",
@@ -74,7 +74,6 @@
     "jest-environment-jsdom": "^29.4.3",
     "node-fetch": "^3.3.1",
     "prettier": "^2.8.4",
-    "terser": "^5.19.0",
     "ts-jest": "^29.0.5",
     "tsup": "^6.7.0",
     "typescript": "^5.0.3"
