@@ -39,9 +39,12 @@ $success: #1ab394;
   @import 'bootstrap/scss/card';
   // 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
   @import 'bootstrap/scss/utilities/api';
-
+  color: #5f5e70;
   .btn-success:hover {
     color: var(--aesirxconsent-white);
+  }
+  .toast-container {
+    box-sizing: border-box;
   }
   .status-tier {
     width: 18px;

@@ -70,7 +70,7 @@ const TermsComponent = ({ children, level, handleLevel }: any) => {
         (term, key) =>
           term.level === level && (
             <Fragment key={key}>
-              <div className="rounded-top d-flex justify-content-between bg-light p-3 fw-bold">
+              <div className="rounded-top d-flex justify-content-between bg-light p-3 fw-bold flex-wrap">
                 <div>{term.name}</div>
                 <div className="d-flex align-items-center">
                   <div className={`status-tier tier-${term.level} rounded-circle`}></div>
