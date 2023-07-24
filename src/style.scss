@@ -39,9 +39,19 @@ $success: #1ab394;
   @import 'bootstrap/scss/card';
   // 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
   @import 'bootstrap/scss/utilities/api';
-
+  color: #5f5e70;
+  .btn.text-white {
+    color: #fff;
+  }
+  .btn-success-outline {
+    @include button-variant(transparent, $success, $success, $success, $success, $success);
+    color: $success;
+  }
   .btn-success:hover {
     color: var(--aesirxconsent-white);
+  }
+  .toast-container {
+    box-sizing: border-box;
   }
   .status-tier {
     width: 18px;
@@ -117,18 +127,28 @@ $success: #1ab394;
         .text {
           font-weight: 500;
         }
+        .minimize-revoke {
+          position: absolute;
+          top: 10px;
+          right: 5px;
+          cursor: pointer;
+        }
       }
     }
   }
   .read-more {
     text-align: right;
     .read-more-btn {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
       color: #132342;
       cursor: pointer;
       font-size: 14px;
       font-weight: 500;
       padding-top: 10px;
+      img.revert {
+        transform: rotate(180deg);
+      }
     }
   }
 }
