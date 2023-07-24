@@ -108,6 +108,7 @@ const ConsentComponent = ({ endpoint }: any) => {
               ));
           });
           setLoading('done');
+          handleRevoke(false);
         } else {
           setLoading('saving');
           const consentList = await getConsents(endpoint, uuid);
@@ -125,13 +126,12 @@ const ConsentComponent = ({ endpoint }: any) => {
           });
           sessionStorage.removeItem('aesirx-analytics-jwt');
           setLoading('done');
+          handleRevoke(false);
         }
       }
-      handleRevoke(false);
     } catch (error) {
       console.log(error);
       setLoading('done');
-      handleRevoke(false);
       toast.error(error.message);
     }
   };
@@ -174,6 +174,14 @@ const ConsentComponent = ({ endpoint }: any) => {
 
               {showExpandRevoke && (
                 <>
+                  <div
+                    className="minimize-revoke"
+                    onClick={() => {
+                      setShowExpandRevoke(false);
+                    }}
+                  >
+                    <img src={no} />
+                  </div>
                   <div className="p-3 bg-white text">
                     You can revoke consent for your data to be used anytime. Go to{' '}
                     <a
@@ -306,7 +314,7 @@ const ConsentComponent = ({ endpoint }: any) => {
                           )}
 
                           <Button
-                            variant="secondary"
+                            variant="success-outline"
                             onClick={handleNotAllow}
                             className="text-white d-flex align-items-center"
                           >

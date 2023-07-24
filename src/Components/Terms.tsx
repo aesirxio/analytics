@@ -60,8 +60,8 @@ const terms = [
 ];
 
 const TermsComponent = ({ children, level, handleLevel }: any) => {
-  const handleReadmore = () => {
-    setShowReadmore(true);
+  const handleReadmore = (status: boolean) => {
+    setShowReadmore(status);
   };
   const [showReadmore, setShowReadmore] = useState(false);
   return (
@@ -80,13 +80,17 @@ const TermsComponent = ({ children, level, handleLevel }: any) => {
               <div className="p-3 bg-white">
                 <span className="fw-bold">{term.content}</span>{' '}
                 <span className="fw-light">{term.term}</span>
-                {!showReadmore && (
-                  <div className="read-more">
-                    <div className="read-more-btn" onClick={handleReadmore}>
-                      Read more <img src={arrow} className="ms-1" />
-                    </div>
+                <div className="read-more">
+                  <div
+                    className="read-more-btn"
+                    onClick={() => {
+                      handleReadmore(!showReadmore ? true : false);
+                    }}
+                  >
+                    {!showReadmore ? 'Show details' : 'Hide details'}{' '}
+                    <img src={arrow} className={`ms-1 ${showReadmore ? 'revert' : ''}`} />
                   </div>
-                )}
+                </div>
               </div>
               <div className="rounded-bottom position-relative overflow-hidden text-white">
                 <img className="position-absolute h-100 w-100 object-fit-cover" src={bg} />

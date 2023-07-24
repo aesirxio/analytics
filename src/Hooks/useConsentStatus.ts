@@ -32,7 +32,7 @@ const useConsentStatus = (endpoint?: string) => {
           if (level > 1) {
             sessionStorage.setItem('aesirx-analytics-uuid', analyticsContext.visitor_uuid);
             sessionStorage.setItem('aesirx-analytics-allow', '1');
-            setShowRevoke(true);
+            handleRevoke(true, '1');
           }
 
           consentList.forEach((consent: any) => {
@@ -43,6 +43,15 @@ const useConsentStatus = (endpoint?: string) => {
             } else {
               sessionStorage.setItem('aesirx-analytics-uuid', analyticsContext.visitor_uuid);
               sessionStorage.setItem('aesirx-analytics-allow', '1');
+              if (consent) {
+                const revokeTier =
+                  consent?.web3id && consent?.address
+                    ? '4'
+                    : consent?.address && !consent?.web3id
+                    ? '3'
+                    : '2';
+                handleRevoke(true, revokeTier);
+              }
             }
           });
         }
