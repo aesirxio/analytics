@@ -316,7 +316,7 @@ const ConsentComponent = ({ endpoint }: any) => {
                           <Button
                             variant="success-outline"
                             onClick={handleNotAllow}
-                            className="text-white d-flex align-items-center"
+                            className="d-flex align-items-center"
                           >
                             <img src={no} className="me-2" />
                             Reject Consent
