@@ -20,7 +20,9 @@ const ConsentComponent = ({ endpoint }: any) => {
     useConsentStatus(endpoint);
   const [consents, setConsents] = useState<number[]>([1, 2]);
   const [loading, setLoading] = useState('done');
+  const [showExpandConsent, setShowExpandConsent] = useState(true);
   const [showExpandRevoke, setShowExpandRevoke] = useState(false);
+  const [showBackdrop, setShowBackdrop] = useState(true);
 
   const handleChange = async ({ target: { value } }: any) => {
     if (consents.indexOf(parseInt(value)) === -1) {
@@ -41,7 +43,6 @@ const ConsentComponent = ({ endpoint }: any) => {
         setLoading('saving');
 
         await agreeConsents(endpoint, level, uuid, consents, address, signature, web3ID);
-        handleRevoke(true, level);
       } else {
         setLoading('saving');
         consents.forEach(async (consent) => {
@@ -54,6 +55,8 @@ const ConsentComponent = ({ endpoint }: any) => {
 
       setShow(false);
       setLoading('done');
+      handleRevoke(true, level);
+      setShowBackdrop(false);
     } catch (error) {
       console.log(error);
 
@@ -80,9 +83,8 @@ const ConsentComponent = ({ endpoint }: any) => {
   };
 
   const handleNotAllow = () => {
-    sessionStorage.setItem('aesirx-analytics-uuid', uuid);
-    sessionStorage.setItem('aesirx-analytics-allow', '0');
-    setShow(false);
+    setShowExpandConsent(false);
+    setShowBackdrop(false);
   };
 
   const handleRevokeBtn = async () => {
@@ -128,6 +130,10 @@ const ConsentComponent = ({ endpoint }: any) => {
           setLoading('done');
           handleRevoke(false);
         }
+        setShowExpandConsent(false);
+        setShow(true);
+        setShowBackdrop(false);
+        sessionStorage.removeItem('aesirx-analytics-allow');
       }
     } catch (error) {
       console.log(error);
@@ -141,19 +147,15 @@ const ConsentComponent = ({ endpoint }: any) => {
   return (
     <div className="aesirxconsent">
       <ToastContainer />
-      <div className={`offcanvas-backdrop fade ${show ? 'show' : 'd-none'}`} />
+      <div className={`offcanvas-backdrop fade ${showBackdrop && show ? 'show' : 'd-none'}`} />
       <div tabIndex={-1} className={`toast-container position-fixed bottom-0 end-0 p-3`}>
         <div
           className={`toast revoke-toast ${
-            showRevoke ||
-            (sessionStorage.getItem('aesirx-analytics-revoke') &&
-              parseInt(sessionStorage.getItem('aesirx-analytics-revoke')) > 1)
-              ? 'show'
-              : ''
-          } ${showExpandRevoke ? 'expand' : ''}`}
+            showRevoke || sessionStorage.getItem('aesirx-analytics-revoke') ? 'show' : ''
+          } ${showExpandRevoke ? '' : 'minimize'}`}
         >
           <div className="toast-body p-0 ">
-            <div className="revoke-wrapper position-relative">
+            <div className="revoke-wrapper minimize-shield-wrapper position-relative">
               {!showExpandRevoke && (
                 <>
                   <img
@@ -161,7 +163,7 @@ const ConsentComponent = ({ endpoint }: any) => {
                     src={bg}
                   />
                   <div
-                    className="revoke-small"
+                    className="minimize-shield"
                     onClick={() => {
                       setShowExpandRevoke(true);
                     }}
@@ -208,7 +210,12 @@ const ConsentComponent = ({ endpoint }: any) => {
                           <Button
                             variant="success"
                             onClick={handleRevokeBtn}
-                            className="text-white d-flex align-items-center revoke-btn"
+                            className={`text-white d-flex align-items-center revoke-btn ${
+                              sessionStorage.getItem('aesirx-analytics-revoke') === '1'
+                                ? 'disabled'
+                                : ''
+                            }`}
+                            disabled={sessionStorage.getItem('aesirx-analytics-revoke') === '1'}
                           >
                             Revoke Consent
                           </Button>
@@ -263,128 +270,151 @@ const ConsentComponent = ({ endpoint }: any) => {
         </div>
       </div>
       <div tabIndex={-1} className={`toast-container position-fixed bottom-0 end-0 p-3`}>
-        <div className={`toast ${show ? 'show' : ''}`}>
+        <div className={`toast ${show ? 'show' : ''} ${showExpandConsent ? '' : 'minimize'}`}>
           <SSOContextProvider>
             <div className="toast-body p-0">
-              {level ? (
-                <TermsComponent level={level} handleLevel={handleLevel}>
-                  <Form>
-                    <Form.Check
-                      checked={consents.includes(1)}
-                      type="switch"
-                      label="Personal data share consent."
-                      value={1}
-                      onChange={handleChange}
-                      className="d-none"
+              {!showExpandConsent ? (
+                <>
+                  <div className="minimize-shield-wrapper position-relative">
+                    <img
+                      className="cover-img position-absolute h-100 w-100 object-fit-cover"
+                      src={bg}
                     />
-                    <Form.Check
-                      checked={consents.includes(2)}
-                      type="switch"
-                      label="Personal data cross site share consent."
-                      value={2}
-                      onChange={handleChange}
-                      className="d-none"
-                    />
-                    <div className="d-flex mt-2 justify-content-end">
-                      {loading === 'done' ? (
-                        <>
-                          {level === 2 ? (
-                            <div className="ssoBtnWrapper me-1 bg-success">
-                              <SSOButton
-                                className="btn btn-success text-white d-flex align-items-center"
-                                text={
-                                  <>
-                                    <img src={yes} className="me-2" />
-                                    Yes, I consent
-                                  </>
-                                }
-                                ssoState={'noscopes'}
-                                onGetData={onGetData}
-                              />
-                            </div>
+                    <div
+                      className="minimize-shield"
+                      onClick={() => {
+                        setShowExpandConsent(true);
+                      }}
+                    >
+                      <img src={privacy} alt="Shield of Privacy" />
+                      Shield of Privacy
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  {level ? (
+                    <TermsComponent level={level} handleLevel={handleLevel}>
+                      <Form>
+                        <Form.Check
+                          checked={consents.includes(1)}
+                          type="switch"
+                          label="Personal data share consent."
+                          value={1}
+                          onChange={handleChange}
+                          className="d-none"
+                        />
+                        <Form.Check
+                          checked={consents.includes(2)}
+                          type="switch"
+                          label="Personal data cross site share consent."
+                          value={2}
+                          onChange={handleChange}
+                          className="d-none"
+                        />
+                        <div className="d-flex justify-content-end">
+                          {loading === 'done' ? (
+                            <>
+                              {level === 2 ? (
+                                <div className="ssoBtnWrapper me-1 bg-success">
+                                  <SSOButton
+                                    className="btn btn-success text-white d-flex align-items-center"
+                                    text={
+                                      <>
+                                        <img src={yes} className="me-2" />
+                                        Yes, I consent
+                                      </>
+                                    }
+                                    ssoState={'noscopes'}
+                                    onGetData={onGetData}
+                                  />
+                                </div>
+                              ) : (
+                                <Button
+                                  variant="success"
+                                  onClick={handleAgree}
+                                  className="me-1 text-white d-flex align-items-center"
+                                >
+                                  <img src={yes} className="me-2" />
+                                  Yes, I consent
+                                </Button>
+                              )}
+
+                              <Button
+                                variant="success-outline"
+                                onClick={handleNotAllow}
+                                className="d-flex align-items-center"
+                              >
+                                <img src={no} className="me-2" />
+                                Reject Consent
+                              </Button>
+                            </>
+                          ) : loading === 'connect' ? (
+                            <Button
+                              variant="success"
+                              disabled
+                              className="d-flex align-items-center text-white"
+                            >
+                              <span
+                                className="spinner-border spinner-border-sm me-1"
+                                role="status"
+                                aria-hidden="true"
+                              ></span>
+                              Please connect your Concordium wallet
+                            </Button>
+                          ) : loading === 'sign' ? (
+                            <Button
+                              variant="success"
+                              disabled
+                              className="d-flex align-items-center text-white"
+                            >
+                              <span
+                                className="spinner-border spinner-border-sm me-1"
+                                role="status"
+                                aria-hidden="true"
+                              ></span>
+                              Please sign the message on your wallet twice and wait for it to be
+                              saved.
+                            </Button>
                           ) : (
                             <Button
                               variant="success"
-                              onClick={handleAgree}
-                              className="me-1 text-white d-flex align-items-center"
+                              disabled
+                              className="d-flex align-items-center text-white"
                             >
-                              <img src={yes} className="me-2" />
-                              Yes, I consent
+                              <span
+                                className="spinner-border spinner-border-sm me-1"
+                                role="status"
+                                aria-hidden="true"
+                              ></span>
+                              Saving...
                             </Button>
                           )}
-
-                          <Button
-                            variant="success-outline"
-                            onClick={handleNotAllow}
-                            className="d-flex align-items-center"
-                          >
-                            <img src={no} className="me-2" />
-                            Reject Consent
-                          </Button>
-                        </>
-                      ) : loading === 'connect' ? (
-                        <Button
-                          variant="success"
-                          disabled
-                          className="d-flex align-items-center text-white"
-                        >
-                          <span
-                            className="spinner-border spinner-border-sm me-1"
-                            role="status"
-                            aria-hidden="true"
-                          ></span>
-                          Please connect your Concordium wallet
-                        </Button>
-                      ) : loading === 'sign' ? (
-                        <Button
-                          variant="success"
-                          disabled
-                          className="d-flex align-items-center text-white"
-                        >
-                          <span
-                            className="spinner-border spinner-border-sm me-1"
-                            role="status"
-                            aria-hidden="true"
-                          ></span>
-                          Please sign the message on your wallet twice and wait for it to be saved.
-                        </Button>
-                      ) : (
-                        <Button
-                          variant="success"
-                          disabled
-                          className="d-flex align-items-center text-white"
-                        >
-                          <span
-                            className="spinner-border spinner-border-sm me-1"
-                            role="status"
-                            aria-hidden="true"
-                          ></span>
-                          Saving...
-                        </Button>
-                      )}
+                        </div>
+                      </Form>
+                    </TermsComponent>
+                  ) : (
+                    <div className="p-4">
+                      <ContentLoader
+                        speed={2}
+                        width={340}
+                        height={84}
+                        viewBox="0 0 340 84"
+                        backgroundColor="#f3f3f3"
+                        foregroundColor="#ecebeb"
+                      >
+                        <rect x="0" y="0" rx="3" ry="3" width="67" height="11" />
+                        <rect x="76" y="0" rx="3" ry="3" width="140" height="11" />
+                        <rect x="127" y="48" rx="3" ry="3" width="53" height="11" />
+                        <rect x="187" y="48" rx="3" ry="3" width="72" height="11" />
+                        <rect x="18" y="48" rx="3" ry="3" width="100" height="11" />
+                        <rect x="0" y="71" rx="3" ry="3" width="37" height="11" />
+                        <rect x="18" y="23" rx="3" ry="3" width="140" height="11" />
+                        <rect x="166" y="23" rx="3" ry="3" width="173" height="11" />
+                      </ContentLoader>
                     </div>
-                  </Form>
-                </TermsComponent>
-              ) : (
-                <div className="p-4">
-                  <ContentLoader
-                    speed={2}
-                    width={340}
-                    height={84}
-                    viewBox="0 0 340 84"
-                    backgroundColor="#f3f3f3"
-                    foregroundColor="#ecebeb"
-                  >
-                    <rect x="0" y="0" rx="3" ry="3" width="67" height="11" />
-                    <rect x="76" y="0" rx="3" ry="3" width="140" height="11" />
-                    <rect x="127" y="48" rx="3" ry="3" width="53" height="11" />
-                    <rect x="187" y="48" rx="3" ry="3" width="72" height="11" />
-                    <rect x="18" y="48" rx="3" ry="3" width="100" height="11" />
-                    <rect x="0" y="71" rx="3" ry="3" width="37" height="11" />
-                    <rect x="18" y="23" rx="3" ry="3" width="140" height="11" />
-                    <rect x="166" y="23" rx="3" ry="3" width="173" height="11" />
-                  </ContentLoader>
-                </div>
+                  )}
+                </>
               )}
             </div>
           </SSOContextProvider>

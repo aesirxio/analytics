@@ -44,12 +44,13 @@ const useConsentStatus = (endpoint?: string) => {
               sessionStorage.setItem('aesirx-analytics-uuid', analyticsContext.visitor_uuid);
               sessionStorage.setItem('aesirx-analytics-allow', '1');
               if (consent) {
-                const revokeTier =
-                  consent?.web3id && consent?.address
-                    ? '4'
-                    : consent?.address && !consent?.web3id
-                    ? '3'
-                    : '2';
+                const revokeTier = !consent?.consent_uuid
+                  ? '1'
+                  : consent?.web3id && consent?.address
+                  ? '4'
+                  : consent?.address && !consent?.web3id
+                  ? '3'
+                  : '2';
                 handleRevoke(true, revokeTier);
               }
             }
