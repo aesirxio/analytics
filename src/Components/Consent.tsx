@@ -83,6 +83,7 @@ const ConsentComponent = ({ endpoint }: any) => {
   };
 
   const handleNotAllow = () => {
+    sessionStorage.setItem('aesirx-analytics-uuid', uuid);
     setShowExpandConsent(false);
     setShowBackdrop(false);
   };
