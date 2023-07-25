@@ -94,6 +94,10 @@ const TermsComponent = ({ children, level, handleLevel }: any) => {
               </div>
               <div className="rounded-bottom position-relative overflow-hidden text-white">
                 <img className="position-absolute h-100 w-100 object-fit-cover" src={bg} />
+                <img
+                  className="position-absolute h-100 w-100 object-fit-cover lightning flash-effect"
+                  src={bg}
+                />
                 <div className="position-relative p-3">
                   {showReadmore && (
                     <>

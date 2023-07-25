@@ -44,7 +44,7 @@ $success: #1ab394;
     color: #fff;
   }
   .btn-success-outline {
-    @include button-variant(transparent, $success, $success, $success, $success, $success);
+    @include button-variant(transparent, $success, $success, transparent, $success, $success);
     color: $success;
   }
   .btn-success:hover {
@@ -97,43 +97,45 @@ $success: #1ab394;
     }
   }
   .revoke-toast {
-    width: auto;
-    &.expand {
-      width: 480px;
-    }
+    width: 480px;
     .toast-body {
-      .revoke-wrapper {
-        border-radius: 0.5rem;
-        position: relative;
-        overflow: hidden;
-        .cover-img {
-          z-index: -1;
-          position: absolute;
-          object-fit: cover;
-          top: 0;
-          left: 0;
-        }
-        .revoke-small {
-          cursor: pointer;
-          padding: 11.5px 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #fff;
-          img {
-            margin-right: 5px;
-          }
-        }
-        .text {
-          font-weight: 500;
-        }
-        .minimize-revoke {
-          position: absolute;
-          top: 10px;
-          right: 5px;
-          cursor: pointer;
-        }
+      .minimize-revoke {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        cursor: pointer;
       }
+    }
+  }
+  .toast {
+    &.minimize {
+      width: auto;
+    }
+  }
+  .minimize-shield-wrapper {
+    border-radius: 0.5rem;
+    position: relative;
+    overflow: hidden;
+    .cover-img {
+      z-index: -1;
+      position: absolute;
+      object-fit: cover;
+      top: 0;
+      left: 0;
+    }
+    .minimize-shield {
+      cursor: pointer;
+      padding: 11.5px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      img {
+        margin-right: 5px;
+      }
+    }
+    .text {
+      font-weight: 500;
     }
   }
   .read-more {
@@ -149,6 +151,62 @@ $success: #1ab394;
       img.revert {
         transform: rotate(180deg);
       }
+    }
+  }
+
+  .lightning {
+    -webkit-filter: brightness(8);
+    filter: brightness(8);
+    -o-filter: brightness(8);
+    -moz-filter: brightness(8);
+    opacity: 0;
+  }
+
+  .flash-effect {
+    -webkit-animation: flash ease-out 5s infinite;
+    -moz-animation: flash ease-out 5s infinite;
+    animation: flash ease-out 5s infinite;
+  }
+
+  @-webkit-keyframes flash {
+    from {
+      opacity: 0;
+    }
+    20% {
+      opacity: 0;
+    }
+    22% {
+      opacity: 0.6;
+    }
+    24% {
+      opacity: 0.2;
+    }
+    26% {
+      opacity: 0.9;
+    }
+    30% {
+      opacity: 0;
+    }
+  }
+
+  @keyframes flash {
+    from {
+      opacity: 0;
+    }
+    20% {
+      opacity: 0;
+    }
+    22% {
+      opacity: 0.6;
+    }
+    24% {
+      opacity: 0.2;
+    }
+    26% {
+      opacity: 1;
+    }
+    30% {
+      opacity: 0;
     }
   }
 }
