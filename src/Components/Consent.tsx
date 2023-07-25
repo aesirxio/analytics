@@ -127,7 +127,6 @@ const ConsentComponent = ({ endpoint }: any) => {
                 sessionStorage.getItem('aesirx-analytics-jwt')
               ));
           });
-          sessionStorage.removeItem('aesirx-analytics-jwt');
           setLoading('done');
           handleRevoke(false);
         }
@@ -152,7 +151,11 @@ const ConsentComponent = ({ endpoint }: any) => {
       <div tabIndex={-1} className={`toast-container position-fixed bottom-0 end-0 p-3`}>
         <div
           className={`toast revoke-toast ${
-            showRevoke || sessionStorage.getItem('aesirx-analytics-revoke') ? 'show' : ''
+            showRevoke ||
+            (sessionStorage.getItem('aesirx-analytics-revoke') &&
+              sessionStorage.getItem('aesirx-analytics-revoke') !== '0')
+              ? 'show'
+              : ''
           } ${showExpandRevoke ? '' : 'minimize'}`}
         >
           <div className="toast-body p-0 ">
@@ -207,59 +210,58 @@ const ConsentComponent = ({ endpoint }: any) => {
                         <div className="me-2">
                           <img src={privacy} alt="Shield of Privacy" /> Shield of Privacy
                         </div>
-                        {loading === 'done' ? (
-                          <Button
-                            variant="success"
-                            onClick={handleRevokeBtn}
-                            className={`text-white d-flex align-items-center revoke-btn ${
-                              sessionStorage.getItem('aesirx-analytics-revoke') === '1'
-                                ? 'disabled'
-                                : ''
-                            }`}
-                            disabled={sessionStorage.getItem('aesirx-analytics-revoke') === '1'}
-                          >
-                            Revoke Consent
-                          </Button>
-                        ) : loading === 'connect' ? (
-                          <Button
-                            variant="success"
-                            disabled
-                            className="d-flex align-items-center text-white"
-                          >
-                            <span
-                              className="spinner-border spinner-border-sm me-1"
-                              role="status"
-                              aria-hidden="true"
-                            ></span>
-                            Please connect your Concordium wallet
-                          </Button>
-                        ) : loading === 'sign' ? (
-                          <Button
-                            variant="success"
-                            disabled
-                            className="d-flex align-items-center text-white"
-                          >
-                            <span
-                              className="spinner-border spinner-border-sm me-1"
-                              role="status"
-                              aria-hidden="true"
-                            ></span>
-                            Please sign the message on your wallet twice and wait for it to be
-                            saved.
-                          </Button>
-                        ) : (
-                          <Button
-                            variant="success"
-                            disabled
-                            className="d-flex align-items-center text-white"
-                          >
-                            <span
-                              className="spinner-border spinner-border-sm me-1"
-                              role="status"
-                              aria-hidden="true"
-                            ></span>
-                            Saving...
-                          </Button>
+                        {sessionStorage.getItem('aesirx-analytics-revoke') !== '1' && (
+                          <>
+                            {loading === 'done' ? (
+                              <Button
+                                variant="success"
+                                onClick={handleRevokeBtn}
+                                className={'text-white d-flex align-items-center revoke-btn'}
+                              >
+                                Revoke Consent
+                              </Button>
+                            ) : loading === 'connect' ? (
+                              <Button
+                                variant="success"
+                                disabled
+                                className="d-flex align-items-center text-white"
+                              >
+                                <span
+                                  className="spinner-border spinner-border-sm me-1"
+                                  role="status"
+                                  aria-hidden="true"
+                                ></span>
+                                Please connect your Concordium wallet
+                              </Button>
+                            ) : loading === 'sign' ? (
+                              <Button
+                                variant="success"
+                                disabled
+                                className="d-flex align-items-center text-white"
+                              >
+                                <span
+                                  className="spinner-border spinner-border-sm me-1"
+                                  role="status"
+                                  aria-hidden="true"
+                                ></span>
+                                Please sign the message on your wallet twice and wait for it to be
+                                saved.
+                              </Button>
+                            ) : (
+                              <Button
+                                variant="success"
+                                disabled
+                                className="d-flex align-items-center text-white"
+                              >
+                                <span
+                                  className="spinner-border spinner-border-sm me-1"
+                                  role="status"
+                                  aria-hidden="true"
+                                ></span>
+                                Saving...
+                              </Button>
+                            )}
+                          </>
                         )}
                       </div>
                     </div>
