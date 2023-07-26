@@ -4,8 +4,14 @@ import { getConsents } from '../utils/consent';
 import { detectConcordiumProvider } from '@concordium/browser-wallet-api-helpers';
 import { getWeb3ID } from '../utils/Concordium';
 import { toast } from 'react-toastify';
-
-const useConsentStatus = (endpoint?: string) => {
+import { isMobile, isDesktop, osName, OsTypes } from 'react-device-detect';
+import { WALLET_CONNECT } from './config';
+import {
+  useConnection,
+  useWalletConnectorSelector,
+  WalletConnectionProps,
+} from '@concordium/react-components';
+const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   const [show, setShow] = useState(false);
   const [showRevoke, setShowRevoke] = useState(false);
   const [level, setLevel] = useState<number>();
@@ -13,6 +19,10 @@ const useConsentStatus = (endpoint?: string) => {
   const [web3ID, setWeb3ID] = useState<string>();
 
   const analyticsContext = useContext(AnalyticsContext);
+
+  const { connectedAccounts, genesisHashes } = props;
+  const { connection } = useConnection(connectedAccounts, genesisHashes);
+  const { select } = useWalletConnectorSelector(WALLET_CONNECT, connection, props);
 
   useEffect(() => {
     const allow = sessionStorage.getItem('aesirx-analytics-allow');
@@ -104,7 +114,16 @@ const useConsentStatus = (endpoint?: string) => {
         setLevel(_level);
       } else if (_level === 3) {
         try {
-          await detectConcordiumProvider(100);
+          if (isDesktop) {
+            await detectConcordiumProvider(100);
+          }
+          if (osName === OsTypes?.IOS && isMobile) {
+            toast('Wallet Connect not support on IOS');
+          } else {
+            // await detectConcordiumProvider(100);
+            select();
+            console.log('testnee');
+          }
           setLevel(_level);
         } catch (error) {
           setLevel(1);

@@ -14,10 +14,10 @@ import privacy from '../Assets/privacy.svg';
 
 import ContentLoader from 'react-content-loader';
 import { SSOButton, SSOContextProvider } from 'aesirx-sso';
-
-const ConsentComponent = ({ endpoint }: any) => {
+import { WalletConnectionProps } from '@concordium/react-components';
+const ConsentComponent = ({ endpoint }: any, props: WalletConnectionProps) => {
   const [uuid, level, provider, show, setShow, web3ID, handleLevel, showRevoke, handleRevoke] =
-    useConsentStatus(endpoint);
+    useConsentStatus(endpoint, props);
   const [consents, setConsents] = useState<number[]>([1, 2]);
   const [loading, setLoading] = useState('done');
   const [showExpandConsent, setShowExpandConsent] = useState(true);

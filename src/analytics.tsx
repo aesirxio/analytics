@@ -6,6 +6,7 @@ import { createRoot } from 'react-dom/client';
 import { AnalyticsContext } from './utils/AnalyticsContextProvider';
 import ConsentComponent from './Components/Consent';
 import { Buffer } from 'buffer';
+import { MAINNET, WithWalletConnector } from '@concordium/react-components';
 
 window.Buffer = Buffer;
 
@@ -19,7 +20,9 @@ const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
         setUUID: undefined,
       }}
     >
-      <ConsentComponent endpoint={window['aesirx1stparty'] ?? ''} />
+      <WithWalletConnector network={MAINNET}>
+        {(props) => <ConsentComponent endpoint={window['aesirx1stparty'] ?? ''} {...props} />}
+      </WithWalletConnector>
     </AnalyticsContext.Provider>
   );
 };

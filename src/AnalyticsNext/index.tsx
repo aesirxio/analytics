@@ -4,6 +4,7 @@ import AnalyticsContextProvider from '../utils/AnalyticsContextProvider';
 import AnalyticsHandle from './handle';
 import { NextRouter } from 'next/router';
 import dynamic from 'next/dynamic';
+import { MAINNET, WithWalletConnector } from '@concordium/react-components';
 
 const ConsentComponent = dynamic(() => import('../Components/Consent'), { ssr: false });
 
@@ -18,7 +19,14 @@ const AnalyticsNext = ({ router, children }: AnalyticsNext) => {
       <AnalyticsContextProvider>
         <AnalyticsHandle router={router}>
           {children}
-          <ConsentComponent endpoint={process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL} />
+          <WithWalletConnector network={MAINNET}>
+            {(props) => (
+              <ConsentComponent
+                endpoint={process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL}
+                {...props}
+              />
+            )}
+          </WithWalletConnector>
         </AnalyticsHandle>
       </AnalyticsContextProvider>
     </>
