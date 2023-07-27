@@ -13,7 +13,7 @@ import bg from '../Assets/bg.png';
 import privacy from '../Assets/privacy.svg';
 
 import ContentLoader from 'react-content-loader';
-import { SSOButton, SSOContextProvider } from 'aesirx-sso';
+import { SSOButton } from 'aesirx-sso';
 import { WalletConnectionProps } from '@concordium/react-components';
 const ConsentComponent = ({ endpoint }: any, props: WalletConnectionProps) => {
   const [uuid, level, provider, show, setShow, web3ID, handleLevel, showRevoke, handleRevoke] =
@@ -274,153 +274,151 @@ const ConsentComponent = ({ endpoint }: any, props: WalletConnectionProps) => {
       </div>
       <div tabIndex={-1} className={`toast-container position-fixed bottom-0 end-0 p-3`}>
         <div className={`toast ${show ? 'show' : ''} ${showExpandConsent ? '' : 'minimize'}`}>
-          <SSOContextProvider>
-            <div className="toast-body p-0">
-              {!showExpandConsent ? (
-                <>
-                  <div className="minimize-shield-wrapper position-relative">
-                    <img
-                      className="cover-img position-absolute h-100 w-100 object-fit-cover"
-                      src={bg}
-                    />
-                    <div
-                      className="minimize-shield"
-                      onClick={() => {
-                        setShowExpandConsent(true);
-                      }}
-                    >
-                      <img src={privacy} alt="Shield of Privacy" />
-                      Shield of Privacy
-                    </div>
+          <div className="toast-body p-0">
+            {!showExpandConsent ? (
+              <>
+                <div className="minimize-shield-wrapper position-relative">
+                  <img
+                    className="cover-img position-absolute h-100 w-100 object-fit-cover"
+                    src={bg}
+                  />
+                  <div
+                    className="minimize-shield"
+                    onClick={() => {
+                      setShowExpandConsent(true);
+                    }}
+                  >
+                    <img src={privacy} alt="Shield of Privacy" />
+                    Shield of Privacy
                   </div>
-                </>
-              ) : (
-                <>
-                  {level ? (
-                    <TermsComponent level={level} handleLevel={handleLevel}>
-                      <Form>
-                        <Form.Check
-                          checked={consents.includes(1)}
-                          type="switch"
-                          label="Personal data share consent."
-                          value={1}
-                          onChange={handleChange}
-                          className="d-none"
-                        />
-                        <Form.Check
-                          checked={consents.includes(2)}
-                          type="switch"
-                          label="Personal data cross site share consent."
-                          value={2}
-                          onChange={handleChange}
-                          className="d-none"
-                        />
-                        <div className="d-flex justify-content-end">
-                          {loading === 'done' ? (
-                            <>
-                              {level === 2 ? (
-                                <div className="ssoBtnWrapper me-1 bg-success">
-                                  <SSOButton
-                                    className="btn btn-success text-white d-flex align-items-center"
-                                    text={
-                                      <>
-                                        <img src={yes} className="me-2" />
-                                        Yes, I consent
-                                      </>
-                                    }
-                                    ssoState={'noscopes'}
-                                    onGetData={onGetData}
-                                  />
-                                </div>
-                              ) : (
-                                <Button
-                                  variant="success"
-                                  onClick={handleAgree}
-                                  className="me-1 text-white d-flex align-items-center"
-                                >
-                                  <img src={yes} className="me-2" />
-                                  Yes, I consent
-                                </Button>
-                              )}
-
+                </div>
+              </>
+            ) : (
+              <>
+                {level ? (
+                  <TermsComponent level={level} handleLevel={handleLevel}>
+                    <Form>
+                      <Form.Check
+                        checked={consents.includes(1)}
+                        type="switch"
+                        label="Personal data share consent."
+                        value={1}
+                        onChange={handleChange}
+                        className="d-none"
+                      />
+                      <Form.Check
+                        checked={consents.includes(2)}
+                        type="switch"
+                        label="Personal data cross site share consent."
+                        value={2}
+                        onChange={handleChange}
+                        className="d-none"
+                      />
+                      <div className="d-flex justify-content-end">
+                        {loading === 'done' ? (
+                          <>
+                            {level === 2 ? (
+                              <div className="ssoBtnWrapper me-1 bg-success">
+                                <SSOButton
+                                  className="btn btn-success text-white d-flex align-items-center"
+                                  text={
+                                    <>
+                                      <img src={yes} className="me-2" />
+                                      Yes, I consent
+                                    </>
+                                  }
+                                  ssoState={'noscopes'}
+                                  onGetData={onGetData}
+                                />
+                              </div>
+                            ) : (
                               <Button
-                                variant="success-outline"
-                                onClick={handleNotAllow}
-                                className="d-flex align-items-center"
+                                variant="success"
+                                onClick={handleAgree}
+                                className="me-1 text-white d-flex align-items-center"
                               >
-                                <img src={no} className="me-2" />
-                                Reject Consent
+                                <img src={yes} className="me-2" />
+                                Yes, I consent
                               </Button>
-                            </>
-                          ) : loading === 'connect' ? (
+                            )}
+
                             <Button
-                              variant="success"
-                              disabled
-                              className="d-flex align-items-center text-white"
+                              variant="success-outline"
+                              onClick={handleNotAllow}
+                              className="d-flex align-items-center"
                             >
-                              <span
-                                className="spinner-border spinner-border-sm me-1"
-                                role="status"
-                                aria-hidden="true"
-                              ></span>
-                              Please connect your Concordium wallet
+                              <img src={no} className="me-2" />
+                              Reject Consent
                             </Button>
-                          ) : loading === 'sign' ? (
-                            <Button
-                              variant="success"
-                              disabled
-                              className="d-flex align-items-center text-white"
-                            >
-                              <span
-                                className="spinner-border spinner-border-sm me-1"
-                                role="status"
-                                aria-hidden="true"
-                              ></span>
-                              Please sign the message on your wallet twice and wait for it to be
-                              saved.
-                            </Button>
-                          ) : (
-                            <Button
-                              variant="success"
-                              disabled
-                              className="d-flex align-items-center text-white"
-                            >
-                              <span
-                                className="spinner-border spinner-border-sm me-1"
-                                role="status"
-                                aria-hidden="true"
-                              ></span>
-                              Saving...
-                            </Button>
-                          )}
-                        </div>
-                      </Form>
-                    </TermsComponent>
-                  ) : (
-                    <div className="p-4">
-                      <ContentLoader
-                        speed={2}
-                        width={340}
-                        height={84}
-                        viewBox="0 0 340 84"
-                        backgroundColor="#f3f3f3"
-                        foregroundColor="#ecebeb"
-                      >
-                        <rect x="0" y="0" rx="3" ry="3" width="67" height="11" />
-                        <rect x="76" y="0" rx="3" ry="3" width="140" height="11" />
-                        <rect x="127" y="48" rx="3" ry="3" width="53" height="11" />
-                        <rect x="187" y="48" rx="3" ry="3" width="72" height="11" />
-                        <rect x="18" y="48" rx="3" ry="3" width="100" height="11" />
-                        <rect x="0" y="71" rx="3" ry="3" width="37" height="11" />
-                        <rect x="18" y="23" rx="3" ry="3" width="140" height="11" />
-                        <rect x="166" y="23" rx="3" ry="3" width="173" height="11" />
-                      </ContentLoader>
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-          </SSOContextProvider>
+                          </>
+                        ) : loading === 'connect' ? (
+                          <Button
+                            variant="success"
+                            disabled
+                            className="d-flex align-items-center text-white"
+                          >
+                            <span
+                              className="spinner-border spinner-border-sm me-1"
+                              role="status"
+                              aria-hidden="true"
+                            ></span>
+                            Please connect your Concordium wallet
+                          </Button>
+                        ) : loading === 'sign' ? (
+                          <Button
+                            variant="success"
+                            disabled
+                            className="d-flex align-items-center text-white"
+                          >
+                            <span
+                              className="spinner-border spinner-border-sm me-1"
+                              role="status"
+                              aria-hidden="true"
+                            ></span>
+                            Please sign the message on your wallet twice and wait for it to be
+                            saved.
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="success"
+                            disabled
+                            className="d-flex align-items-center text-white"
+                          >
+                            <span
+                              className="spinner-border spinner-border-sm me-1"
+                              role="status"
+                              aria-hidden="true"
+                            ></span>
+                            Saving...
+                          </Button>
+                        )}
+                      </div>
+                    </Form>
+                  </TermsComponent>
+                ) : (
+                  <div className="p-4">
+                    <ContentLoader
+                      speed={2}
+                      width={340}
+                      height={84}
+                      viewBox="0 0 340 84"
+                      backgroundColor="#f3f3f3"
+                      foregroundColor="#ecebeb"
+                    >
+                      <rect x="0" y="0" rx="3" ry="3" width="67" height="11" />
+                      <rect x="76" y="0" rx="3" ry="3" width="140" height="11" />
+                      <rect x="127" y="48" rx="3" ry="3" width="53" height="11" />
+                      <rect x="187" y="48" rx="3" ry="3" width="72" height="11" />
+                      <rect x="18" y="48" rx="3" ry="3" width="100" height="11" />
+                      <rect x="0" y="71" rx="3" ry="3" width="37" height="11" />
+                      <rect x="18" y="23" rx="3" ry="3" width="140" height="11" />
+                      <rect x="166" y="23" rx="3" ry="3" width="173" height="11" />
+                    </ContentLoader>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>
