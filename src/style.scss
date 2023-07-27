@@ -50,8 +50,12 @@ $success: #1ab394;
   .btn-success:hover {
     color: var(--aesirxconsent-white);
   }
+  .toast {
+    --aesirxconsent-toast-zindex: 1049;
+  }
   .toast-container {
     box-sizing: border-box;
+    --aesirxconsent-toast-zindex: 1049;
   }
   .status-tier {
     width: 18px;

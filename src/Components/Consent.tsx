@@ -13,7 +13,7 @@ import bg from '../Assets/bg.png';
 import privacy from '../Assets/privacy.svg';
 
 import ContentLoader from 'react-content-loader';
-import { SSOButton, SSOContextProvider } from 'aesirx-sso';
+import { SSOButton } from 'aesirx-sso';
 
 const ConsentComponent = ({ endpoint }: any) => {
   const [uuid, level, provider, show, setShow, web3ID, handleLevel, showRevoke, handleRevoke] =
@@ -274,7 +274,6 @@ const ConsentComponent = ({ endpoint }: any) => {
       </div>
       <div tabIndex={-1} className={`toast-container position-fixed bottom-0 end-0 p-3`}>
         <div className={`toast ${show ? 'show' : ''} ${showExpandConsent ? '' : 'minimize'}`}>
-          <SSOContextProvider>
             <div className="toast-body p-0">
               {!showExpandConsent ? (
                 <>
@@ -420,7 +419,6 @@ const ConsentComponent = ({ endpoint }: any) => {
                 </>
               )}
             </div>
-          </SSOContextProvider>
         </div>
       </div>
     </div>
