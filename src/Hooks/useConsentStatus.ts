@@ -1,28 +1,33 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
 import { getConsents } from '../utils/consent';
-import { detectConcordiumProvider } from '@concordium/browser-wallet-api-helpers';
 import { getWeb3ID } from '../utils/Concordium';
 import { toast } from 'react-toastify';
 import { isMobile, isDesktop, osName, OsTypes } from 'react-device-detect';
-import { WALLET_CONNECT } from './config';
+import { BROWSER_WALLET, WALLET_CONNECT } from './config';
 import {
+  MAINNET,
   useConnection,
-  useWalletConnectorSelector,
+  useConnect,
   WalletConnectionProps,
+  withJsonRpcClient,
 } from '@concordium/react-components';
 const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   const [show, setShow] = useState(false);
   const [showRevoke, setShowRevoke] = useState(false);
-  const [level, setLevel] = useState<number>();
-  const [provider, setProvider] = useState(null);
+  const [level, setLevel] = useState<any>();
   const [web3ID, setWeb3ID] = useState<string>();
 
   const analyticsContext = useContext(AnalyticsContext);
 
-  const { connectedAccounts, genesisHashes } = props;
-  const { connection } = useConnection(connectedAccounts, genesisHashes);
-  const { select } = useWalletConnectorSelector(WALLET_CONNECT, connection, props);
+  const {
+    activeConnector,
+    activeConnectorError,
+    network,
+    connectedAccounts,
+    genesisHashes,
+    setActiveConnectorType,
+  } = props;
 
   useEffect(() => {
     const allow = sessionStorage.getItem('aesirx-analytics-allow');
@@ -70,43 +75,97 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
     }
   }, [analyticsContext.visitor_uuid]);
 
+  const { connection, setConnection, account, genesisHash } = useConnection(
+    connectedAccounts,
+    genesisHashes
+  );
+
+  const { connect, connectError } = useConnect(activeConnector, setConnection);
+
+  const [, setRpcGenesisHash] = useState();
+  const [, setRpcError] = useState('');
+
+  useEffect(() => {
+    if (connection) {
+      setRpcGenesisHash(undefined);
+      withJsonRpcClient(connection, async (rpc) => {
+        const status = await rpc.getConsensusStatus();
+        return status.genesisBlock;
+      })
+        .then((hash: any) => {
+          const network = 'mainnet';
+
+          let r = false;
+
+          switch (network) {
+            // case 'testnet':
+            //   r = hash === TESTNET.genesisHash;
+            //   break;
+
+            default:
+              r = hash === MAINNET.genesisHash;
+          }
+
+          if (!r) {
+            const network = 'mainnet';
+            throw new Error(`Please change the network to ${network} in Wallet`);
+          }
+
+          setRpcGenesisHash(hash);
+          setRpcError('');
+        })
+        .catch((err) => {
+          setRpcGenesisHash(undefined);
+          toast(err.message);
+          setRpcError(err.message);
+        });
+    }
+  }, [connection, genesisHash, network]);
+
+  useEffect(() => {
+    if (activeConnector) {
+      connect();
+    }
+  }, [activeConnector]);
+
+  useEffect(() => {
+    if (connectError) {
+      toast.error(connectError);
+    }
+  }, [connectError]);
+
+  useEffect(() => {
+    if (isDesktop) {
+      setActiveConnectorType(BROWSER_WALLET);
+    }
+  }, []);
+
   useEffect(() => {
     (async () => {
       try {
         let l = level;
-        const provider = await detectConcordiumProvider(100);
-
-        if (provider) {
-          provider.on('accountDisconnected', () => {
-            setLevel(3);
-          });
-
-          provider.on('accountChanged', () => setLevel(4));
-
+        if (connection) {
+          setLevel(null);
           l = 3;
           let web3ID = '';
-          const accountAddress = await provider.getMostRecentlySelectedAccount();
-
-          if (accountAddress) {
-            web3ID = await getWeb3ID(provider, accountAddress);
-
-            console.log(web3ID);
+          if (account) {
+            web3ID = await getWeb3ID(connection, account);
 
             if (web3ID) {
               l = 4;
             }
           }
-
-          setProvider(provider);
           setLevel(l);
           setWeb3ID(web3ID);
+        } else {
+          setLevel(level ?? 1);
         }
       } catch (error) {
         setLevel(level ?? 1);
         console.error(error);
       }
     })();
-  }, [level]);
+  }, [account]);
 
   const handleLevel = useCallback(
     async (_level: number) => {
@@ -115,16 +174,21 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
       } else if (_level === 3) {
         try {
           if (isDesktop) {
-            await detectConcordiumProvider(100);
+            setActiveConnectorType(BROWSER_WALLET);
+            setLevel(null);
           }
           if (osName === OsTypes?.IOS && isMobile) {
             toast('Wallet Connect not support on IOS');
-          } else {
-            // await detectConcordiumProvider(100);
-            select();
-            console.log('testnee');
+          } else if (isMobile) {
+            setActiveConnectorType(WALLET_CONNECT);
+            setLevel(null);
           }
-          setLevel(_level);
+          if (activeConnectorError) {
+            setLevel(1);
+            toast('Browser Wallet extension not detected');
+          } else {
+            setLevel(_level);
+          }
         } catch (error) {
           setLevel(1);
           toast('Browser Wallet extension not detected');
@@ -133,8 +197,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
         setLevel(null);
 
         try {
-          const accountAddress = await provider.connect();
-          const web3ID = await getWeb3ID(provider, accountAddress);
+          const web3ID = await getWeb3ID(connection, account);
 
           if (web3ID) {
             setLevel(_level);
@@ -159,7 +222,8 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   return [
     analyticsContext.visitor_uuid,
     level,
-    provider,
+    connection,
+    account,
     show,
     setShow,
     web3ID,

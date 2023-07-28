@@ -14,10 +14,32 @@ import privacy from '../Assets/privacy.svg';
 
 import ContentLoader from 'react-content-loader';
 import { SSOButton } from 'aesirx-sso';
-import { WalletConnectionProps } from '@concordium/react-components';
-const ConsentComponent = ({ endpoint }: any, props: WalletConnectionProps) => {
-  const [uuid, level, provider, show, setShow, web3ID, handleLevel, showRevoke, handleRevoke] =
-    useConsentStatus(endpoint, props);
+import { MAINNET, WithWalletConnector, WalletConnectionProps } from '@concordium/react-components';
+interface WalletConnectionPropsExtends extends WalletConnectionProps {
+  endpoint: string;
+}
+const ConsentComponent = ({ endpoint }: any) => {
+  return (
+    <WithWalletConnector network={MAINNET}>
+      {(props) => <ConsentComponentApp {...props} endpoint={endpoint} />}
+    </WithWalletConnector>
+  );
+};
+const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
+  const { endpoint } = props;
+  const [
+    uuid,
+    level,
+    connection,
+    account,
+    show,
+    setShow,
+    web3ID,
+    handleLevel,
+    showRevoke,
+    handleRevoke,
+  ] = useConsentStatus(endpoint, props);
+
   const [consents, setConsents] = useState<number[]>([1, 2]);
   const [loading, setLoading] = useState('done');
   const [showExpandConsent, setShowExpandConsent] = useState(true);
@@ -36,9 +58,9 @@ const ConsentComponent = ({ endpoint }: any, props: WalletConnectionProps) => {
     try {
       if (level > 2) {
         setLoading('connect');
-        const address = await provider.connect();
+        const address = account;
         setLoading('sign');
-        const signature = await getSignature(endpoint, address, provider, 'Give consent:{}');
+        const signature = await getSignature(endpoint, address, connection, 'Give consent:{}');
 
         setLoading('saving');
 
@@ -62,7 +84,7 @@ const ConsentComponent = ({ endpoint }: any, props: WalletConnectionProps) => {
 
       setShow(false);
       setLoading('done');
-      toast.error(error.message);
+      toast.error(error?.response?.data?.error ?? error.message);
     }
   };
 
@@ -78,7 +100,7 @@ const ConsentComponent = ({ endpoint }: any, props: WalletConnectionProps) => {
       console.log(error);
       setShow(false);
       setLoading('done');
-      toast.error(error.message);
+      toast.error(error?.response?.data?.error ?? error.message);
     }
   };
 
@@ -94,9 +116,9 @@ const ConsentComponent = ({ endpoint }: any, props: WalletConnectionProps) => {
       if (levelRevoke) {
         if (parseInt(levelRevoke) > 2) {
           setLoading('connect');
-          const address = await provider.connect();
+          const address = account;
           setLoading('sign');
-          const signature = await getSignature(endpoint, address, provider, 'Revoke consent:{}');
+          const signature = await getSignature(endpoint, address, connection, 'Revoke consent:{}');
           setLoading('saving');
           const consentList = await getConsents(endpoint, uuid);
           consentList.forEach(async (consent: any) => {
@@ -138,7 +160,7 @@ const ConsentComponent = ({ endpoint }: any, props: WalletConnectionProps) => {
     } catch (error) {
       console.log(error);
       setLoading('done');
-      toast.error(error.message);
+      toast.error(error?.response?.data?.error ?? error.message);
     }
   };
 
@@ -338,7 +360,7 @@ const ConsentComponent = ({ endpoint }: any, props: WalletConnectionProps) => {
                                 className="me-1 text-white d-flex align-items-center"
                               >
                                 <img src={yes} className="me-2" />
-                                Yes, I consent
+                                Yes, I consent haha
                               </Button>
                             )}
 
