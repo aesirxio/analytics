@@ -9,8 +9,13 @@ import { Buffer } from 'buffer';
 import { MAINNET, WithWalletConnector } from '@concordium/react-components';
 
 window.Buffer = Buffer;
-
+declare global {
+  interface Window {
+    process: any;
+  }
+}
 const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
+  window.process = { env: '' };
   return (
     <AnalyticsContext.Provider
       value={{

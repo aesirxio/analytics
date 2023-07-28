@@ -211,7 +211,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                     <img src={no} />
                   </div>
                   <div className="p-3 bg-white text">
-                    You can revoke consent for your data to be used anytime. Go to{' '}
+                    You can revoke your consent for data usage at any time. Go to{' '}
                     <a
                       href="https://nft.web3id.aesirx.io"
                       className="text-success text-decoration-underline"
@@ -233,7 +233,15 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                           <img src={privacy} alt="Shield of Privacy" /> Shield of Privacy
                         </div>
                         {sessionStorage.getItem('aesirx-analytics-revoke') !== '1' && (
-                          <>
+                          <div className="d-flex align-items-center">
+                            <a
+                              className="text-success text-decoration-underline manage-consent"
+                              href="https://dapp.web3id.aesirx.io/revoke-consent"
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              Manage Consent
+                            </a>
                             {loading === 'done' ? (
                               <Button
                                 variant="success"
@@ -283,7 +291,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                                 Saving...
                               </Button>
                             )}
-                          </>
+                          </div>
                         )}
                       </div>
                     </div>
@@ -360,7 +368,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                                 className="me-1 text-white d-flex align-items-center"
                               >
                                 <img src={yes} className="me-2" />
-                                Yes, I consent haha
+                                Yes, I consent
                               </Button>
                             )}
 
