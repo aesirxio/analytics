@@ -189,7 +189,7 @@ const ConsentComponent = ({ endpoint }: any) => {
                     <img src={no} />
                   </div>
                   <div className="p-3 bg-white text">
-                    You can revoke consent for your data to be used anytime. Go to{' '}
+                    You can revoke your consent for data usage at any time. Go to{' '}
                     <a
                       href="https://nft.web3id.aesirx.io"
                       className="text-success text-decoration-underline"
