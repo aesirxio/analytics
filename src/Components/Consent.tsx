@@ -15,6 +15,8 @@ import privacy from '../Assets/privacy.svg';
 import ContentLoader from 'react-content-loader';
 import { SSOButton } from 'aesirx-sso';
 import { MAINNET, WithWalletConnector, WalletConnectionProps } from '@concordium/react-components';
+import { WALLET_CONNECT } from '../Hooks/config';
+import { OsTypes, isMobile, osName } from 'react-device-detect';
 interface WalletConnectionPropsExtends extends WalletConnectionProps {
   endpoint: string;
 }
@@ -26,7 +28,7 @@ const ConsentComponent = ({ endpoint }: any) => {
   );
 };
 const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
-  const { endpoint } = props;
+  const { endpoint, setActiveConnectorType } = props;
   const [
     uuid,
     level,
@@ -191,6 +193,15 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                   <div
                     className="minimize-shield"
                     onClick={() => {
+                      if (
+                        osName !== OsTypes?.IOS &&
+                        isMobile &&
+                        !connection &&
+                        sessionStorage.getItem('aesirx-analytics-revoke') &&
+                        parseInt(sessionStorage.getItem('aesirx-analytics-revoke')) > 2
+                      ) {
+                        setActiveConnectorType(WALLET_CONNECT);
+                      }
                       setShowExpandRevoke(true);
                     }}
                   >
