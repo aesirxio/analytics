@@ -178,6 +178,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
             setLevel(null);
           }
           if (osName === OsTypes?.IOS && isMobile) {
+            setLevel(1);
             toast('Wallet Connect not support on IOS');
           } else if (isMobile) {
             setActiveConnectorType(WALLET_CONNECT);
