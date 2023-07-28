@@ -19,11 +19,17 @@ Follow the instructions in: [https://github.com/aesirxio/analytics-1stparty](htt
 1. Add script to `<head>`:
 
 ```
-<script>window.aesirx1stparty = "https://example.com"</script>
+<script>
+  window.aesirx1stparty = "https://example.com"
+  window.aesirxClientID="[REPLACE THIS WITH THE PROVIDED CLIENT_ID]"
+  window.aesirxClientSecret="[REPLACE THIS WITH THE PROVIDED CLIENT_SECRET]"
+</script>
 <script async defer src="YOUR_PROJECT_PATH/analytics.js"></script>
 ```
 
-(`https://example.com` is the link to your 1st party server which must be installed)
+1. (`https://example.com` is the link to your 1st party server which must be installed)
+2. `CLIENT_ID` replace this with the provided `CLIENT_ID` from https://sso.aesirx.io/
+3. `CLIENT_SECRET` replace this with the provided `CLIENT_SECRET` from https://sso.aesirx.io/
 
 #### Usage in ReactJS
 
@@ -33,8 +39,12 @@ Follow the instructions in: [https://github.com/aesirxio/analytics-1stparty](htt
 
 ```
 REACT_APP_ENDPOINT_ANALYTICS_URL=https://example.com
+REACT_APP_SSO_CLIENT_ID=[REPLACE THIS WITH THE PROVIDED CLIENT_ID]
+REACT_APP_SSO_CLIENT_SECRET=[REPLACE THIS WITH THE PROVIDED CLIENT_SECRET]
 
 (https://example.com is the link to your 1st party server)
+`CLIENT_ID` replace this with the provided `CLIENT_ID` from https://sso.aesirx.io/
+`CLIENT_SECRET` replace this with the provided `CLIENT_SECRET` from https://sso.aesirx.io/
 ```
 
 ###### With react-router-dom v5:
@@ -66,8 +76,12 @@ export default AnalyticsContainer;
 
 ```
 NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL=https://example.com
+NEXT_PUBLIC_SSO_CLIENT_ID=[REPLACE THIS WITH THE PROVIDED CLIENT_ID]
+NEXT_PUBLIC_SSO_CLIENT_SECRET=[REPLACE THIS WITH THE PROVIDED CLIENT_SECRET]
 
 (https://example.com is the link to your 1st party server)
+`CLIENT_ID` replace this with the provided `CLIENT_ID` from https://sso.aesirx.io/
+`CLIENT_SECRET` replace this with the provided `CLIENT_SECRET` from https://sso.aesirx.io/
 ```
 
 ###### With next/router:
