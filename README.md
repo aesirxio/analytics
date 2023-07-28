@@ -19,7 +19,11 @@ Follow the instructions in: [https://github.com/aesirxio/analytics-1stparty](htt
 1. Add script to `<head>`:
 
 ```
-<script>window.aesirx1stparty = "https://example.com"</script>
+<script>
+  window.aesirx1stparty = "https://example.com"
+  window.aesirxClientID="[REPLACE THIS WITH THE PROVIDED CLIENT_ID]"
+  window.aesirxClientSecret="[REPLACE THIS WITH THE PROVIDED CLIENT_SECRET]"
+</script>
 <script async defer src="YOUR_PROJECT_PATH/analytics.js"></script>
 ```
 
