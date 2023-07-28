@@ -60,13 +60,12 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     try {
       if (level > 2) {
         setLoading('connect');
-        const address = account;
         setLoading('sign');
-        const signature = await getSignature(endpoint, address, connection, 'Give consent:{}');
+        const signature = await getSignature(endpoint, account, connection, 'Give consent:{}');
 
         setLoading('saving');
 
-        await agreeConsents(endpoint, level, uuid, consents, address, signature, web3ID);
+        await agreeConsents(endpoint, level, uuid, consents, account, signature, web3ID);
       } else {
         setLoading('saving');
         consents.forEach(async (consent) => {
@@ -118,9 +117,8 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
       if (levelRevoke) {
         if (parseInt(levelRevoke) > 2) {
           setLoading('connect');
-          const address = account;
           setLoading('sign');
-          const signature = await getSignature(endpoint, address, connection, 'Revoke consent:{}');
+          const signature = await getSignature(endpoint, account, connection, 'Revoke consent:{}');
           setLoading('saving');
           const consentList = await getConsents(endpoint, uuid);
           consentList.forEach(async (consent: any) => {
@@ -129,7 +127,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                 endpoint,
                 levelRevoke,
                 consent?.consent_uuid,
-                address,
+                account,
                 signature,
                 web3ID
               ));

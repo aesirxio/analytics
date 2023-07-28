@@ -25,9 +25,7 @@ const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
         setUUID: undefined,
       }}
     >
-      <WithWalletConnector network={MAINNET}>
-        {(props) => <ConsentComponent endpoint={window['aesirx1stparty'] ?? ''} {...props} />}
-      </WithWalletConnector>
+      <ConsentComponent endpoint={window['aesirx1stparty'] ?? ''} />
     </AnalyticsContext.Provider>
   );
 };
