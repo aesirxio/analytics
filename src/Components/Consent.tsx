@@ -211,7 +211,8 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                     <img src={no} />
                   </div>
                   <div className="p-3 bg-white text">
-                    You can revoke your consent for data usage at any time. Go to{' '}
+                    You can revoke your consent for data usage at any time. <br />
+                    Go to{' '}
                     <a
                       href="https://nft.web3id.aesirx.io"
                       className="text-success text-decoration-underline"
