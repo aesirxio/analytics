@@ -20,14 +20,8 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
 
   const analyticsContext = useContext(AnalyticsContext);
 
-  const {
-    activeConnector,
-    activeConnectorError,
-    network,
-    connectedAccounts,
-    genesisHashes,
-    setActiveConnectorType,
-  } = props;
+  const { activeConnector, network, connectedAccounts, genesisHashes, setActiveConnectorType } =
+    props;
 
   useEffect(() => {
     const allow = sessionStorage.getItem('aesirx-analytics-allow');
@@ -135,7 +129,11 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   }, [connectError]);
 
   useEffect(() => {
-    if (isDesktop) {
+    if (
+      isDesktop &&
+      (!sessionStorage.getItem('aesirx-analytics-revoke') ||
+        sessionStorage.getItem('aesirx-analytics-revoke') === '0')
+    ) {
       setActiveConnectorType(BROWSER_WALLET);
     }
   }, []);
@@ -176,19 +174,22 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
           if (isDesktop) {
             setActiveConnectorType(BROWSER_WALLET);
             setLevel(null);
-          }
-          if (osName === OsTypes?.IOS && isMobile) {
-            setLevel(1);
-            toast('Wallet Connect not support on IOS');
-          } else if (isMobile) {
-            setActiveConnectorType(WALLET_CONNECT);
-            setLevel(null);
-          }
-          if (activeConnectorError) {
-            setLevel(1);
-            toast('Browser Wallet extension not detected');
+            if (!activeConnector) {
+              setLevel(1);
+              toast('Browser Wallet extension not detected');
+            } else {
+              setLevel(_level);
+            }
           } else {
-            setLevel(_level);
+            if (osName === OsTypes?.IOS && isMobile) {
+              setLevel(1);
+              toast('Wallet Connect not support on IOS');
+            } else if (isMobile) {
+              setActiveConnectorType(WALLET_CONNECT);
+              setLevel(_level);
+            } else {
+              setLevel(_level);
+            }
           }
         } catch (error) {
           setLevel(1);

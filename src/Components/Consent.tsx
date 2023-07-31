@@ -329,7 +329,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                                     className="btn btn-success text-white d-flex align-items-center"
                                     text={
                                       <>
-                                        <img src={yes} className="me-2" />
+                                        <img src={yes} className="me-1" />
                                         Yes, I consent
                                       </>
                                     }
@@ -343,7 +343,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                                   onClick={handleAgree}
                                   className="me-1 text-white d-flex align-items-center"
                                 >
-                                  <img src={yes} className="me-2" />
+                                  <img src={yes} className="me-1" />
                                   Yes, I consent
                                 </Button>
                               )}
@@ -353,7 +353,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                                 onClick={handleNotAllow}
                                 className="d-flex align-items-center"
                               >
-                                <img src={no} className="me-2" />
+                                <img src={no} className="me-1" />
                                 Reject Consent
                               </Button>
                             </>
