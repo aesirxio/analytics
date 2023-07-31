@@ -131,8 +131,8 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   useEffect(() => {
     if (
       isDesktop &&
-      (!sessionStorage.getItem('aesirx-analytics-revoke') ||
-        sessionStorage.getItem('aesirx-analytics-revoke') === '0')
+      sessionStorage.getItem('aesirx-analytics-revoke') !== '1' &&
+      sessionStorage.getItem('aesirx-analytics-revoke') !== '2'
     ) {
       setActiveConnectorType(BROWSER_WALLET);
     }
@@ -153,8 +153,8 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
               l = 4;
             }
           }
-          setLevel(l);
           setWeb3ID(web3ID);
+          setLevel(l);
         } else {
           setLevel(level ?? 1);
         }
