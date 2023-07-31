@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
 import { agreeConsents, getConsents, getSignature, revokeConsents } from '../utils/consent';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import useConsentStatus from '../Hooks/useConsentStatus';
 import '../style.scss';
