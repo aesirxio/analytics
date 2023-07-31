@@ -63,7 +63,7 @@ $success: #1ab394;
       border-radius: var(--aesirxconsent-toast-border-radius);
       button {
         @include media-breakpoint-down(lg) {
-          font-size: 15px;
+          font-size: 14px;
         }
       }
     }
