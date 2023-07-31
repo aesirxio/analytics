@@ -6,7 +6,6 @@ import { createRoot } from 'react-dom/client';
 import { AnalyticsContext } from './utils/AnalyticsContextProvider';
 import ConsentComponent from './Components/Consent';
 import { Buffer } from 'buffer';
-import { MAINNET, WithWalletConnector } from '@concordium/react-components';
 
 window.Buffer = Buffer;
 declare global {
