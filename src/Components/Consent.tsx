@@ -14,10 +14,35 @@ import privacy from '../Assets/privacy.svg';
 
 import ContentLoader from 'react-content-loader';
 import { SSOButton } from 'aesirx-sso';
-
+import { MAINNET, WithWalletConnector, WalletConnectionProps } from '@concordium/react-components';
+import { WALLET_CONNECT } from '../Hooks/config';
+import { OsTypes, isMobile, osName } from 'react-device-detect';
+import { LoadingStatus } from './LoadingStatus';
+interface WalletConnectionPropsExtends extends WalletConnectionProps {
+  endpoint: string;
+}
 const ConsentComponent = ({ endpoint }: any) => {
-  const [uuid, level, provider, show, setShow, web3ID, handleLevel, showRevoke, handleRevoke] =
-    useConsentStatus(endpoint);
+  return (
+    <WithWalletConnector network={MAINNET}>
+      {(props) => <ConsentComponentApp {...props} endpoint={endpoint} />}
+    </WithWalletConnector>
+  );
+};
+const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
+  const { endpoint, setActiveConnectorType } = props;
+  const [
+    uuid,
+    level,
+    connection,
+    account,
+    show,
+    setShow,
+    web3ID,
+    handleLevel,
+    showRevoke,
+    handleRevoke,
+  ] = useConsentStatus(endpoint, props);
+
   const [consents, setConsents] = useState<number[]>([1, 2]);
   const [loading, setLoading] = useState('done');
   const [showExpandConsent, setShowExpandConsent] = useState(true);
@@ -36,13 +61,12 @@ const ConsentComponent = ({ endpoint }: any) => {
     try {
       if (level > 2) {
         setLoading('connect');
-        const address = await provider.connect();
         setLoading('sign');
-        const signature = await getSignature(endpoint, address, provider, 'Give consent:{}');
+        const signature = await getSignature(endpoint, account, connection, 'Give consent:{}');
 
         setLoading('saving');
 
-        await agreeConsents(endpoint, level, uuid, consents, address, signature, web3ID);
+        await agreeConsents(endpoint, level, uuid, consents, account, signature, web3ID);
       } else {
         setLoading('saving');
         consents.forEach(async (consent) => {
@@ -59,10 +83,10 @@ const ConsentComponent = ({ endpoint }: any) => {
       setShowBackdrop(false);
     } catch (error) {
       console.log(error);
+      handleNotAllow();
 
-      setShow(false);
       setLoading('done');
-      toast.error(error.message);
+      toast.error(error?.response?.data?.error ?? error.message);
     }
   };
 
@@ -78,7 +102,7 @@ const ConsentComponent = ({ endpoint }: any) => {
       console.log(error);
       setShow(false);
       setLoading('done');
-      toast.error(error.message);
+      toast.error(error?.response?.data?.error ?? error.message);
     }
   };
 
@@ -94,9 +118,8 @@ const ConsentComponent = ({ endpoint }: any) => {
       if (levelRevoke) {
         if (parseInt(levelRevoke) > 2) {
           setLoading('connect');
-          const address = await provider.connect();
           setLoading('sign');
-          const signature = await getSignature(endpoint, address, provider, 'Revoke consent:{}');
+          const signature = await getSignature(endpoint, account, connection, 'Revoke consent:{}');
           setLoading('saving');
           const consentList = await getConsents(endpoint, uuid);
           consentList.forEach(async (consent: any) => {
@@ -105,7 +128,7 @@ const ConsentComponent = ({ endpoint }: any) => {
                 endpoint,
                 levelRevoke,
                 consent?.consent_uuid,
-                address,
+                account,
                 signature,
                 web3ID
               ));
@@ -138,7 +161,7 @@ const ConsentComponent = ({ endpoint }: any) => {
     } catch (error) {
       console.log(error);
       setLoading('done');
-      toast.error(error.message);
+      toast.error(error?.response?.data?.error ?? error.message);
     }
   };
 
@@ -158,6 +181,7 @@ const ConsentComponent = ({ endpoint }: any) => {
               : ''
           } ${showExpandRevoke ? '' : 'minimize'}`}
         >
+          <LoadingStatus loading={loading} />
           <div className="toast-body p-0 ">
             <div className="revoke-wrapper minimize-shield-wrapper position-relative">
               {!showExpandRevoke && (
@@ -169,6 +193,15 @@ const ConsentComponent = ({ endpoint }: any) => {
                   <div
                     className="minimize-shield"
                     onClick={() => {
+                      if (
+                        osName !== OsTypes?.IOS &&
+                        isMobile &&
+                        !connection &&
+                        sessionStorage.getItem('aesirx-analytics-revoke') &&
+                        parseInt(sessionStorage.getItem('aesirx-analytics-revoke')) > 2
+                      ) {
+                        setActiveConnectorType(WALLET_CONNECT);
+                      }
                       setShowExpandRevoke(true);
                     }}
                   >
@@ -189,7 +222,8 @@ const ConsentComponent = ({ endpoint }: any) => {
                     <img src={no} />
                   </div>
                   <div className="p-3 bg-white text">
-                    You can revoke your consent for data usage at any time. Go to{' '}
+                    You can revoke your consent for data usage at any time. <br />
+                    Go to{' '}
                     <a
                       href="https://nft.web3id.aesirx.io"
                       className="text-success text-decoration-underline"
@@ -228,46 +262,8 @@ const ConsentComponent = ({ endpoint }: any) => {
                               >
                                 Revoke Consent
                               </Button>
-                            ) : loading === 'connect' ? (
-                              <Button
-                                variant="success"
-                                disabled
-                                className="d-flex align-items-center text-white"
-                              >
-                                <span
-                                  className="spinner-border spinner-border-sm me-1"
-                                  role="status"
-                                  aria-hidden="true"
-                                ></span>
-                                Please connect your Concordium wallet
-                              </Button>
-                            ) : loading === 'sign' ? (
-                              <Button
-                                variant="success"
-                                disabled
-                                className="d-flex align-items-center text-white"
-                              >
-                                <span
-                                  className="spinner-border spinner-border-sm me-1"
-                                  role="status"
-                                  aria-hidden="true"
-                                ></span>
-                                Please sign the message on your wallet twice and wait for it to be
-                                saved.
-                              </Button>
                             ) : (
-                              <Button
-                                variant="success"
-                                disabled
-                                className="d-flex align-items-center text-white"
-                              >
-                                <span
-                                  className="spinner-border spinner-border-sm me-1"
-                                  role="status"
-                                  aria-hidden="true"
-                                ></span>
-                                Saving...
-                              </Button>
+                              <></>
                             )}
                           </div>
                         )}
@@ -282,6 +278,7 @@ const ConsentComponent = ({ endpoint }: any) => {
       </div>
       <div tabIndex={-1} className={`toast-container position-fixed bottom-0 end-0 p-3`}>
         <div className={`toast ${show ? 'show' : ''} ${showExpandConsent ? '' : 'minimize'}`}>
+          <LoadingStatus loading={loading} />
           <div className="toast-body p-0">
             {!showExpandConsent ? (
               <>
@@ -304,105 +301,69 @@ const ConsentComponent = ({ endpoint }: any) => {
             ) : (
               <>
                 {level ? (
-                  <TermsComponent level={level} handleLevel={handleLevel}>
-                    <Form>
-                      <Form.Check
-                        checked={consents.includes(1)}
-                        type="switch"
-                        label="Personal data share consent."
-                        value={1}
-                        onChange={handleChange}
-                        className="d-none"
-                      />
-                      <Form.Check
-                        checked={consents.includes(2)}
-                        type="switch"
-                        label="Personal data cross site share consent."
-                        value={2}
-                        onChange={handleChange}
-                        className="d-none"
-                      />
-                      <div className="d-flex justify-content-end">
-                        {loading === 'done' ? (
-                          <>
-                            {level === 2 ? (
-                              <div className="ssoBtnWrapper me-1 bg-success">
-                                <SSOButton
-                                  className="btn btn-success text-white d-flex align-items-center"
-                                  text={
-                                    <>
-                                      <img src={yes} className="me-2" />
-                                      Yes, I consent
-                                    </>
-                                  }
-                                  ssoState={'noscopes'}
-                                  onGetData={onGetData}
-                                />
-                              </div>
-                            ) : (
-                              <Button
-                                variant="success"
-                                onClick={handleAgree}
-                                className="me-1 text-white d-flex align-items-center"
-                              >
-                                <img src={yes} className="me-2" />
-                                Yes, I consent
-                              </Button>
-                            )}
+                  <>
+                    <TermsComponent level={level} handleLevel={handleLevel}>
+                      <Form className="mb-0">
+                        <Form.Check
+                          checked={consents.includes(1)}
+                          type="switch"
+                          label="Personal data share consent."
+                          value={1}
+                          onChange={handleChange}
+                          className="d-none"
+                        />
+                        <Form.Check
+                          checked={consents.includes(2)}
+                          type="switch"
+                          label="Personal data cross site share consent."
+                          value={2}
+                          onChange={handleChange}
+                          className="d-none"
+                        />
+                        <div className="d-flex justify-content-end">
+                          {loading === 'done' ? (
+                            <>
+                              {level === 2 ? (
+                                <div className="ssoBtnWrapper me-1 bg-success">
+                                  <SSOButton
+                                    className="btn btn-success text-white d-flex align-items-center"
+                                    text={
+                                      <>
+                                        <img src={yes} className="me-2" />
+                                        Yes, I consent
+                                      </>
+                                    }
+                                    ssoState={'noscopes'}
+                                    onGetData={onGetData}
+                                  />
+                                </div>
+                              ) : (
+                                <Button
+                                  variant="success"
+                                  onClick={handleAgree}
+                                  className="me-1 text-white d-flex align-items-center"
+                                >
+                                  <img src={yes} className="me-2" />
+                                  Yes, I consent
+                                </Button>
+                              )}
 
-                            <Button
-                              variant="success-outline"
-                              onClick={handleNotAllow}
-                              className="d-flex align-items-center"
-                            >
-                              <img src={no} className="me-2" />
-                              Reject Consent
-                            </Button>
-                          </>
-                        ) : loading === 'connect' ? (
-                          <Button
-                            variant="success"
-                            disabled
-                            className="d-flex align-items-center text-white"
-                          >
-                            <span
-                              className="spinner-border spinner-border-sm me-1"
-                              role="status"
-                              aria-hidden="true"
-                            ></span>
-                            Please connect your Concordium wallet
-                          </Button>
-                        ) : loading === 'sign' ? (
-                          <Button
-                            variant="success"
-                            disabled
-                            className="d-flex align-items-center text-white"
-                          >
-                            <span
-                              className="spinner-border spinner-border-sm me-1"
-                              role="status"
-                              aria-hidden="true"
-                            ></span>
-                            Please sign the message on your wallet twice and wait for it to be
-                            saved.
-                          </Button>
-                        ) : (
-                          <Button
-                            variant="success"
-                            disabled
-                            className="d-flex align-items-center text-white"
-                          >
-                            <span
-                              className="spinner-border spinner-border-sm me-1"
-                              role="status"
-                              aria-hidden="true"
-                            ></span>
-                            Saving...
-                          </Button>
-                        )}
-                      </div>
-                    </Form>
-                  </TermsComponent>
+                              <Button
+                                variant="success-outline"
+                                onClick={handleNotAllow}
+                                className="d-flex align-items-center"
+                              >
+                                <img src={no} className="me-2" />
+                                Reject Consent
+                              </Button>
+                            </>
+                          ) : (
+                            <></>
+                          )}
+                        </div>
+                      </Form>
+                    </TermsComponent>
+                  </>
                 ) : (
                   <div className="p-4">
                     <ContentLoader

@@ -1,4 +1,5 @@
 /* eslint-disable no-useless-catch */
+import { stringMessage } from '@concordium/react-components';
 import axios from 'axios';
 
 const agreeConsents = async (
@@ -81,7 +82,7 @@ const getSignature = async (
 };
 
 const getSignedNonce = async (nonce: string, address: string, provider: any) => {
-  const signature = await provider.signMessage(address, String(nonce));
+  const signature = await provider.signMessage(address, stringMessage(`${nonce}`));
 
   return Buffer.from(
     typeof signature === 'object' && signature !== null ? JSON.stringify(signature) : signature,
