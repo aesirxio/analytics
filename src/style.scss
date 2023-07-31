@@ -43,6 +43,9 @@ $success: #1ab394;
   .btn.text-white {
     color: #fff;
   }
+  .btn-dark {
+    @include button-variant(#222328, #222328, #fff, #222328, #222328, #fff);
+  }
   .btn-success-outline {
     @include button-variant(transparent, $success, $success, transparent, $success, $success);
     color: $success;
@@ -52,6 +55,18 @@ $success: #1ab394;
   }
   .toast {
     --aesirxconsent-toast-zindex: 1049;
+    border: 0;
+    box-shadow: none;
+    .toast-body {
+      border: var(--aesirxconsent-toast-border-width) solid var(--aesirxconsent-toast-border-color);
+      box-shadow: var(--aesirxconsent-toast-box-shadow);
+      border-radius: var(--aesirxconsent-toast-border-radius);
+      button {
+        @include media-breakpoint-down(lg) {
+          font-size: 15px;
+        }
+      }
+    }
   }
   .toast-container {
     box-sizing: border-box;
@@ -78,30 +93,9 @@ $success: #1ab394;
     position: relative;
     border-radius: 0.5rem;
     min-width: 120px;
-    .position-fixed {
-      position: absolute !important;
-      background: transparent !important;
-      & > span {
-        width: 25.7143px !important;
-        height: 25.7143px !important;
-        & > span {
-          width: 2.85714px !important;
-          height: 2.85714px !important;
-          top: 8.57143px !important;
-          background-color: rgb(255, 255, 255) !important;
-          + span {
-            width: 20px !important;
-            height: 20px !important;
-            border: 2.85714px solid rgb(255, 255, 255) !important;
-            background: transparent !important;
-            top: 0 !important;
-          }
-        }
-      }
-    }
   }
   .revoke-toast {
-    width: 532px;
+    width: 500px;
     .toast-body {
       .minimize-revoke {
         position: absolute;
@@ -158,6 +152,16 @@ $success: #1ab394;
       img.revert {
         transform: rotate(180deg);
       }
+    }
+  }
+
+  .loading-status {
+    margin-bottom: 10px;
+    .btn:disabled {
+      opacity: 1;
+    }
+    .text {
+      max-width: calc(100% - 1.75rem);
     }
   }
 
