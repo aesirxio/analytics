@@ -78,7 +78,7 @@
     "node-fetch": "^3.3.1",
     "prettier": "^2.8.4",
     "ts-jest": "^29.0.5",
-    "tsup": "^6.7.0",
+    "tsup": "^7.1.0",
     "typescript": "^5.0.3"
   },
   "files": [
