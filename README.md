@@ -31,6 +31,13 @@ Follow the instructions in: [https://github.com/aesirxio/analytics-1stparty](htt
 2. `CLIENT_ID` replace this with the provided `CLIENT_ID` from https://sso.aesirx.io/
 3. `CLIENT_SECRET` replace this with the provided `CLIENT_SECRET` from https://sso.aesirx.io/
 
+##### Disable Consent Popup:
+```
+<script>
+  window.disableAnalyticsConsent = "true"
+</script>
+```
+
 #### Usage in ReactJS
 
 `npm i aesirx-analytics`
@@ -45,6 +52,12 @@ REACT_APP_SSO_CLIENT_SECRET=[REPLACE THIS WITH THE PROVIDED CLIENT_SECRET]
 (https://example.com is the link to your 1st party server)
 `CLIENT_ID` replace this with the provided `CLIENT_ID` from https://sso.aesirx.io/
 `CLIENT_SECRET` replace this with the provided `CLIENT_SECRET` from https://sso.aesirx.io/
+```
+
+##### Disable Consent Popup:
+add this environment variable to `.env`
+```
+REACT_APP_DISABLE_ANALYTICS_CONSENT=true
 ```
 
 ###### With react-router-dom v5:
@@ -82,6 +95,12 @@ NEXT_PUBLIC_SSO_CLIENT_SECRET=[REPLACE THIS WITH THE PROVIDED CLIENT_SECRET]
 (https://example.com is the link to your 1st party server)
 `CLIENT_ID` replace this with the provided `CLIENT_ID` from https://sso.aesirx.io/
 `CLIENT_SECRET` replace this with the provided `CLIENT_SECRET` from https://sso.aesirx.io/
+```
+
+##### Disable Consent Popup:
+add this environment variable to `.env`
+```
+NEXT_PUBLIC_DISABLE_ANALYTICS_CONSENT=true
 ```
 
 ###### With next/router:
