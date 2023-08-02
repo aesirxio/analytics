@@ -1,6 +1,6 @@
 {
   "name": "aesirx-analytics",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "license": "GPL-3.0-only",
   "author": "AesirX",
   "repository": "https://gitlab.redweb.dk/aesirx/analytics",
@@ -13,7 +13,7 @@
     "@concordium/react-components": "^0.3.0",
     "@concordium/web-sdk": "^6",
     "@fingerprintjs/fingerprintjs": "^3.4.2",
-    "aesirx-sso": "^1.2.0",
+    "aesirx-sso": "^1.2.1",
     "axios": "^1.4.0",
     "bootstrap": "^5.3.0",
     "bowser": "^2.11.0",

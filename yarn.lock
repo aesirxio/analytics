@@ -3064,10 +3064,10 @@ aes-js@^3.1.2:
   resolved "https://registry.yarnpkg.com/aes-js/-/aes-js-3.1.2.tgz#db9aabde85d5caabbfc0d4f2a4446960f627146a"
   integrity sha512-e5pEa2kBnBOgR4Y/p20pskXI74UEz7de8ZGVo58asOtvSVG5YAbJeELPZxOmt+Bnz3rX753YKhfIn4X4l1PPRQ==
 
-aesirx-sso@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/aesirx-sso/-/aesirx-sso-1.2.0.tgz#e67890532b888ef049772ae0fbd8eb3010db6b29"
-  integrity sha512-9QgC7V9/kemKq/zzU0xJlGzoytVNBnn7csxJKVCmapa13tJ7ij8slKQGIKpX4HRqqXLigp/pkptxa5FmU/OzKQ==
+aesirx-sso@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/aesirx-sso/-/aesirx-sso-1.2.1.tgz#c0811e9d4fc5562397f183cd8b2e242fe51daa68"
+  integrity sha512-kX2v5Roxn4q6mE5bW2u8jb+I79xLuTvjoy3bh9hW8loOFH/m+BxxqX/o+UZrY6PmuTXRVG34YQKXn/GTnAfnew==
   dependencies:
     "@concordium/react-components" "^0.3.0"
     "@wagmi/core" "^1.3.8"
@@ -3079,6 +3079,7 @@ aesirx-sso@^1.2.0:
     dotenv "^16.0.3"
     ethers "^6.6.5"
     react "^18.2.0"
+    react-device-detect "^2.2.3"
     react-secure-storage "^1.2.2"
     react-toastify "^9.1.3"
     reactstrap "^9.2.0"
