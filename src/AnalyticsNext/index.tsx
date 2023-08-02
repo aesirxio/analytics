@@ -18,7 +18,9 @@ const AnalyticsNext = ({ router, children }: AnalyticsNext) => {
       <AnalyticsContextProvider>
         <AnalyticsHandle router={router}>
           {children}
-          <ConsentComponent endpoint={process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL} />
+          {process.env.NEXT_PUBLIC_DISABLE_ANALYTICS_CONSENT !== 'true' && (
+            <ConsentComponent endpoint={process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL} />
+          )}
         </AnalyticsHandle>
       </AnalyticsContextProvider>
     </>

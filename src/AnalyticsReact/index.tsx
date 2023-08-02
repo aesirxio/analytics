@@ -16,10 +16,11 @@ const AnalyticsReact = ({ location, history, children }: AnalyticsReact) => {
     <AnalyticsContextProvider>
       <AnalyticsHandle location={location} history={history}>
         {children}
-
-        <Suspense fallback={<></>}>
-          <ConsentComponent endpoint={process.env.REACT_APP_ENDPOINT_ANALYTICS_URL} />
-        </Suspense>
+        {process.env.REACT_APP_DISABLE_ANALYTICS_CONSENT !== 'true' && (
+          <Suspense fallback={<></>}>
+            <ConsentComponent endpoint={process.env.REACT_APP_ENDPOINT_ANALYTICS_URL} />
+          </Suspense>
+        )}
       </AnalyticsHandle>
     </AnalyticsContextProvider>
   );

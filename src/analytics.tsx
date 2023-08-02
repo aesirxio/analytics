@@ -92,13 +92,14 @@ const AesirAnalytics = () => {
         window['event_uuid'] = responseStart.event_uuid;
         window['visitor_uuid'] = responseStart.visitor_uuid;
       }
-
-      rootElement.render(
-        <ConsentPopup
-          event_uuid={responseStart.visitor_uuid}
-          visitor_uuid={responseStart.visitor_uuid}
-        />
-      );
+      if (window['disableAnalyticsConsent'] !== 'true') {
+        rootElement.render(
+          <ConsentPopup
+            event_uuid={responseStart.visitor_uuid}
+            visitor_uuid={responseStart.visitor_uuid}
+          />
+        );
+      }
 
       if (dataEvents) {
         addEvents(document);
