@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
 import { agreeConsents, getConsents, getSignature, revokeConsents } from '../utils/consent';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import useConsentStatus from '../Hooks/useConsentStatus';
 import '../style.scss';
@@ -108,6 +108,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
 
   const handleNotAllow = () => {
     sessionStorage.setItem('aesirx-analytics-uuid', uuid);
+    sessionStorage.setItem('aesirx-analytics-rejected', 'true');
     setShowExpandConsent(false);
     setShowBackdrop(false);
   };
@@ -164,6 +165,13 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
       toast.error(error?.response?.data?.error ?? error.message);
     }
   };
+
+  useEffect(() => {
+    if (sessionStorage.getItem('aesirx-analytics-rejected') === 'true') {
+      setShowBackdrop(false);
+      setShowExpandConsent(false);
+    }
+  }, []);
 
   console.log('level', uuid, level, web3ID);
 
@@ -291,6 +299,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                     className="minimize-shield"
                     onClick={() => {
                       setShowExpandConsent(true);
+                      sessionStorage.removeItem('aesirx-analytics-rejected');
                     }}
                   >
                     <img src={privacy} alt="Shield of Privacy" />
