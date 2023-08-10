@@ -129,13 +129,13 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   }, [connectError]);
 
   useEffect(() => {
-    if (
-      isDesktop &&
-      sessionStorage.getItem('aesirx-analytics-revoke') !== '1' &&
-      sessionStorage.getItem('aesirx-analytics-revoke') !== '2'
-    ) {
-      setActiveConnectorType(BROWSER_WALLET);
-    }
+    // if (
+    //   isDesktop &&
+    //   sessionStorage.getItem('aesirx-analytics-revoke') !== '1' &&
+    //   sessionStorage.getItem('aesirx-analytics-revoke') !== '2'
+    // ) {
+    //   setActiveConnectorType(BROWSER_WALLET);
+    // }
   }, []);
 
   useEffect(() => {
@@ -171,29 +171,30 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
         setLevel(_level);
       } else if (_level === 3) {
         try {
-          if (isDesktop) {
-            setActiveConnectorType(BROWSER_WALLET);
-            setLevel(null);
-            if (!activeConnector) {
-              setLevel(1);
-              toast('Browser Wallet extension not detected');
-            } else {
-              setLevel(_level);
-            }
-          } else {
-            if (osName === OsTypes?.IOS && isMobile) {
-              setLevel(1);
-              toast('Wallet Connect not support on IOS');
-            } else if (isMobile) {
-              setActiveConnectorType(WALLET_CONNECT);
-              setLevel(_level);
-            } else {
-              setLevel(_level);
-            }
-          }
+          setLevel(3)
+          // if (isDesktop) {
+          //   setActiveConnectorType(BROWSER_WALLET);
+          //   setLevel(null);
+          //   if (!activeConnector) {
+          //     setLevel(1);
+          //     toast('Browser Wallet extension not detected');
+          //   } else {
+          //     setLevel(_level);
+          //   }
+          // } else {
+          //   if (osName === OsTypes?.IOS && isMobile) {
+          //     setLevel(1);
+          //     toast('Wallet Connect not support on IOS');
+          //   } else if (isMobile) {
+          //     setActiveConnectorType(WALLET_CONNECT);
+          //     setLevel(_level);
+          //   } else {
+          //     setLevel(_level);
+          //   }
+          // }
         } catch (error) {
           setLevel(1);
-          toast('Browser Wallet extension not detected');
+        
         }
       } else if (_level === 4) {
         setLevel(null);

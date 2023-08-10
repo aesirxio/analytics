@@ -14,10 +14,18 @@ import privacy from '../Assets/privacy.svg';
 
 import ContentLoader from 'react-content-loader';
 import { SSOButton } from 'aesirx-sso';
-import { MAINNET, WithWalletConnector, WalletConnectionProps } from '@concordium/react-components';
+import {
+  MAINNET,
+  WithWalletConnector,
+  WalletConnectionProps,
+  useConnection,
+  useConnect,
+  ConnectorType,
+} from '@concordium/react-components';
 import { WALLET_CONNECT } from '../Hooks/config';
 import { OsTypes, isMobile, osName } from 'react-device-detect';
 import { LoadingStatus } from './LoadingStatus';
+import ConnectModal from './Connect';
 interface WalletConnectionPropsExtends extends WalletConnectionProps {
   endpoint: string;
 }
@@ -29,7 +37,25 @@ const ConsentComponent = ({ endpoint }: any) => {
   );
 };
 const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
-  const { endpoint, setActiveConnectorType } = props;
+  const {
+    endpoint,
+    activeConnectorType,
+    activeConnector,
+    activeConnectorError,
+    connectedAccounts,
+    genesisHashes,
+    setActiveConnectorType,
+  } = props;
+
+  const { setConnection } = useConnection(connectedAccounts, genesisHashes);
+
+  const { isConnecting } = useConnect(activeConnector, setConnection);
+
+  const handleOnConnect = async (connectorType: ConnectorType) => {
+    await setActiveConnectorType(connectorType);
+    setLoading('done');
+  };
+
   const [
     uuid,
     level,
@@ -59,14 +85,19 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
 
   const handleAgree = async () => {
     try {
+      let flag = true;
+      // Wallets
       if (level > 2) {
-        setLoading('connect');
-        setLoading('sign');
-        const signature = await getSignature(endpoint, account, connection, 'Give consent:{}');
+        if (account) {
+          const signature = await getSignature(endpoint, account, connection, 'Give consent:{}');
 
-        setLoading('saving');
+          setLoading('saving');
 
-        await agreeConsents(endpoint, level, uuid, consents, account, signature, web3ID);
+          await agreeConsents(endpoint, level, uuid, consents, account, signature, web3ID);
+        } else {
+          setLoading('connect');
+          flag = false;
+        }
       } else {
         setLoading('saving');
         consents.forEach(async (consent) => {
@@ -74,13 +105,15 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
         });
       }
 
-      sessionStorage.setItem('aesirx-analytics-uuid', uuid);
-      sessionStorage.setItem('aesirx-analytics-allow', '1');
+      if (flag) {
+        sessionStorage.setItem('aesirx-analytics-uuid', uuid);
+        sessionStorage.setItem('aesirx-analytics-allow', '1');
 
-      setShow(false);
-      setLoading('done');
-      handleRevoke(true, level);
-      setShowBackdrop(false);
+        setShow(false);
+        setLoading('done');
+        handleRevoke(true, level);
+        setShowBackdrop(false);
+      }
     } catch (error) {
       console.log(error);
       handleNotAllow();
@@ -116,26 +149,37 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
   const handleRevokeBtn = async () => {
     const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');
     try {
+      let flag = true;
+
       if (levelRevoke) {
         if (parseInt(levelRevoke) > 2) {
-          setLoading('connect');
-          setLoading('sign');
-          const signature = await getSignature(endpoint, account, connection, 'Revoke consent:{}');
-          setLoading('saving');
-          const consentList = await getConsents(endpoint, uuid);
-          consentList.forEach(async (consent: any) => {
-            !consent?.expiration &&
-              (await revokeConsents(
-                endpoint,
-                levelRevoke,
-                consent?.consent_uuid,
-                account,
-                signature,
-                web3ID
-              ));
-          });
-          setLoading('done');
-          handleRevoke(false);
+          if (account) {
+            setLoading('sign');
+            const signature = await getSignature(
+              endpoint,
+              account,
+              connection,
+              'Revoke consent:{}'
+            );
+            setLoading('saving');
+            const consentList = await getConsents(endpoint, uuid);
+            consentList.forEach(async (consent: any) => {
+              !consent?.expiration &&
+                (await revokeConsents(
+                  endpoint,
+                  levelRevoke,
+                  consent?.consent_uuid,
+                  account,
+                  signature,
+                  web3ID
+                ));
+            });
+            setLoading('done');
+            handleRevoke(false);
+          } else {
+            setLoading('connect');
+            flag = false;
+          }
         } else {
           setLoading('saving');
           const consentList = await getConsents(endpoint, uuid);
@@ -154,10 +198,13 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
           setLoading('done');
           handleRevoke(false);
         }
-        setShowExpandConsent(false);
-        setShow(true);
-        setShowBackdrop(false);
-        sessionStorage.removeItem('aesirx-analytics-allow');
+
+        if (flag) {
+          setShowExpandConsent(false);
+          setShow(true);
+          setShowBackdrop(false);
+          sessionStorage.removeItem('aesirx-analytics-allow');
+        }
       }
     } catch (error) {
       console.log(error);
@@ -173,7 +220,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     }
   }, []);
 
-  console.log('level', uuid, level, web3ID);
+  console.log('level', uuid, level, web3ID, account, loading);
 
   return (
     <div className="aesirxconsent">
@@ -351,6 +398,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                                   variant="success"
                                   onClick={handleAgree}
                                   className="me-1 text-white d-flex align-items-center"
+                                
                                 >
                                   <img src={yes} className="me-1" />
                                   Yes, I consent
@@ -399,6 +447,16 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
           </div>
         </div>
       </div>
+
+      {!account && loading === 'connect' && (
+        <ConnectModal
+          isConnecting={isConnecting}
+          handleOnConnect={handleOnConnect}
+          activeConnectorError={activeConnectorError}
+          activeConnectorType={activeConnectorType}
+          activeConnector={activeConnector}
+        />
+      )}
     </div>
   );
 };
