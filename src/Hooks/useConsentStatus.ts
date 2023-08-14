@@ -15,6 +15,7 @@ import {
 const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   const [show, setShow] = useState(false);
   const [showRevoke, setShowRevoke] = useState(false);
+  const [showConnectModal, setShowConnectModal] = useState(false);
   const [level, setLevel] = useState<any>();
   const [web3ID, setWeb3ID] = useState<string>();
 
@@ -151,6 +152,10 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
 
             if (web3ID) {
               l = 4;
+            } else {
+              toast(
+                "You haven't minted any WEB3 ID yet. Try to mint at https://dapp.web3id.aesirx.io"
+              );
             }
           }
           setWeb3ID(web3ID);
@@ -171,7 +176,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
         setLevel(_level);
       } else if (_level === 3) {
         try {
-          setLevel(3)
+          setLevel(3);
           // if (isDesktop) {
           //   setActiveConnectorType(BROWSER_WALLET);
           //   setLevel(null);
@@ -194,19 +199,21 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
           // }
         } catch (error) {
           setLevel(1);
-        
         }
       } else if (_level === 4) {
         setLevel(null);
 
         try {
-          const web3ID = await getWeb3ID(connection, account);
-
-          if (web3ID) {
-            setLevel(_level);
-            setWeb3ID(web3ID);
+          if (connection) {
+            const web3ID = await getWeb3ID(connection, account);
+            if (web3ID) {
+              setLevel(_level);
+              setWeb3ID(web3ID);
+            } else {
+              throw new Error('no web3id');
+            }
           } else {
-            throw new Error('no web3id');
+            setShowConnectModal(true);
           }
         } catch (error) {
           setLevel(3);
@@ -233,6 +240,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
     handleLevel,
     showRevoke,
     handleRevoke,
+    showConnectModal,
   ];
 };
 

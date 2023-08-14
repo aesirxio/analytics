@@ -67,6 +67,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     handleLevel,
     showRevoke,
     handleRevoke,
+    showConnectModal,
   ] = useConsentStatus(endpoint, props);
 
   const [consents, setConsents] = useState<number[]>([1, 2]);
@@ -398,7 +399,6 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                                   variant="success"
                                   onClick={handleAgree}
                                   className="me-1 text-white d-flex align-items-center"
-                                
                                 >
                                   <img src={yes} className="me-1" />
                                   Yes, I consent
@@ -448,7 +448,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
         </div>
       </div>
 
-      {!account && loading === 'connect' && (
+      {!account && (loading === 'connect' || showConnectModal) && (
         <ConnectModal
           isConnecting={isConnecting}
           handleOnConnect={handleOnConnect}
