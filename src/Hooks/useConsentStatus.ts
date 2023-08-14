@@ -3,8 +3,8 @@ import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
 import { getConsents } from '../utils/consent';
 import { getWeb3ID } from '../utils/Concordium';
 import { toast } from 'react-toastify';
-import { isMobile, isDesktop, osName, OsTypes } from 'react-device-detect';
-import { BROWSER_WALLET, WALLET_CONNECT } from './config';
+// import { isMobile, isDesktop, osName, OsTypes } from 'react-device-detect';
+// import { BROWSER_WALLET, WALLET_CONNECT } from './config';
 import {
   MAINNET,
   useConnection,
@@ -21,8 +21,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
 
   const analyticsContext = useContext(AnalyticsContext);
 
-  const { activeConnector, network, connectedAccounts, genesisHashes, setActiveConnectorType } =
-    props;
+  const { activeConnector, network, connectedAccounts, genesisHashes } = props;
 
   useEffect(() => {
     const allow = sessionStorage.getItem('aesirx-analytics-allow');
