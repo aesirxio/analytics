@@ -22,7 +22,9 @@ const ConnectModal = ({
           {' '}
           <div className="pb-4 px-4 block-wallet rounded-top">
             <div className="px-3 text-center">
-              <h3 className="fs-3 fw-semibold mt-2 mb-4 text-primary">Please connect to your wallet</h3>
+              <h3 className="fs-3 fw-semibold mt-2 mb-4 text-primary">
+                Please connect to your wallet
+              </h3>
               <div className="d-flex flex-row flex-wrap">
                 {isDesktop && (
                   <button

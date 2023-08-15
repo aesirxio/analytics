@@ -153,7 +153,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
               l = 4;
             } else {
               toast(
-                "You haven't minted any WEB3 ID yet. Try to mint at https://dapp.web3id.aesirx.io"
+                "You haven't minted any WEB3 ID yet. Try to mint at https://dapp.shield.aesirx.io"
               );
             }
           }
@@ -216,7 +216,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
           }
         } catch (error) {
           setLevel(3);
-          toast("You haven't minted any WEB3 ID yet. Try to mint at https://dapp.web3id.aesirx.io");
+          toast("You haven't minted any WEB3 ID yet. Try to mint at https://dapp.shield.aesirx.io");
         }
       }
     },

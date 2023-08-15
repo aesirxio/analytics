@@ -304,7 +304,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                           <div className="d-flex align-items-center">
                             <a
                               className="text-success text-decoration-underline manage-consent"
-                              href="https://dapp.web3id.aesirx.io/revoke-consent"
+                              href="https://dapp.shield.aesirx.io/revoke-consent"
                               target="_blank"
                               rel="noreferrer"
                             >
