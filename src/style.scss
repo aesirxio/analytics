@@ -42,11 +42,15 @@ $primary: #132342;
   a {
     text-decoration: underline;
   }
+  button {
+    text-transform: none;
+  }
   .text-primary {
     color: $primary;
   }
   img {
     height: auto;
+    display: inline;
   }
   .btn {
     --#{$prefix}btn-font-size: 16px;
