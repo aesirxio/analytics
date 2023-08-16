@@ -39,6 +39,9 @@ $primary: #132342;
   @import 'bootstrap/scss/utilities/api';
   color: #5f5e70;
   font-size: 16px;
+  .text-primary {
+    color: $primary;
+  }
   img {
     height: auto;
   }
