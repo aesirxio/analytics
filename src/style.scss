@@ -4,23 +4,22 @@
 // 2. Include any default variable overrides here
 $enable-important-utilities: false;
 $enable-negative-margins: true;
-$enable-dark-mode: false;
 $prefix: aesirxconsent-;
 $toast-background-color: var(--aesirxconsent-white);
 $toast-max-width: 617px;
 
-$toast-font-size: 1rem;
 $form-check-input-checked-bg-color: var(--aesirxconsent-success);
 $toast-background-color: '';
 
 $border-radius: 0.5rem;
 $success: #1ab394;
-
+$spacer: 16px;
+$primary: #132342;
 // 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
 @import 'bootstrap/scss/variables';
-
+@import 'variables-dark';
+@import 'bootstrap/scss/variables-dark';
 // 4. Include any default map overrides here
-
 // 5. Include remainder of required parts
 @import 'bootstrap/scss/maps';
 @import 'bootstrap/scss/mixins';
@@ -40,8 +39,25 @@ $success: #1ab394;
   // 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
   @import 'bootstrap/scss/utilities/api';
   color: #5f5e70;
-  .btn.text-white {
-    color: #fff;
+  font-size: 16px;
+  a {
+    text-decoration: underline;
+  }
+  button {
+    text-transform: none;
+  }
+  .text-primary {
+    color: $primary;
+  }
+  img {
+    height: auto;
+    display: inline;
+  }
+  .btn {
+    --#{$prefix}btn-font-size: 16px;
+    &.text-white {
+      color: #fff;
+    }
   }
   .btn-dark {
     @include button-variant(#222328, #222328, #fff, #222328, #222328, #fff);
@@ -51,16 +67,17 @@ $success: #1ab394;
     color: $success;
   }
   .btn-success:hover {
-    color: var(--aesirxconsent-white);
+    color: var(--#{$prefix}white);
   }
   .toast {
-    --aesirxconsent-toast-zindex: 1049;
+    --#{$prefix}toast-zindex: 1049;
+    --#{$prefix}toast-font-size: 16px;
     border: 0;
     box-shadow: none;
     .toast-body {
-      border: var(--aesirxconsent-toast-border-width) solid var(--aesirxconsent-toast-border-color);
-      box-shadow: var(--aesirxconsent-toast-box-shadow);
-      border-radius: var(--aesirxconsent-toast-border-radius);
+      border: var(--#{$prefix}toast-border-width) solid var(--#{$prefix}toast-border-color);
+      box-shadow: var(--#{$prefix}toast-box-shadow);
+      border-radius: var(--#{$prefix}toast-border-radius);
       button {
         @include media-breakpoint-down(lg) {
           font-size: 14px;
@@ -70,7 +87,7 @@ $success: #1ab394;
   }
   .toast-container {
     box-sizing: border-box;
-    --aesirxconsent-toast-zindex: 1049;
+    --#{$prefix}toast-zindex: 1049;
   }
   .status-tier {
     width: 18px;

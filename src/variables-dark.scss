@@ -1,0 +1,34 @@
+$body-bg-dark: #101529 !default;
+$link-color-dark: $white !default;
+
+[data-bs-theme='dark'] {
+  .aesirxconsent {
+    color: #c8c8db;
+    .block-wallet,
+    .modal-header {
+      background-color: #101529;
+    }
+    .border,
+    .border-bottom,
+    .border-top,
+    .border-start,
+    .border-end {
+      border-color: #1e4284 !important;
+    }
+    .btn-dark {
+      --#{$prefix}btn-bg: #132342;
+      --#{$prefix}btn-border-color: #132342;
+    }
+    .bg-white {
+      background-color: #0c1124;
+    }
+    .bg-light {
+      background-color: #0c1124;
+    }
+    .read-more {
+      .read-more-btn {
+        color: $white;
+      }
+    }
+  }
+}

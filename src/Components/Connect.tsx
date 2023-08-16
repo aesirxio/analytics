@@ -18,8 +18,7 @@ const ConnectModal = ({
   return (
     <>
       <Modal show={show} onHide={handleClose}>
-        <Modal.Body>
-          {' '}
+        <Modal.Body className="aesirxconsent">
           <div className="pb-4 px-4 block-wallet rounded-top">
             <div className="px-3 text-center">
               <h3 className="fs-3 fw-semibold mt-2 mb-4 text-primary">
@@ -29,7 +28,7 @@ const ConnectModal = ({
                 {isDesktop && (
                   <button
                     disabled={isConnecting}
-                    className="btn btn-dark btn-concordium flex-grow-1 fw-medium py-2 px-4 fs-18 lh-sm text-white d-flex align-items-center justify-content-center mb-3"
+                    className="btn btn-primary btn-concordium flex-grow-1 fw-medium py-2 px-4 lh-sm text-white d-flex align-items-center justify-content-center mb-3"
                     onClick={() => handleOnConnect(BROWSER_WALLET)}
                   >
                     {isConnecting ? (
@@ -56,7 +55,7 @@ const ConnectModal = ({
                 )}
 
                 <button
-                  className="btn btn-dark btn-concordium flex-grow-1 fw-medium py-2 px-4 fs-18 lh-sm text-white d-flex align-items-center justify-content-center"
+                  className="btn btn-primary btn-concordium flex-grow-1 fw-medium py-2 px-4 lh-sm text-white d-flex align-items-center justify-content-center"
                   onClick={() => handleOnConnect(WALLET_CONNECT)}
                 >
                   {!activeConnectorError && activeConnectorType && !activeConnector ? (
