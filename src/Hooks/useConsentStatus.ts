@@ -3,8 +3,7 @@ import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
 import { getConsents } from '../utils/consent';
 import { getWeb3ID } from '../utils/Concordium';
 import { toast } from 'react-toastify';
-// import { isMobile, isDesktop, osName, OsTypes } from 'react-device-detect';
-// import { BROWSER_WALLET, WALLET_CONNECT } from './config';
+import { isDesktop } from 'react-device-detect';
 import {
   MAINNET,
   useConnection,
@@ -12,6 +11,7 @@ import {
   WalletConnectionProps,
   withJsonRpcClient,
 } from '@concordium/react-components';
+import { BROWSER_WALLET } from './config';
 const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   const [show, setShow] = useState(false);
   const [showRevoke, setShowRevoke] = useState(false);
@@ -21,7 +21,8 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
 
   const analyticsContext = useContext(AnalyticsContext);
 
-  const { activeConnector, network, connectedAccounts, genesisHashes } = props;
+  const { activeConnector, network, connectedAccounts, genesisHashes, setActiveConnectorType } =
+    props;
 
   useEffect(() => {
     const allow = sessionStorage.getItem('aesirx-analytics-allow');
@@ -129,13 +130,13 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   }, [connectError]);
 
   useEffect(() => {
-    // if (
-    //   isDesktop &&
-    //   sessionStorage.getItem('aesirx-analytics-revoke') !== '1' &&
-    //   sessionStorage.getItem('aesirx-analytics-revoke') !== '2'
-    // ) {
-    //   setActiveConnectorType(BROWSER_WALLET);
-    // }
+    if (
+      isDesktop &&
+      sessionStorage.getItem('aesirx-analytics-revoke') !== '1' &&
+      sessionStorage.getItem('aesirx-analytics-revoke') !== '2'
+    ) {
+      setActiveConnectorType(BROWSER_WALLET);
+    }
   }, []);
 
   useEffect(() => {
@@ -151,10 +152,6 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
 
             if (web3ID) {
               l = 4;
-            } else {
-              toast(
-                "You haven't minted any WEB3 ID yet. Try to mint at https://dapp.web3id.aesirx.io"
-              );
             }
           }
           setWeb3ID(web3ID);
