@@ -104,11 +104,8 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
       } else {
         setLoading('saving');
         const consentList = await getConsents(endpoint, analyticsContext.visitor_uuid);
-        console.log('consentList', consentList);
         consents.forEach(async (consent) => {
           const existConsent = consentList.find((item: any) => item?.consent === consent);
-          console.log('consent', consent);
-          console.log('existConsent', existConsent);
           if (!existConsent) {
             await agreeConsents(endpoint, 1, uuid, consent);
           } else if (
