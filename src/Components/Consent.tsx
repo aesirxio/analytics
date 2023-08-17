@@ -27,6 +27,7 @@ import { OsTypes, isMobile, osName } from 'react-device-detect';
 import { LoadingStatus } from './LoadingStatus';
 import ConnectModal from './Connect';
 import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
+import { useTranslation } from 'react-i18next';
 interface WalletConnectionPropsExtends extends WalletConnectionProps {
   endpoint: string;
 }
@@ -77,6 +78,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
   const [showExpandRevoke, setShowExpandRevoke] = useState(false);
   const [showBackdrop, setShowBackdrop] = useState(true);
   const analyticsContext = useContext(AnalyticsContext);
+  const { t } = useTranslation();
 
   const handleChange = async ({ target: { value } }: any) => {
     if (consents.indexOf(parseInt(value)) === -1) {
@@ -280,7 +282,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                     }}
                   >
                     <img src={privacy} alt="Shield of Privacy" />
-                    Shield of Privacy
+                    {t('txt_shield_of_privacy')}
                   </div>
                 </>
               )}
@@ -296,17 +298,17 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                     <img src={no} />
                   </div>
                   <div className="p-3 bg-white text">
-                    You can revoke your consent for data usage at any time. <br />
-                    Go to{' '}
+                    {t('txt_you_can_revoke')} <br />
+                    {t('txt_go_to')}{' '}
                     <a
                       href="https://nft.shield.aesirx.io"
                       className="text-success text-decoration-underline"
                       target="_blank"
                       rel="noreferrer"
                     >
-                      link
+                      {t('txt_link')}
                     </a>{' '}
-                    for more information.
+                    {t('txt_for_more_information')}
                   </div>
                   <div className="rounded-bottom position-relative overflow-hidden text-white">
                     <img
@@ -316,7 +318,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                     <div className="position-relative p-3">
                       <div className="d-flex align-items-center justify-content-between flex-wrap">
                         <div className="me-2">
-                          <img src={privacy} alt="Shield of Privacy" /> Shield of Privacy
+                          <img src={privacy} alt="Shield of Privacy" /> {t('txt_shield_of_privacy')}
                         </div>
                         <div className="d-flex align-items-center">
                           <a
@@ -325,7 +327,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                             target="_blank"
                             rel="noreferrer"
                           >
-                            Manage Consent
+                            {t('txt_manage_consent')}
                           </a>
                           {loading === 'done' ? (
                             <Button
@@ -333,7 +335,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                               onClick={handleRevokeBtn}
                               className={'text-white d-flex align-items-center revoke-btn'}
                             >
-                              Revoke Consent
+                              {t('txt_revoke_consent')}
                             </Button>
                           ) : (
                             <></>
@@ -367,7 +369,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                     }}
                   >
                     <img src={privacy} alt="Shield of Privacy" />
-                    Shield of Privacy
+                    {t('txt_shield_of_privacy')}
                   </div>
                 </div>
               </>
@@ -403,7 +405,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                                     text={
                                       <>
                                         <img src={yes} className="me-1" />
-                                        Yes, I consent
+                                        {t('txt_yes_i_consent')}
                                       </>
                                     }
                                     ssoState={'noscopes'}
@@ -417,7 +419,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                                   className="me-1 text-white d-flex align-items-center"
                                 >
                                   <img src={yes} className="me-1" />
-                                  Yes, I consent
+                                  {t('txt_yes_i_consent')}
                                 </Button>
                               )}
 
@@ -427,7 +429,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                                 className="d-flex align-items-center"
                               >
                                 <img src={no} className="me-1" />
-                                Reject Consent
+                                {t('txt_reject_consent')}
                               </Button>
                             </>
                           ) : (

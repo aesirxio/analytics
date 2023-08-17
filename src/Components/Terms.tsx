@@ -6,60 +6,56 @@ import concordium from '../Assets/concordium.svg';
 import upgrade from '../Assets/upgrade.svg';
 import privacy from '../Assets/privacy.svg';
 import arrow from '../Assets/arrow.svg';
+import { useTranslation } from 'react-i18next';
 
 const terms = [
   {
     level: 1,
-    tier: 'Tier 1',
-    name: 'Session-Based',
-    levelname: 'Basic',
-    content:
-      "Ideal for new site visitors or if you don't want your data stored beyond your current visit.",
-    term: 'You consent to data collection for a 30-minute session only.',
-    upgrade: 'Upgrade to Tier 2 Consent - Medium',
-    upgradetext:
-      ' & add on a Web3 Wallet for greater data control & consent or revoke at any time you choose.',
+    tier: 'txt_tier_1_tier',
+    name: 'txt_tier_1_name',
+    levelname: 'txt_tier_1_levelname',
+    content: 'txt_tier_1_content',
+    term: 'txt_tier_1_term',
+    upgrade: 'txt_tier_1_upgrade',
+    upgradetext: 'txt_tier_1_upgradetext',
     logos: [aesirx],
   },
   {
     level: 2,
-    tier: 'Tier 2',
-    name: 'AesirX WEB3 ID',
-    levelname: 'Medium',
-    content:
-      'Ideal for personalized online experiences & secure consent management across sessions & platforms.',
-    term: 'You consent to data use across multiple sessions.',
-    upgrade: 'Upgrade to Tier 3 Consent - High ',
-    upgradetext:
-      '& add on Wallet-Based Decentralized Consent to give explicit consent for data collection & processing for the most secure, private & personalized experience.',
+    tier: 'txt_tier_2_tier',
+    name: 'txt_tier_2_name',
+    levelname: 'txt_tier_2_levelname',
+    content: 'txt_tier_2_content',
+    term: 'txt_tier_2_term',
+    upgrade: 'txt_tier_2_upgrade',
+    upgradetext: 'txt_tier_2_upgradetext',
     logos: [aesirx, web3id],
   },
   {
     level: 3,
-    tier: 'Tier 3',
-    name: 'Decentralized Wallet',
-    levelname: 'High',
-    content: 'Utilize your Web3 Wallet for greater control over your data.',
-    term: 'You consent for your data to be used, which can be revoked at any time you choose.',
-    upgrade: 'Upgrade to Tier 4 Consent - Super Advanced (our highest tier!)',
-    upgradetext:
-      ' & add on AesirX WEB3 ID to give explicit consent for data collection & processing for the most secure, private & personalized experience.',
+    tier: 'txt_tier_3_tier',
+    name: 'txt_tier_3_name',
+    levelname: 'txt_tier_3_levelname',
+    content: 'txt_tier_3_content',
+    term: 'txt_tier_3_term',
+    upgrade: 'txt_tier_3_upgrade',
+    upgradetext: 'txt_tier_3_upgradetext',
     logos: [aesirx, web3id],
   },
   {
     level: 4,
-    tier: 'Tier 4',
-    name: 'Combined Wallet + AesirX WEB3 ID',
-    levelname: 'Super Advanced',
-    content:
-      'Use your Web3 Wallet + AesirX WEB3 ID & get full multi-site control of your data use. Consent or revoke permissions at any time for true decentralized data ownership.',
-    term: 'You consent for your data to be used, which can be revoked at any time you choose.',
-    upgradetext: 'The most personalized and privacy-preserving experience!',
+    tier: 'txt_tier_4_tier',
+    name: 'txt_tier_4_name',
+    levelname: 'txt_tier_4_levelname',
+    content: 'txt_tier_4_content',
+    term: 'txt_tier_4_term',
+    upgradetext: 'txt_tier_4_upgradetext',
     logos: [aesirx, web3id, concordium],
   },
 ];
 
 const TermsComponent = ({ children, level, handleLevel }: any) => {
+  const { t } = useTranslation();
   const handleReadmore = (status: boolean) => {
     setShowReadmore(status);
   };
@@ -71,15 +67,15 @@ const TermsComponent = ({ children, level, handleLevel }: any) => {
           term.level === level && (
             <Fragment key={key}>
               <div className="rounded-top d-flex justify-content-between bg-light p-3 fw-bold flex-wrap">
-                <div>{term.name}</div>
+                <div>{t(term.name)}</div>
                 <div className="d-flex align-items-center">
                   <div className={`status-tier tier-${term.level} rounded-circle`}></div>
-                  {term.tier} - {term.levelname}
+                  {t(term.tier)} - {t(term.levelname)}
                 </div>
               </div>
               <div className="p-3 bg-white">
-                <span className="fw-bold">{term.content}</span>{' '}
-                <span className="fw-light">{term.term}</span>
+                <span className="fw-bold">{t(term.content)}</span>{' '}
+                <span className="fw-light">{t(term.term)}</span>
                 <div className="read-more">
                   <div
                     className="read-more-btn"
@@ -87,7 +83,7 @@ const TermsComponent = ({ children, level, handleLevel }: any) => {
                       handleReadmore(!showReadmore ? true : false);
                     }}
                   >
-                    {!showReadmore ? 'Show details' : 'Hide details'}{' '}
+                    {!showReadmore ? t('txt_show_details') : t('txt_hide_details')}{' '}
                     <img src={arrow} className={`ms-1 ${showReadmore ? 'revert' : ''}`} />
                   </div>
                 </div>
@@ -104,7 +100,7 @@ const TermsComponent = ({ children, level, handleLevel }: any) => {
                       <div className="d-flex align-items-center">
                         {term.logos.map((logo, i) => (
                           <Fragment key={i}>
-                            <img className="me-2" src={logo} alt={term.levelname} />
+                            <img className="me-2" src={logo} alt={t(term.levelname)} />
                           </Fragment>
                         ))}
                       </div>
@@ -117,20 +113,18 @@ const TermsComponent = ({ children, level, handleLevel }: any) => {
                               href="#"
                               onClick={() => handleLevel(terms[key + 1].level)}
                             >
-                              {term.upgrade}
+                              {t(term.upgrade)}
                             </a>
                           )}
-                          {term.upgradetext}
-                          <div className="fst-italic">
-                            We do not collect any personal data, only user insights.
-                          </div>
+                          {t(term.upgradetext)}
+                          <div className="fst-italic">{t('txt_no_collect')}</div>
                         </div>
                       </div>
                     </>
                   )}
                   <div className="d-flex align-items-center justify-content-between flex-wrap">
                     <div className="me-2">
-                      <img src={privacy} alt={term.name} /> Shield of Privacy
+                      <img src={privacy} alt={t(term.name)} /> {t('txt_shield_of_privacy')}
                     </div>
                     {children}
                   </div>
