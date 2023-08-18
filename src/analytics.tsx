@@ -6,6 +6,8 @@ import { createRoot } from 'react-dom/client';
 import { AnalyticsContext } from './utils/AnalyticsContextProvider';
 import ConsentComponent from './Components/Consent';
 import { Buffer } from 'buffer';
+import { appLanguages } from './translations';
+import { AesirXI18nextProvider } from './utils/I18nextProvider';
 
 window.Buffer = Buffer;
 declare global {
@@ -24,7 +26,9 @@ const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
         setUUID: undefined,
       }}
     >
-      <ConsentComponent endpoint={window['aesirx1stparty'] ?? ''} />
+      <AesirXI18nextProvider appLanguages={appLanguages}>
+        <ConsentComponent endpoint={window['aesirx1stparty'] ?? ''} />
+      </AesirXI18nextProvider>
     </AnalyticsContext.Provider>
   );
 };

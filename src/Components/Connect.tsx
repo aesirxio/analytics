@@ -3,6 +3,7 @@ import { Modal } from 'react-bootstrap';
 import { isMobile, isDesktop } from 'react-device-detect';
 import { BROWSER_WALLET, WALLET_CONNECT } from '../Hooks/config';
 import concordium_logo from '../Assets/concordium_logo.png';
+import { useTranslation } from 'react-i18next';
 
 const ConnectModal = ({
   isConnecting,
@@ -14,7 +15,7 @@ const ConnectModal = ({
   const [show, setShow] = useState(true);
 
   const handleClose = () => setShow(false);
-
+  const { t } = useTranslation();
   return (
     <>
       <Modal show={show} onHide={handleClose}>
@@ -22,7 +23,7 @@ const ConnectModal = ({
           <div className="pb-4 px-4 block-wallet rounded-top">
             <div className="px-3 text-center">
               <h3 className="fs-3 fw-semibold mt-2 mb-4 text-primary">
-                Please connect to your wallet
+                {t('txt_please_connect_your_wallet')}
               </h3>
               <div className="d-flex flex-row flex-wrap">
                 {isDesktop && (
@@ -38,7 +39,7 @@ const ConnectModal = ({
                           role="status"
                           aria-hidden="true"
                         ></span>
-                        Connecting
+                        {t('txt_connecting')}
                       </>
                     ) : (
                       <>
