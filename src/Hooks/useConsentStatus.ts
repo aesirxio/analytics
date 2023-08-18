@@ -55,13 +55,13 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
               sessionStorage.setItem('aesirx-analytics-allow', '1');
               if (consent) {
                 const revokeTier = !consent?.consent_uuid
-                  ? '1'
+                  ? ''
                   : consent?.web3id && consent?.address
                   ? '4'
                   : consent?.address && !consent?.web3id
                   ? '3'
                   : '2';
-                handleRevoke(true, revokeTier);
+                revokeTier ? handleRevoke(true, revokeTier) : setShow(true);
               }
             }
           });

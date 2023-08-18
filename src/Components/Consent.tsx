@@ -1,6 +1,6 @@
 /* eslint-disable no-case-declarations */
 import { agreeConsents, getConsents, getSignature, revokeConsents } from '../utils/consent';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import useConsentStatus from '../Hooks/useConsentStatus';
 import '../style.scss';
@@ -26,6 +26,7 @@ import { WALLET_CONNECT } from '../Hooks/config';
 import { OsTypes, isMobile, osName } from 'react-device-detect';
 import { LoadingStatus } from './LoadingStatus';
 import ConnectModal from './Connect';
+import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
 interface WalletConnectionPropsExtends extends WalletConnectionProps {
   endpoint: string;
 }
@@ -75,6 +76,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
   const [showExpandConsent, setShowExpandConsent] = useState(true);
   const [showExpandRevoke, setShowExpandRevoke] = useState(false);
   const [showBackdrop, setShowBackdrop] = useState(true);
+  const analyticsContext = useContext(AnalyticsContext);
 
   const handleChange = async ({ target: { value } }: any) => {
     if (consents.indexOf(parseInt(value)) === -1) {
@@ -101,8 +103,18 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
         }
       } else {
         setLoading('saving');
+        const consentList = await getConsents(endpoint, analyticsContext.visitor_uuid);
         consents.forEach(async (consent) => {
-          await agreeConsents(endpoint, 1, uuid, consent);
+          const existConsent = consentList.find((item: any) => item?.consent === consent);
+          if (!existConsent) {
+            await agreeConsents(endpoint, 1, uuid, consent);
+          } else if (
+            !!existConsent?.consent_uuid &&
+            existConsent?.expiration &&
+            new Date(existConsent.expiration) < new Date()
+          ) {
+            await agreeConsents(endpoint, 1, uuid, consent);
+          }
         });
       }
 
@@ -152,7 +164,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     try {
       let flag = true;
 
-      if (levelRevoke) {
+      if (levelRevoke !== '1') {
         if (parseInt(levelRevoke) > 2) {
           if (account) {
             setLoading('sign');
@@ -206,6 +218,12 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
           setShowBackdrop(false);
           sessionStorage.removeItem('aesirx-analytics-allow');
         }
+      } else {
+        handleRevoke(false);
+        setShowExpandConsent(false);
+        setShow(true);
+        setShowBackdrop(false);
+        sessionStorage.removeItem('aesirx-analytics-allow');
       }
     } catch (error) {
       console.log(error);
@@ -281,7 +299,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                     You can revoke your consent for data usage at any time. <br />
                     Go to{' '}
                     <a
-                      href="https://nft.web3id.aesirx.io"
+                      href="https://nft.shield.aesirx.io"
                       className="text-success text-decoration-underline"
                       target="_blank"
                       rel="noreferrer"
@@ -300,29 +318,27 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                         <div className="me-2">
                           <img src={privacy} alt="Shield of Privacy" /> Shield of Privacy
                         </div>
-                        {sessionStorage.getItem('aesirx-analytics-revoke') !== '1' && (
-                          <div className="d-flex align-items-center">
-                            <a
-                              className="text-success text-decoration-underline manage-consent"
-                              href="https://dapp.shield.aesirx.io/revoke-consent"
-                              target="_blank"
-                              rel="noreferrer"
+                        <div className="d-flex align-items-center">
+                          <a
+                            className="text-success text-decoration-underline manage-consent"
+                            href="https://dapp.shield.aesirx.io/revoke-consent"
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            Manage Consent
+                          </a>
+                          {loading === 'done' ? (
+                            <Button
+                              variant="success"
+                              onClick={handleRevokeBtn}
+                              className={'text-white d-flex align-items-center revoke-btn'}
                             >
-                              Manage Consent
-                            </a>
-                            {loading === 'done' ? (
-                              <Button
-                                variant="success"
-                                onClick={handleRevokeBtn}
-                                className={'text-white d-flex align-items-center revoke-btn'}
-                              >
-                                Revoke Consent
-                              </Button>
-                            ) : (
-                              <></>
-                            )}
-                          </div>
-                        )}
+                              Revoke Consent
+                            </Button>
+                          ) : (
+                            <></>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
