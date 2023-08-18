@@ -3,7 +3,7 @@ import { agreeConsents, getConsents, getSignature, revokeConsents } from '../uti
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import useConsentStatus from '../Hooks/useConsentStatus';
-import '../style.scss';
+import '../styles/style.scss';
 import { TermsComponent } from './Terms';
 import { ToastContainer, toast } from 'react-toastify';
 
