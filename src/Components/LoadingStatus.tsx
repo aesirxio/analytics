@@ -1,7 +1,10 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 const LoadingStatus = ({ loading }: any) => {
+  const { t } = useTranslation();
+
   return (
     <>
       {loading === 'connect' ? (
@@ -16,7 +19,7 @@ const LoadingStatus = ({ loading }: any) => {
               role="status"
               aria-hidden="true"
             ></span>
-            <span className="text">Please connect your Concordium wallet</span>
+            <span className="text">{t('txt_please_connect')}</span>
           </Button>
         </div>
       ) : loading === 'sign' ? (
@@ -31,9 +34,7 @@ const LoadingStatus = ({ loading }: any) => {
               role="status"
               aria-hidden="true"
             ></span>
-            <span className="text">
-              Please sign the message on your wallet twice and wait for it to be saved.
-            </span>
+            <span className="text">{t('txt_please_sign')}</span>
           </Button>
         </div>
       ) : loading === 'saving' ? (
@@ -48,7 +49,7 @@ const LoadingStatus = ({ loading }: any) => {
               role="status"
               aria-hidden="true"
             ></span>
-            <span className="text">Saving...</span>
+            <span className="text">{t('txt_saving')}</span>
           </Button>
         </div>
       ) : (

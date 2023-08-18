@@ -4,6 +4,8 @@
  */
 
 import React, { Dispatch, ReactNode, SetStateAction, useState } from 'react';
+import { appLanguages } from '../translations';
+import { AesirXI18nextProvider } from './I18nextProvider';
 
 interface Props {
   children?: ReactNode;
@@ -35,7 +37,7 @@ const AnalyticsContextProvider: React.FC<Props> = ({ children }) => {
         setUUID: setUUID,
       }}
     >
-      {children}
+      <AesirXI18nextProvider appLanguages={appLanguages}>{children}</AesirXI18nextProvider>
     </AnalyticsContext.Provider>
   );
 };
