@@ -3,8 +3,7 @@ import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
 import { getConsents } from '../utils/consent';
 import { getWeb3ID } from '../utils/Concordium';
 import { toast } from 'react-toastify';
-import { isMobile, isDesktop, osName, OsTypes } from 'react-device-detect';
-import { BROWSER_WALLET, WALLET_CONNECT } from './config';
+import { isDesktop } from 'react-device-detect';
 import {
   MAINNET,
   useConnection,
@@ -12,9 +11,11 @@ import {
   WalletConnectionProps,
   withJsonRpcClient,
 } from '@concordium/react-components';
+import { BROWSER_WALLET } from './config';
 const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   const [show, setShow] = useState(false);
   const [showRevoke, setShowRevoke] = useState(false);
+  const [showConnectModal, setShowConnectModal] = useState(false);
   const [level, setLevel] = useState<any>();
   const [web3ID, setWeb3ID] = useState<string>();
 
@@ -54,13 +55,13 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
               sessionStorage.setItem('aesirx-analytics-allow', '1');
               if (consent) {
                 const revokeTier = !consent?.consent_uuid
-                  ? '1'
+                  ? ''
                   : consent?.web3id && consent?.address
                   ? '4'
                   : consent?.address && !consent?.web3id
                   ? '3'
                   : '2';
-                handleRevoke(true, revokeTier);
+                revokeTier ? handleRevoke(true, revokeTier) : setShow(true);
               }
             }
           });
@@ -171,45 +172,48 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
         setLevel(_level);
       } else if (_level === 3) {
         try {
-          if (isDesktop) {
-            setActiveConnectorType(BROWSER_WALLET);
-            setLevel(null);
-            if (!activeConnector) {
-              setLevel(1);
-              toast('Browser Wallet extension not detected');
-            } else {
-              setLevel(_level);
-            }
-          } else {
-            if (osName === OsTypes?.IOS && isMobile) {
-              setLevel(1);
-              toast('Wallet Connect not support on IOS');
-            } else if (isMobile) {
-              setActiveConnectorType(WALLET_CONNECT);
-              setLevel(_level);
-            } else {
-              setLevel(_level);
-            }
-          }
+          setLevel(3);
+          // if (isDesktop) {
+          //   setActiveConnectorType(BROWSER_WALLET);
+          //   setLevel(null);
+          //   if (!activeConnector) {
+          //     setLevel(1);
+          //     toast('Browser Wallet extension not detected');
+          //   } else {
+          //     setLevel(_level);
+          //   }
+          // } else {
+          //   if (osName === OsTypes?.IOS && isMobile) {
+          //     setLevel(1);
+          //     toast('Wallet Connect not support on IOS');
+          //   } else if (isMobile) {
+          //     setActiveConnectorType(WALLET_CONNECT);
+          //     setLevel(_level);
+          //   } else {
+          //     setLevel(_level);
+          //   }
+          // }
         } catch (error) {
           setLevel(1);
-          toast('Browser Wallet extension not detected');
         }
       } else if (_level === 4) {
         setLevel(null);
 
         try {
-          const web3ID = await getWeb3ID(connection, account);
-
-          if (web3ID) {
-            setLevel(_level);
-            setWeb3ID(web3ID);
+          if (connection) {
+            const web3ID = await getWeb3ID(connection, account);
+            if (web3ID) {
+              setLevel(_level);
+              setWeb3ID(web3ID);
+            } else {
+              throw new Error('no web3id');
+            }
           } else {
-            throw new Error('no web3id');
+            setShowConnectModal(true);
           }
         } catch (error) {
           setLevel(3);
-          toast("You haven't minted any WEB3 ID yet. Try to mint at https://dapp.web3id.aesirx.io");
+          toast("You haven't minted any WEB3 ID yet. Try to mint at https://dapp.shield.aesirx.io");
         }
       }
     },
@@ -232,6 +236,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
     handleLevel,
     showRevoke,
     handleRevoke,
+    showConnectModal,
   ];
 };
 

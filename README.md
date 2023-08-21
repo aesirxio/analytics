@@ -233,3 +233,45 @@ const CustomEvent = () => {
 (`endPoint` is the link to your 1st party server which must be installed)
 
 (`referer` is the referer domain)
+
+## Customize CSS for Consent modal
+Please follow below CSS example:
+```
+  // Customize toast
+  .aesirxconsent .toast {
+    --aesirxconsent-toast-font-size: 16px;
+    --aesirxconsent-toast-padding-x: 0.75rem;
+    --aesirxconsent-toast-padding-y: 0.5rem;
+    --aesirxconsent-toast-spacing: 1.5rem;
+    --aesirxconsent-toast-zindex: 1049;
+  }
+  // Customize button
+  .aesirxconsent .btn {
+    --aesirxconsent-btn-font-size: 16px;
+    --aesirxconsent-btn-padding-x: 0.75rem;
+    --aesirxconsent-btn-padding-y: 0.375rem;
+    --aesirxconsent-btn-font-weight: 400;
+    --aesirxconsent-btn-line-height: 1.5;
+  }
+  // Customize button success
+  .aesirxconsent .btn-success {
+    --aesirxconsent-btn-color: #000;
+    --aesirxconsent-btn-bg: #1ab394;
+    --aesirxconsent-btn-border-color: #1ab394;
+    --aesirxconsent-btn-hover-color: #000;
+    --aesirxconsent-btn-hover-bg: #3cbea4;
+    --aesirxconsent-btn-hover-border-color: #31bb9f;
+    --aesirxconsent-btn-focus-shadow-rgb: 22, 152, 126;
+    --aesirxconsent-btn-active-color: #000;
+    --aesirxconsent-btn-active-bg: #48c2a9;
+    --aesirxconsent-btn-active-border-color: #31bb9f;
+    --aesirxconsent-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --aesirxconsent-btn-disabled-color: #000;
+    --aesirxconsent-btn-disabled-bg: #1ab394;
+    --aesirxconsent-btn-disabled-border-color: #1ab394;
+  }
+  // To customize CSS for dark mode (Bootstrap dark mode)
+  [data-bs-theme=dark] .aesirxconsent {
+    color: #fff;
+  }
+```
