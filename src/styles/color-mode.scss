@@ -1,0 +1,35 @@
+// Colors
+@include color-mode(dark) {
+  .aesirxconsent {
+    color: #c8c8db;
+    .block-wallet,
+    .modal-header {
+      background-color: var(--#{$prefix}body-bg);
+    }
+    .border,
+    .border-bottom,
+    .border-top,
+    .border-start,
+    .border-end {
+      border-color: var(--#{$prefix}border-color);
+    }
+    .btn-dark {
+      border-color: var(--#{$prefix}dark-border-subtle);
+      background-color: var(--#{$prefix}dark-bg-subtle);
+    }
+    .bg-white {
+      background-color: var(--#{$prefix}light-bg-subtle);
+    }
+    .bg-light {
+      background-color: var(--#{$prefix}light-bg-subtle);
+    }
+    .read-more {
+      .read-more-btn {
+        color: $white;
+      }
+    }
+    .text-primary {
+      color: $white;
+    }
+  }
+}
