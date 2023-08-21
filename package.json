@@ -73,7 +73,7 @@
     "esbuild-plugin-inline-image": "^0.0.9",
     "esbuild-sass-plugin": "^2.10.0",
     "esbuild-scss-modules-plugin": "^1.1.1",
-    "eslint": "^8.36",
+    "eslint": "^8.47",
     "eslint-plugin-react": "^7.31.10",
     "jest": "^29.4.3",
     "jest-environment-jsdom": "^29.4.3",
