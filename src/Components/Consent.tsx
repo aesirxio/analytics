@@ -99,6 +99,9 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
           setLoading('saving');
 
           await agreeConsents(endpoint, level, uuid, consents, account, signature, web3ID);
+          if (isMobile) {
+            connection.disconnect();
+          }
         } else {
           setLoading('connect');
           flag = false;
@@ -191,6 +194,9 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
             });
             setLoading('done');
             handleRevoke(false);
+            if (isMobile) {
+              connection.disconnect();
+            }
           } else {
             setLoading('connect');
             flag = false;
