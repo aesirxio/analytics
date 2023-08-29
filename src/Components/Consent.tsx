@@ -99,6 +99,9 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
           setLoading('saving');
 
           await agreeConsents(endpoint, level, uuid, consents, account, signature, web3ID);
+          if (isMobile) {
+            connection.disconnect();
+          }
         } else {
           setLoading('connect');
           flag = false;
@@ -191,6 +194,9 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
             });
             setLoading('done');
             handleRevoke(false);
+            if (isMobile) {
+              connection.disconnect();
+            }
           } else {
             setLoading('connect');
             flag = false;
@@ -299,14 +305,14 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                   </div>
                   <div className="p-3 bg-white text">
                     {t('txt_you_can_revoke')} <br />
-                    {t('txt_go_to')}{' '}
+                    {t('txt_visit')}{' '}
                     <a
                       href="https://nft.shield.aesirx.io"
                       className="text-success text-decoration-underline"
                       target="_blank"
                       rel="noreferrer"
                     >
-                      {t('txt_link')}
+                      {t('txt_here')}
                     </a>{' '}
                     {t('txt_for_more_information')}
                   </div>
