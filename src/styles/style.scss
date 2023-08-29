@@ -24,10 +24,10 @@ $primary: #132342;
 @import 'bootstrap/scss/maps';
 @import 'bootstrap/scss/mixins';
 @import 'bootstrap/scss/root';
-@import 'bootstrap/scss/modal';
 .aesirxconsent {
   // 6. Optionally include any other parts as needed
   @import 'bootstrap/scss/utilities';
+  @import 'bootstrap/scss/modal';
   @import 'bootstrap/scss/offcanvas';
   @import 'bootstrap/scss/buttons';
   @import 'bootstrap/scss/close';
@@ -40,6 +40,9 @@ $primary: #132342;
   @import 'bootstrap/scss/utilities/api';
   color: #5f5e70;
   font-size: 16px;
+  &-modal .modal-dialog {
+    max-width: 500px;
+  }
   a {
     text-decoration: underline;
   }
