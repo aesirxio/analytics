@@ -30,7 +30,7 @@
   "txt_hide_details": "Sakrij detalje",
   "txt_no_collect": "Ne prikupljamo nikakve osobne podatke, samo korisničke uvide.",
   "txt_shield_of_privacy": "Shield of Privacy",
-  "txt_you_can_revoke": "Možete opozvati svoj pristanak za korištenje podataka u bilo kojem trenutku.",
+  "txt_you_can_revoke": "Opozovite svoj pristanak za korištenje podataka kad god to želite.",
   "txt_go_to": "Idi na",
   "txt_link": "link",
   "txt_for_more_information": "za više informacija.",
@@ -42,5 +42,7 @@
   "txt_please_sign": "Molimo vas da dvaput potpišete poruku na svom novčaniku i pričekate da se spremi.",
   "txt_saving": "Spremanje...",
   "txt_please_connect_your_wallet": "Povežite se sa svojim novčanikom",
-  "txt_connecting": "Povezivanje"
+  "txt_connecting": "Povezivanje",
+  "txt_here": "OVDJE",
+  "txt_visit": "Posjetiti"
 }
