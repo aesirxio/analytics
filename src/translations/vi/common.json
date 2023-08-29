@@ -30,7 +30,7 @@
   "txt_hide_details": "Ẩn chi tiết",
   "txt_no_collect": "Chúng tôi không thu thập bất kỳ dữ liệu cá nhân nào, chỉ thu thập thông tin chi tiết của người dùng.",
   "txt_shield_of_privacy": "Shield of Privacy",
-  "txt_you_can_revoke": "Bạn có thể rút lại sự đồng ý sử dụng dữ liệu của mình bất kỳ lúc nào.",
+  "txt_you_can_revoke": "Thu hồi sự đồng ý của bạn về việc sử dụng dữ liệu bất cứ khi nào bạn muốn.",
   "txt_go_to": "Đi tới",
   "txt_link": "liên kết",
   "txt_for_more_information": "để biết thêm thông tin.",
@@ -42,5 +42,7 @@
   "txt_please_sign": "Vui lòng ký vào tin nhắn trên ví của bạn hai lần và đợi nó được lưu.",
   "txt_save": "Đang lưu...",
   "txt_please_connect_your_wallet": "Vui lòng kết nối với ví của bạn",
-  "txt_connecting": "Đang kết nối"
+  "txt_connecting": "Đang kết nối",
+  "txt_here": "ĐÂY",
+  "txt_visit": "Đến"
 }

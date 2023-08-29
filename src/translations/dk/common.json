@@ -30,7 +30,7 @@
   "txt_hide_details": "Skjul detaljer",
   "txt_no_collect": "Vi indsamler ingen personlige data, kun brugerindsigt.",
   "txt_shield_of_privacy": "Shield of Privacy",
-  "txt_you_can_revoke": "Du kan til enhver tid tilbagekalde dit samtykke til databrug.",
+  "txt_you_can_revoke": "Tilbagekald dit samtykke til databrug, når du ønsker det.",
   "txt_go_to": "Gå til",
   "txt_link": "link",
   "txt_for_more_information": "for mere information.",
@@ -42,5 +42,7 @@
   "txt_please_sign": "Skriv venligst beskeden på din tegnebog to gange og vent på, at den bliver gemt.",
   "txt_saving": "Gemmer...",
   "txt_please_connect_your_wallet": "Forbind venligst til din tegnebog",
-  "txt_connecting": "Opretter forbindelse"
+  "txt_connecting": "Opretter forbindelse",
+  "txt_here": "HER",
+  "txt_visit": "Besøg"
 }

@@ -30,7 +30,7 @@
   "txt_hide_details": "Hide details",
   "txt_no_collect": "We do not collect any personal data, only user insights.",
   "txt_shield_of_privacy": "Shield of Privacy",
-  "txt_you_can_revoke": "You can revoke your consent for data usage at any time.",
+  "txt_you_can_revoke": "Revoke your consent for data use whenever you wish.",
   "txt_go_to": "Go to",
   "txt_link": "link",
   "txt_for_more_information": "for more information.",
@@ -42,5 +42,7 @@
   "txt_please_sign": "Please sign the message on your wallet twice and wait for it to be saved.",
   "txt_saving": "Saving...",
   "txt_please_connect_your_wallet": "Please connect to your wallet",
-  "txt_connecting": "Connecting"
+  "txt_connecting": "Connecting",
+  "txt_here": "HERE",
+  "txt_visit": "Visit"
 }

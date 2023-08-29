@@ -30,7 +30,7 @@
   "txt_hide_details": "Masquer les détails",
   "txt_no_collect": "Nous ne collectons aucune donnée personnelle, uniquement des informations sur les utilisateurs.",
   "txt_shield_of_privacy": "Shield of Privacy",
-  "txt_you_can_revoke": "Vous pouvez révoquer à tout moment votre consentement à l'utilisation des données.",
+  "txt_you_can_revoke": "Révoquer votre consentement à l'utilisation des données quand vous le souhaitez.",
   "txt_go_to": "Aller à",
   "txt_link": "lien",
   "txt_for_more_information": "pour plus d'informations.",
@@ -42,5 +42,7 @@
   "txt_Please_sign": "Veuillez signer deux fois le message sur votre portefeuille et attendre qu'il soit enregistré.",
   "txt_saving": "Enregistrement en cours...",
   "txt_Please_connect_your_wallet": "Veuillez vous connecter à votre portefeuille",
-  "txt_connecting": "Connexion"
+  "txt_connecting": "Connexion",
+  "txt_here": "ICI",
+  "txt_visit": "Visite"
 }
