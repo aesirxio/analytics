@@ -110,7 +110,6 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
           setRpcError('');
         })
         .catch((err: any) => {
-          console.log('errerrerrerrerr', err);
           setRpcGenesisHash(undefined);
           toast(err.message);
           setRpcError(err.message);
