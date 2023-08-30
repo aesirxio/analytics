@@ -18,7 +18,7 @@ const ConnectModal = ({
   const { t } = useTranslation();
   return (
     <>
-      <Modal show={show} onHide={handleClose}>
+      <Modal className="aesirxconsent-modal" show={show} onHide={handleClose}>
         <Modal.Body className="aesirxconsent">
           <div className="pb-4 px-4 block-wallet rounded-top">
             <div className="px-3 text-center">
