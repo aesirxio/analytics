@@ -30,7 +30,7 @@
   "txt_hide_details": "Ocultar detalles",
   "txt_no_collect": "No recopilamos ningún dato personal, solo información del usuario",
   "txt_shield_of_privacy": "Shield of Privacy",
-  "txt_you_can_revoke": "Puedes revocar tu consentimiento para el uso de datos en cualquier momento.",
+  "txt_you_can_revoke": "Revocar tu consentimiento al uso de datos en cualquier momento.",
   "txt_go_to": "Ir a",
   "txt_link": "enlace",
   "txt_for_more_information": "para más información.",
@@ -42,5 +42,7 @@
   "txt_please_sign": "Por favor, firme el mensaje en su billetera dos veces y espere a que se guarde.",
   "txt_saving": "Guardando...",
   "txt_please_connect_your_wallet": "Conéctese a su billetera",
-  "txt_connecting": "Conectando"
+  "txt_connecting": "Conectando",
+  "txt_here": "AQUÍ",
+  "txt_visit": "Visita"
 }

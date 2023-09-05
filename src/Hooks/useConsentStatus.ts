@@ -109,7 +109,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
           setRpcGenesisHash(hash);
           setRpcError('');
         })
-        .catch((err) => {
+        .catch((err: any) => {
           setRpcGenesisHash(undefined);
           toast(err.message);
           setRpcError(err.message);
@@ -124,7 +124,11 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   }, [activeConnector]);
 
   useEffect(() => {
-    if (connectError) {
+    if (
+      connectError &&
+      connectError !==
+        'A listener indicated an asynchronous response by returning true, but the message channel closed before a response was received'
+    ) {
       toast.error(connectError);
     }
   }, [connectError]);
