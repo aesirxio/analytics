@@ -241,6 +241,16 @@ $primary: #132342;
     }
   }
 }
+body.modal-open {
+  .aesirxconsent {
+    .offcanvas-backdrop {
+      z-index: 99;
+    }
+    .toast-container {
+      --#{$prefix}toast-zindex: 100;
+    }
+  }
+}
 .aesirxsso {
   color: #5f5e70;
 }
