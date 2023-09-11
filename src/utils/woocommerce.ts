@@ -56,11 +56,11 @@ const addToCartAnalytics = () => {
   ) => {
     const attributes = Array<AttributeType>();
 
+    pushAttr(attributes, '1', 'analytics_woocommerce');
     pushAttr(attributes, title, 'wooocommerce_product_name');
     pushAttr(attributes, productID, 'wooocommerce_product_id');
     pushAttr(attributes, quantity, 'wooocommerce_quantity');
     pushAttr(attributes, variantID, 'wooocommerce_variant_id');
-
     trackEvent(root, '', {
       event_name: 'Add to cart',
       event_type: 'submit',
@@ -86,6 +86,7 @@ const searchAnalytics = () => {
   });
   const trackEventSearch = (searchValue: string) => {
     const attributes = Array<AttributeType>();
+    pushAttr(attributes, '1', 'analytics_woocommerce');
     pushAttr(attributes, searchValue, 'wooocommerce_search');
 
     trackEvent(root, '', {
@@ -98,6 +99,8 @@ const searchAnalytics = () => {
 
 const checkoutAnalytics = () => {
   document.querySelector('form.woocommerce-checkout')?.addEventListener('submit', function (e) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     jQuery('form.woocommerce-checkout').on('checkout_place_order', function () {
       const form = e.target as HTMLElement;
       const attributes = Array<AttributeType>();
@@ -180,6 +183,7 @@ const checkoutAnalytics = () => {
         }
       });
 
+      pushAttr(attributes, '1', 'analytics_woocommerce');
       pushAttr(attributes, (billing_first_name as HTMLInputElement).value, 'billing_first_name');
       pushAttr(attributes, (billing_last_name as HTMLInputElement).value, 'billing_last_name');
       pushAttr(attributes, (billing_company as HTMLInputElement).value, 'billing_company');
