@@ -97,29 +97,33 @@ const trackEvent = async (endpoint: string, referer?: string, data?: object) => 
   const ip = '';
 
   const fpPromise = FingerprintJS.load({ monitoring: false });
-  const body = fpPromise
+  const responseStart = fpPromise
     .then((fp) => fp.get())
     .then(async (result) => {
       const fingerprint = result.visitorId;
-      return {
-        fingerprint: fingerprint,
-        url: url,
-        ...(referer !== '/' &&
-          referer && {
-            referer: referer,
+      const headers = { type: 'application/json' };
+      const blobData = new Blob(
+        [
+          JSON.stringify({
+            fingerprint: fingerprint,
+            url: url,
+            ...(referer !== '/' &&
+              referer && {
+                referer: referer,
+              }),
+            user_agent: user_agent,
+            ip: ip,
+            browser_name: browser_name,
+            browser_version: browser_version,
+            lang: lang,
+            device: device,
+            ...data,
           }),
-        user_agent: user_agent,
-        ip: ip,
-        browser_name: browser_name,
-        browser_version: browser_version,
-        lang: lang,
-        device: device,
-        ...data,
-      };
+        ],
+        headers
+      );
+      return navigator.sendBeacon(createRequestV2(endpoint, 'start'), blobData);
     });
-  const headers = { type: 'application/json' };
-  const blob = new Blob([JSON.stringify(body)], headers);
-  const responseStart = navigator.sendBeacon(createRequestV2(endpoint, 'start'), blob);
 
   return responseStart;
 };
