@@ -131,6 +131,11 @@ const checkoutAnalytics = () => {
             productPrice += productPriceSelector.childNodes[i].textContent;
         }
         pushAttr(attributes, productPrice.trim(), 'product-' + index + '-price');
+
+        const productSymbolSelector = item.querySelector(
+          '.woocommerce-Price-amount .woocommerce-Price-currencySymbol'
+        ) as HTMLElement;
+        pushAttr(attributes, productSymbolSelector?.innerText, 'product-' + index + '-symbol');
       });
 
       // Order total
