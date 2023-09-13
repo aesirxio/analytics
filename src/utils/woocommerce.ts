@@ -56,12 +56,12 @@ const addToCartAnalytics = () => {
   ) => {
     const attributesJSON = <any>{};
 
-    attributesJSON['wooocommerce_product_name'] = title;
-    attributesJSON['wooocommerce_product_id'] = productID;
+    attributesJSON['product_name'] = title;
+    attributesJSON['product_id'] = productID;
     if (variantID) {
-      attributesJSON['wooocommerce_variant_id'] = variantID;
+      attributesJSON['variant_id'] = variantID;
     }
-    attributesJSON['wooocommerce_quantity'] = quantity;
+    attributesJSON['quantity'] = quantity;
 
     trackEvent(root, '', {
       event_name: 'Add to cart',
@@ -142,7 +142,7 @@ const checkoutAnalytics = () => {
           symbol: productSymbolSelector?.innerText,
         });
       });
-      attributesJSON['product'] = productList;
+      attributesJSON['products'] = productList;
       // Order total
       const orderTotalSelect = form.querySelector('.order-total .woocommerce-Price-amount bdi');
       let orderTotal = '';
@@ -194,7 +194,6 @@ const checkoutAnalytics = () => {
         }
       });
 
-      attributesJSON['analytics_woocommerce'] = 1;
       attributesJSON['billing_first_name'] = (billing_first_name as HTMLInputElement).value;
       attributesJSON['billing_last_name'] = (billing_last_name as HTMLInputElement).value;
       attributesJSON['billing_company'] = (billing_company as HTMLInputElement).value;
