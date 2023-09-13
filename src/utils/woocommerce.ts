@@ -54,17 +54,19 @@ const addToCartAnalytics = () => {
     quantity: string = null,
     variantID: string = null
   ) => {
-    const attributes = Array<AttributeType>();
+    const attributesJSON = <any>{};
 
-    pushAttr(attributes, '1', 'analytics_woocommerce');
-    pushAttr(attributes, title, 'wooocommerce_product_name');
-    pushAttr(attributes, productID, 'wooocommerce_product_id');
-    pushAttr(attributes, quantity, 'wooocommerce_quantity');
-    pushAttr(attributes, variantID, 'wooocommerce_variant_id');
+    attributesJSON['product_name'] = title;
+    attributesJSON['product_id'] = productID;
+    if (variantID) {
+      attributesJSON['variant_id'] = variantID;
+    }
+    attributesJSON['quantity'] = quantity;
+
     trackEvent(root, '', {
       event_name: 'Add to cart',
       event_type: 'submit',
-      attributes: attributes,
+      attributes: [{ name: 'woo.addtocart', value: JSON.stringify(attributesJSON) }],
     });
   };
 };
@@ -103,11 +105,12 @@ const checkoutAnalytics = () => {
     // @ts-ignore
     jQuery('form.woocommerce-checkout').on('checkout_place_order', function () {
       const form = e.target as HTMLElement;
-      const attributes = Array<AttributeType>();
+      const attributesJSON = <any>{};
+      const productList = <any>[];
 
       // Order List
       const listProductSelector = form.querySelectorAll('.cart_item');
-      listProductSelector.forEach((item, index) => {
+      listProductSelector.forEach((item) => {
         // get Name
         const productNameSelector = item.querySelector('.product-name');
         let productName = '';
@@ -115,13 +118,11 @@ const checkoutAnalytics = () => {
           if (productNameSelector.childNodes[i].nodeType === Node.TEXT_NODE)
             productName += productNameSelector.childNodes[i].textContent;
         }
-        pushAttr(attributes, productName.trim(), 'product-' + index + '-name');
 
         // get Quantity
         const productQuantity = (
           item.querySelector('.product-quantity') as HTMLElement
         ).innerText?.replace('×', '');
-        pushAttr(attributes, productQuantity.trim(), 'product-' + index + '-quantity');
 
         // get Price
         const productPriceSelector = item.querySelector('.woocommerce-Price-amount bdi');
@@ -130,9 +131,18 @@ const checkoutAnalytics = () => {
           if (productPriceSelector.childNodes[i].nodeType === Node.TEXT_NODE)
             productPrice += productPriceSelector.childNodes[i].textContent;
         }
-        pushAttr(attributes, productPrice.trim(), 'product-' + index + '-price');
-      });
 
+        const productSymbolSelector = item.querySelector(
+          '.woocommerce-Price-amount .woocommerce-Price-currencySymbol'
+        ) as HTMLElement;
+        productList.push({
+          name: productName?.trim(),
+          quantity: productQuantity?.trim(),
+          price: productPrice?.trim(),
+          symbol: productSymbolSelector?.innerText,
+        });
+      });
+      attributesJSON['products'] = productList;
       // Order total
       const orderTotalSelect = form.querySelector('.order-total .woocommerce-Price-amount bdi');
       let orderTotal = '';
@@ -140,7 +150,8 @@ const checkoutAnalytics = () => {
         if (orderTotalSelect.childNodes[i].nodeType === Node.TEXT_NODE)
           orderTotal += orderTotalSelect.childNodes[i].textContent;
       }
-      pushAttr(attributes, orderTotal.trim(), 'order-total');
+      attributesJSON['order-total'] = orderTotal.trim();
+      // pushAttr(attributes, orderTotal.trim(), 'order-total');
 
       // Billing
       const billing_first_name = form.querySelector('input[name="billing_first_name"]');
@@ -183,39 +194,36 @@ const checkoutAnalytics = () => {
         }
       });
 
-      pushAttr(attributes, '1', 'analytics_woocommerce');
-      pushAttr(attributes, (billing_first_name as HTMLInputElement).value, 'billing_first_name');
-      pushAttr(attributes, (billing_last_name as HTMLInputElement).value, 'billing_last_name');
-      pushAttr(attributes, (billing_company as HTMLInputElement).value, 'billing_company');
-      pushAttr(attributes, (billing_address_1 as HTMLInputElement).value, 'billing_address_1');
-      pushAttr(attributes, (billing_address_2 as HTMLInputElement).value, 'billing_address_2');
-      pushAttr(attributes, (billing_postcode as HTMLInputElement).value, 'billing_postcode');
-      pushAttr(attributes, (billing_city as HTMLInputElement).value, 'billing_city');
-      pushAttr(attributes, (billing_state as HTMLInputElement).value, 'billing_state');
-      pushAttr(attributes, (billing_phone as HTMLInputElement).value, 'billing_phone');
-      pushAttr(attributes, (billing_email as HTMLInputElement).value, 'billing_email');
+      attributesJSON['billing_first_name'] = (billing_first_name as HTMLInputElement).value;
+      attributesJSON['billing_last_name'] = (billing_last_name as HTMLInputElement).value;
+      attributesJSON['billing_company'] = (billing_company as HTMLInputElement).value;
+      attributesJSON['billing_address_1'] = (billing_address_1 as HTMLInputElement).value;
+      attributesJSON['billing_address_2'] = (billing_address_2 as HTMLInputElement).value;
+      attributesJSON['billing_postcode'] = (billing_postcode as HTMLInputElement).value;
+      attributesJSON['billing_city'] = (billing_city as HTMLInputElement).value;
+      attributesJSON['billing_state'] = (billing_state as HTMLInputElement).value;
+      attributesJSON['billing_phone'] = (billing_phone as HTMLInputElement).value;
+      attributesJSON['billing_email'] = (billing_email as HTMLInputElement).value;
 
-      pushAttr(attributes, (shipping_first_name as HTMLInputElement).value, 'shipping_first_name');
-      pushAttr(attributes, (shipping_last_name as HTMLInputElement).value, 'shipping_last_name');
-      pushAttr(attributes, (shipping_company as HTMLInputElement).value, 'shipping_company');
-      pushAttr(attributes, (shipping_address_1 as HTMLInputElement).value, 'shipping_address_1');
-      pushAttr(attributes, (shipping_address_2 as HTMLInputElement).value, 'shipping_address_2');
-      pushAttr(attributes, (shipping_postcode as HTMLInputElement).value, 'shipping_postcode');
-      pushAttr(attributes, (shipping_city as HTMLInputElement).value, 'shipping_city');
-      pushAttr(attributes, (shipping_state as HTMLInputElement).value, 'shipping_state');
+      attributesJSON['shipping_first_name'] = (shipping_first_name as HTMLInputElement).value;
+      attributesJSON['shipping_last_name'] = (shipping_last_name as HTMLInputElement).value;
+      attributesJSON['shipping_company'] = (shipping_company as HTMLInputElement).value;
+      attributesJSON['shipping_address_1'] = (shipping_address_1 as HTMLInputElement).value;
+      attributesJSON['shipping_address_2'] = (shipping_address_2 as HTMLInputElement).value;
+      attributesJSON['shipping_postcode'] = (shipping_postcode as HTMLInputElement).value;
+      attributesJSON['shipping_city'] = (shipping_city as HTMLInputElement).value;
+      attributesJSON['shipping_state'] = (shipping_state as HTMLInputElement).value;
 
-      pushAttr(attributes, shipping_method, 'shipping_method');
-      pushAttr(attributes, payment_method, 'payment_method');
-      pushAttr(
-        attributes,
-        (mailpoet_woocommerce_checkout_optin as HTMLInputElement).value,
-        'mailpoet_woocommerce_checkout_optin'
-      );
+      attributesJSON['shipping_method'] = shipping_method;
+      attributesJSON['payment_method'] = payment_method;
+      attributesJSON['mailpoet_woocommerce_checkout_optin'] = (
+        mailpoet_woocommerce_checkout_optin as HTMLInputElement
+      ).value;
 
       trackEvent(root, '', {
         event_name: 'Checkout',
         event_type: 'submit',
-        attributes: attributes,
+        attributes: [{ name: 'woo.checkout', value: JSON.stringify(attributesJSON) }],
       });
     });
   });
