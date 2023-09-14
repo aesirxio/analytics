@@ -71,11 +71,26 @@ const getSignature = async (
   network = 'concordium'
 ) => {
   try {
+    const nonce = await getNonce(endpoint, address, text, network);
+
+    return getSignedNonce(nonce, address, provider);
+  } catch (error) {
+    throw error;
+  }
+};
+
+const getNonce = async (
+  endpoint: string,
+  address: string,
+  text: string,
+  network = 'concordium'
+) => {
+  try {
     const nonce = (
       await axios.post(`${endpoint}/wallet/v1/${network}/${address}/nonce`, { text: text })
     )?.data.nonce;
 
-    return getSignedNonce(nonce, address, provider);
+    return nonce;
   } catch (error) {
     throw error;
   }
@@ -130,4 +145,4 @@ const revokeConsents = async (
   }
 };
 
-export { agreeConsents, getConsents, getSignature, revokeConsents };
+export { agreeConsents, getConsents, getSignature, getNonce, revokeConsents };

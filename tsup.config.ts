@@ -13,9 +13,9 @@ export default defineConfig([
       '.js': 'jsx',
     },
     esbuildPlugins: [inlineImage({ limit: -1 }), sassPlugin({ type: 'style' })],
-    esbuildOptions(options) {
-      options.drop = ['console'];
-    },
+    // esbuildOptions(options) {
+    //   options.drop = ['console'];
+    // },
     outExtension() {
       return {
         js: `.js`,
@@ -28,9 +28,9 @@ export default defineConfig([
     format: ['iife'],
     platform: 'browser',
     esbuildPlugins: [inlineImage({ limit: -1 }), sassPlugin({ type: 'style' })],
-    esbuildOptions(options) {
-      options.drop = ['console'];
-    },
+    // esbuildOptions(options) {
+    //   options.drop = ['console'];
+    // },
     outExtension() {
       return {
         js: `.js`,
