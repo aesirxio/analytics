@@ -12,6 +12,8 @@ import {
   withJsonRpcClient,
 } from '@concordium/react-components';
 import { BROWSER_WALLET } from './config';
+import { useWeb3Modal } from '@web3modal/react';
+import { useAccount } from 'wagmi';
 const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   const [show, setShow] = useState(false);
   const [showRevoke, setShowRevoke] = useState(false);
@@ -24,6 +26,8 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   const { activeConnector, network, connectedAccounts, genesisHashes, setActiveConnectorType } =
     props;
 
+  const { open } = useWeb3Modal();
+  const { address, connector } = useAccount();
   useEffect(() => {
     const allow = sessionStorage.getItem('aesirx-analytics-allow');
     const currentUuid = sessionStorage.getItem('aesirx-analytics-uuid');
@@ -139,7 +143,11 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
       sessionStorage.getItem('aesirx-analytics-revoke') !== '1' &&
       sessionStorage.getItem('aesirx-analytics-revoke') !== '2'
     ) {
-      setActiveConnectorType(BROWSER_WALLET);
+      if (window['concordium']) {
+        setActiveConnectorType(BROWSER_WALLET);
+      } else if (window['ethereum'] && window['ethereum']?.isMetaMask && isDesktop) {
+        open();
+      }
     }
   }, []);
 
@@ -148,6 +156,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
       try {
         let l = level;
         if (connection) {
+          // Concordium
           setLevel(null);
           l = 3;
           let web3ID = '';
@@ -160,6 +169,13 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
           }
           setWeb3ID(web3ID);
           setLevel(l);
+        } else if (connector) {
+          // Metamask
+          setLevel(null);
+          l = 3;
+          const web3ID = '';
+          setWeb3ID(web3ID);
+          setLevel(l);
         } else {
           setLevel(level ?? 1);
         }
@@ -168,7 +184,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
         console.error(error);
       }
     })();
-  }, [account]);
+  }, [account, address, connector]);
 
   const handleLevel = useCallback(
     async (_level: number) => {

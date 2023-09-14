@@ -15,6 +15,7 @@ $border-radius: 0.5rem;
 $success: #1ab394;
 $spacer: 16px;
 $primary: #132342;
+$secondary: #627eea;
 // 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
 @import 'bootstrap/scss/variables';
 @import 'variables-dark';
@@ -40,6 +41,7 @@ $primary: #132342;
   @import 'bootstrap/scss/utilities/api';
   color: #5f5e70;
   font-size: 16px;
+  --w3m-z-index: 1060;
   &-modal .modal-dialog {
     max-width: 500px;
   }
