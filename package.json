@@ -72,7 +72,7 @@
     "@types/react-dom": "^18.2.4",
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.0",
-    "@walletconnect/types": "^2.9.1",
+    "@walletconnect/types": "^2.10.0",
     "dotenv": "^16.0.3",
     "esbuild-plugin-inline-image": "^0.0.9",
     "esbuild-sass-plugin": "^2.10.0",
