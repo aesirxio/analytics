@@ -117,12 +117,19 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
               consent?.consent_uuid,
               address,
               signature,
-              web3ID
+              web3ID,
+              '',
+              'metamask'
             ));
         });
         setLoading('done');
         handleRevoke(false);
+        setShowExpandConsent(false);
+        setShow(true);
+        setShowBackdrop(false);
+        sessionStorage.removeItem('aesirx-analytics-allow');
       } else {
+        setLoading('saving');
         // Consent Metamask
         await agreeConsents(
           endpoint,
@@ -170,16 +177,13 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
           setLoading('saving');
 
           await agreeConsents(endpoint, level, uuid, consents, account, signature, web3ID);
+        } else if (connector) {
+          // Metamask
+          const nonce = await getNonce(endpoint, address, 'Give consent:{}', 'metamask');
+          signMessage({ message: `${nonce}` });
         } else {
-          if (connector) {
-            // Metamask
-            const nonce = await getNonce(endpoint, address, 'Give consent:{}', 'metamask');
-            setLoading('saving');
-            signMessage({ message: `${nonce}` });
-          } else {
-            setLoading('connect');
-            flag = false;
-          }
+          setLoading('connect');
+          flag = false;
         }
       } else {
         setLoading('saving');
@@ -198,7 +202,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
         });
       }
 
-      if (flag && !connector) {
+      if (flag && account) {
         sessionStorage.setItem('aesirx-analytics-uuid', uuid);
         sessionStorage.setItem('aesirx-analytics-allow', '1');
 
@@ -300,7 +304,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
           handleRevoke(false);
         }
 
-        if (flag) {
+        if (flag && account) {
           setShowExpandConsent(false);
           setShow(true);
           setShowBackdrop(false);
