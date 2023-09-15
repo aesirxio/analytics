@@ -205,6 +205,10 @@ function removeParam(key: string, sourceURL: string) {
   return rtn;
 }
 
+const shortenString = (str: string) => {
+  return str.substring(0, 6) + '...' + str.substring(str.length - 4);
+};
+
 export {
   startTracker,
   trackEvent,
@@ -213,4 +217,5 @@ export {
   endTracker,
   endTrackerVisibilityState,
   removeParam,
+  shortenString,
 };

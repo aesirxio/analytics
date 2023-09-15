@@ -1,5 +1,11 @@
 /* eslint-disable no-case-declarations */
-import { agreeConsents, getConsents, getSignature, revokeConsents } from '../utils/consent';
+import {
+  agreeConsents,
+  getConsents,
+  getNonce,
+  getSignature,
+  revokeConsents,
+} from '../utils/consent';
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import useConsentStatus from '../Hooks/useConsentStatus';
@@ -28,13 +34,21 @@ import { LoadingStatus } from './LoadingStatus';
 import ConnectModal from './Connect';
 import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
 import { useTranslation } from 'react-i18next';
+import { useAccount, useSignMessage } from 'wagmi';
+import SSOEthereumProvider from './Ethereum';
 interface WalletConnectionPropsExtends extends WalletConnectionProps {
   endpoint: string;
 }
 const ConsentComponent = ({ endpoint }: any) => {
   return (
     <WithWalletConnector network={MAINNET}>
-      {(props) => <ConsentComponentApp {...props} endpoint={endpoint} />}
+      {(props) => (
+        <div className="aesirxconsent">
+          <SSOEthereumProvider>
+            <ConsentComponentApp {...props} endpoint={endpoint} />
+          </SSOEthereumProvider>
+        </div>
+      )}
     </WithWalletConnector>
   );
 };
@@ -53,8 +67,10 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
 
   const { isConnecting } = useConnect(activeConnector, setConnection);
 
-  const handleOnConnect = async (connectorType: ConnectorType) => {
-    await setActiveConnectorType(connectorType);
+  const handleOnConnect = async (connectorType: ConnectorType, network = 'concordium') => {
+    if (network === 'concordium') {
+      setActiveConnectorType(connectorType);
+    }
     setLoading('done');
   };
 
@@ -80,6 +96,67 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
   const analyticsContext = useContext(AnalyticsContext);
   const { t } = useTranslation();
 
+  // Metamask
+  const { address, connector } = useAccount();
+
+  const { signMessage } = useSignMessage({
+    async onSuccess(data, variables) {
+      const signature = Buffer.from(
+        typeof data === 'object' && data !== null ? JSON.stringify(data) : data,
+        'utf-8'
+      ).toString('base64');
+      if (variables?.message.indexOf('Revoke consent') > -1) {
+        // Revoke Metamask
+        const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');
+        const consentList = await getConsents(endpoint, uuid);
+        consentList.forEach(async (consent: any) => {
+          !consent?.expiration &&
+            (await revokeConsents(
+              endpoint,
+              levelRevoke,
+              consent?.consent_uuid,
+              address,
+              signature,
+              web3ID,
+              '',
+              'metamask'
+            ));
+        });
+        setLoading('done');
+        handleRevoke(false);
+        setShowExpandConsent(false);
+        setShow(true);
+        setShowBackdrop(false);
+        sessionStorage.removeItem('aesirx-analytics-allow');
+      } else {
+        setLoading('saving');
+        // Consent Metamask
+        await agreeConsents(
+          endpoint,
+          level,
+          uuid,
+          consents,
+          address,
+          signature,
+          web3ID,
+          '',
+          'metamask'
+        );
+        sessionStorage.setItem('aesirx-analytics-uuid', uuid);
+        sessionStorage.setItem('aesirx-analytics-allow', '1');
+
+        setShow(false);
+        setLoading('done');
+        handleRevoke(true, level);
+        setShowBackdrop(false);
+      }
+    },
+    async onError(error) {
+      setLoading('done');
+      toast.error(error.message);
+    },
+  });
+
   const handleChange = async ({ target: { value } }: any) => {
     if (consents.indexOf(parseInt(value)) === -1) {
       setConsents([...consents, ...[parseInt(value)]]);
@@ -94,11 +171,16 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
       // Wallets
       if (level > 2) {
         if (account) {
+          // Concordium
           const signature = await getSignature(endpoint, account, connection, 'Give consent:{}');
 
           setLoading('saving');
 
           await agreeConsents(endpoint, level, uuid, consents, account, signature, web3ID);
+        } else if (connector) {
+          // Metamask
+          const nonce = await getNonce(endpoint, address, 'Give consent:{}', 'metamask');
+          signMessage({ message: `${nonce}` });
         } else {
           setLoading('connect');
           flag = false;
@@ -120,7 +202,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
         });
       }
 
-      if (flag) {
+      if (flag && account) {
         sessionStorage.setItem('aesirx-analytics-uuid', uuid);
         sessionStorage.setItem('aesirx-analytics-allow', '1');
 
@@ -192,8 +274,16 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
             setLoading('done');
             handleRevoke(false);
           } else {
-            setLoading('connect');
-            flag = false;
+            if (connector) {
+              // Metamask
+              setLoading('sign');
+              const nonce = await getNonce(endpoint, address, 'Revoke consent:{}', 'metamask');
+              setLoading('saving');
+              signMessage({ message: `${nonce}` });
+            } else {
+              setLoading('connect');
+              flag = false;
+            }
           }
         } else {
           setLoading('saving');
@@ -214,7 +304,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
           handleRevoke(false);
         }
 
-        if (flag) {
+        if (flag && account) {
           setShowExpandConsent(false);
           setShow(true);
           setShowBackdrop(false);
@@ -235,6 +325,12 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
   };
 
   useEffect(() => {
+    if (activeConnectorError) {
+      toast.error(activeConnectorError);
+    }
+  }, [activeConnectorError]);
+
+  useEffect(() => {
     if (sessionStorage.getItem('aesirx-analytics-rejected') === 'true') {
       setShowBackdrop(false);
       setShowExpandConsent(false);
@@ -244,7 +340,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
   console.log('level', uuid, level, web3ID, account, loading);
 
   return (
-    <div className="aesirxconsent">
+    <div>
       <ToastContainer />
       <div className={`offcanvas-backdrop fade ${showBackdrop && show ? 'show' : 'd-none'}`} />
       <div tabIndex={-1} className={`toast-container position-fixed bottom-0 end-0 p-3`}>
