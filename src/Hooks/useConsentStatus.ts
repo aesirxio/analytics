@@ -143,11 +143,13 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
       sessionStorage.getItem('aesirx-analytics-revoke') !== '1' &&
       sessionStorage.getItem('aesirx-analytics-revoke') !== '2'
     ) {
-      if (window['concordium']) {
-        setActiveConnectorType(BROWSER_WALLET);
-      } else if (window['ethereum'] && window['ethereum']?.isMetaMask && isDesktop) {
-        open();
-      }
+      window.addEventListener('load', function () {
+        if (window['concordium']) {
+          setActiveConnectorType(BROWSER_WALLET);
+        } else if (window['ethereum'] && window['ethereum']?.isMetaMask && isDesktop) {
+          open();
+        }
+      });
     }
   }, []);
 
