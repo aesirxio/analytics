@@ -14,6 +14,7 @@ const agreeConsents = async (
   network = 'concordium'
 ) => {
   const url = `${endpoint}/consent/v1/level${level}/${uuid}`;
+  const urlV2 = `${endpoint}/consent/v2/level${level}/${uuid}`;
 
   try {
     switch (level) {
@@ -39,10 +40,19 @@ const agreeConsents = async (
         });
         break;
       case 4:
-        await axios.post(`${url}/${network}/${web3id}/${wallet}`, {
-          signature: signature,
-          consent: consent,
-        });
+        await axios.post(
+          `${urlV2}/${network}/${wallet}`,
+          {
+            signature: signature,
+            consent: consent,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + jwt,
+            },
+          }
+        );
         break;
 
       default:
@@ -116,6 +126,7 @@ const revokeConsents = async (
   network = 'concordium'
 ) => {
   const url = `${endpoint}/consent/v1/level${level}/revoke/${uuid}`;
+  const urlV2 = `${endpoint}/consent/v2/level${level}/revoke/${uuid}`;
   try {
     switch (level) {
       case '2':
@@ -132,9 +143,18 @@ const revokeConsents = async (
         });
         break;
       case '4':
-        await axios.put(`${url}/${network}/${web3id}/${wallet}`, {
-          signature: signature,
-        });
+        await axios.put(
+          `${urlV2}/${network}/${wallet}`,
+          {
+            signature: signature,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + jwt,
+            },
+          }
+        );
         break;
 
       default:
