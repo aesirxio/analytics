@@ -12,7 +12,7 @@
     "@concordium/browser-wallet-api-helpers": "^2",
     "@concordium/react-components": "^0.3.0",
     "@concordium/web-sdk": "^6",
-    "@fingerprintjs/fingerprintjs": "^4.0.1",
+    "@fingerprintjs/fingerprintjs": "3.4.2",
     "@web3modal/ethereum": "^2.7.0",
     "@web3modal/react": "^2.7.0",
     "aesirx-sso": "^1.2.1",
