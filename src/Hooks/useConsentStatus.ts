@@ -17,7 +17,6 @@ import { useAccount } from 'wagmi';
 const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   const [show, setShow] = useState(false);
   const [showRevoke, setShowRevoke] = useState(false);
-  const [showConnectModal, setShowConnectModal] = useState(false);
   const [level, setLevel] = useState<any>();
   const [web3ID, setWeb3ID] = useState<string>();
 
@@ -159,24 +158,27 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
         let l = level;
         if (connection) {
           // Concordium
-          setLevel(null);
-          l = 3;
-          let web3ID = '';
-          if (account && sessionStorage.getItem('aesirx-analytics-consent-type') !== 'metamask') {
-            web3ID = await getWeb3ID(connection, account);
-            if (web3ID) {
-              l = 4;
+          if (l < 3) {
+            setLevel(null);
+            l = 3;
+            let web3ID = '';
+            if (account && sessionStorage.getItem('aesirx-analytics-consent-type') !== 'metamask') {
+              web3ID = await getWeb3ID(connection, account);
+              if (web3ID) {
+                l = 4;
+              }
             }
+            setWeb3ID(web3ID);
+            setLevel(l);
           }
-          setWeb3ID(web3ID);
-          setLevel(l);
         } else if (connector) {
           // Metamask
-          setLevel(null);
-          l = 3;
-          const web3ID = '';
-          setWeb3ID(web3ID);
-          setLevel(l);
+          if (l < 3) {
+            l = 3;
+            const web3ID = '';
+            setWeb3ID(web3ID);
+            setLevel(l);
+          }
         } else {
           setLevel(level ?? 1);
         }
@@ -211,7 +213,6 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
     handleLevel,
     showRevoke,
     handleRevoke,
-    showConnectModal,
   ];
 };
 

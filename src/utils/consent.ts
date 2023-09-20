@@ -165,4 +165,34 @@ const revokeConsents = async (
   }
 };
 
-export { agreeConsents, getConsents, getSignature, getNonce, revokeConsents };
+const getMember = async (endpoint: string, accessToken: string) => {
+  try {
+    const member = await axios.get(
+      `${endpoint}/index.php?webserviceClient=site&webserviceVersion=1.0.0&option=persona&api=hal&task=getTokenByUser`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + accessToken,
+        },
+      }
+    );
+
+    if (member?.data?.result?.member_id) {
+      const data = await axios.get(
+        `${endpoint}/index.php?webserviceClient=site&webserviceVersion=1.0.0&option=member&api=hal&id=${member?.data?.result?.member_id}`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + accessToken,
+          },
+        }
+      );
+      return data?.data;
+    }
+  } catch (error) {
+    console.log('getMember', error);
+    throw error;
+  }
+};
+
+export { agreeConsents, getConsents, getSignature, getNonce, revokeConsents, getMember };

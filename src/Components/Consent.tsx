@@ -2,6 +2,7 @@
 import {
   agreeConsents,
   getConsents,
+  getMember,
   getNonce,
   getSignature,
   revokeConsents,
@@ -39,14 +40,15 @@ import SSOEthereumProvider from './Ethereum';
 import { getWeb3ID } from '../utils/Concordium';
 interface WalletConnectionPropsExtends extends WalletConnectionProps {
   endpoint: string;
+  aesirXEndpoint: string;
 }
-const ConsentComponent = ({ endpoint }: any) => {
+const ConsentComponent = ({ endpoint, aesirXEndpoint }: any) => {
   return (
     <WithWalletConnector network={MAINNET}>
       {(props) => (
         <div className="aesirxconsent">
           <SSOEthereumProvider>
-            <ConsentComponentApp {...props} endpoint={endpoint} />
+            <ConsentComponentApp {...props} endpoint={endpoint} aesirXEndpoint={aesirXEndpoint} />
           </SSOEthereumProvider>
         </div>
       )}
@@ -56,6 +58,7 @@ const ConsentComponent = ({ endpoint }: any) => {
 const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
   const {
     endpoint,
+    aesirXEndpoint,
     activeConnectorType,
     activeConnector,
     activeConnectorError,
@@ -63,7 +66,6 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     genesisHashes,
     setActiveConnectorType,
   } = props;
-
   const { setConnection } = useConnection(connectedAccounts, genesisHashes);
 
   const { isConnecting } = useConnect(activeConnector, setConnection);
@@ -87,7 +89,6 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     handleLevel,
     showRevoke,
     handleRevoke,
-    showConnectModal,
   ] = useConsentStatus(endpoint, props);
 
   const [consents, setConsents] = useState<number[]>([1, 2]);
@@ -251,9 +252,9 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
               hasWeb3ID = false;
             }
           } else {
-            hasWeb3ID = true;
+            const memberData = await getMember(aesirXEndpoint, response?.access_token);
+            hasWeb3ID = memberData?.web3id ? true : false;
           }
-
           if (hasWeb3ID) {
             if (response?.loginType === 'concordium') {
               // Concordium
@@ -591,6 +592,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                                     }
                                     ssoState={'noscopes'}
                                     onGetData={onGetData}
+                                    {...(level === 2 ? { noCreateAccount: true } : {})}
                                   />
                                 </div>
                               ) : (
@@ -647,7 +649,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
         </div>
       </div>
 
-      {!account && (loading === 'connect' || showConnectModal) && (
+      {!account && loading === 'connect' && (
         <ConnectModal
           isConnecting={isConnecting}
           handleOnConnect={handleOnConnect}
