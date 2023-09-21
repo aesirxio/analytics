@@ -2,9 +2,12 @@
 import {
   agreeConsents,
   getConsents,
+  getMember,
   getNonce,
   getSignature,
+  getWalletNonce,
   revokeConsents,
+  verifySignature,
 } from '../utils/consent';
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
@@ -27,6 +30,7 @@ import {
   useConnection,
   useConnect,
   ConnectorType,
+  stringMessage,
 } from '@concordium/react-components';
 import { WALLET_CONNECT } from '../Hooks/config';
 import { OsTypes, isMobile, osName } from 'react-device-detect';
@@ -36,16 +40,18 @@ import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
 import { useTranslation } from 'react-i18next';
 import { useAccount, useSignMessage } from 'wagmi';
 import SSOEthereumProvider from './Ethereum';
+import { getWeb3ID } from '../utils/Concordium';
 interface WalletConnectionPropsExtends extends WalletConnectionProps {
   endpoint: string;
+  aesirXEndpoint: string;
 }
-const ConsentComponent = ({ endpoint }: any) => {
+const ConsentComponent = ({ endpoint, aesirXEndpoint }: any) => {
   return (
     <WithWalletConnector network={MAINNET}>
       {(props) => (
         <div className="aesirxconsent">
           <SSOEthereumProvider>
-            <ConsentComponentApp {...props} endpoint={endpoint} />
+            <ConsentComponentApp {...props} endpoint={endpoint} aesirXEndpoint={aesirXEndpoint} />
           </SSOEthereumProvider>
         </div>
       )}
@@ -55,6 +61,7 @@ const ConsentComponent = ({ endpoint }: any) => {
 const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
   const {
     endpoint,
+    aesirXEndpoint,
     activeConnectorType,
     activeConnector,
     activeConnectorError,
@@ -62,7 +69,6 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     genesisHashes,
     setActiveConnectorType,
   } = props;
-
   const { setConnection } = useConnection(connectedAccounts, genesisHashes);
 
   const { isConnecting } = useConnect(activeConnector, setConnection);
@@ -82,14 +88,15 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     show,
     setShow,
     web3ID,
+    setWeb3ID,
     handleLevel,
     showRevoke,
     handleRevoke,
-    showConnectModal,
   ] = useConsentStatus(endpoint, props);
 
   const [consents, setConsents] = useState<number[]>([1, 2]);
   const [loading, setLoading] = useState('done');
+  const [loadingCheckAccount, setLoadingCheckAccount] = useState(false);
   const [showExpandConsent, setShowExpandConsent] = useState(true);
   const [showExpandRevoke, setShowExpandRevoke] = useState(false);
   const [showBackdrop, setShowBackdrop] = useState(true);
@@ -105,6 +112,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
         typeof data === 'object' && data !== null ? JSON.stringify(data) : data,
         'utf-8'
       ).toString('base64');
+      const jwt = sessionStorage.getItem('aesirx-analytics-jwt');
       if (variables?.message.indexOf('Revoke consent') > -1) {
         // Revoke Metamask
         const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');
@@ -118,7 +126,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
               address,
               signature,
               web3ID,
-              '',
+              jwt,
               'metamask'
             ));
         });
@@ -128,6 +136,12 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
         setShow(true);
         setShowBackdrop(false);
         sessionStorage.removeItem('aesirx-analytics-allow');
+      } else if (variables?.message.indexOf('Login with nonce') > -1) {
+        const res = await verifySignature(aesirXEndpoint, 'metamask', address, data);
+        sessionStorage.setItem('aesirx-analytics-jwt', res?.jwt);
+        setLoadingCheckAccount(false);
+        const nonce = await getNonce(endpoint, address, 'Give consent Tier 4:{}', 'metamask');
+        signMessage({ message: `${nonce}` });
       } else {
         setLoading('saving');
         // Consent Metamask
@@ -139,11 +153,12 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
           address,
           signature,
           web3ID,
-          '',
+          jwt,
           'metamask'
         );
         sessionStorage.setItem('aesirx-analytics-uuid', uuid);
         sessionStorage.setItem('aesirx-analytics-allow', '1');
+        sessionStorage.setItem('aesirx-analytics-consent-type', 'metamask');
 
         setShow(false);
         setLoading('done');
@@ -169,18 +184,75 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     try {
       let flag = true;
       // Wallets
+      let jwt = '';
       if (level > 2) {
+        if (level === 4) {
+          try {
+            setLoadingCheckAccount(true);
+            const nonceLogin = await getWalletNonce(
+              aesirXEndpoint,
+              account ? 'concordium' : 'metamask',
+              account ?? address
+            );
+            if (nonceLogin) {
+              try {
+                if (account) {
+                  const signature = await connection.signMessage(
+                    account,
+                    stringMessage(`${nonceLogin}`)
+                  );
+                  const convertedSignature =
+                    typeof signature === 'object' && signature !== null
+                      ? signature
+                      : JSON.parse(signature);
+
+                  if (signature) {
+                    const data = await verifySignature(
+                      aesirXEndpoint,
+                      'concordium',
+                      account,
+                      convertedSignature
+                    );
+                    sessionStorage.setItem('aesirx-analytics-jwt', data?.jwt);
+                    jwt = data?.jwt;
+                    setLoadingCheckAccount(false);
+                  }
+                } else {
+                  signMessage({ message: `${nonceLogin}` });
+                }
+              } catch (error) {
+                setLoadingCheckAccount(false);
+                toast(error.message);
+              }
+            }
+          } catch (error) {
+            SSOClick('.loginSSO');
+            setLoadingCheckAccount(false);
+            return;
+          }
+        }
         if (account) {
           // Concordium
-          const signature = await getSignature(endpoint, account, connection, 'Give consent:{}');
-
+          const signature = await getSignature(
+            endpoint,
+            account,
+            connection,
+            level === 3 ? 'Give consent:{}' : 'Give consent Tier 4:{}'
+          );
           setLoading('saving');
-
-          await agreeConsents(endpoint, level, uuid, consents, account, signature, web3ID);
+          await agreeConsents(endpoint, level, uuid, consents, account, signature, web3ID, jwt);
+          sessionStorage.setItem('aesirx-analytics-consent-type', 'concordium');
         } else if (connector) {
           // Metamask
-          const nonce = await getNonce(endpoint, address, 'Give consent:{}', 'metamask');
-          signMessage({ message: `${nonce}` });
+          if (level === 3) {
+            const nonce = await getNonce(
+              endpoint,
+              address,
+              level === 3 ? 'Give consent:{}' : 'Give consent Tier 4:{}',
+              'metamask'
+            );
+            signMessage({ message: `${nonce}` });
+          }
         } else {
           setLoading('connect');
           flag = false;
@@ -202,7 +274,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
         });
       }
 
-      if (flag && account) {
+      if ((flag && account) || (flag && level < 3)) {
         sessionStorage.setItem('aesirx-analytics-uuid', uuid);
         sessionStorage.setItem('aesirx-analytics-allow', '1');
 
@@ -221,13 +293,77 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
   };
 
   const onGetData = async (response: any) => {
+    // on Login Tier 2 & 4
     try {
       setLoading('saving');
+      const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');
       sessionStorage.setItem('aesirx-analytics-jwt', response?.jwt);
-      await agreeConsents(endpoint, level, uuid, consents, null, null, null, response?.jwt);
-      setShow(false);
-      handleRevoke(true, level);
-      setLoading('done');
+      if (levelRevoke && levelRevoke !== '0') {
+        // Revoke Consent
+        sessionStorage.setItem(
+          'aesirx-analytics-consent-type',
+          response?.loginType === 'concordium' ? 'concordium' : 'metamask'
+        );
+        handleRevokeBtn();
+      } else {
+        // Agree Consent
+        if (level === 4) {
+          // Check web3ID
+          let hasWeb3ID = true;
+          if (response?.loginType === 'concordium') {
+            const web3ID = await getWeb3ID(connection, account);
+            if (web3ID) {
+              setWeb3ID(web3ID);
+            } else {
+              hasWeb3ID = false;
+            }
+          } else {
+            const memberData = await getMember(aesirXEndpoint, response?.access_token);
+            hasWeb3ID = memberData?.web3id ? true : false;
+          }
+          if (hasWeb3ID) {
+            if (response?.loginType === 'concordium') {
+              // Concordium
+              sessionStorage.setItem('aesirx-analytics-consent-type', 'concordium');
+              const signature = await getSignature(
+                endpoint,
+                account,
+                connection,
+                'Give consent Tier 4:{}'
+              );
+              await agreeConsents(
+                endpoint,
+                level,
+                uuid,
+                consents,
+                account,
+                signature,
+                null,
+                response?.jwt
+              );
+              setShow(false);
+              handleRevoke(true, level);
+              setLoading('done');
+            } else if (response?.loginType === 'metamask') {
+              // Metamask
+              sessionStorage.setItem('aesirx-analytics-consent-type', 'metamask');
+              const nonce = await getNonce(endpoint, address, 'Give consent Tier 4:{}', 'metamask');
+              signMessage({ message: `${nonce}` });
+            }
+          } else {
+            handleLevel(3);
+            toast(
+              "You haven't minted any WEB3 ID yet. Try to mint at https://dapp.shield.aesirx.io"
+            );
+            setLoading('done');
+          }
+        } else {
+          await agreeConsents(endpoint, level, uuid, consents, null, null, null, response?.jwt);
+          setShow(false);
+          handleRevoke(true, level);
+          setLoading('done');
+        }
+      }
     } catch (error) {
       console.log(error);
       setShow(false);
@@ -242,15 +378,20 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     setShowExpandConsent(false);
     setShowBackdrop(false);
   };
-
   const handleRevokeBtn = async () => {
     const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');
+    const consentType = sessionStorage.getItem('aesirx-analytics-consent-type');
+    const jwt = sessionStorage.getItem('aesirx-analytics-jwt');
     try {
       let flag = true;
 
       if (levelRevoke !== '1') {
         if (parseInt(levelRevoke) > 2) {
-          if (account) {
+          if (!jwt && (parseInt(levelRevoke) === 2 || parseInt(levelRevoke) === 4)) {
+            SSOClick('.revokeLogin');
+            return;
+          }
+          if (account && consentType !== 'metamask') {
             setLoading('sign');
             const signature = await getSignature(
               endpoint,
@@ -268,22 +409,21 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                   consent?.consent_uuid,
                   account,
                   signature,
-                  web3ID
+                  web3ID,
+                  jwt
                 ));
             });
             setLoading('done');
             handleRevoke(false);
+          } else if (connector) {
+            // Metamask
+            setLoading('sign');
+            setLoading('saving');
+            const nonce = await getNonce(endpoint, address, 'Revoke consent:{}', 'metamask');
+            signMessage({ message: `${nonce}` });
           } else {
-            if (connector) {
-              // Metamask
-              setLoading('sign');
-              const nonce = await getNonce(endpoint, address, 'Revoke consent:{}', 'metamask');
-              setLoading('saving');
-              signMessage({ message: `${nonce}` });
-            } else {
-              setLoading('connect');
-              flag = false;
-            }
+            setLoading('connect');
+            flag = false;
           }
         } else {
           setLoading('saving');
@@ -297,14 +437,14 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                 null,
                 null,
                 null,
-                sessionStorage.getItem('aesirx-analytics-jwt')
+                jwt
               ));
           });
           setLoading('done');
           handleRevoke(false);
         }
 
-        if (flag && account) {
+        if (flag && account && consentType !== 'metamask') {
           setShowExpandConsent(false);
           setShow(true);
           setShowBackdrop(false);
@@ -322,6 +462,11 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
       setLoading('done');
       toast.error(error?.response?.data?.error ?? error.message);
     }
+  };
+
+  const SSOClick = (selector: string) => {
+    const element: HTMLElement = document.querySelector(selector) as HTMLElement;
+    element.click();
   };
 
   useEffect(() => {
@@ -436,6 +581,17 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                           ) : (
                             <></>
                           )}
+                          {(sessionStorage.getItem('aesirx-analytics-revoke') === '4' ||
+                            sessionStorage.getItem('aesirx-analytics-revoke') === '2') && (
+                            <div className="d-none">
+                              <SSOButton
+                                className="revokeLogin"
+                                text={<>Login Revoke</>}
+                                ssoState={'noscopes'}
+                                onGetData={onGetData}
+                              />
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -494,27 +650,43 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                         <div className="d-flex justify-content-end">
                           {loading === 'done' ? (
                             <>
-                              {level === 2 ? (
-                                <div className="ssoBtnWrapper me-1 bg-success">
-                                  <SSOButton
-                                    className="btn btn-success text-white d-flex align-items-center"
-                                    text={
-                                      <>
-                                        <img src={yes} className="me-1" />
-                                        {t('txt_yes_i_consent')}
-                                      </>
-                                    }
-                                    ssoState={'noscopes'}
-                                    onGetData={onGetData}
-                                  />
-                                </div>
+                              <div
+                                className={`ssoBtnWrapper me-1 bg-success ${
+                                  level === 2 || (level === 4 && !account && !address)
+                                    ? ''
+                                    : 'd-none'
+                                }`}
+                              >
+                                <SSOButton
+                                  className="btn btn-success text-white d-flex align-items-center loginSSO"
+                                  text={
+                                    <>
+                                      <img src={yes} className="me-1" />
+                                      {t('txt_yes_i_consent')}
+                                    </>
+                                  }
+                                  ssoState={'noscopes'}
+                                  onGetData={onGetData}
+                                  {...(level === 2 ? { noCreateAccount: true } : {})}
+                                />
+                              </div>
+                              {level === 2 || (level === 4 && !account && !address) ? (
+                                <></>
                               ) : (
                                 <Button
                                   variant="success"
                                   onClick={handleAgree}
                                   className="me-1 text-white d-flex align-items-center"
                                 >
-                                  <img src={yes} className="me-1" />
+                                  {loadingCheckAccount ? (
+                                    <span
+                                      className="spinner-border spinner-border-sm me-1"
+                                      role="status"
+                                      aria-hidden="true"
+                                    ></span>
+                                  ) : (
+                                    <img src={yes} className="me-1" />
+                                  )}
                                   {t('txt_yes_i_consent')}
                                 </Button>
                               )}
@@ -562,7 +734,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
         </div>
       </div>
 
-      {!account && (loading === 'connect' || showConnectModal) && (
+      {!account && loading === 'connect' && (
         <ConnectModal
           isConnecting={isConnecting}
           handleOnConnect={handleOnConnect}

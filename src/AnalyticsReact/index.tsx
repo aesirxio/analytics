@@ -18,7 +18,10 @@ const AnalyticsReact = ({ location, history, children }: AnalyticsReact) => {
         {children}
         {process.env.REACT_APP_DISABLE_ANALYTICS_CONSENT !== 'true' && (
           <Suspense fallback={<></>}>
-            <ConsentComponent endpoint={process.env.REACT_APP_ENDPOINT_ANALYTICS_URL} />
+            <ConsentComponent
+              endpoint={process.env.REACT_APP_ENDPOINT_ANALYTICS_URL}
+              aesirXEndpoint={process.env.REACT_APP_ENDPOINT_URL ?? 'https://api.aesirx.io'}
+            />
           </Suspense>
         )}
       </AnalyticsHandle>
