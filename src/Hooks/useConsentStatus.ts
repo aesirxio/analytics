@@ -12,7 +12,6 @@ import {
   withJsonRpcClient,
 } from '@concordium/react-components';
 import { BROWSER_WALLET } from './config';
-import { useWeb3Modal } from '@web3modal/react';
 import { useAccount } from 'wagmi';
 const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   const [show, setShow] = useState(false);
@@ -25,7 +24,6 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   const { activeConnector, network, connectedAccounts, genesisHashes, setActiveConnectorType } =
     props;
 
-  const { open } = useWeb3Modal();
   const { address, connector } = useAccount();
   useEffect(() => {
     const allow = sessionStorage.getItem('aesirx-analytics-allow');

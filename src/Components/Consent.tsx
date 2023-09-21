@@ -10,7 +10,7 @@ import {
   verifySignature,
 } from '../utils/consent';
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Form, Spinner } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import useConsentStatus from '../Hooks/useConsentStatus';
 import '../styles/style.scss';
 import { TermsComponent } from './Terms';
