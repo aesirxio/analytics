@@ -243,7 +243,8 @@ $secondary: #627eea;
     }
   }
 }
-body.modal-open {
+body.modal-open,
+body.modal-sso-open {
   .aesirxconsent {
     .offcanvas-backdrop {
       z-index: 99;

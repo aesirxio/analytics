@@ -194,5 +194,79 @@ const getMember = async (endpoint: string, accessToken: string) => {
     throw error;
   }
 };
+const getWalletNonce = async (endpoint: any, wallet: any, publicAddress: any) => {
+  try {
+    const reqAuthFormData = {
+      publicAddress: publicAddress,
+      wallet: wallet,
+      text: `Login with nonce: {}`,
+    };
 
-export { agreeConsents, getConsents, getSignature, getNonce, revokeConsents, getMember };
+    const config = {
+      method: 'post',
+      url: `${endpoint}/index.php?webserviceClient=site&webserviceVersion=1.0.0&option=member&task=getWalletNonce&api=hal`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: reqAuthFormData,
+    };
+    const { data } = await axios(config);
+
+    if (data.result) {
+      return data.result;
+    }
+    throw false;
+  } catch (error) {
+    throw error;
+  }
+};
+
+const verifySignature = async (
+  endpoint: any,
+  wallet: any,
+  publicAddress: string,
+  signature: any
+) => {
+  try {
+    // Get return
+    const returnParams = new URLSearchParams(window.location.search)?.get('return');
+
+    const reqAuthFormData = {
+      wallet: wallet,
+      publicAddress: publicAddress,
+      signature: signature,
+    };
+
+    const config = {
+      method: 'post',
+      url: `${endpoint}/index.php?webserviceClient=site&webserviceVersion=1.0.0&option=member&task=walletLogin&api=hal&return=${
+        returnParams ?? null
+      }`,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: reqAuthFormData,
+    };
+
+    const { data } = await axios(config);
+    if (data?.result) {
+      return data?.result;
+    } else {
+      throw false;
+    }
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export {
+  agreeConsents,
+  getConsents,
+  getSignature,
+  getNonce,
+  revokeConsents,
+  getMember,
+  getWalletNonce,
+  verifySignature,
+};

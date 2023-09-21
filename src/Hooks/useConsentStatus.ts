@@ -145,8 +145,6 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
       window.addEventListener('load', function () {
         if (window['concordium']) {
           setActiveConnectorType(BROWSER_WALLET);
-        } else if (window['ethereum'] && window['ethereum']?.isMetaMask && isDesktop) {
-          !address && open();
         }
       });
     }

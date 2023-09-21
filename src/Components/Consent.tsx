@@ -5,10 +5,12 @@ import {
   getMember,
   getNonce,
   getSignature,
+  getWalletNonce,
   revokeConsents,
+  verifySignature,
 } from '../utils/consent';
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Spinner } from 'react-bootstrap';
 import useConsentStatus from '../Hooks/useConsentStatus';
 import '../styles/style.scss';
 import { TermsComponent } from './Terms';
@@ -28,6 +30,7 @@ import {
   useConnection,
   useConnect,
   ConnectorType,
+  stringMessage,
 } from '@concordium/react-components';
 import { WALLET_CONNECT } from '../Hooks/config';
 import { OsTypes, isMobile, osName } from 'react-device-detect';
@@ -93,6 +96,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
 
   const [consents, setConsents] = useState<number[]>([1, 2]);
   const [loading, setLoading] = useState('done');
+  const [loadingCheckAccount, setLoadingCheckAccount] = useState(false);
   const [showExpandConsent, setShowExpandConsent] = useState(true);
   const [showExpandRevoke, setShowExpandRevoke] = useState(false);
   const [showBackdrop, setShowBackdrop] = useState(true);
@@ -132,6 +136,12 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
         setShow(true);
         setShowBackdrop(false);
         sessionStorage.removeItem('aesirx-analytics-allow');
+      } else if (variables?.message.indexOf('Login with nonce') > -1) {
+        const res = await verifySignature(aesirXEndpoint, 'metamask', address, data);
+        sessionStorage.setItem('aesirx-analytics-jwt', res?.jwt);
+        setLoadingCheckAccount(false);
+        const nonce = await getNonce(endpoint, address, 'Give consent Tier 4:{}', 'metamask');
+        signMessage({ message: `${nonce}` });
       } else {
         setLoading('saving');
         // Consent Metamask
@@ -174,19 +184,75 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     try {
       let flag = true;
       // Wallets
+      let jwt = '';
       if (level > 2) {
+        if (level === 4) {
+          try {
+            setLoadingCheckAccount(true);
+            const nonceLogin = await getWalletNonce(
+              aesirXEndpoint,
+              account ? 'concordium' : 'metamask',
+              account ?? address
+            );
+            if (nonceLogin) {
+              try {
+                if (account) {
+                  const signature = await connection.signMessage(
+                    account,
+                    stringMessage(`${nonceLogin}`)
+                  );
+                  const convertedSignature =
+                    typeof signature === 'object' && signature !== null
+                      ? signature
+                      : JSON.parse(signature);
+
+                  if (signature) {
+                    const data = await verifySignature(
+                      aesirXEndpoint,
+                      'concordium',
+                      account,
+                      convertedSignature
+                    );
+                    sessionStorage.setItem('aesirx-analytics-jwt', data?.jwt);
+                    jwt = data?.jwt;
+                    setLoadingCheckAccount(false);
+                  }
+                } else {
+                  signMessage({ message: `${nonceLogin}` });
+                }
+              } catch (error) {
+                setLoadingCheckAccount(false);
+                toast(error.message);
+              }
+            }
+          } catch (error) {
+            SSOClick('.loginSSO');
+            setLoadingCheckAccount(false);
+            return;
+          }
+        }
         if (account) {
           // Concordium
-          const signature = await getSignature(endpoint, account, connection, 'Give consent:{}');
-
+          const signature = await getSignature(
+            endpoint,
+            account,
+            connection,
+            level === 3 ? 'Give consent:{}' : 'Give consent Tier 4:{}'
+          );
           setLoading('saving');
-
-          await agreeConsents(endpoint, level, uuid, consents, account, signature, web3ID);
+          await agreeConsents(endpoint, level, uuid, consents, account, signature, web3ID, jwt);
           sessionStorage.setItem('aesirx-analytics-consent-type', 'concordium');
         } else if (connector) {
           // Metamask
-          const nonce = await getNonce(endpoint, address, 'Give consent:{}', 'metamask');
-          signMessage({ message: `${nonce}` });
+          if (level === 3) {
+            const nonce = await getNonce(
+              endpoint,
+              address,
+              level === 3 ? 'Give consent:{}' : 'Give consent Tier 4:{}',
+              'metamask'
+            );
+            signMessage({ message: `${nonce}` });
+          }
         } else {
           setLoading('connect');
           flag = false;
@@ -208,7 +274,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
         });
       }
 
-      if (flag && account) {
+      if ((flag && account) || (flag && level < 3)) {
         sessionStorage.setItem('aesirx-analytics-uuid', uuid);
         sessionStorage.setItem('aesirx-analytics-allow', '1');
 
@@ -322,8 +388,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
       if (levelRevoke !== '1') {
         if (parseInt(levelRevoke) > 2) {
           if (!jwt && (parseInt(levelRevoke) === 2 || parseInt(levelRevoke) === 4)) {
-            const element: HTMLElement = document.querySelector('.revokeLogin') as HTMLElement;
-            element.click();
+            SSOClick('.revokeLogin');
             return;
           }
           if (account && consentType !== 'metamask') {
@@ -397,6 +462,11 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
       setLoading('done');
       toast.error(error?.response?.data?.error ?? error.message);
     }
+  };
+
+  const SSOClick = (selector: string) => {
+    const element: HTMLElement = document.querySelector(selector) as HTMLElement;
+    element.click();
   };
 
   useEffect(() => {
@@ -580,28 +650,43 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                         <div className="d-flex justify-content-end">
                           {loading === 'done' ? (
                             <>
-                              {level === 2 || level === 4 ? (
-                                <div className="ssoBtnWrapper me-1 bg-success">
-                                  <SSOButton
-                                    className="btn btn-success text-white d-flex align-items-center"
-                                    text={
-                                      <>
-                                        <img src={yes} className="me-1" />
-                                        {t('txt_yes_i_consent')}
-                                      </>
-                                    }
-                                    ssoState={'noscopes'}
-                                    onGetData={onGetData}
-                                    {...(level === 2 ? { noCreateAccount: true } : {})}
-                                  />
-                                </div>
+                              <div
+                                className={`ssoBtnWrapper me-1 bg-success ${
+                                  level === 2 || (level === 4 && !account && !address)
+                                    ? ''
+                                    : 'd-none'
+                                }`}
+                              >
+                                <SSOButton
+                                  className="btn btn-success text-white d-flex align-items-center loginSSO"
+                                  text={
+                                    <>
+                                      <img src={yes} className="me-1" />
+                                      {t('txt_yes_i_consent')}
+                                    </>
+                                  }
+                                  ssoState={'noscopes'}
+                                  onGetData={onGetData}
+                                  {...(level === 2 ? { noCreateAccount: true } : {})}
+                                />
+                              </div>
+                              {level === 2 || (level === 4 && !account && !address) ? (
+                                <></>
                               ) : (
                                 <Button
                                   variant="success"
                                   onClick={handleAgree}
                                   className="me-1 text-white d-flex align-items-center"
                                 >
-                                  <img src={yes} className="me-1" />
+                                  {loadingCheckAccount ? (
+                                    <span
+                                      className="spinner-border spinner-border-sm me-1"
+                                      role="status"
+                                      aria-hidden="true"
+                                    ></span>
+                                  ) : (
+                                    <img src={yes} className="me-1" />
+                                  )}
                                   {t('txt_yes_i_consent')}
                                 </Button>
                               )}
