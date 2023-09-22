@@ -274,7 +274,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
         });
       }
 
-      if ((flag && account) || (flag && level < 3)) {
+      if (flag && (account || level < 3)) {
         sessionStorage.setItem('aesirx-analytics-uuid', uuid);
         sessionStorage.setItem('aesirx-analytics-allow', '1');
 
@@ -444,7 +444,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
           handleRevoke(false);
         }
 
-        if (flag && account && consentType !== 'metamask') {
+        if (flag && ((account && consentType !== 'metamask') || level < 3)) {
           setShowExpandConsent(false);
           setShow(true);
           setShowBackdrop(false);
