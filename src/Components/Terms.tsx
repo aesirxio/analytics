@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from 'react';
 import bg from '../Assets/bg.png';
 import aesirx from '../Assets/aesirx.svg';
-import web3id from '../Assets/web3id.svg';
+import shield_of_privacy from '../Assets/shield_of_privacy.png';
 import concordium from '../Assets/concordium.svg';
 import upgrade from '../Assets/upgrade.svg';
 import privacy from '../Assets/privacy.svg';
@@ -29,7 +29,7 @@ const terms = [
     term: 'txt_tier_2_term',
     upgrade: 'txt_tier_2_upgrade',
     upgradetext: 'txt_tier_2_upgradetext',
-    logos: [aesirx, web3id],
+    logos: [shield_of_privacy],
   },
   {
     level: 3,
@@ -40,7 +40,7 @@ const terms = [
     term: 'txt_tier_3_term',
     upgrade: 'txt_tier_3_upgrade',
     upgradetext: 'txt_tier_3_upgradetext',
-    logos: [aesirx, web3id],
+    logos: [shield_of_privacy],
   },
   {
     level: 4,
@@ -50,7 +50,7 @@ const terms = [
     content: 'txt_tier_4_content',
     term: 'txt_tier_4_term',
     upgradetext: 'txt_tier_4_upgradetext',
-    logos: [aesirx, web3id, concordium],
+    logos: [shield_of_privacy, concordium],
   },
 ];
 
