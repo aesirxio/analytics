@@ -174,6 +174,12 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
             const web3ID = '';
             setWeb3ID(web3ID);
             setLevel(l);
+          } else {
+            if (l === 4) {
+              setLevel(4);
+            } else {
+              setLevel(3);
+            }
           }
         } else {
           setLevel(level ?? 1);

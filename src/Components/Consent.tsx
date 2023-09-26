@@ -583,9 +583,9 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                           )}
                           {(sessionStorage.getItem('aesirx-analytics-revoke') === '4' ||
                             sessionStorage.getItem('aesirx-analytics-revoke') === '2') && (
-                            <div className="d-none">
+                            <div>
                               <SSOButton
-                                className="revokeLogin"
+                                className="d-none revokeLogin"
                                 text={<>Login Revoke</>}
                                 ssoState={'noscopes'}
                                 onGetData={onGetData}
