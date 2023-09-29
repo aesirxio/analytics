@@ -488,7 +488,12 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     <div>
       <ToastContainer />
       <div className={`offcanvas-backdrop fade ${showBackdrop && show ? 'show' : 'd-none'}`} />
-      <div tabIndex={-1} className={`toast-container position-fixed bottom-0 end-0 p-3`}>
+      <div
+        tabIndex={-1}
+        className={`toast-container position-fixed m-3 ${
+          showExpandRevoke ? 'top-50 start-50 translate-middle shadow' : 'bottom-0 end-0'
+        }`}
+      >
         <div
           className={`toast revoke-toast ${
             showRevoke ||
@@ -602,7 +607,12 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
           </div>
         </div>
       </div>
-      <div tabIndex={-1} className={`toast-container position-fixed bottom-0 end-0 p-3`}>
+      <div
+        tabIndex={-1}
+        className={`toast-container position-fixed m-3 ${
+          showExpandConsent ? 'top-50 start-50 translate-middle shadow' : 'bottom-0 end-0'
+        }`}
+      >
         <div className={`toast ${show ? 'show' : ''} ${showExpandConsent ? '' : 'minimize'}`}>
           <LoadingStatus loading={loading} />
           <div className="toast-body p-0">
