@@ -90,5 +90,8 @@
   },
   "files": [
     "dist"
-  ]
+  ],
+  "resolutions": {
+    "postcss": "^8"
+  }
 }
