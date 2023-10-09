@@ -19,9 +19,9 @@ const ConnectModal = ({
   const { t } = useTranslation();
   return (
     <>
-      <Modal className="aesirxconsent-modal" show={show} onHide={handleClose}>
+      <Modal className="aesirxconsent aesirxconsent-modal" show={show} onHide={handleClose} centered>
         <Modal.Body className="aesirxconsent">
-          <div className="pb-4 px-4 block-wallet rounded-top">
+          <div className="p-4 block-wallet rounded-top">
             <div className="px-3 text-center">
               <h3 className="fs-3 fw-semibold mt-2 mb-4 text-primary">
                 {t('txt_please_connect_your_wallet')}
