@@ -27,8 +27,8 @@ Follow the instructions in: [https://github.com/aesirxio/analytics-1stparty](htt
 ```
 
 1. (`https://example.com` is the link to your 1st party server which must be installed)
-2. `CLIENT_ID` replace this with the provided `CLIENT_ID` from https://sso.aesirx.io/
-3. `CLIENT_SECRET` replace this with the provided `CLIENT_SECRET` from https://sso.aesirx.io/
+2. `CLIENT_ID` replace this with the provided `CLIENT_ID` from https://dapp.shield.aesirx.io/
+3. `CLIENT_SECRET` replace this with the provided `CLIENT_SECRET` fromhttps://dapp.shield.aesirx.io/
 
 ##### Disable Consent Popup:
 ```
@@ -48,7 +48,7 @@ REACT_APP_ENDPOINT_ANALYTICS_URL=https://example.com
 REACT_APP_SSO_CLIENT_ID=[REPLACE THIS WITH THE PROVIDED CLIENT_ID]
 
 (https://example.com is the link to your 1st party server)
-`CLIENT_ID` replace this with the provided `CLIENT_ID` from https://sso.aesirx.io/
+`CLIENT_ID` replace this with the provided `CLIENT_ID` from https://dapp.shield.aesirx.io/
 ```
 
 ##### Disable Consent Popup:
@@ -89,7 +89,7 @@ NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL=https://example.com
 NEXT_PUBLIC_SSO_CLIENT_ID=[REPLACE THIS WITH THE PROVIDED CLIENT_ID]
 
 (https://example.com is the link to your 1st party server)
-`CLIENT_ID` replace this with the provided `CLIENT_ID` from https://sso.aesirx.io/
+`CLIENT_ID` replace this with the provided `CLIENT_ID` from https://dapp.shield.aesirx.io/
 ```
 
 ##### Disable Consent Popup:
