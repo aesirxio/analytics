@@ -59,7 +59,7 @@ const TermsComponent = ({ children, level, handleLevel }: any) => {
   const handleReadmore = (status: boolean) => {
     setShowReadmore(status);
   };
-  const [showReadmore, setShowReadmore] = useState(false);
+  const [showReadmore, setShowReadmore] = useState(true);
   return (
     <>
       {terms.map(
