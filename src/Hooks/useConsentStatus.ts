@@ -19,8 +19,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
 
   const analyticsContext = useContext(AnalyticsContext);
 
-  const { activeConnector, network, connectedAccounts, genesisHashes } =
-    props;
+  const { activeConnector, network, connectedAccounts, genesisHashes } = props;
 
   const { address, connector } = useAccount();
   useEffect(() => {
