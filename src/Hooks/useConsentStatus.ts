@@ -131,20 +131,6 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
     }
   }, [connectError]);
 
-  // useEffect(() => {
-  //   if (
-  //     isDesktop &&
-  //     sessionStorage.getItem('aesirx-analytics-revoke') !== '1' &&
-  //     sessionStorage.getItem('aesirx-analytics-revoke') !== '2'
-  //   ) {
-  //     window.addEventListener('load', function () {
-  //       if (window['concordium']) {
-  //         setActiveConnectorType(BROWSER_WALLET);
-  //       }
-  //     });
-  //   }
-  // }, []);
-
   useEffect(() => {
     (async () => {
       try {
