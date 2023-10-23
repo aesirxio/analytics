@@ -54,8 +54,8 @@ const startTracker = async (
           fingerprint: fingerprint,
           url: url,
           ...(referer &&
-            referer !== url && {
-              referer: referer,
+            (referer !== url || document.referrer) && {
+              referer: referer !== url ? referer : document.referrer,
             }),
           user_agent: user_agent,
           ip: ip,
