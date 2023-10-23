@@ -14,6 +14,7 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
   const handleStartTracker = useCallback(
     async (prevRoute: string) => {
       const referer = prevRoute ? prevRoute : '';
+      console.log('prevRoute', prevRoute);
       window['referer'] = referer;
       const responseStart = await startTracker(endPoint, '', referer);
       responseStart?.event_uuid && AnalyticsStore.setEventID(responseStart.event_uuid);
@@ -25,6 +26,7 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
   useEffect(() => {
     const init = async () => {
       if (!AnalyticsStore.visitor_uuid) {
+        setPrevRoute(router.asPath);
         await handleStartTracker(router.asPath);
       }
     };
@@ -36,6 +38,9 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
       setPrevRoute(router.asPath);
       if (AnalyticsStore.visitor_uuid) {
         endTracker(endPoint, window['event_uuid'], AnalyticsStore.visitor_uuid);
+        console.log('router.asPath', router.asPath);
+        console.log('prevRoute222', prevRoute);
+
         await handleStartTracker(prevRoute);
       }
     };
