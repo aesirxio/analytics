@@ -227,6 +227,23 @@ const checkoutAnalytics = () => {
   });
 };
 
+const viewProductAnalytics = () => {
+  if(document.body.classList.contains('woocommerce') && document.body.classList.contains('single-product')) {
+    const productName = (
+      document.querySelector('.wp-block-post-title') as HTMLElement
+    )?.innerText;
+    if(productName) {
+      const attributes = Array<AttributeType>();
+      pushAttr(attributes, productName, 'woo.view_product');
+      trackEvent(root, '', {
+        event_name: 'View product',
+        event_type: 'view',
+        attributes: attributes,
+      });
+    }
+  }
+};
+
 const pushAttr = (arr: Array<AttributeType>, attrValue: string, attrLabel: string) => {
   attrValue &&
     arr.push({
@@ -235,4 +252,4 @@ const pushAttr = (arr: Array<AttributeType>, attrValue: string, attrLabel: strin
     });
 };
 
-export { addToCartAnalytics, searchAnalytics, checkoutAnalytics };
+export { addToCartAnalytics, searchAnalytics, checkoutAnalytics, viewProductAnalytics };
