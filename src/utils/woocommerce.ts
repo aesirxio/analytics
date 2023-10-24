@@ -228,11 +228,12 @@ const checkoutAnalytics = () => {
 };
 
 const viewProductAnalytics = () => {
-  if(document.body.classList.contains('woocommerce') && document.body.classList.contains('single-product')) {
-    const productName = (
-      document.querySelector('.wp-block-post-title') as HTMLElement
-    )?.innerText;
-    if(productName) {
+  if (
+    document.body.classList.contains('woocommerce') &&
+    document.body.classList.contains('single-product')
+  ) {
+    const productName = (document.querySelector('.wp-block-post-title') as HTMLElement)?.innerText;
+    if (productName) {
       const attributes = Array<AttributeType>();
       pushAttr(attributes, productName, 'woo.view_product');
       trackEvent(root, '', {
