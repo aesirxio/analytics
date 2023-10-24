@@ -21,7 +21,8 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
 
   const analyticsContext = useContext(AnalyticsContext);
 
-  const { activeConnector, network, connectedAccounts, genesisHashes, setActiveConnectorType } = props;
+  const { activeConnector, network, connectedAccounts, genesisHashes, setActiveConnectorType } =
+    props;
 
   const { address, connector } = useAccount();
   useEffect(() => {
@@ -118,20 +119,20 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   }, [connection, genesisHash, network]);
 
   useEffect(() => {
-    const initConnector = async() => {
+    const initConnector = async () => {
       if (
         isDesktop &&
         sessionStorage.getItem('aesirx-analytics-revoke') !== '1' &&
         sessionStorage.getItem('aesirx-analytics-revoke') !== '2'
       ) {
-        const address = await window['concordium']?.requestAccounts() ?? [];
+        const address = (await window['concordium']?.requestAccounts()) ?? [];
         window.addEventListener('load', function () {
           if (window['concordium'] && address?.length) {
             setActiveConnectorType(BROWSER_WALLET);
           }
         });
       }
-    }
+    };
     initConnector();
   }, []);
 
