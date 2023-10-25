@@ -69,7 +69,9 @@ const startTracker = async (
             attributes: attributes,
           }),
         });
-      });
+      }) as any;
+    window['aesirxTrackEcommerce'] === 'true' &&
+      sessionStorage.setItem('analytics_flow_uuid', (await responseStart)?.flow_uuid);
     return responseStart;
   } catch (error) {
     console.error('Analytics Error: ', error);
