@@ -3,7 +3,6 @@ import bg from '../Assets/bg.png';
 import aesirx from '../Assets/aesirx.svg';
 import shield_of_privacy from '../Assets/shield_of_privacy.png';
 import concordium from '../Assets/concordium.svg';
-import upgrade from '../Assets/upgrade.svg';
 import privacy from '../Assets/privacy.svg';
 import arrow from '../Assets/arrow.svg';
 import { useTranslation } from 'react-i18next';
