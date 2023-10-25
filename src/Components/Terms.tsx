@@ -66,19 +66,30 @@ const TermsComponent = ({ children, level, handleLevel }: any) => {
         (term, key) =>
           term.level === level && (
             <Fragment key={key}>
-              <div className="rounded-top d-flex justify-content-between bg-light p-3 fw-bold flex-wrap">
-                <div>{t(term.name)}</div>
-                <div className="d-flex align-items-center">
+              <div className="rounded-top d-flex justify-content-between bg-white p-3 fw-medium flex-wrap border-bottom">
+                <div className="text-primary">{t(term.name)}</div>
+                <div className="d-flex align-items-center fs-14 text-primary">
                   <div className={`status-tier tier-${term.level} rounded-circle`}></div>
-                  {t(term.tier)} - {t(term.levelname)}
+                  <div className="status-tier-text">
+                    {t(term.tier)} - {t(term.levelname)}
+                  </div>
                 </div>
               </div>
               <div className="p-3 bg-white">
-                <span className="fw-bold">{t(term.content)}</span>{' '}
-                <span className="fw-light">{t(term.term)}</span>
-                <div className="read-more">
+                <span className="text-dark fw-medium">{t(term.content)}</span>{' '}
+                <span className="">{t(term.term)}</span>
+                <div className="read-more d-flex justify-content-between align-items-center">
+                  {term.upgrade && (
+                    <a
+                      className="fs-14 text-success fw-bold"
+                      href="#"
+                      onClick={() => handleLevel(terms[key + 1].level)}
+                    >
+                      {t(term.upgrade)}
+                    </a>
+                  )}
                   <div
-                    className="read-more-btn"
+                    className="ms-auto read-more-btn"
                     onClick={() => {
                       handleReadmore(!showReadmore ? true : false);
                     }}
@@ -97,28 +108,10 @@ const TermsComponent = ({ children, level, handleLevel }: any) => {
                 <div className="position-relative p-3">
                   {showReadmore && (
                     <>
-                      <div className="d-flex align-items-center">
-                        {term.logos.map((logo, i) => (
-                          <Fragment key={i}>
-                            <img className="me-2" src={logo} alt={t(term.levelname)} />
-                          </Fragment>
-                        ))}
-                      </div>
-                      <div className="d-flex align-items-start my-3">
-                        <img src={upgrade} />
-                        <div className="ms-3">
-                          {term.upgrade && (
-                            <a
-                              className="text-white"
-                              href="#"
-                              onClick={() => handleLevel(terms[key + 1].level)}
-                            >
-                              {t(term.upgrade)}
-                            </a>
-                          )}
-                          {t(term.upgradetext)}
-                          <div className="fst-italic">{t('txt_no_collect')}</div>
-                        </div>
+                      <div className="mb-3">
+                        {term.upgrade && t(term.upgrade)}
+                        {t(term.upgradetext)}
+                        <div className="fs-14 fst-italic">* {t('txt_no_collect')}</div>
                       </div>
                     </>
                   )}

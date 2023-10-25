@@ -16,6 +16,7 @@ $success: #1ab394;
 $spacer: 16px;
 $primary: #132342;
 $secondary: #627eea;
+$dark: #222328;
 // 3. Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
 @import 'bootstrap/scss/variables';
 @import 'variables-dark';
@@ -50,6 +51,9 @@ $secondary: #627eea;
   a {
     text-decoration: underline;
   }
+  .fs-14 {
+    font-size: 14px;
+  }
   button {
     text-transform: none;
   }
@@ -62,6 +66,10 @@ $secondary: #627eea;
   }
   .btn {
     --#{$prefix}btn-font-size: 16px;
+    font-weight: 600;
+    padding: 9px 20px;
+    line-height: 18px;
+    border-radius: 6px;
     &.text-white {
       color: #fff;
     }
@@ -72,6 +80,9 @@ $secondary: #627eea;
   .btn-success-outline {
     @include button-variant(transparent, $success, $success, transparent, $success, $success);
     color: $success;
+  }
+  .btn-gray {
+    @include button-variant(#a5a4b5, #a5a4b5, #fff, transparent, #a5a4b5, #fff);
   }
   .btn-success:hover {
     color: var(--#{$prefix}white);
@@ -96,6 +107,9 @@ $secondary: #627eea;
     box-sizing: border-box;
     --#{$prefix}toast-zindex: 1049;
   }
+  .status-tier-text {
+    font-weight: 600;
+  }
   .status-tier {
     width: 18px;
     height: 18px;
@@ -119,7 +133,7 @@ $secondary: #627eea;
     min-width: 120px;
   }
   .revoke-toast {
-    width: 500px;
+    width: 530px;
     .toast-body {
       .minimize-revoke {
         position: absolute;
@@ -161,10 +175,12 @@ $secondary: #627eea;
     }
     .text {
       font-weight: 500;
+      color: $dark;
     }
   }
   .read-more {
     text-align: right;
+    margin-top: 12px;
     .read-more-btn {
       display: inline-flex;
       align-items: center;
@@ -172,7 +188,6 @@ $secondary: #627eea;
       cursor: pointer;
       font-size: 14px;
       font-weight: 500;
-      padding-top: 10px;
       img.revert {
         transform: rotate(180deg);
       }
