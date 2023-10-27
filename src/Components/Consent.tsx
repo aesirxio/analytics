@@ -18,6 +18,7 @@ import { ToastContainer, toast } from 'react-toastify';
 
 import yes from '../Assets/yes.svg';
 import no from '../Assets/no.svg';
+import no_white from '../Assets/no_white.svg';
 import bg from '../Assets/bg.png';
 import privacy from '../Assets/privacy.svg';
 
@@ -552,7 +553,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                       target="_blank"
                       rel="noreferrer"
                     >
-                      {t('txt_here')}
+                      {t('txt_link')}
                     </a>{' '}
                     {t('txt_for_more_information')}
                   </div>
@@ -568,7 +569,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                         </div>
                         <div className="d-flex align-items-center">
                           <a
-                            className="text-success text-decoration-underline manage-consent"
+                            className="text-success text-decoration-underline manage-consent fs-14"
                             href="https://dapp.shield.aesirx.io/revoke-consent"
                             target="_blank"
                             rel="noreferrer"
@@ -579,7 +580,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                             <Button
                               variant="success"
                               onClick={handleRevokeBtn}
-                              className={'text-white d-flex align-items-center revoke-btn'}
+                              className={'text-white d-flex align-items-center revoke-btn fs-14'}
                             >
                               {t('txt_revoke_consent')}
                             </Button>
@@ -686,7 +687,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                                 <Button
                                   variant="success"
                                   onClick={handleAgree}
-                                  className="me-1 text-white d-flex align-items-center"
+                                  className="me-1 text-white d-flex align-items-center fs-14"
                                 >
                                   {loadingCheckAccount ? (
                                     <span
@@ -702,11 +703,11 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                               )}
 
                               <Button
-                                variant="success-outline"
+                                variant="gray"
                                 onClick={handleNotAllow}
-                                className="d-flex align-items-center"
+                                className="d-flex align-items-center fs-14"
                               >
-                                <img src={no} className="me-1" />
+                                <img src={no_white} className="me-1" />
                                 {t('txt_reject_consent')}
                               </Button>
                             </>
