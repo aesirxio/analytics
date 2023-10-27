@@ -3,7 +3,6 @@ import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
 import { getConsents } from '../utils/consent';
 import { getWeb3ID } from '../utils/Concordium';
 import { toast } from 'react-toastify';
-import { isDesktop } from 'react-device-detect';
 import {
   MAINNET,
   useConnection,
@@ -12,6 +11,7 @@ import {
   withJsonRpcClient,
 } from '@concordium/react-components';
 import { BROWSER_WALLET } from './config';
+import { isDesktop } from 'react-device-detect';
 import { useAccount } from 'wagmi';
 const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   const [show, setShow] = useState(false);
@@ -119,6 +119,24 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   }, [connection, genesisHash, network]);
 
   useEffect(() => {
+    const initConnector = async () => {
+      if (
+        isDesktop &&
+        sessionStorage.getItem('aesirx-analytics-revoke') !== '1' &&
+        sessionStorage.getItem('aesirx-analytics-revoke') !== '2'
+      ) {
+        const address = (await window['concordium']?.requestAccounts()) ?? [];
+        window.addEventListener('load', function () {
+          if (window['concordium'] && address?.length) {
+            setActiveConnectorType(BROWSER_WALLET);
+          }
+        });
+      }
+    };
+    initConnector();
+  }, []);
+
+  useEffect(() => {
     if (activeConnector) {
       connect();
     }
@@ -133,20 +151,6 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
       toast.error(connectError);
     }
   }, [connectError]);
-
-  useEffect(() => {
-    if (
-      isDesktop &&
-      sessionStorage.getItem('aesirx-analytics-revoke') !== '1' &&
-      sessionStorage.getItem('aesirx-analytics-revoke') !== '2'
-    ) {
-      window.addEventListener('load', function () {
-        if (window['concordium']) {
-          setActiveConnectorType(BROWSER_WALLET);
-        }
-      });
-    }
-  }, []);
 
   useEffect(() => {
     (async () => {

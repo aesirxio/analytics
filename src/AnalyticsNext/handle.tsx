@@ -25,6 +25,7 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
   useEffect(() => {
     const init = async () => {
       if (!AnalyticsStore.visitor_uuid) {
+        setPrevRoute(router.asPath);
         await handleStartTracker(router.asPath);
       }
     };

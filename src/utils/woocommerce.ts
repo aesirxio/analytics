@@ -116,7 +116,7 @@ const checkoutAnalytics = () => {
         let productName = '';
         for (let i = 0; i < productNameSelector.childNodes.length; ++i) {
           if (productNameSelector.childNodes[i].nodeType === Node.TEXT_NODE)
-            productName += productNameSelector.childNodes[i].textContent;
+            productName += productNameSelector.childNodes[i]?.textContent;
         }
 
         // get Quantity
@@ -129,7 +129,7 @@ const checkoutAnalytics = () => {
         let productPrice = '';
         for (let i = 0; i < productPriceSelector.childNodes.length; ++i) {
           if (productPriceSelector.childNodes[i].nodeType === Node.TEXT_NODE)
-            productPrice += productPriceSelector.childNodes[i].textContent;
+            productPrice += productPriceSelector.childNodes[i]?.textContent;
         }
 
         const productSymbolSelector = item.querySelector(
@@ -148,9 +148,9 @@ const checkoutAnalytics = () => {
       let orderTotal = '';
       for (let i = 0; i < orderTotalSelect.childNodes.length; ++i) {
         if (orderTotalSelect.childNodes[i].nodeType === Node.TEXT_NODE)
-          orderTotal += orderTotalSelect.childNodes[i].textContent;
+          orderTotal += orderTotalSelect.childNodes[i]?.textContent;
       }
-      attributesJSON['order-total'] = orderTotal.trim();
+      attributesJSON['order-total'] = orderTotal?.trim();
       // pushAttr(attributes, orderTotal.trim(), 'order-total');
 
       // Billing
@@ -179,47 +179,45 @@ const checkoutAnalytics = () => {
       const mailpoet_woocommerce_checkout_optin = form.querySelector(
         'input[name="mailpoet_woocommerce_checkout_optin"]'
       );
-
       let payment_method = '';
       payment_method_selector?.forEach((item) => {
         if ((item as HTMLInputElement).checked) {
-          payment_method = (item as HTMLInputElement).value;
+          payment_method = (item as HTMLInputElement)?.value;
         }
       });
 
       let shipping_method = '';
       shipping_method_selector?.forEach((item) => {
         if ((item as HTMLInputElement).checked) {
-          shipping_method = (item as HTMLInputElement).value;
+          shipping_method = (item as HTMLInputElement)?.value;
         }
       });
 
-      attributesJSON['billing_first_name'] = (billing_first_name as HTMLInputElement).value;
-      attributesJSON['billing_last_name'] = (billing_last_name as HTMLInputElement).value;
-      attributesJSON['billing_company'] = (billing_company as HTMLInputElement).value;
-      attributesJSON['billing_address_1'] = (billing_address_1 as HTMLInputElement).value;
-      attributesJSON['billing_address_2'] = (billing_address_2 as HTMLInputElement).value;
-      attributesJSON['billing_postcode'] = (billing_postcode as HTMLInputElement).value;
-      attributesJSON['billing_city'] = (billing_city as HTMLInputElement).value;
-      attributesJSON['billing_state'] = (billing_state as HTMLInputElement).value;
-      attributesJSON['billing_phone'] = (billing_phone as HTMLInputElement).value;
-      attributesJSON['billing_email'] = (billing_email as HTMLInputElement).value;
+      attributesJSON['billing_first_name'] = (billing_first_name as HTMLInputElement)?.value;
+      attributesJSON['billing_last_name'] = (billing_last_name as HTMLInputElement)?.value;
+      attributesJSON['billing_company'] = (billing_company as HTMLInputElement)?.value;
+      attributesJSON['billing_address_1'] = (billing_address_1 as HTMLInputElement)?.value;
+      attributesJSON['billing_address_2'] = (billing_address_2 as HTMLInputElement)?.value;
+      attributesJSON['billing_postcode'] = (billing_postcode as HTMLInputElement)?.value;
+      attributesJSON['billing_city'] = (billing_city as HTMLInputElement)?.value;
+      attributesJSON['billing_state'] = (billing_state as HTMLInputElement)?.value;
+      attributesJSON['billing_phone'] = (billing_phone as HTMLInputElement)?.value;
+      attributesJSON['billing_email'] = (billing_email as HTMLInputElement)?.value;
 
       attributesJSON['shipping_first_name'] = (shipping_first_name as HTMLInputElement).value;
       attributesJSON['shipping_last_name'] = (shipping_last_name as HTMLInputElement).value;
-      attributesJSON['shipping_company'] = (shipping_company as HTMLInputElement).value;
-      attributesJSON['shipping_address_1'] = (shipping_address_1 as HTMLInputElement).value;
-      attributesJSON['shipping_address_2'] = (shipping_address_2 as HTMLInputElement).value;
-      attributesJSON['shipping_postcode'] = (shipping_postcode as HTMLInputElement).value;
-      attributesJSON['shipping_city'] = (shipping_city as HTMLInputElement).value;
-      attributesJSON['shipping_state'] = (shipping_state as HTMLInputElement).value;
+      attributesJSON['shipping_company'] = (shipping_company as HTMLInputElement)?.value;
+      attributesJSON['shipping_address_1'] = (shipping_address_1 as HTMLInputElement)?.value;
+      attributesJSON['shipping_address_2'] = (shipping_address_2 as HTMLInputElement)?.value;
+      attributesJSON['shipping_postcode'] = (shipping_postcode as HTMLInputElement)?.value;
+      attributesJSON['shipping_city'] = (shipping_city as HTMLInputElement)?.value;
+      attributesJSON['shipping_state'] = (shipping_state as HTMLInputElement)?.value;
 
       attributesJSON['shipping_method'] = shipping_method;
       attributesJSON['payment_method'] = payment_method;
       attributesJSON['mailpoet_woocommerce_checkout_optin'] = (
         mailpoet_woocommerce_checkout_optin as HTMLInputElement
-      ).value;
-
+      )?.value;
       trackEvent(root, '', {
         event_name: 'Checkout',
         event_type: 'submit',
@@ -227,6 +225,24 @@ const checkoutAnalytics = () => {
       });
     });
   });
+};
+
+const viewProductAnalytics = () => {
+  if (
+    document.body.classList.contains('woocommerce') &&
+    document.body.classList.contains('single-product')
+  ) {
+    const productName = (document.querySelector('.wp-block-post-title') as HTMLElement)?.innerText;
+    if (productName) {
+      const attributes = Array<AttributeType>();
+      pushAttr(attributes, productName, 'woo.view_product');
+      trackEvent(root, '', {
+        event_name: 'View product',
+        event_type: 'view',
+        attributes: attributes,
+      });
+    }
+  }
 };
 
 const pushAttr = (arr: Array<AttributeType>, attrValue: string, attrLabel: string) => {
@@ -237,4 +253,4 @@ const pushAttr = (arr: Array<AttributeType>, attrValue: string, attrLabel: strin
     });
 };
 
-export { addToCartAnalytics, searchAnalytics, checkoutAnalytics };
+export { addToCartAnalytics, searchAnalytics, checkoutAnalytics, viewProductAnalytics };

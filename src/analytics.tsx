@@ -1,5 +1,10 @@
 import { endTrackerVisibilityState, startTracker, trackEvent } from './utils';
-import { addToCartAnalytics, checkoutAnalytics, searchAnalytics } from './utils/woocommerce';
+import {
+  addToCartAnalytics,
+  checkoutAnalytics,
+  searchAnalytics,
+  viewProductAnalytics,
+} from './utils/woocommerce';
 import React from 'react';
 
 import { createRoot } from 'react-dom/client';
@@ -155,6 +160,7 @@ const WoocommerceAnalytics = () => {
   addToCartAnalytics();
   searchAnalytics();
   checkoutAnalytics();
+  viewProductAnalytics();
 };
 
 AesirAnalytics();
