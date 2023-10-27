@@ -8,6 +8,10 @@ const createRequestV2 = (endpoint: string, task: string) => {
   return `${endpoint}/visitor/v2/${task}`;
 };
 
+const rememberFlow = (endpoint: string, flow: string) => {
+  return `${endpoint}/remember_flow/${flow}`;
+};
+
 const startTracker = async (
   endpoint: string,
   url?: string,
@@ -69,7 +73,17 @@ const startTracker = async (
             attributes: attributes,
           }),
         });
-      });
+      }) as any;
+    if (
+      window['aesirxTrackEcommerce'] === 'true' &&
+      sessionStorage.getItem('aesirx-analytics-flow') !== (await responseStart)?.flow_uuid
+    ) {
+      sessionStorage.setItem('aesirx-analytics-flow', (await responseStart)?.flow_uuid);
+      await trackerService(
+        rememberFlow(window.location.origin, (await responseStart)?.flow_uuid),
+        {}
+      );
+    }
     return responseStart;
   } catch (error) {
     console.error('Analytics Error: ', error);
