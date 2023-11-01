@@ -198,7 +198,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   const handleLevel = useCallback(
     async (_level: number) => {
       setLevel(_level);
-      if (_level > 3 && isDesktop && !connection) {
+      if (_level > 3 && isDesktop && !connection && window['concordium']) {
         setActiveConnectorType(BROWSER_WALLET);
       }
     },
