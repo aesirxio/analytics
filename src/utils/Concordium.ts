@@ -4,7 +4,7 @@ import {
   SchemaVersion,
   toBuffer,
 } from '@concordium/web-sdk';
-import { NFT_SMARTCONTRACT, WHITELIST_SMARTCONTRACT } from './config';
+import { NFT_SMARTCONTRACT } from './config';
 
 const invokeSmartContract = async (
   provider: any,
