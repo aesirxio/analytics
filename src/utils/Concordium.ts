@@ -61,10 +61,10 @@ const getWeb3ID = async (provider: any, account: string) => {
       }
     }
   } catch (error) {
-    return '';
+    return false;
   }
 
-  return '';
+  return false;
 };
 
 export { invokeSmartContract, getWeb3ID };
