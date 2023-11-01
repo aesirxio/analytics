@@ -17,7 +17,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   const [show, setShow] = useState(false);
   const [showRevoke, setShowRevoke] = useState(false);
   const [level, setLevel] = useState<any>();
-  const [web3ID, setWeb3ID] = useState<string>();
+  const [web3ID, setWeb3ID] = useState<boolean>();
 
   const analyticsContext = useContext(AnalyticsContext);
 
@@ -161,10 +161,10 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
           if (l < 3) {
             setLevel(null);
             l = 3;
-            let web3ID = '';
+            let web3ID = false;
             if (account && sessionStorage.getItem('aesirx-analytics-consent-type') !== 'metamask') {
               web3ID = await getWeb3ID(connection, account);
-              if (web3ID) {
+              if (web3ID === true) {
                 l = 4;
               }
             }
@@ -175,7 +175,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
           // Metamask
           if (l < 3) {
             l = 3;
-            const web3ID = '';
+            const web3ID = false;
             setWeb3ID(web3ID);
             setLevel(l);
           } else {
@@ -198,6 +198,9 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   const handleLevel = useCallback(
     async (_level: number) => {
       setLevel(_level);
+      if (_level > 3 && isDesktop && !connection && window['concordium']) {
+        setActiveConnectorType(BROWSER_WALLET);
+      }
     },
     [level]
   );

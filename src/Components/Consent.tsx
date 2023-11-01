@@ -141,7 +141,12 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
         const res = await verifySignature(aesirXEndpoint, 'metamask', address, data);
         sessionStorage.setItem('aesirx-analytics-jwt', res?.jwt);
         setLoadingCheckAccount(false);
-        const nonce = await getNonce(endpoint, address, 'Give consent Tier 4:{}', 'metamask');
+        const nonce = await getNonce(
+          endpoint,
+          address,
+          'Give consent Tier 4:{nonce} {domain} {time}',
+          'metamask'
+        );
         signMessage({ message: `${nonce}` });
       } else {
         setLoading('saving');
@@ -238,7 +243,9 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
             endpoint,
             account,
             connection,
-            level === 3 ? 'Give consent:{}' : 'Give consent Tier 4:{}'
+            level === 3
+              ? 'Give consent:{nonce} {domain} {time}'
+              : 'Give consent Tier 4:{nonce} {domain} {time}'
           );
           setLoading('saving');
           await agreeConsents(endpoint, level, uuid, consents, account, signature, web3ID, jwt);
@@ -249,7 +256,9 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
             const nonce = await getNonce(
               endpoint,
               address,
-              level === 3 ? 'Give consent:{}' : 'Give consent Tier 4:{}',
+              level === 3
+                ? 'Give consent:{nonce} {domain} {time}'
+                : 'Give consent Tier 4:{nonce} {domain} {time}',
               'metamask'
             );
             signMessage({ message: `${nonce}` });
@@ -330,7 +339,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                 endpoint,
                 account,
                 connection,
-                'Give consent Tier 4:{}'
+                'Give consent Tier 4:{nonce} {domain} {time}'
               );
               await agreeConsents(
                 endpoint,
@@ -348,7 +357,12 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
             } else if (response?.loginType === 'metamask') {
               // Metamask
               sessionStorage.setItem('aesirx-analytics-consent-type', 'metamask');
-              const nonce = await getNonce(endpoint, address, 'Give consent Tier 4:{}', 'metamask');
+              const nonce = await getNonce(
+                endpoint,
+                address,
+                'Give consent Tier 4:{nonce} {domain} {time}',
+                'metamask'
+              );
               signMessage({ message: `${nonce}` });
             }
           } else {
@@ -398,7 +412,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
               endpoint,
               account,
               connection,
-              'Revoke consent:{}'
+              'Revoke consent:{nonce} {domain} {time}'
             );
             setLoading('saving');
             const consentList = await getConsents(endpoint, uuid);

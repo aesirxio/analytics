@@ -4,7 +4,7 @@ import {
   SchemaVersion,
   toBuffer,
 } from '@concordium/web-sdk';
-import { NFT_SMARTCONTRACT, WHITELIST_SMARTCONTRACT } from './config';
+import { NFT_SMARTCONTRACT } from './config';
 
 const invokeSmartContract = async (
   provider: any,
@@ -56,30 +56,15 @@ const getWeb3ID = async (provider: any, account: string) => {
 
     if (nft) {
       const tokens = nft[1]['owned_tokens'];
-
       if (tokens) {
-        const data = await invokeSmartContract(
-          provider,
-          account,
-          WHITELIST_SMARTCONTRACT.name,
-          WHITELIST_SMARTCONTRACT.index,
-          WHITELIST_SMARTCONTRACT.subIndex,
-          WHITELIST_SMARTCONTRACT.schema,
-          'view'
-        );
-
-        const web3id = data?.state?.filter((arrVal: any) => tokens.includes(arrVal[1]?.token));
-
-        if (web3id && web3id[0][0]) {
-          return web3id[0][0];
-        }
+        return true;
       }
     }
   } catch (error) {
-    return '';
+    return false;
   }
 
-  return '';
+  return false;
 };
 
 export { invokeSmartContract, getWeb3ID };
