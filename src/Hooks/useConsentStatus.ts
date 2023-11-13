@@ -8,11 +8,13 @@ import {
   useConnection,
   useConnect,
   WalletConnectionProps,
-  withJsonRpcClient,
+  useGrpcClient,
 } from '@concordium/react-components';
 import { BROWSER_WALLET } from './config';
 import { isDesktop } from 'react-device-detect';
 import { useAccount } from 'wagmi';
+import { BlockHash } from '@concordium/web-sdk';
+
 const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   const [show, setShow] = useState(false);
   const [showRevoke, setShowRevoke] = useState(false);
@@ -71,7 +73,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
     }
   }, [analyticsContext.visitor_uuid]);
 
-  const { connection, setConnection, account, genesisHash } = useConnection(
+  const { connection, setConnection, account } = useConnection(
     connectedAccounts,
     genesisHashes
   );
@@ -80,43 +82,44 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
 
   const [, setRpcGenesisHash] = useState();
   const [, setRpcError] = useState('');
+  const rpc = useGrpcClient(network);
 
   useEffect(() => {
-    if (connection) {
+    if (rpc) {
       setRpcGenesisHash(undefined);
-      withJsonRpcClient(connection, async (rpc) => {
-        const status = await rpc.getConsensusStatus();
-        return status.genesisBlock;
-      })
+      rpc
+        .getConsensusStatus()
+        .then((status) => {
+          return status.genesisBlock;
+        })
         .then((hash: any) => {
           const network = 'mainnet';
-
           let r = false;
 
           switch (network) {
+
             // case 'testnet':
-            //   r = hash === TESTNET.genesisHash;
+            //   r = BlockHash.toHexString(hash) === TESTNET.genesisHash;
             //   break;
 
             default:
-              r = hash === MAINNET.genesisHash;
+              r = BlockHash.toHexString(hash) === MAINNET.genesisHash;
           }
-
           if (!r) {
-            const network = 'mainnet';
+           
             throw new Error(`Please change the network to ${network} in Wallet`);
           }
 
           setRpcGenesisHash(hash);
           setRpcError('');
         })
-        .catch((err: any) => {
+        .catch((err) => {
           setRpcGenesisHash(undefined);
           toast(err.message);
           setRpcError(err.message);
         });
     }
-  }, [connection, genesisHash, network]);
+  }, [rpc]);
 
   useEffect(() => {
     const initConnector = async () => {
