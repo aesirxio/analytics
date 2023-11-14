@@ -73,10 +73,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
     }
   }, [analyticsContext.visitor_uuid]);
 
-  const { connection, setConnection, account } = useConnection(
-    connectedAccounts,
-    genesisHashes
-  );
+  const { connection, setConnection, account } = useConnection(connectedAccounts, genesisHashes);
 
   const { connect, connectError } = useConnect(activeConnector, setConnection);
 
@@ -95,9 +92,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
         .then((hash: any) => {
           const network = 'mainnet';
           let r = false;
-
           switch (network) {
-
             // case 'testnet':
             //   r = BlockHash.toHexString(hash) === TESTNET.genesisHash;
             //   break;
@@ -106,7 +101,6 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
               r = BlockHash.toHexString(hash) === MAINNET.genesisHash;
           }
           if (!r) {
-           
             throw new Error(`Please change the network to ${network} in Wallet`);
           }
 
@@ -159,14 +153,14 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
     (async () => {
       try {
         let l = level;
-        if (connection) {
+        if (rpc) {
           // Concordium
           if (l < 3) {
             setLevel(null);
             l = 3;
             let web3ID = false;
             if (account && sessionStorage.getItem('aesirx-analytics-consent-type') !== 'metamask') {
-              web3ID = await getWeb3ID(connection, account);
+              web3ID = await getWeb3ID(account, rpc);
               if (web3ID === true) {
                 l = 4;
               }

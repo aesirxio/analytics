@@ -32,6 +32,7 @@ import {
   useConnect,
   ConnectorType,
   stringMessage,
+  useGrpcClient,
 } from '@concordium/react-components';
 import { BROWSER_WALLET, WALLET_CONNECT } from '../Hooks/config';
 import { OsTypes, isDesktop, isMobile, osName } from 'react-device-detect';
@@ -69,6 +70,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     connectedAccounts,
     genesisHashes,
     setActiveConnectorType,
+    network,
   } = props;
   const { setConnection } = useConnection(connectedAccounts, genesisHashes);
 
@@ -104,6 +106,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
   const [consentTier4, setConsentTier4] = useState<any>({});
   const analyticsContext = useContext(AnalyticsContext);
   const { t } = useTranslation();
+  const gRPCClient = useGrpcClient(network);
 
   // Metamask
   const { address, connector } = useAccount();
@@ -316,7 +319,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
   const consentTier4Init = async (response: any) => {
     let hasWeb3ID = true;
     if (response?.loginType === 'concordium') {
-      const web3ID = await getWeb3ID(connection, account);
+      const web3ID = await getWeb3ID(account, gRPCClient);
       if (web3ID) {
         setWeb3ID(web3ID);
       } else {
