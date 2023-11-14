@@ -77,7 +77,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
 
   const { connect, connectError } = useConnect(activeConnector, setConnection);
 
-  const [rpcGenesisHash, setRpcGenesisHash] = useState();
+  const [, setRpcGenesisHash] = useState();
   const [, setRpcError] = useState('');
   const rpc = useGrpcClient(network);
 
@@ -92,7 +92,6 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
         .then((hash: any) => {
           const network = 'mainnet';
           let r = false;
-          console.log('hashhash', hash);
           switch (network) {
             // case 'testnet':
             //   r = BlockHash.toHexString(hash) === TESTNET.genesisHash;
