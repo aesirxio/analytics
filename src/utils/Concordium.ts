@@ -24,7 +24,6 @@ const invokeSmartContract = async (
     const res = await rpcClient.invokeContract({
       invoker: AccountAddress.fromBase58(account),
       method: ReceiveName.fromString(`${name}.${method}`),
-      parameter: undefined,
       contract: ContractAddress.create(index, subIndex),
     });
 
