@@ -21,6 +21,7 @@ const AnalyticsNext = ({ router, children }: AnalyticsNext) => {
           {process.env.NEXT_PUBLIC_DISABLE_ANALYTICS_CONSENT !== 'true' && (
             <ConsentComponent
               endpoint={process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL}
+              networkEnv={process.env.NEXT_PUBLIC_CONCORDIUM_NETWORK}
               aesirXEndpoint={process.env.NEXT_PUBLIC_ENDPOINT_URL ?? 'https://api.aesirx.io'}
             />
           )}

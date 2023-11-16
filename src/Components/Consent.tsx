@@ -33,6 +33,7 @@ import {
   ConnectorType,
   stringMessage,
   useGrpcClient,
+  TESTNET,
 } from '@concordium/react-components';
 import { BROWSER_WALLET, WALLET_CONNECT } from '../Hooks/config';
 import { OsTypes, isDesktop, isMobile, osName } from 'react-device-detect';
@@ -46,10 +47,11 @@ import { getWeb3ID } from '../utils/Concordium';
 interface WalletConnectionPropsExtends extends WalletConnectionProps {
   endpoint: string;
   aesirXEndpoint: string;
+  networkEnv?: string;
 }
-const ConsentComponent = ({ endpoint, aesirXEndpoint }: any) => {
+const ConsentComponent = ({ endpoint, aesirXEndpoint, networkEnv }: any) => {
   return (
-    <WithWalletConnector network={MAINNET}>
+    <WithWalletConnector network={networkEnv === 'testnet' ? TESTNET : MAINNET}>
       {(props) => (
         <div className="aesirxconsent">
           <SSOEthereumProvider>
@@ -319,7 +321,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
   const consentTier4Init = async (response: any) => {
     let hasWeb3ID = true;
     if (response?.loginType === 'concordium') {
-      const web3ID = await getWeb3ID(account, gRPCClient);
+      const web3ID = await getWeb3ID(account, gRPCClient, network?.name);
       if (web3ID) {
         setWeb3ID(web3ID);
       } else {
