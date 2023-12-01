@@ -9,7 +9,7 @@ import {
   ContractName,
   EntrypointName,
 } from '@concordium/web-sdk';
-import { NFT_SMARTCONTRACT } from './config';
+import { NFT_SMARTCONTRACT, NFT_SMARTCONTRACT_TESTNET } from './config';
 
 const invokeSmartContract = async (
   account: any,
@@ -49,19 +49,18 @@ const invokeSmartContract = async (
   }
 };
 
-const getWeb3ID = async (account: string, gRPCClient: ConcordiumGRPCClient) => {
+const getWeb3ID = async (account: string, gRPCClient: ConcordiumGRPCClient, network: any) => {
   try {
     const dataNFT = await invokeSmartContract(
       account,
-      NFT_SMARTCONTRACT.name,
-      NFT_SMARTCONTRACT.index,
-      NFT_SMARTCONTRACT.subIndex,
-      NFT_SMARTCONTRACT.schema,
+      network === 'testnet' ? NFT_SMARTCONTRACT_TESTNET.name : NFT_SMARTCONTRACT.name,
+      network === 'testnet' ? NFT_SMARTCONTRACT_TESTNET.index : NFT_SMARTCONTRACT.index,
+      network === 'testnet' ? NFT_SMARTCONTRACT_TESTNET.subIndex : NFT_SMARTCONTRACT.subIndex,
+      network === 'testnet' ? NFT_SMARTCONTRACT_TESTNET.schema : NFT_SMARTCONTRACT.schema,
       'view',
       gRPCClient
     );
     const nft = dataNFT?.state?.find((arrVal: any) => account === arrVal[0]?.Account[0]);
-
     if (nft) {
       const tokens = nft[1]['owned_tokens'];
       if (tokens) {

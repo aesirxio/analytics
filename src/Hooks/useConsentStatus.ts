@@ -9,6 +9,7 @@ import {
   useConnect,
   WalletConnectionProps,
   useGrpcClient,
+  TESTNET,
 } from '@concordium/react-components';
 import { BROWSER_WALLET } from './config';
 import { isDesktop } from 'react-device-detect';
@@ -90,12 +91,11 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
           return status.genesisBlock;
         })
         .then((hash: any) => {
-          const network = 'mainnet';
           let r = false;
-          switch (network) {
-            // case 'testnet':
-            //   r = BlockHash.toHexString(hash) === TESTNET.genesisHash;
-            //   break;
+          switch (network?.name) {
+            case 'testnet':
+              r = BlockHash.toHexString(hash) === TESTNET.genesisHash;
+              break;
 
             default:
               r = BlockHash.toHexString(hash) === MAINNET.genesisHash;
@@ -160,7 +160,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
             l = 3;
             let web3ID = false;
             if (account && sessionStorage.getItem('aesirx-analytics-consent-type') !== 'metamask') {
-              web3ID = await getWeb3ID(account, rpc);
+              web3ID = await getWeb3ID(account, rpc, network?.name);
               if (web3ID === true) {
                 l = 4;
               }
