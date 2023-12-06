@@ -1,34 +1,42 @@
 import {
   AccountAddress,
+  ContractAddress,
   deserializeReceiveReturnValue,
+  ReceiveName,
+  ReturnValue,
   SchemaVersion,
-  toBuffer,
+  ConcordiumGRPCClient,
+  ContractName,
+  EntrypointName,
 } from '@concordium/web-sdk';
-import { NFT_SMARTCONTRACT, WHITELIST_SMARTCONTRACT } from './config';
+import { NFT_SMARTCONTRACT, NFT_SMARTCONTRACT_TESTNET } from './config';
 
 const invokeSmartContract = async (
-  provider: any,
   account: any,
   name: any,
   index: any,
   subIndex: any,
   schema: any,
-  method: any
+  method: any,
+  rpcClient: ConcordiumGRPCClient
 ) => {
   try {
-    const client = await provider.getJsonRpcClient();
-
-    const rawReturnValue = await client.invokeContract({
-      invoker: new AccountAddress(account),
-      contract: { index: BigInt(index), subindex: BigInt(subIndex) },
-      method: `${name}.${method}`,
+    const res = await rpcClient.invokeContract({
+      invoker: AccountAddress.fromBase58(account),
+      method: ReceiveName.fromString(`${name}.${method}`),
+      contract: ContractAddress.create(index, subIndex),
     });
 
+    if (!res || res.tag === 'failure' || !res.returnValue) {
+      throw new Error(
+        `RPC call 'invokeContract' on method '${name}.view' of contract '${method}' failed`
+      );
+    }
     const returnValue = await deserializeReceiveReturnValue(
-      toBuffer(rawReturnValue.returnValue, 'hex'),
-      toBuffer(schema, 'base64'),
-      name,
-      method,
+      ReturnValue.toBuffer(res.returnValue),
+      Buffer.from(schema, 'base64'),
+      ContractName.fromString(name),
+      EntrypointName.fromString(method),
       SchemaVersion.V2
     );
 
@@ -41,45 +49,29 @@ const invokeSmartContract = async (
   }
 };
 
-const getWeb3ID = async (provider: any, account: string) => {
+const getWeb3ID = async (account: string, gRPCClient: ConcordiumGRPCClient, network: any) => {
   try {
     const dataNFT = await invokeSmartContract(
-      provider,
       account,
-      NFT_SMARTCONTRACT.name,
-      NFT_SMARTCONTRACT.index,
-      NFT_SMARTCONTRACT.subIndex,
-      NFT_SMARTCONTRACT.schema,
-      'view'
+      network === 'testnet' ? NFT_SMARTCONTRACT_TESTNET.name : NFT_SMARTCONTRACT.name,
+      network === 'testnet' ? NFT_SMARTCONTRACT_TESTNET.index : NFT_SMARTCONTRACT.index,
+      network === 'testnet' ? NFT_SMARTCONTRACT_TESTNET.subIndex : NFT_SMARTCONTRACT.subIndex,
+      network === 'testnet' ? NFT_SMARTCONTRACT_TESTNET.schema : NFT_SMARTCONTRACT.schema,
+      'view',
+      gRPCClient
     );
     const nft = dataNFT?.state?.find((arrVal: any) => account === arrVal[0]?.Account[0]);
-
     if (nft) {
       const tokens = nft[1]['owned_tokens'];
-
       if (tokens) {
-        const data = await invokeSmartContract(
-          provider,
-          account,
-          WHITELIST_SMARTCONTRACT.name,
-          WHITELIST_SMARTCONTRACT.index,
-          WHITELIST_SMARTCONTRACT.subIndex,
-          WHITELIST_SMARTCONTRACT.schema,
-          'view'
-        );
-
-        const web3id = data?.state?.filter((arrVal: any) => tokens.includes(arrVal[1]?.token));
-
-        if (web3id && web3id[0][0]) {
-          return web3id[0][0];
-        }
+        return true;
       }
     }
   } catch (error) {
-    return '';
+    return false;
   }
 
-  return '';
+  return false;
 };
 
 export { invokeSmartContract, getWeb3ID };

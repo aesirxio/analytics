@@ -20,6 +20,7 @@ const AnalyticsReact = ({ location, history, children }: AnalyticsReact) => {
           <Suspense fallback={<></>}>
             <ConsentComponent
               endpoint={process.env.REACT_APP_ENDPOINT_ANALYTICS_URL}
+              networkEnv={process.env.REACT_APP_CONCORDIUM_NETWORK}
               aesirXEndpoint={process.env.REACT_APP_ENDPOINT_URL ?? 'https://api.aesirx.io'}
             />
           </Suspense>

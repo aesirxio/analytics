@@ -1,6 +1,6 @@
 import { trackerService } from './services';
 import Bowser from 'bowser';
-import * as FingerprintJS from '@fingerprintjs/fingerprintjs';
+import getFingerprint from '../lib/fingerprint';
 const createRequest = (endpoint: string, task: string) => {
   return `${endpoint}/visitor/v1/${task}`;
 };
@@ -42,38 +42,33 @@ const startTracker = async (
   const urlParams = new URLSearchParams(queryString);
   const ip = '';
 
-  const fpPromise = FingerprintJS.load({ monitoring: false });
   try {
-    const responseStart = fpPromise
-      .then((fp) => fp.get())
-      .then(async (result) => {
-        const fingerprint = result.visitorId;
-        const attributes = [];
-        for (const key of urlParams.keys()) {
-          if (key.startsWith('utm_')) {
-            urlParams.get(key) && attributes.push({ name: key, value: urlParams.get(key) });
-          }
-        }
-        return await trackerService(createRequestV2(endpoint, 'start'), {
-          fingerprint: fingerprint,
-          url: url,
-          ...(referer &&
-            (referer !== url || document.referrer) && {
-              referer: referer !== url ? referer : document.referrer,
-            }),
-          user_agent: user_agent,
-          ip: ip,
-          browser_name: browser_name,
-          browser_version: browser_version,
-          lang: lang,
-          device: device,
-          ...(attributes?.length && {
-            event_name: 'visit',
-            event_type: 'action',
-            attributes: attributes,
-          }),
-        });
-      }) as any;
+    const fingerprint = getFingerprint();
+    const attributes = [];
+    for (const key of urlParams.keys()) {
+      if (key.startsWith('utm_')) {
+        urlParams.get(key) && attributes.push({ name: key, value: urlParams.get(key) });
+      }
+    }
+    const responseStart = await trackerService(createRequestV2(endpoint, 'start'), {
+      fingerprint: fingerprint,
+      url: url,
+      ...(referer &&
+        (referer !== url || document.referrer) && {
+          referer: referer !== url ? referer : document.referrer,
+        }),
+      user_agent: user_agent,
+      ip: ip,
+      browser_name: browser_name,
+      browser_version: browser_version,
+      lang: lang,
+      device: device,
+      ...(attributes?.length && {
+        event_name: 'visit',
+        event_type: 'action',
+        attributes: attributes,
+      }),
+    });
     if (
       window['aesirxTrackEcommerce'] === 'true' &&
       sessionStorage.getItem('aesirx-analytics-flow') !== (await responseStart)?.flow_uuid
@@ -110,34 +105,29 @@ const trackEvent = async (endpoint: string, referer?: string, data?: object) => 
   const device = browser?.platform?.model ?? browser?.platform?.type;
   const ip = '';
 
-  const fpPromise = FingerprintJS.load({ monitoring: false });
-  const responseStart = fpPromise
-    .then((fp) => fp.get())
-    .then(async (result) => {
-      const fingerprint = result.visitorId;
-      const headers = { type: 'application/json' };
-      const blobData = new Blob(
-        [
-          JSON.stringify({
-            fingerprint: fingerprint,
-            url: url,
-            ...(referer !== '/' &&
-              referer && {
-                referer: referer,
-              }),
-            user_agent: user_agent,
-            ip: ip,
-            browser_name: browser_name,
-            browser_version: browser_version,
-            lang: lang,
-            device: device,
-            ...data,
+  const fingerprint = getFingerprint();
+  const headers = { type: 'application/json' };
+  const blobData = new Blob(
+    [
+      JSON.stringify({
+        fingerprint: fingerprint,
+        url: url,
+        ...(referer !== '/' &&
+          referer && {
+            referer: referer,
           }),
-        ],
-        headers
-      );
-      return navigator.sendBeacon(createRequestV2(endpoint, 'start'), blobData);
-    });
+        user_agent: user_agent,
+        ip: ip,
+        browser_name: browser_name,
+        browser_version: browser_version,
+        lang: lang,
+        device: device,
+        ...data,
+      }),
+    ],
+    headers
+  );
+  const responseStart = navigator.sendBeacon(createRequestV2(endpoint, 'start'), blobData);
 
   return responseStart;
 };

@@ -34,6 +34,7 @@ const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
       <AesirXI18nextProvider appLanguages={appLanguages}>
         <ConsentComponent
           endpoint={window['aesirx1stparty'] ?? ''}
+          networkEnv={window['concordiumNetwork'] ?? ''}
           aesirXEndpoint={window['aesirxEndpoint'] ?? 'https://api.aesirx.io'}
         />
       </AesirXI18nextProvider>

@@ -32,9 +32,11 @@ import {
   useConnect,
   ConnectorType,
   stringMessage,
+  useGrpcClient,
+  TESTNET,
 } from '@concordium/react-components';
-import { WALLET_CONNECT } from '../Hooks/config';
-import { OsTypes, isMobile, osName } from 'react-device-detect';
+import { BROWSER_WALLET, WALLET_CONNECT } from '../Hooks/config';
+import { OsTypes, isDesktop, isMobile, osName } from 'react-device-detect';
 import { LoadingStatus } from './LoadingStatus';
 import ConnectModal from './Connect';
 import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
@@ -45,10 +47,11 @@ import { getWeb3ID } from '../utils/Concordium';
 interface WalletConnectionPropsExtends extends WalletConnectionProps {
   endpoint: string;
   aesirXEndpoint: string;
+  networkEnv?: string;
 }
-const ConsentComponent = ({ endpoint, aesirXEndpoint }: any) => {
+const ConsentComponent = ({ endpoint, aesirXEndpoint, networkEnv }: any) => {
   return (
-    <WithWalletConnector network={MAINNET}>
+    <WithWalletConnector network={networkEnv === 'testnet' ? TESTNET : MAINNET}>
       {(props) => (
         <div className="aesirxconsent">
           <SSOEthereumProvider>
@@ -69,6 +72,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     connectedAccounts,
     genesisHashes,
     setActiveConnectorType,
+    network,
   } = props;
   const { setConnection } = useConnection(connectedAccounts, genesisHashes);
 
@@ -101,8 +105,10 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
   const [showExpandConsent, setShowExpandConsent] = useState(true);
   const [showExpandRevoke, setShowExpandRevoke] = useState(false);
   const [showBackdrop, setShowBackdrop] = useState(true);
+  const [consentTier4, setConsentTier4] = useState<any>({});
   const analyticsContext = useContext(AnalyticsContext);
   const { t } = useTranslation();
+  const gRPCClient = useGrpcClient(network);
 
   // Metamask
   const { address, connector } = useAccount();
@@ -141,7 +147,12 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
         const res = await verifySignature(aesirXEndpoint, 'metamask', address, data);
         sessionStorage.setItem('aesirx-analytics-jwt', res?.jwt);
         setLoadingCheckAccount(false);
-        const nonce = await getNonce(endpoint, address, 'Give consent Tier 4:{}', 'metamask');
+        const nonce = await getNonce(
+          endpoint,
+          address,
+          'Give consent Tier 4:{nonce} {domain} {time}',
+          'metamask'
+        );
         signMessage({ message: `${nonce}` });
       } else {
         setLoading('saving');
@@ -238,7 +249,9 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
             endpoint,
             account,
             connection,
-            level === 3 ? 'Give consent:{}' : 'Give consent Tier 4:{}'
+            level === 3
+              ? 'Give consent:{nonce} {domain} {time}'
+              : 'Give consent Tier 4:{nonce} {domain} {time}'
           );
           setLoading('saving');
           await agreeConsents(endpoint, level, uuid, consents, account, signature, web3ID, jwt);
@@ -249,7 +262,9 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
             const nonce = await getNonce(
               endpoint,
               address,
-              level === 3 ? 'Give consent:{}' : 'Give consent Tier 4:{}',
+              level === 3
+                ? 'Give consent:{nonce} {domain} {time}'
+                : 'Give consent Tier 4:{nonce} {domain} {time}',
               'metamask'
             );
             signMessage({ message: `${nonce}` });
@@ -293,6 +308,69 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     }
   };
 
+  useEffect(() => {
+    const init = async () => {
+      if (Object.keys(consentTier4)?.length && (account || address)) {
+        await consentTier4Init(consentTier4);
+        setConsentTier4({});
+      }
+    };
+    init();
+  }, [consentTier4, account, address]);
+
+  const consentTier4Init = async (response: any) => {
+    let hasWeb3ID = true;
+    if (response?.loginType === 'concordium') {
+      const web3ID = await getWeb3ID(account, gRPCClient, network?.name);
+      if (web3ID) {
+        setWeb3ID(web3ID);
+      } else {
+        hasWeb3ID = false;
+      }
+    } else {
+      const memberData = await getMember(aesirXEndpoint, response?.access_token);
+      hasWeb3ID = memberData?.web3id ? true : false;
+    }
+    if (hasWeb3ID) {
+      if (response?.loginType === 'concordium') {
+        // Concordium
+        sessionStorage.setItem('aesirx-analytics-consent-type', 'concordium');
+        const signature = await getSignature(
+          endpoint,
+          account,
+          connection,
+          'Give consent Tier 4:{nonce} {domain} {time}'
+        );
+        await agreeConsents(
+          endpoint,
+          level,
+          uuid,
+          consents,
+          account,
+          signature,
+          null,
+          response?.jwt
+        );
+        setShow(false);
+        handleRevoke(true, level);
+        setLoading('done');
+      } else if (response?.loginType === 'metamask') {
+        // Metamask
+        sessionStorage.setItem('aesirx-analytics-consent-type', 'metamask');
+        const nonce = await getNonce(
+          endpoint,
+          address,
+          'Give consent Tier 4:{nonce} {domain} {time}',
+          'metamask'
+        );
+        signMessage({ message: `${nonce}` });
+      }
+    } else {
+      handleLevel(3);
+      toast("You haven't minted any WEB3 ID yet. Try to mint at https://dapp.shield.aesirx.io");
+      setLoading('done');
+    }
+  };
   const onGetData = async (response: any) => {
     // on Login Tier 2 & 4
     try {
@@ -309,55 +387,10 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
       } else {
         // Agree Consent
         if (level === 4) {
-          // Check web3ID
-          let hasWeb3ID = true;
-          if (response?.loginType === 'concordium') {
-            const web3ID = await getWeb3ID(connection, account);
-            if (web3ID) {
-              setWeb3ID(web3ID);
-            } else {
-              hasWeb3ID = false;
-            }
-          } else {
-            const memberData = await getMember(aesirXEndpoint, response?.access_token);
-            hasWeb3ID = memberData?.web3id ? true : false;
+          if (response?.loginType === 'concordium' && isDesktop) {
+            setActiveConnectorType(BROWSER_WALLET);
           }
-          if (hasWeb3ID) {
-            if (response?.loginType === 'concordium') {
-              // Concordium
-              sessionStorage.setItem('aesirx-analytics-consent-type', 'concordium');
-              const signature = await getSignature(
-                endpoint,
-                account,
-                connection,
-                'Give consent Tier 4:{}'
-              );
-              await agreeConsents(
-                endpoint,
-                level,
-                uuid,
-                consents,
-                account,
-                signature,
-                null,
-                response?.jwt
-              );
-              setShow(false);
-              handleRevoke(true, level);
-              setLoading('done');
-            } else if (response?.loginType === 'metamask') {
-              // Metamask
-              sessionStorage.setItem('aesirx-analytics-consent-type', 'metamask');
-              const nonce = await getNonce(endpoint, address, 'Give consent Tier 4:{}', 'metamask');
-              signMessage({ message: `${nonce}` });
-            }
-          } else {
-            handleLevel(3);
-            toast(
-              "You haven't minted any WEB3 ID yet. Try to mint at https://dapp.shield.aesirx.io"
-            );
-            setLoading('done');
-          }
+          setConsentTier4(response);
         } else {
           await agreeConsents(endpoint, level, uuid, consents, null, null, null, response?.jwt);
           setShow(false);
@@ -398,7 +431,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
               endpoint,
               account,
               connection,
-              'Revoke consent:{}'
+              'Revoke consent:{nonce} {domain} {time}'
             );
             setLoading('saving');
             const consentList = await getConsents(endpoint, uuid);
@@ -420,7 +453,12 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
             // Metamask
             setLoading('sign');
             setLoading('saving');
-            const nonce = await getNonce(endpoint, address, 'Revoke consent:{}', 'metamask');
+            const nonce = await getNonce(
+              endpoint,
+              address,
+              'Revoke consent:{nonce} {domain} {time}',
+              'metamask'
+            );
             signMessage({ message: `${nonce}` });
           } else {
             setLoading('connect');

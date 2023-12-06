@@ -58,7 +58,7 @@ const TermsComponent = ({ children, level, handleLevel }: any) => {
   const handleReadmore = (status: boolean) => {
     setShowReadmore(status);
   };
-  const [showReadmore, setShowReadmore] = useState(true);
+  const [showReadmore, setShowReadmore] = useState(false);
   return (
     <>
       {terms.map(
@@ -77,10 +77,10 @@ const TermsComponent = ({ children, level, handleLevel }: any) => {
               <div className="p-3 bg-white">
                 <span className="text-dark fw-medium">{t(term.content)}</span>{' '}
                 <span className="">{t(term.term)}</span>
-                <div className="read-more d-flex justify-content-between align-items-center">
+                <div className="read-more d-flex justify-content-between align-items-center flex-wrap">
                   {term.upgrade && (
                     <a
-                      className="fs-14 text-success fw-bold"
+                      className="fs-14 text-success fw-bold mb-1"
                       href="#"
                       onClick={() => handleLevel(terms[key + 1].level)}
                     >
@@ -88,7 +88,7 @@ const TermsComponent = ({ children, level, handleLevel }: any) => {
                     </a>
                   )}
                   <div
-                    className="ms-auto read-more-btn"
+                    className="ms-auto read-more-btn mb-1"
                     onClick={() => {
                       handleReadmore(!showReadmore ? true : false);
                     }}

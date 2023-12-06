@@ -8,16 +8,19 @@ import {
   useConnection,
   useConnect,
   WalletConnectionProps,
-  withJsonRpcClient,
+  useGrpcClient,
+  TESTNET,
 } from '@concordium/react-components';
 import { BROWSER_WALLET } from './config';
 import { isDesktop } from 'react-device-detect';
 import { useAccount } from 'wagmi';
+import { BlockHash } from '@concordium/web-sdk';
+
 const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   const [show, setShow] = useState(false);
   const [showRevoke, setShowRevoke] = useState(false);
   const [level, setLevel] = useState<any>();
-  const [web3ID, setWeb3ID] = useState<string>();
+  const [web3ID, setWeb3ID] = useState<boolean>();
 
   const analyticsContext = useContext(AnalyticsContext);
 
@@ -71,52 +74,46 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
     }
   }, [analyticsContext.visitor_uuid]);
 
-  const { connection, setConnection, account, genesisHash } = useConnection(
-    connectedAccounts,
-    genesisHashes
-  );
+  const { connection, setConnection, account } = useConnection(connectedAccounts, genesisHashes);
 
   const { connect, connectError } = useConnect(activeConnector, setConnection);
 
   const [, setRpcGenesisHash] = useState();
   const [, setRpcError] = useState('');
+  const rpc = useGrpcClient(network);
 
   useEffect(() => {
-    if (connection) {
+    if (rpc) {
       setRpcGenesisHash(undefined);
-      withJsonRpcClient(connection, async (rpc) => {
-        const status = await rpc.getConsensusStatus();
-        return status.genesisBlock;
-      })
+      rpc
+        .getConsensusStatus()
+        .then((status) => {
+          return status.genesisBlock;
+        })
         .then((hash: any) => {
-          const network = 'mainnet';
-
           let r = false;
-
-          switch (network) {
-            // case 'testnet':
-            //   r = hash === TESTNET.genesisHash;
-            //   break;
+          switch (network?.name) {
+            case 'testnet':
+              r = BlockHash.toHexString(hash) === TESTNET.genesisHash;
+              break;
 
             default:
-              r = hash === MAINNET.genesisHash;
+              r = BlockHash.toHexString(hash) === MAINNET.genesisHash;
           }
-
           if (!r) {
-            const network = 'mainnet';
             throw new Error(`Please change the network to ${network} in Wallet`);
           }
 
           setRpcGenesisHash(hash);
           setRpcError('');
         })
-        .catch((err: any) => {
+        .catch((err) => {
           setRpcGenesisHash(undefined);
           toast(err.message);
           setRpcError(err.message);
         });
     }
-  }, [connection, genesisHash, network]);
+  }, [rpc]);
 
   useEffect(() => {
     const initConnector = async () => {
@@ -156,15 +153,15 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
     (async () => {
       try {
         let l = level;
-        if (connection) {
+        if (rpc) {
           // Concordium
           if (l < 3) {
             setLevel(null);
             l = 3;
-            let web3ID = '';
+            let web3ID = false;
             if (account && sessionStorage.getItem('aesirx-analytics-consent-type') !== 'metamask') {
-              web3ID = await getWeb3ID(connection, account);
-              if (web3ID) {
+              web3ID = await getWeb3ID(account, rpc, network?.name);
+              if (web3ID === true) {
                 l = 4;
               }
             }
@@ -175,7 +172,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
           // Metamask
           if (l < 3) {
             l = 3;
-            const web3ID = '';
+            const web3ID = false;
             setWeb3ID(web3ID);
             setLevel(l);
           } else {
@@ -198,6 +195,9 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   const handleLevel = useCallback(
     async (_level: number) => {
       setLevel(_level);
+      if (_level > 3 && isDesktop && !connection && window['concordium']) {
+        setActiveConnectorType(BROWSER_WALLET);
+      }
     },
     [level]
   );
