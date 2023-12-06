@@ -11,7 +11,7 @@
   "dependencies": {
     "@concordium/browser-wallet-api-helpers": "^3.0.0",
     "@concordium/react-components": "^0.4.0-rc.7",
-    "@concordium/web-sdk": "^7.0.4-rc.3",
+    "@concordium/web-sdk": "^7.1.0",
     "@web3modal/ethereum": "^2.7.0",
     "@web3modal/react": "^2.7.0",
     "aesirx-sso": "^1.4.5",
