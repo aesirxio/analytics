@@ -24,7 +24,6 @@ const startTracker = async (
   if (allow === '0') {
     return null;
   }
-  console.log('attributesVisitattributesVisitattributesVisit', attributesVisit);
   const { location, document } = window;
   const { pathname, search, origin } = location;
   url = `${origin}${pathname}${search}`;
