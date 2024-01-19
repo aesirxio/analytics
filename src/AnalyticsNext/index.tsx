@@ -9,14 +9,15 @@ const ConsentComponent = dynamic(() => import('../Components/Consent'), { ssr: f
 
 interface AnalyticsNext {
   router: NextRouter;
+  attributes: any;
   children?: ReactNode;
 }
 
-const AnalyticsNext = ({ router, children }: AnalyticsNext) => {
+const AnalyticsNext = ({ router, attributes, children }: AnalyticsNext) => {
   return (
     <>
       <AnalyticsContextProvider>
-        <AnalyticsHandle router={router}>
+        <AnalyticsHandle router={router} attributes={attributes}>
           {children}
           {process.env.NEXT_PUBLIC_DISABLE_ANALYTICS_CONSENT !== 'true' && (
             <ConsentComponent

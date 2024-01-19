@@ -16,22 +16,23 @@ const startTracker = async (
   endpoint: string,
   url?: string,
   referer?: string,
-  user_agent?: string
+  user_agent?: string,
+  attributesVisit?: any
 ) => {
   const allow = sessionStorage.getItem('aesirx-analytics-allow');
 
   if (allow === '0') {
     return null;
   }
-
+  console.log('attributesVisitattributesVisitattributesVisit', attributesVisit);
   const { location, document } = window;
   const { pathname, search, origin } = location;
   url = `${origin}${pathname}${search}`;
   referer = referer
     ? location.protocol + '//' + location.host + referer
     : document.referrer
-    ? document.referrer
-    : '';
+      ? document.referrer
+      : '';
   user_agent = window.navigator.userAgent;
   const browser = Bowser.parse(window.navigator.userAgent);
   const browser_name = browser?.browser?.name;
@@ -49,6 +50,11 @@ const startTracker = async (
       if (key.startsWith('utm_')) {
         urlParams.get(key) && attributes.push({ name: key, value: urlParams.get(key) });
       }
+    }
+    if (attributesVisit?.length) {
+      attributesVisit?.forEach((element: any) => {
+        element?.name && attributes.push({ name: element?.name, value: element?.value });
+      });
     }
     const responseStart = await trackerService(createRequestV2(endpoint, 'start'), {
       fingerprint: fingerprint,

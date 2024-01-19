@@ -4,18 +4,19 @@ import { startTracker, endTracker, endTrackerVisibilityState } from '../utils/in
 
 interface AnalyticsHandle {
   router: any;
+  attributes: any;
   children?: ReactNode;
 }
 
-const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
+const AnalyticsHandle = ({ router, attributes, children }: AnalyticsHandle) => {
   const AnalyticsStore = React.useContext(AnalyticsContext);
   const endPoint = process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL;
   const [prevRoute, setPrevRoute] = useState<string>('');
   const handleStartTracker = useCallback(
-    async (prevRoute: string) => {
+    async (prevRoute: string, attributes: any) => {
       const referer = prevRoute ? prevRoute : '';
       window['referer'] = referer;
-      const responseStart = await startTracker(endPoint, '', referer);
+      const responseStart = await startTracker(endPoint, '', referer, '', attributes);
       responseStart?.event_uuid && AnalyticsStore.setEventID(responseStart.event_uuid);
       responseStart?.visitor_uuid && AnalyticsStore.setUUID(responseStart.visitor_uuid);
     },
@@ -26,7 +27,7 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
     const init = async () => {
       if (!AnalyticsStore.visitor_uuid) {
         setPrevRoute(router.asPath);
-        await handleStartTracker(router.asPath);
+        await handleStartTracker(router.asPath, attributes);
       }
     };
     init();
@@ -37,7 +38,7 @@ const AnalyticsHandle = ({ router, children }: AnalyticsHandle) => {
       setPrevRoute(router.asPath);
       if (AnalyticsStore.visitor_uuid) {
         endTracker(endPoint, window['event_uuid'], AnalyticsStore.visitor_uuid);
-        await handleStartTracker(prevRoute);
+        await handleStartTracker(prevRoute, attributes);
       }
     };
     router.events.on('routeChangeComplete', handleRouteChange);
