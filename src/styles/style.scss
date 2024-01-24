@@ -54,6 +54,9 @@ $dark: #222328;
   .fs-14 {
     font-size: 14px;
   }
+  .w-30 {
+    width: 30%;
+  }
   button {
     text-transform: none;
   }
@@ -99,6 +102,58 @@ $dark: #222328;
       button {
         @include media-breakpoint-down(lg) {
           font-size: 14px;
+        }
+      }
+    }
+    &.custom {
+      --#{$prefix}toast-max-width: 800px;
+      .consent_info_tab {
+        .nav-item {
+          width: 100%;
+          button {
+            width: 100%;
+            font-weight: 600;
+            color: #a5a4b5;
+            border: 0;
+            &.active {
+              color: $primary;
+              border-bottom: 2px solid $success;
+            }
+          }
+        }
+      }
+      .about_section {
+        height: 373px;
+        overflow: auto;
+        padding: 0 10px;
+        @include media-breakpoint-down(lg) {
+          padding: 0;
+        }
+        &::-webkit-scrollbar-track {
+          border-radius: 5px;
+          background-color: #e9e9e9;
+        }
+        &::-webkit-scrollbar {
+          width: 4px;
+          background-color: #e9e9e9;
+        }
+        &::-webkit-scrollbar-thumb {
+          border-radius: 5px;
+          background-color: $dark;
+        }
+      }
+      .status-tier {
+        &.tier-1 {
+          background-color: #c8192e;
+        }
+        &.tier-2 {
+          background-color: #e67e22;
+        }
+        &.tier-3 {
+          background-color: #ffc700;
+        }
+        &.tier-4 {
+          background-color: #1c9678;
         }
       }
     }
@@ -220,6 +275,38 @@ $dark: #222328;
 
   .block-wallet {
     background-color: var(--#{$prefix}body-bg);
+  }
+
+  .item_compliant {
+    padding: 6px 14px 6px 8px;
+    background-color: #f0f3fb;
+    border-radius: 17px;
+  }
+
+  .consent_level {
+    border: 2px solid #dedede;
+    border-radius: 6px;
+    padding: 20px;
+    position: relative;
+    &.active {
+      border: 2px solid $success;
+      background-color: #eaffff;
+    }
+    .checkbox_img {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+    }
+    .consent_upgrade_content {
+      width: 95%;
+    }
+    @include media-breakpoint-down(lg) {
+      padding: 10px;
+      .checkbox_img {
+        bottom: 10px;
+        right: 10px;
+      }
+    }
   }
 
   @-webkit-keyframes flash {
