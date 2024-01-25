@@ -846,7 +846,7 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                                   }}
                                   className="d-flex align-items-center justify-content-center fs-14 w-100 w-lg-30 me-3 rounded-pill py-3 text-white"
                                 >
-                                  {t('txt_upgrade_consent')}
+                                  {t('txt_change_consent')}
                                 </Button>
                               </div>
                             </>
@@ -885,7 +885,7 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                                     }}
                                     className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-3 text-dark"
                                   >
-                                    {t('txt_upgrade_consent')}
+                                    {t('txt_change_consent')}
                                   </Button>{' '}
                                   <Button
                                     variant="outline-success"
