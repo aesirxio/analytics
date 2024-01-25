@@ -30,8 +30,8 @@ const startTracker = async (
   referer = referer
     ? location.protocol + '//' + location.host + referer
     : document.referrer
-      ? document.referrer
-      : '';
+    ? document.referrer
+    : '';
   user_agent = window.navigator.userAgent;
   const browser = Bowser.parse(window.navigator.userAgent);
   const browser_name = browser?.browser?.name;
