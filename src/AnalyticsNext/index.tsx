@@ -11,12 +11,11 @@ const ConsentComponentCustom = dynamic(() => import('../Components/ConsentCustom
 interface AnalyticsNext {
   router: NextRouter;
   attributes: any;
-  customLayout: boolean;
+  customLayout?: boolean;
   children?: ReactNode;
 }
 
 const AnalyticsNext = ({ router, attributes, customLayout = false, children }: AnalyticsNext) => {
-  console.log('customLayout', customLayout);
   return (
     <>
       <AnalyticsContextProvider>
