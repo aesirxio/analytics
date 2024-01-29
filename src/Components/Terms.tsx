@@ -87,7 +87,7 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false }: any)
                   }),
                 }}
               >
-                <div className="text-primary">
+                <div className="text-primary text-nowrap">
                   {isCustom ? t('txt_take_full_control') : t(term.name)}
                 </div>
                 <div className="d-flex align-items-center fs-14 text-primary">

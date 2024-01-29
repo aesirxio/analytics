@@ -38,6 +38,7 @@ $dark: #222328;
   @import 'bootstrap/scss/spinners';
   @import 'bootstrap/scss/toasts';
   @import 'bootstrap/scss/card';
+  @import "~bootstrap/scss/nav";
   @import 'bootstrap/scss/_grid';
   // 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
   @import 'bootstrap/scss/utilities/api';
