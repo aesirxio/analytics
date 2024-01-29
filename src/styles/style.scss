@@ -38,7 +38,7 @@ $dark: #222328;
   @import 'bootstrap/scss/spinners';
   @import 'bootstrap/scss/toasts';
   @import 'bootstrap/scss/card';
-  @import "bootstrap/scss/nav";
+  @import 'bootstrap/scss/nav';
   @import 'bootstrap/scss/_grid';
   // 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
   @import 'bootstrap/scss/utilities/api';
@@ -46,6 +46,9 @@ $dark: #222328;
   font-size: 16px;
   --w3m-z-index: 1060;
   --#{$prefix}modal-margin: 1.75rem;
+  --#{$prefix}btn-padding-y: 9px;
+  --#{$prefix}btn-padding-x: 20px;
+  line-height: 24px;
   &-modal .modal-dialog {
     max-width: 500px;
   }
@@ -57,6 +60,9 @@ $dark: #222328;
   }
   .w-30 {
     width: 30%;
+  }
+  .ms-10px {
+    margin-left: 10px;
   }
   button {
     text-transform: none;
@@ -71,7 +77,6 @@ $dark: #222328;
   .btn {
     --#{$prefix}btn-font-size: 16px;
     font-weight: 600;
-    padding: 9px 20px;
     line-height: 18px;
     border-radius: 6px;
     &.text-white {
@@ -187,6 +192,9 @@ $dark: #222328;
     position: relative;
     border-radius: 0.5rem;
     min-width: 120px;
+    &.rounded-pill {
+      border-radius: var(--#{$prefix}border-radius-pill);
+    }
   }
   .revoke-toast {
     width: 530px;
@@ -217,6 +225,9 @@ $dark: #222328;
       object-fit: cover;
       top: 0;
       left: 0;
+      &.z-1 {
+        z-index: 1;
+      }
     }
     .minimize-shield {
       cursor: pointer;
@@ -308,6 +319,41 @@ $dark: #222328;
         right: 10px;
       }
     }
+  }
+  .d-flex {
+    width: auto;
+    grid-column-gap: unset;
+    grid-row-gap: unset;
+    justify-content: start;
+    flex-direction: unset;
+    &.w-100 {
+      width: 100%;
+    }
+    &.justify-content-between {
+      justify-content: space-between;
+    }
+    &.justify-content-center {
+      justify-content: center;
+    }
+  }
+  .btn.rounded-pill {
+    border-radius: var(--#{$prefix}border-radius-pill);
+  }
+  .d-flex.justify-content-between.align-items-center {
+    grid-column-gap: unset;
+    flex-flow: unset;
+    &.flex-wrap {
+      flex-wrap: wrap;
+    }
+  }
+  .position-relative {
+    display: block;
+  }
+  .tab-pane {
+    height: auto;
+  }
+  .cursor-pointer {
+    cursor: pointer;
   }
 
   @-webkit-keyframes flash {
