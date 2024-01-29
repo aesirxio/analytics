@@ -205,6 +205,9 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
   const handleRevoke = (status: boolean, level: string) => {
     sessionStorage.setItem('aesirx-analytics-revoke', level ? level : '0');
     setShowRevoke(status);
+    if (level && level !== '0') {
+      window.funcAfterConsent && window.funcAfterConsent();
+    }
   };
 
   return [

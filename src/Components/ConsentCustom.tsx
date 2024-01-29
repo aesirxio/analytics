@@ -528,6 +528,12 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
       setShowBackdrop(false);
       setShowExpandConsent(false);
     }
+    if (
+      sessionStorage.getItem('aesirx-analytics-revoke') &&
+      sessionStorage.getItem('aesirx-analytics-revoke') !== '0'
+    ) {
+      window.funcAfterConsent && window.funcAfterConsent();
+    }
   }, []);
 
   console.log('level', uuid, level, web3ID, account, loading);
