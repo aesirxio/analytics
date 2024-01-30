@@ -57,7 +57,7 @@ const startTracker = async (
     }
     const responseStart = await trackerService(createRequestV2(endpoint, 'start'), {
       fingerprint: fingerprint,
-      url: url,
+      url: url?.replace(/^(https?:\/\/)?(www\.)?/, '$1'),
       ...(referer &&
         (referer !== url || document.referrer) && {
           referer: referer !== url ? referer : document.referrer,

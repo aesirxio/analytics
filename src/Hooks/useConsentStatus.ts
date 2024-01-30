@@ -122,8 +122,8 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
         sessionStorage.getItem('aesirx-analytics-revoke') !== '1' &&
         sessionStorage.getItem('aesirx-analytics-revoke') !== '2'
       ) {
-        const address = (await window['concordium']?.requestAccounts()) ?? [];
-        window.addEventListener('load', function () {
+        window.addEventListener('load', async function () {
+          const address = (await window['concordium']?.requestAccounts()) ?? [];
           if (window['concordium'] && address?.length) {
             setActiveConnectorType(BROWSER_WALLET);
           }
