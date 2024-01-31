@@ -16,14 +16,14 @@ const startTracker = async (
   endpoint: string,
   url?: string,
   referer?: string,
-  user_agent?: string
+  user_agent?: string,
+  attributesVisit?: any
 ) => {
   const allow = sessionStorage.getItem('aesirx-analytics-allow');
 
   if (allow === '0') {
     return null;
   }
-
   const { location, document } = window;
   const { pathname, search, origin } = location;
   url = `${origin}${pathname}${search}`;
@@ -50,9 +50,14 @@ const startTracker = async (
         urlParams.get(key) && attributes.push({ name: key, value: urlParams.get(key) });
       }
     }
+    if (attributesVisit?.length) {
+      attributesVisit?.forEach((element: any) => {
+        element?.name && attributes.push({ name: element?.name, value: element?.value });
+      });
+    }
     const responseStart = await trackerService(createRequestV2(endpoint, 'start'), {
       fingerprint: fingerprint,
-      url: url,
+      url: url?.replace(/^(https?:\/\/)?(www\.)?/, '$1'),
       ...(referer &&
         (referer !== url || document.referrer) && {
           referer: referer !== url ? referer : document.referrer,
