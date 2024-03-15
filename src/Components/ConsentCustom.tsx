@@ -741,6 +741,7 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                   />
                   <div
                     className="minimize-shield"
+                    ref={analyticsContext?.ref}
                     onClick={() => {
                       setShowExpandConsent(true);
                       sessionStorage.removeItem('aesirx-analytics-rejected');
