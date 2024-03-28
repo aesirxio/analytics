@@ -78,10 +78,12 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false }: any)
             <Fragment key={key}>
               <div
                 className={`rounded-top d-flex align-items-center justify-content-between p-3 fw-medium flex-wrap  ${
-                  isCustom ? 'py-3 px-4' : 'p-3 border-bottom'
+                  isCustom ? 'py-3 px-4' : 'p-3 border-bottom bg-white'
                 }`}
                 style={{
-                  backgroundColor: isCustom ? '#F8F9FD' : '#FFFFFF',
+                  ...(isCustom && {
+                    backgroundColor: '#F8F9FD',
+                  }),
                   ...(isCustom && {
                     borderBottom: '1px solid #DEDEDE',
                   }),
