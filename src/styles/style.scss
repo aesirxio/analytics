@@ -38,6 +38,7 @@ $dark: #222328;
   @import 'bootstrap/scss/spinners';
   @import 'bootstrap/scss/toasts';
   @import 'bootstrap/scss/card';
+  @import 'bootstrap/scss/nav';
   @import 'bootstrap/scss/_grid';
   // 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
   @import 'bootstrap/scss/utilities/api';
@@ -45,6 +46,9 @@ $dark: #222328;
   font-size: 16px;
   --w3m-z-index: 1060;
   --#{$prefix}modal-margin: 1.75rem;
+  --#{$prefix}btn-padding-y: 9px;
+  --#{$prefix}btn-padding-x: 20px;
+  line-height: 24px;
   &-modal .modal-dialog {
     max-width: 500px;
   }
@@ -53,6 +57,12 @@ $dark: #222328;
   }
   .fs-14 {
     font-size: 14px;
+  }
+  .w-30 {
+    width: 30%;
+  }
+  .ms-10px {
+    margin-left: 10px;
   }
   button {
     text-transform: none;
@@ -67,7 +77,6 @@ $dark: #222328;
   .btn {
     --#{$prefix}btn-font-size: 16px;
     font-weight: 600;
-    padding: 9px 20px;
     line-height: 18px;
     border-radius: 6px;
     &.text-white {
@@ -102,6 +111,58 @@ $dark: #222328;
         }
       }
     }
+    &.custom {
+      --#{$prefix}toast-max-width: 800px;
+      .consent_info_tab {
+        .nav-item {
+          width: 100%;
+          button {
+            width: 100%;
+            font-weight: 600;
+            color: #a5a4b5;
+            border: 0;
+            &.active {
+              color: $primary;
+              border-bottom: 2px solid $success;
+            }
+          }
+        }
+      }
+      .about_section {
+        height: 373px;
+        overflow: auto;
+        padding: 0 10px;
+        @include media-breakpoint-down(lg) {
+          padding: 0;
+        }
+        &::-webkit-scrollbar-track {
+          border-radius: 5px;
+          background-color: #e9e9e9;
+        }
+        &::-webkit-scrollbar {
+          width: 4px;
+          background-color: #e9e9e9;
+        }
+        &::-webkit-scrollbar-thumb {
+          border-radius: 5px;
+          background-color: $dark;
+        }
+      }
+      .status-tier {
+        &.tier-1 {
+          background-color: #c8192e;
+        }
+        &.tier-2 {
+          background-color: #e67e22;
+        }
+        &.tier-3 {
+          background-color: #ffc700;
+        }
+        &.tier-4 {
+          background-color: #1c9678;
+        }
+      }
+    }
   }
   .toast-container {
     box-sizing: border-box;
@@ -131,6 +192,9 @@ $dark: #222328;
     position: relative;
     border-radius: 0.5rem;
     min-width: 120px;
+    &.rounded-pill {
+      border-radius: var(--#{$prefix}border-radius-pill);
+    }
   }
   .revoke-toast {
     width: 530px;
@@ -161,6 +225,9 @@ $dark: #222328;
       object-fit: cover;
       top: 0;
       left: 0;
+      &.z-1 {
+        z-index: 1;
+      }
     }
     .minimize-shield {
       cursor: pointer;
@@ -220,6 +287,73 @@ $dark: #222328;
 
   .block-wallet {
     background-color: var(--#{$prefix}body-bg);
+  }
+
+  .item_compliant {
+    padding: 6px 14px 6px 8px;
+    background-color: #f0f3fb;
+    border-radius: 17px;
+  }
+
+  .consent_level {
+    border: 2px solid #dedede;
+    border-radius: 6px;
+    padding: 20px;
+    position: relative;
+    &.active {
+      border: 2px solid $success;
+      background-color: #eaffff;
+    }
+    .checkbox_img {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+    }
+    .consent_upgrade_content {
+      width: 95%;
+    }
+    @include media-breakpoint-down(lg) {
+      padding: 10px;
+      .checkbox_img {
+        bottom: 10px;
+        right: 10px;
+      }
+    }
+  }
+  .d-flex {
+    width: auto;
+    grid-column-gap: unset;
+    grid-row-gap: unset;
+    justify-content: start;
+    flex-direction: unset;
+    &.w-100 {
+      width: 100%;
+    }
+    &.justify-content-between {
+      justify-content: space-between;
+    }
+    &.justify-content-center {
+      justify-content: center;
+    }
+  }
+  .btn.rounded-pill {
+    border-radius: var(--#{$prefix}border-radius-pill);
+  }
+  .d-flex.justify-content-between.align-items-center {
+    grid-column-gap: unset;
+    flex-flow: unset;
+    &.flex-wrap {
+      flex-wrap: wrap;
+    }
+  }
+  .position-relative {
+    display: block;
+  }
+  .tab-pane {
+    height: auto;
+  }
+  .cursor-pointer {
+    cursor: pointer;
   }
 
   @-webkit-keyframes flash {
