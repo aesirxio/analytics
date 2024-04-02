@@ -61,10 +61,10 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
                 const revokeTier = !consent?.consent_uuid
                   ? ''
                   : consent?.web3id && consent?.address
-                  ? '4'
-                  : consent?.address && !consent?.web3id
-                  ? '3'
-                  : '2';
+                    ? '4'
+                    : consent?.address && !consent?.web3id
+                      ? '3'
+                      : '2';
                 revokeTier ? handleRevoke(true, revokeTier) : setShow(true);
               }
             }
@@ -120,7 +120,8 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
       if (
         isDesktop &&
         sessionStorage.getItem('aesirx-analytics-revoke') !== '1' &&
-        sessionStorage.getItem('aesirx-analytics-revoke') !== '2'
+        sessionStorage.getItem('aesirx-analytics-revoke') !== '2' &&
+        sessionStorage.getItem('aesirx-analytics-rejected') !== 'true'
       ) {
         if (window['concordium']) {
           const address = (await window['concordium']?.requestAccounts()) ?? [];
