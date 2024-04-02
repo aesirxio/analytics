@@ -77,8 +77,8 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false }: any)
           term.level === level && (
             <Fragment key={key}>
               <div
-                className={`rounded-top d-flex align-items-center justify-content-between p-3 fw-medium flex-wrap  ${
-                  isCustom ? 'py-3 px-4' : 'p-3 border-bottom bg-white'
+                className={`rounded-top d-flex align-items-center justify-content-between p-2 p-lg-3 fw-medium flex-wrap  ${
+                  isCustom ? 'py-2 py-lg-3 px-4' : 'p-2 p-lg-3 border-bottom bg-white'
                 }`}
                 style={{
                   ...(isCustom && {
@@ -123,10 +123,10 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false }: any)
                       id="consent_info_tab"
                       activeKey={activeTab}
                       onSelect={(k) => setActiveTab(k)}
-                      className="mb-3 w-100 flex-nowrap consent_info_tab"
+                      className="mb-2 mb-lg-3 w-100 flex-nowrap consent_info_tab"
                     >
                       <Tab eventKey="consent" title="Consent" className="w-100">
-                        <p className="mb-3">{t('txt_consent_to_data')}</p>
+                        <p className="mb-2 mb-lg-3">{t('txt_consent_to_data')}</p>
                         <div className="d-flex align-items-center flex-wrap">
                           <div className="me-10px">{t('txt_ethical_compliant')}</div>
                           <div className="d-flex align-items-center">
@@ -140,7 +140,7 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false }: any)
                             </div>
                           </div>
                         </div>
-                        <div className="fw-semibold mt-3 mb-0 text-dark">
+                        <div className="fw-semibold mt-2 mt-lg-3 mb-0 text-dark">
                           {t('txt_your_current_level')}
                         </div>
                         <ConsentLevel
@@ -331,7 +331,7 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false }: any)
               </div>
               {isCustom ? (
                 <div className="rounded-bottom position-relative overflow-hidden text-white bg-white">
-                  <div className="position-relative p-3">
+                  <div className="position-relative pt-2 pt-lg-3 p-3">
                     <div className="d-flex align-items-center justify-content-between flex-wrap">
                       {children}
                     </div>
@@ -344,7 +344,7 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false }: any)
                     className="position-absolute h-100 w-100 object-fit-cover lightning flash-effect"
                     src={bg}
                   />
-                  <div className="position-relative p-3">
+                  <div className="position-relative pt-2 pt-lg-3 p-3">
                     {showReadmore && (
                       <>
                         <div className="mb-3">
@@ -372,7 +372,7 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false }: any)
 
 const ConsentLevel = ({ level, tier, levelname, term_custom, content_custom }: any) => {
   return (
-    <div className="consent_level mt-3">
+    <div className="consent_level mt-2 mt-lg-3">
       <div className="d-flex align-items-center justify-content-between flex-wrap mb-2">
         <div className="d-flex align-items-center">
           <div className={`status-tier tier-${level} rounded-circle`}></div>

@@ -96,6 +96,11 @@ $dark: #222328;
   .btn-success:hover {
     color: var(--#{$prefix}white);
   }
+  .nav {
+    @include media-breakpoint-down(lg) {
+      --aesirxconsent-nav-link-padding-y: 5px;
+    }
+  }
   .toast {
     --#{$prefix}toast-zindex: 1049;
     --#{$prefix}toast-font-size: 16px;
@@ -105,6 +110,11 @@ $dark: #222328;
       border: var(--#{$prefix}toast-border-width) solid var(--#{$prefix}toast-border-color);
       box-shadow: var(--#{$prefix}toast-box-shadow);
       border-radius: var(--#{$prefix}toast-border-radius);
+      max-height: 100vh;
+      overflow-y: auto;
+      @include media-breakpoint-down(lg) {
+        font-size: 14px;
+      }
       button {
         @include media-breakpoint-down(lg) {
           font-size: 14px;

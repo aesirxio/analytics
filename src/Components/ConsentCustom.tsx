@@ -761,7 +761,7 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                         <div className="bg-white rounded p-3 w-100">
                           {loading === 'done' ? (
                             <>
-                              <p className="mb-3">{t('txt_upgrade_consent_text')}</p>
+                              <p className="mb-2 mb-lg-3">{t('txt_upgrade_consent_text')}</p>
                               <p className="fw-semibold text-dark">{t('txt_your_current_level')}</p>
                               <ConsentLevelUprade
                                 level={level}
@@ -890,14 +890,14 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                                     onClick={() => {
                                       setUpgradeLayout(true);
                                     }}
-                                    className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-3 text-dark"
+                                    className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3 text-dark"
                                   >
                                     {t('txt_change_consent')}
                                   </Button>{' '}
                                   <Button
                                     variant="outline-success"
                                     onClick={handleNotAllow}
-                                    className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-3 text-dark"
+                                    className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3 text-dark"
                                   >
                                     {t('txt_reject_consent')}
                                   </Button>
@@ -909,7 +909,7 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                                     }`}
                                   >
                                     <SSOButton
-                                      className="btn btn-success text-white d-flex align-items-center justify-content-center loginSSO rounded-pill py-3 w-100"
+                                      className="btn btn-success text-white d-flex align-items-center justify-content-center loginSSO rounded-pill py-2 py-lg-3 w-100"
                                       text={
                                         <>
                                           <img src={yes} className="me-1" />
@@ -927,7 +927,7 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                                     <Button
                                       variant="success"
                                       onClick={handleAgree}
-                                      className="w-100 me-3 text-white d-flex align-items-center justify-content-center fs-14 rounded-pill py-3"
+                                      className="w-100 me-3 text-white d-flex align-items-center justify-content-center fs-14 rounded-pill py-2 py-lg-3"
                                     >
                                       {loadingCheckAccount ? (
                                         <span
