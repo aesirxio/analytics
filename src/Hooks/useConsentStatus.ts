@@ -122,12 +122,19 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
         sessionStorage.getItem('aesirx-analytics-revoke') !== '1' &&
         sessionStorage.getItem('aesirx-analytics-revoke') !== '2'
       ) {
-        window.addEventListener('load', async function () {
+        if (window['concordium']) {
           const address = (await window['concordium']?.requestAccounts()) ?? [];
           if (window['concordium'] && address?.length) {
             setActiveConnectorType(BROWSER_WALLET);
           }
-        });
+        } else {
+          window.addEventListener('load', async function () {
+            const address = (await window['concordium']?.requestAccounts()) ?? [];
+            if (window['concordium'] && address?.length) {
+              setActiveConnectorType(BROWSER_WALLET);
+            }
+          });
+        }
       }
     };
     initConnector();
@@ -159,6 +166,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
             setLevel(null);
             l = 3;
             let web3ID = false;
+            console.log('test', account);
             if (account && sessionStorage.getItem('aesirx-analytics-consent-type') !== 'metamask') {
               web3ID = await getWeb3ID(account, rpc, network?.name);
               if (web3ID === true) {

@@ -12,7 +12,7 @@ const WALLET_CONNECT_OPTS: SignClientTypes.Options = {
     name: 'Sign Message',
     description: 'Example dApp for signing an arbitrary message.',
     url: '#',
-    icons: ['https://walletconnect.com/walletconnect-logo.png'],
+    icons: [''],
   },
 };
 
