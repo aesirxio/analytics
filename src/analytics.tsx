@@ -31,6 +31,7 @@ const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
         visitor_uuid: visitor_uuid,
         setEventID: undefined,
         setUUID: undefined,
+        ref: undefined,
       }}
     >
       <AesirXI18nextProvider appLanguages={appLanguages}>
