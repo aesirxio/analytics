@@ -13,6 +13,7 @@ interface AnalyticsNext {
   attributes: any;
   customLayout?: boolean;
   loginApp?: any;
+  isLoggedApp?: boolean;
   children?: ReactNode;
 }
 
@@ -21,6 +22,7 @@ const AnalyticsNext = ({
   attributes,
   customLayout = false,
   loginApp,
+  isLoggedApp,
   children,
 }: AnalyticsNext) => {
   return (
@@ -36,6 +38,7 @@ const AnalyticsNext = ({
                   networkEnv={process.env.NEXT_PUBLIC_CONCORDIUM_NETWORK}
                   aesirXEndpoint={process.env.NEXT_PUBLIC_ENDPOINT_URL ?? 'https://api.aesirx.io'}
                   loginApp={loginApp}
+                  isLoggedApp={isLoggedApp}
                 />
               ) : (
                 <ConsentComponent
@@ -43,6 +46,7 @@ const AnalyticsNext = ({
                   networkEnv={process.env.NEXT_PUBLIC_CONCORDIUM_NETWORK}
                   aesirXEndpoint={process.env.NEXT_PUBLIC_ENDPOINT_URL ?? 'https://api.aesirx.io'}
                   loginApp={loginApp}
+                  isLoggedApp={isLoggedApp}
                 />
               )}
             </>

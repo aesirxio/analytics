@@ -49,8 +49,9 @@ interface WalletConnectionPropsExtends extends WalletConnectionProps {
   aesirXEndpoint: string;
   networkEnv?: string;
   loginApp?: any;
+  isLoggedApp?: boolean;
 }
-const ConsentComponent = ({ endpoint, aesirXEndpoint, networkEnv, loginApp }: any) => {
+const ConsentComponent = ({ endpoint, aesirXEndpoint, networkEnv, loginApp, isLoggedApp }: any) => {
   return (
     <WithWalletConnector network={networkEnv === 'testnet' ? TESTNET : MAINNET}>
       {(props) => (
@@ -61,6 +62,7 @@ const ConsentComponent = ({ endpoint, aesirXEndpoint, networkEnv, loginApp }: an
               endpoint={endpoint}
               aesirXEndpoint={aesirXEndpoint}
               loginApp={loginApp}
+              isLoggedApp={isLoggedApp}
             />
           </SSOEthereumProvider>
         </div>
@@ -73,6 +75,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     endpoint,
     aesirXEndpoint,
     loginApp,
+    isLoggedApp,
     activeConnectorType,
     activeConnector,
     activeConnectorError,
@@ -234,7 +237,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                     );
                     sessionStorage.setItem('aesirx-analytics-jwt', data?.jwt);
                     jwt = data?.jwt;
-                    loginApp && loginApp(data);
+                    loginApp && !isLoggedApp && loginApp(data);
                     setLoadingCheckAccount(false);
                   }
                 } else {
@@ -406,7 +409,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
           setLoading('done');
         }
       }
-      loginApp && loginApp(response);
+      loginApp && !isLoggedApp && loginApp(response);
     } catch (error) {
       console.log(error);
       setShow(false);
