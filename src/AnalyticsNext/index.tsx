@@ -12,10 +12,17 @@ interface AnalyticsNext {
   router: NextRouter;
   attributes: any;
   customLayout?: boolean;
+  loginApp?: any;
   children?: ReactNode;
 }
 
-const AnalyticsNext = ({ router, attributes, customLayout = false, children }: AnalyticsNext) => {
+const AnalyticsNext = ({
+  router,
+  attributes,
+  customLayout = false,
+  loginApp,
+  children,
+}: AnalyticsNext) => {
   return (
     <>
       <AnalyticsContextProvider>
@@ -28,12 +35,14 @@ const AnalyticsNext = ({ router, attributes, customLayout = false, children }: A
                   endpoint={process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL}
                   networkEnv={process.env.NEXT_PUBLIC_CONCORDIUM_NETWORK}
                   aesirXEndpoint={process.env.NEXT_PUBLIC_ENDPOINT_URL ?? 'https://api.aesirx.io'}
+                  loginApp={loginApp}
                 />
               ) : (
                 <ConsentComponent
                   endpoint={process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL}
                   networkEnv={process.env.NEXT_PUBLIC_CONCORDIUM_NETWORK}
                   aesirXEndpoint={process.env.NEXT_PUBLIC_ENDPOINT_URL ?? 'https://api.aesirx.io'}
+                  loginApp={loginApp}
                 />
               )}
             </>
