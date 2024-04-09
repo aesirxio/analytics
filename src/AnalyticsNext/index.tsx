@@ -11,7 +11,7 @@ const ConsentComponentCustom = dynamic(() => import('../Components/ConsentCustom
 interface AnalyticsNext {
   router: NextRouter;
   attributes: any;
-  customLayout?: boolean;
+  oldLayout?: boolean;
   loginApp?: any;
   isLoggedApp?: boolean;
   children?: ReactNode;
@@ -20,7 +20,7 @@ interface AnalyticsNext {
 const AnalyticsNext = ({
   router,
   attributes,
-  customLayout = false,
+  oldLayout = false,
   loginApp,
   isLoggedApp,
   children,
@@ -32,8 +32,8 @@ const AnalyticsNext = ({
           {children}
           {process.env.NEXT_PUBLIC_DISABLE_ANALYTICS_CONSENT !== 'true' && (
             <>
-              {customLayout ? (
-                <ConsentComponentCustom
+              {oldLayout ? (
+                <ConsentComponent
                   endpoint={process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL}
                   networkEnv={process.env.NEXT_PUBLIC_CONCORDIUM_NETWORK}
                   aesirXEndpoint={process.env.NEXT_PUBLIC_ENDPOINT_URL ?? 'https://api.aesirx.io'}
@@ -41,7 +41,7 @@ const AnalyticsNext = ({
                   isLoggedApp={isLoggedApp}
                 />
               ) : (
-                <ConsentComponent
+                <ConsentComponentCustom
                   endpoint={process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL}
                   networkEnv={process.env.NEXT_PUBLIC_CONCORDIUM_NETWORK}
                   aesirXEndpoint={process.env.NEXT_PUBLIC_ENDPOINT_URL ?? 'https://api.aesirx.io'}
