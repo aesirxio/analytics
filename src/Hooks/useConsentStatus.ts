@@ -139,7 +139,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
       }
     };
     initConnector();
-  }, []);
+  }, [window['concordium']]);
 
   useEffect(() => {
     if (activeConnector) {

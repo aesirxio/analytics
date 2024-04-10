@@ -36,5 +36,14 @@
         color: $white;
       }
     }
+    .header-consent-bg {
+      background-color: var(--#{$prefix}light-bg-subtle);
+    }
+    .toast.custom .consent_info_tab .nav-item button.active {
+      color: $white;
+    }
+    .item_compliant {
+      background-color: #101529;
+    }
   }
 }
