@@ -115,7 +115,7 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false }: any)
                   )}
                 </div>
               </div>
-              <div className={`p-3 ${isCustom ? 'pt-0' : ''} bg-white`}>
+              <div className={`pb-3 ${isCustom ? 'pt-0' : ''} bg-white`}>
                 {isCustom ? (
                   <>
                     <Tabs
@@ -124,16 +124,16 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false }: any)
                       onSelect={(k) => setActiveTab(k)}
                       className="mb-2 mb-lg-3 w-100 flex-nowrap consent_info_tab"
                     >
-                      <Tab eventKey="consent" title="Consent" className="w-100">
+                      <Tab eventKey="consent" title="Consent" className="w-100 px-3">
                         <p className="mb-2 mb-lg-3">{t('txt_consent_to_data')}</p>
                         <div className="d-flex align-items-center flex-wrap">
                           <div className="me-10px">{t('txt_ethical_compliant')}</div>
                           <div className="d-flex align-items-center">
-                            <div className="item_compliant fw-semibold d-flex align-items-center text-dark">
+                            <div className="item_compliant fw-semibold d-flex align-items-center">
                               <img src={check_line} width={24} height={24} />
                               GDPR
                             </div>
-                            <div className="item_compliant fw-semibold d-flex align-items-center text-dark ms-10px">
+                            <div className="item_compliant fw-semibold d-flex align-items-center ms-10px">
                               <img src={check_line} width={24} height={24} />
                               CCPA
                             </div>
@@ -150,7 +150,7 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false }: any)
                           content_custom={t(term.content_custom)}
                         />
                       </Tab>
-                      <Tab eventKey="detail" title="Detail">
+                      <Tab eventKey="detail" title="Detail" className="px-3">
                         <div className="about_section">
                           <div className="d-flex align-items-start">
                             <span>
@@ -228,7 +228,7 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false }: any)
                           />
                         </div>
                       </Tab>
-                      <Tab eventKey="about" title="About">
+                      <Tab eventKey="about" title="About" className="px-3">
                         <div className="d-flex align-items-start">
                           <span>
                             <img src={check_circle} width={'14px'} height={'15px'} />
@@ -288,11 +288,11 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false }: any)
                         <div className="d-flex align-items-center mt-3 flex-wrap">
                           <div className="me-10px">{t('txt_ethical_compliant')}</div>
                           <div className="d-flex align-items-center">
-                            <div className="item_compliant fw-semibold d-flex align-items-center text-dark">
+                            <div className="item_compliant fw-semibold d-flex align-items-center">
                               <img src={check_line} width={24} height={24} />
                               GDPR
                             </div>
-                            <div className="item_compliant fw-semibold d-flex align-items-center text-dark ms-10px">
+                            <div className="item_compliant fw-semibold d-flex align-items-center ms-10px">
                               <img src={check_line} width={24} height={24} />
                               CCPA
                             </div>
