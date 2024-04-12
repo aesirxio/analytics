@@ -77,10 +77,11 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false }: any)
           term.level === level && (
             <Fragment key={key}>
               <div
-                className={`rounded-top d-flex align-items-center justify-content-between p-2 p-lg-3 fw-medium flex-wrap  ${isCustom
+                className={`rounded-top d-flex align-items-center justify-content-between p-2 p-lg-3 fw-medium flex-wrap  ${
+                  isCustom
                     ? 'py-2 py-lg-3 px-4 header-consent-bg'
                     : 'p-2 p-lg-3 border-bottom bg-white'
-                  }`}
+                }`}
                 style={{
                   ...(isCustom && {
                     borderBottom: '1px solid #DEDEDE',
@@ -149,7 +150,7 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false }: any)
                           content_custom={t(term.content_custom)}
                         />
                       </Tab>
-                      <Tab eventKey="detail" title="Detail" className='px-3'>
+                      <Tab eventKey="detail" title="Detail" className="px-3">
                         <div className="about_section">
                           <div className="d-flex align-items-start">
                             <span>
@@ -227,7 +228,7 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false }: any)
                           />
                         </div>
                       </Tab>
-                      <Tab eventKey="about" title="About" className='px-3'>
+                      <Tab eventKey="about" title="About" className="px-3">
                         <div className="d-flex align-items-start">
                           <span>
                             <img src={check_circle} width={'14px'} height={'15px'} />
