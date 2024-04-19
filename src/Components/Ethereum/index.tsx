@@ -116,18 +116,16 @@ const projectId = CONCORDIUM_WALLET_CONNECT_PROJECT_ID;
 const { publicClient, webSocketPublicClient } = configureChains(chains, [
   w3mProvider({ projectId }),
 ]);
-const wagmiConfig: any = window['ethereum']
-  ? createConfig({
-      autoConnect: true,
-      connectors: w3mConnectors({ projectId, chains }),
-      publicClient,
-      webSocketPublicClient,
-    })
-  : '';
-
-const ethereumClient = new EthereumClient(wagmiConfig, chains);
 
 const SSOEthereumProvider = ({ children }: any) => {
+  const wagmiConfig = createConfig({
+    autoConnect: true,
+    connectors: w3mConnectors({ projectId, chains }),
+    publicClient,
+    webSocketPublicClient,
+  });
+
+  const ethereumClient = new EthereumClient(wagmiConfig, chains);
   return (
     <>
       <WagmiConfig config={wagmiConfig}>{children}</WagmiConfig>
