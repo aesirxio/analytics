@@ -61,21 +61,81 @@ const ConsentComponentCustom = ({
   isLoggedApp,
 }: any) => {
   return (
-    <WithWalletConnector network={networkEnv === 'testnet' ? TESTNET : MAINNET}>
-      {(props) => (
+    <>
+      {window['concordium'] && window['ethereum'] ? (
+        <WithWalletConnector network={networkEnv === 'testnet' ? TESTNET : MAINNET}>
+          {(props) => (
+            <div className="aesirxconsent">
+              <SSOEthereumProvider>
+                <ConsentComponentCustomApp
+                  {...props}
+                  endpoint={endpoint}
+                  aesirXEndpoint={aesirXEndpoint}
+                  loginApp={loginApp}
+                  isLoggedApp={isLoggedApp}
+                />
+              </SSOEthereumProvider>
+            </div>
+          )}
+        </WithWalletConnector>
+      ) : window['concordium'] ? (
+        <>
+          <WithWalletConnector network={networkEnv === 'testnet' ? TESTNET : MAINNET}>
+            {(props) => (
+              <div className="aesirxconsent">
+                <ConsentComponentCustomApp
+                  {...props}
+                  endpoint={endpoint}
+                  aesirXEndpoint={aesirXEndpoint}
+                  loginApp={loginApp}
+                  isLoggedApp={isLoggedApp}
+                />
+              </div>
+            )}
+          </WithWalletConnector>
+        </>
+      ) : window['ethereum'] ? (
+        <>
+          <div className="aesirxconsent">
+            <SSOEthereumProvider>
+              <ConsentComponentCustomApp
+                endpoint={endpoint}
+                aesirXEndpoint={aesirXEndpoint}
+                loginApp={loginApp}
+                isLoggedApp={isLoggedApp}
+                network={undefined}
+                setActiveConnectorType={() => {
+                  return;
+                }}
+                activeConnectorType={undefined}
+                activeConnector={undefined}
+                activeConnectorError={''}
+                connectedAccounts={undefined}
+                genesisHashes={undefined}
+              />
+            </SSOEthereumProvider>
+          </div>
+        </>
+      ) : (
         <div className="aesirxconsent">
-          <SSOEthereumProvider>
-            <ConsentComponentCustomApp
-              {...props}
-              endpoint={endpoint}
-              aesirXEndpoint={aesirXEndpoint}
-              loginApp={loginApp}
-              isLoggedApp={isLoggedApp}
-            />
-          </SSOEthereumProvider>
+          <ConsentComponentCustomApp
+            endpoint={endpoint}
+            aesirXEndpoint={aesirXEndpoint}
+            loginApp={loginApp}
+            isLoggedApp={isLoggedApp}
+            network={undefined}
+            setActiveConnectorType={() => {
+              return;
+            }}
+            activeConnectorType={undefined}
+            activeConnector={undefined}
+            activeConnectorError={''}
+            connectedAccounts={undefined}
+            genesisHashes={undefined}
+          />
         </div>
       )}
-    </WithWalletConnector>
+    </>
   );
 };
 const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
@@ -92,12 +152,20 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
     setActiveConnectorType,
     network,
   } = props;
-  const { setConnection } = useConnection(connectedAccounts, genesisHashes);
+  const { setConnection } = window['concordium']
+    ? useConnection(connectedAccounts, genesisHashes)
+    : {
+        setConnection: () => {
+          return;
+        },
+      };
 
-  const { isConnecting } = useConnect(activeConnector, setConnection);
+  const { isConnecting } = window['concordium']
+    ? useConnect(activeConnector, setConnection)
+    : { isConnecting: false };
 
   const handleOnConnect = async (connectorType: ConnectorType, network = 'concordium') => {
-    if (network === 'concordium') {
+    if (network === 'concordium' && window['concordium']) {
       setActiveConnectorType(connectorType);
     }
     setLoading('done');
@@ -129,81 +197,87 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
   const [upgradeLevel, setUpgradeLevel] = useState<any>(0);
   const analyticsContext = useContext(AnalyticsContext);
   const { t } = useTranslation();
-  const gRPCClient = useGrpcClient(network);
+  const gRPCClient: any = window['concordium'] ? useGrpcClient(network) : {};
 
   // Metamask
-  const { address, connector } = useAccount();
+  const { address, connector } = window['ethereum'] ? useAccount() : { address: '', connector: '' };
 
-  const { signMessage } = useSignMessage({
-    async onSuccess(data, variables) {
-      const signature = Buffer.from(
-        typeof data === 'object' && data !== null ? JSON.stringify(data) : data,
-        'utf-8'
-      ).toString('base64');
-      const jwt = sessionStorage.getItem('aesirx-analytics-jwt');
-      if (variables?.message.indexOf('Revoke consent') > -1) {
-        // Revoke Metamask
-        const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');
-        const consentList = await getConsents(endpoint, uuid);
-        consentList.forEach(async (consent: any) => {
-          !consent?.expiration &&
-            (await revokeConsents(
+  const { signMessage } = window['ethereum']
+    ? useSignMessage({
+        async onSuccess(data, variables) {
+          const signature = Buffer.from(
+            typeof data === 'object' && data !== null ? JSON.stringify(data) : data,
+            'utf-8'
+          ).toString('base64');
+          const jwt = sessionStorage.getItem('aesirx-analytics-jwt');
+          if (variables?.message.indexOf('Revoke consent') > -1) {
+            // Revoke Metamask
+            const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');
+            const consentList = await getConsents(endpoint, uuid);
+            consentList.forEach(async (consent: any) => {
+              !consent?.expiration &&
+                (await revokeConsents(
+                  endpoint,
+                  levelRevoke,
+                  consent?.consent_uuid,
+                  address,
+                  signature,
+                  web3ID,
+                  jwt,
+                  'metamask'
+                ));
+            });
+            setLoading('done');
+            handleRevoke(false);
+            setShowExpandConsent(false);
+            setShow(true);
+            setShowBackdrop(false);
+            sessionStorage.removeItem('aesirx-analytics-allow');
+          } else if (variables?.message.indexOf('Login with nonce') > -1) {
+            const res = await verifySignature(aesirXEndpoint, 'metamask', address, data);
+            sessionStorage.setItem('aesirx-analytics-jwt', res?.jwt);
+            setLoadingCheckAccount(false);
+            const nonce = await getNonce(
               endpoint,
-              levelRevoke,
-              consent?.consent_uuid,
+              address,
+              'Give consent Tier 4:{nonce} {domain} {time}',
+              'metamask'
+            );
+            signMessage({ message: `${nonce}` });
+          } else {
+            setLoading('saving');
+            // Consent Metamask
+            await agreeConsents(
+              endpoint,
+              level,
+              uuid,
+              consents,
               address,
               signature,
               web3ID,
               jwt,
               'metamask'
-            ));
-        });
-        setLoading('done');
-        handleRevoke(false);
-        setShowExpandConsent(false);
-        setShow(true);
-        setShowBackdrop(false);
-        sessionStorage.removeItem('aesirx-analytics-allow');
-      } else if (variables?.message.indexOf('Login with nonce') > -1) {
-        const res = await verifySignature(aesirXEndpoint, 'metamask', address, data);
-        sessionStorage.setItem('aesirx-analytics-jwt', res?.jwt);
-        setLoadingCheckAccount(false);
-        const nonce = await getNonce(
-          endpoint,
-          address,
-          'Give consent Tier 4:{nonce} {domain} {time}',
-          'metamask'
-        );
-        signMessage({ message: `${nonce}` });
-      } else {
-        setLoading('saving');
-        // Consent Metamask
-        await agreeConsents(
-          endpoint,
-          level,
-          uuid,
-          consents,
-          address,
-          signature,
-          web3ID,
-          jwt,
-          'metamask'
-        );
-        sessionStorage.setItem('aesirx-analytics-uuid', uuid);
-        sessionStorage.setItem('aesirx-analytics-allow', '1');
-        sessionStorage.setItem('aesirx-analytics-consent-type', 'metamask');
+            );
+            sessionStorage.setItem('aesirx-analytics-uuid', uuid);
+            sessionStorage.setItem('aesirx-analytics-allow', '1');
+            sessionStorage.setItem('aesirx-analytics-consent-type', 'metamask');
 
-        setShow(false);
-        setLoading('done');
-        handleRevoke(true, level);
-        setShowBackdrop(false);
-      }
-    },
-    async onError(error) {
-      setLoading('done');
-      toast.error(error.message);
-    },
-  });
+            setShow(false);
+            setLoading('done');
+            handleRevoke(true, level);
+            setShowBackdrop(false);
+          }
+        },
+        async onError(error) {
+          setLoading('done');
+          toast.error(error.message);
+        },
+      })
+    : {
+        signMessage: () => {
+          return;
+        },
+      };
 
   const handleChange = async ({ target: { value } }: any) => {
     if (consents.indexOf(parseInt(value)) === -1) {
