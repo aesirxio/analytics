@@ -35,17 +35,22 @@ const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
       }}
     >
       <AesirXI18nextProvider appLanguages={appLanguages}>
-        {window['oldLayoutConsent'] === 'true' ? (
+        {window['consentLayout'] === 'original' ? (
           <ConsentComponent
             endpoint={window['aesirx1stparty'] ?? ''}
             networkEnv={window['concordiumNetwork'] ?? ''}
             aesirXEndpoint={window['aesirxEndpoint'] ?? 'https://api.aesirx.io'}
+            gtagId={window['analyticsGtagId'] ?? ''}
+            gtmId={window['analyticsGtmId'] ?? ''}
           />
         ) : (
           <ConsentComponentCustom
             endpoint={window['aesirx1stparty'] ?? ''}
             networkEnv={window['concordiumNetwork'] ?? ''}
             aesirXEndpoint={window['aesirxEndpoint'] ?? 'https://api.aesirx.io'}
+            gtagId={window['analyticsGtagId'] ?? ''}
+            gtmId={window['analyticsGtmId'] ?? ''}
+            layout={window['consentLayout'] ?? ''}
           />
         )}
       </AesirXI18nextProvider>

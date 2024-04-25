@@ -11,11 +11,19 @@ const agreeConsents = async (
   signature?: string,
   web3id?: string,
   jwt?: string,
-  network = 'concordium'
+  network = 'concordium',
+  gtagId?: string,
+  gtmId?: string,
+  layout?: string
 ) => {
   const url = `${endpoint}/consent/v1/level${level}/${uuid}`;
   const urlV2 = `${endpoint}/consent/v2/level${level}/${uuid}`;
-
+  console.log('gtagIdne', gtagId);
+  console.log('gtmIdne', gtmId);
+  if (sessionStorage.getItem('consentGranted') !== 'true') {
+    gtagId && consentModeGrant(true, gtagId, layout);
+    gtmId && consentModeGrant(false, gtmId, layout);
+  }
   try {
     switch (level) {
       case 1:
@@ -63,6 +71,47 @@ const agreeConsents = async (
   }
 };
 
+declare const dataLayer: any[];
+const consentModeGrant = async (isGtag: any, id: any, layout: any) => {
+  if (layout !== 'advance-consent-mode') {
+    isGtag ? loadGtagScript(id) : loadGtmScript(id);
+  }
+  sessionStorage.setItem('consentGranted', 'true');
+  function gtag( // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    p0: any, // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    p1: any, // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    p2: any
+  ) {
+    // eslint-disable-next-line prefer-rest-params
+    dataLayer.push(arguments);
+  }
+  gtag('consent', 'update', {
+    ad_user_data: 'granted',
+    ad_personalization: 'granted',
+    ad_storage: 'granted',
+    analytics_storage: 'granted',
+  });
+};
+
+const loadGtagScript = (gtagId: any) => {
+  // Load gtag.js script.
+  const gtagScript = document.createElement('script');
+  gtagScript.async = true;
+  gtagScript.src = `https://www.googletagmanager.com/gtag/js?id=${gtagId}`;
+
+  const firstScript = document.getElementsByTagName('script')[0];
+  firstScript.parentNode.insertBefore(gtagScript, firstScript);
+};
+
+const loadGtmScript = (gtmId: any) => {
+  // Load Tag Manager script.
+  const gtmScript = document.createElement('script');
+  gtmScript.async = true;
+  gtmScript.src = `https://www.googletagmanager.com/gtm.js?id=${gtmId}`;
+
+  const firstScript = document.getElementsByTagName('script')[0];
+  firstScript.parentNode.insertBefore(gtmScript, firstScript);
+};
 const getConsents = async (endpoint: string, uuid: string) => {
   try {
     const response = (await axios.get(`${endpoint}/visitor/v1/${uuid}`))?.data?.visitor_consents;
@@ -127,6 +176,7 @@ const revokeConsents = async (
 ) => {
   const url = `${endpoint}/consent/v1/level${level}/revoke/${uuid}`;
   const urlV2 = `${endpoint}/consent/v2/level${level}/revoke/${uuid}`;
+  sessionStorage.setItem('consentGranted', 'false');
   try {
     switch (level) {
       case '2':
@@ -269,4 +319,6 @@ export {
   getMember,
   getWalletNonce,
   verifySignature,
+  loadGtagScript,
+  loadGtmScript,
 };

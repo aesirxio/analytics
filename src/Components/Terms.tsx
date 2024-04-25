@@ -63,7 +63,7 @@ const terms = [
   },
 ];
 
-const TermsComponent = ({ children, level, handleLevel, isCustom = false }: any) => {
+const TermsComponent = ({ children, level, handleLevel, isCustom = false, layout }: any) => {
   const { t } = useTranslation();
   const handleReadmore = (status: boolean) => {
     setShowReadmore(status);
@@ -115,191 +115,229 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false }: any)
                   )}
                 </div>
               </div>
-              <div className={`pb-3 ${isCustom ? 'pt-0' : ''} bg-white`}>
+              <div className={`pb-3 ${isCustom ? 'pt-0' : 'p-3'} bg-white`}>
                 {isCustom ? (
                   <>
-                    <Tabs
-                      id="consent_info_tab"
-                      activeKey={activeTab}
-                      onSelect={(k) => setActiveTab(k)}
-                      className="mb-2 mb-lg-3 w-100 flex-nowrap consent_info_tab"
-                    >
-                      <Tab eventKey="consent" title="Consent" className="w-100 px-3">
-                        <p className="mb-2 mb-lg-3">{t('txt_consent_to_data')}</p>
-                        <div className="d-flex align-items-center flex-wrap">
-                          <div className="me-10px">{t('txt_ethical_compliant')}</div>
-                          <div className="d-flex align-items-center">
-                            <div className="item_compliant fw-semibold d-flex align-items-center">
-                              <img src={check_line} width={24} height={24} />
-                              GDPR
-                            </div>
-                            <div className="item_compliant fw-semibold d-flex align-items-center ms-10px">
-                              <img src={check_line} width={24} height={24} />
-                              CCPA
-                            </div>
-                          </div>
-                        </div>
-                        <div className="fw-semibold mt-2 mt-lg-3 mb-0 text-dark">
-                          {t('txt_your_current_level')}
-                        </div>
+                    {layout === 'simple-web-2' ? (
+                      <div className="px-3">
                         <ConsentLevel
-                          level={term.level}
-                          tier={t(term.tier)}
-                          levelname={t(term.levelname)}
-                          term_custom={t(term.term_custom)}
-                          content_custom={t(term.content_custom)}
+                          level={1}
+                          tier={t('txt_tier_1_tier')}
+                          levelname={t('txt_tier_1_levelname')}
+                          term_custom={t('txt_tier_1_term_custom')}
+                          content_custom={t('txt_tier_1_content_custom')}
                         />
-                      </Tab>
-                      <Tab eventKey="detail" title="Detail" className="px-3">
-                        <div className="about_section">
-                          <div className="d-flex align-items-start">
-                            <span>
-                              <img src={check_circle} width={'14px'} height={'15px'} />
-                            </span>
-                            <div className="ms-10px">
-                              <div
-                                dangerouslySetInnerHTML={{
-                                  __html: t('txt_detail_1', {
-                                    interpolation: { escapeValue: false },
-                                  }),
-                                }}
-                              />
+                      </div>
+                    ) : (
+                      <>
+                        <Tabs
+                          id="consent_info_tab"
+                          activeKey={activeTab}
+                          onSelect={(k) => setActiveTab(k)}
+                          className="mb-2 mb-lg-3 w-100 flex-nowrap consent_info_tab"
+                        >
+                          <Tab eventKey="consent" title="Consent" className="w-auto px-3">
+                            <p className="mb-2 mb-lg-3">{t('txt_consent_to_data')}</p>
+                            <div className="d-flex align-items-center flex-wrap">
+                              <div className="me-10px">{t('txt_ethical_compliant')}</div>
+                              <div className="d-flex align-items-center">
+                                <div className="item_compliant fw-semibold d-flex align-items-center">
+                                  <img src={check_line} width={24} height={24} />
+                                  GDPR
+                                </div>
+                                <div className="item_compliant fw-semibold d-flex align-items-center ms-10px">
+                                  <img src={check_line} width={24} height={24} />
+                                  CCPA
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                          <div className="d-flex align-items-start">
-                            <span>
-                              <img src={check_circle} width={'14px'} height={'15px'} />
-                            </span>
-                            <div className="ms-10px">
-                              <div
-                                dangerouslySetInnerHTML={{
-                                  __html: t('txt_detail_2', {
-                                    interpolation: { escapeValue: false },
-                                  }),
-                                }}
-                              />
+                            <div className="fw-semibold mt-2 mt-lg-3 mb-0 text-dark">
+                              {t('txt_your_current_level')}
                             </div>
-                          </div>
-                          <div className="d-flex align-items-start">
-                            <span>
-                              <img src={check_circle} width={'14px'} height={'15px'} />
-                            </span>
-                            <div className="ms-10px">
-                              <div
-                                dangerouslySetInnerHTML={{
-                                  __html: t('txt_detail_3', {
-                                    interpolation: { escapeValue: false },
-                                  }),
-                                }}
-                              />
-                            </div>
-                          </div>
-                          <div className="fw-semibold mt-3 mb-2 text-dark">
-                            {t('txt_understanding_your_consent')}
-                          </div>
-                          <div className="mb-0">{t('txt_this_website_uses')}</div>
-                          <ConsentLevel
-                            level={1}
-                            tier={t('txt_tier_1_tier')}
-                            levelname={t('txt_tier_1_levelname')}
-                            term_custom={t('txt_tier_1_term_custom')}
-                            content_custom={t('txt_tier_1_content_custom')}
-                          />
-                          <ConsentLevel
-                            level={2}
-                            tier={t('txt_tier_2_tier')}
-                            levelname={t('txt_tier_2_levelname')}
-                            term_custom={t('txt_tier_2_term_custom')}
-                            content_custom={t('txt_tier_2_content_custom')}
-                          />
-                          <ConsentLevel
-                            level={3}
-                            tier={t('txt_tier_3_tier')}
-                            levelname={t('txt_tier_3_levelname')}
-                            term_custom={t('txt_tier_3_term_custom')}
-                            content_custom={t('txt_tier_3_content_custom')}
-                          />
-                          <ConsentLevel
-                            level={4}
-                            tier={t('txt_tier_4_tier')}
-                            levelname={t('txt_tier_4_levelname')}
-                            term_custom={t('txt_tier_4_term_custom')}
-                            content_custom={t('txt_tier_4_content_custom')}
-                          />
-                        </div>
-                      </Tab>
-                      <Tab eventKey="about" title="About" className="px-3">
-                        <div className="d-flex align-items-start">
-                          <span>
-                            <img src={check_circle} width={'14px'} height={'15px'} />
-                          </span>
-                          <div className="ms-10px">
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: t('txt_about_1', {
-                                  interpolation: { escapeValue: false },
-                                }),
-                              }}
+                            <ConsentLevel
+                              level={term.level}
+                              tier={t(term.tier)}
+                              levelname={t(term.levelname)}
+                              term_custom={t(term.term_custom)}
+                              content_custom={t(term.content_custom)}
                             />
-                          </div>
-                        </div>
-                        <div className="d-flex align-items-start">
-                          <span>
-                            <img src={check_circle} width={'14px'} height={'15px'} />
-                          </span>
-                          <div className="ms-10px">
+                          </Tab>
+                          <Tab eventKey="detail" title="Detail" className="px-3">
                             <div
-                              dangerouslySetInnerHTML={{
-                                __html: t('txt_about_2', {
-                                  interpolation: { escapeValue: false },
-                                }),
-                              }}
-                            />
-                          </div>
-                        </div>
-                        <div className="d-flex align-items-start">
-                          <span>
-                            <img src={check_circle} width={'14px'} height={'15px'} />
-                          </span>
-                          <div className="ms-10px">
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: t('txt_about_3', {
-                                  interpolation: { escapeValue: false },
-                                }),
-                              }}
-                            />
-                          </div>
-                        </div>
-                        <div className="d-flex align-items-start">
-                          <span>
-                            <img src={check_circle} width={'14px'} height={'15px'} />
-                          </span>
-                          <div className="ms-10px">
-                            <div
-                              dangerouslySetInnerHTML={{
-                                __html: t('txt_about_4', {
-                                  interpolation: { escapeValue: false },
-                                }),
-                              }}
-                            />
-                          </div>
-                        </div>
-                        <div className="d-flex align-items-center mt-3 flex-wrap">
-                          <div className="me-10px">{t('txt_ethical_compliant')}</div>
-                          <div className="d-flex align-items-center">
-                            <div className="item_compliant fw-semibold d-flex align-items-center">
-                              <img src={check_line} width={24} height={24} />
-                              GDPR
+                              className={`about_section ${
+                                layout !== 'simple-consent-mode' && layout !== 'simple-web-2'
+                                  ? 'fix_height'
+                                  : ''
+                              }`}
+                            >
+                              <div className="d-flex align-items-start">
+                                <span>
+                                  <img src={check_circle} width={'14px'} height={'15px'} />
+                                </span>
+                                <div className="ms-10px">
+                                  <div
+                                    dangerouslySetInnerHTML={{
+                                      __html: t('txt_detail_1', {
+                                        interpolation: { escapeValue: false },
+                                      }),
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                              <div className="d-flex align-items-start">
+                                <span>
+                                  <img src={check_circle} width={'14px'} height={'15px'} />
+                                </span>
+                                <div className="ms-10px">
+                                  <div
+                                    dangerouslySetInnerHTML={{
+                                      __html: t('txt_detail_2', {
+                                        interpolation: { escapeValue: false },
+                                      }),
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                              <div className="d-flex align-items-start">
+                                <span>
+                                  <img src={check_circle} width={'14px'} height={'15px'} />
+                                </span>
+                                <div className="ms-10px">
+                                  <div
+                                    dangerouslySetInnerHTML={{
+                                      __html: t('txt_detail_3', {
+                                        interpolation: { escapeValue: false },
+                                      }),
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                              <div className="fw-semibold mt-3 mb-2 text-dark">
+                                {t('txt_understanding_your_consent')}
+                              </div>
+                              {layout !== 'simple-consent-mode' &&
+                              layout !== 'advance-consent-mode' ? (
+                                <div className="mb-0">{t('txt_this_website_uses')}</div>
+                              ) : (
+                                <></>
+                              )}
+                              {layout === 'advance-consent-mode' ? (
+                                <></>
+                              ) : (
+                                <>
+                                  <ConsentLevel
+                                    level={1}
+                                    tier={t('txt_tier_1_tier')}
+                                    levelname={t('txt_tier_1_levelname')}
+                                    term_custom={t('txt_tier_1_term_custom')}
+                                    content_custom={t('txt_tier_1_content_custom')}
+                                  />
+                                </>
+                              )}
+
+                              {layout !== 'simple-consent-mode' && layout !== 'simple-web-2' ? (
+                                <>
+                                  <ConsentLevel
+                                    level={2}
+                                    tier={t('txt_tier_2_tier')}
+                                    levelname={t('txt_tier_2_levelname')}
+                                    term_custom={t('txt_tier_2_term_custom')}
+                                    content_custom={t('txt_tier_2_content_custom')}
+                                  />
+                                  <ConsentLevel
+                                    level={3}
+                                    tier={t('txt_tier_3_tier')}
+                                    levelname={t('txt_tier_3_levelname')}
+                                    term_custom={t('txt_tier_3_term_custom')}
+                                    content_custom={t('txt_tier_3_content_custom')}
+                                  />
+                                  <ConsentLevel
+                                    level={4}
+                                    tier={t('txt_tier_4_tier')}
+                                    levelname={t('txt_tier_4_levelname')}
+                                    term_custom={t('txt_tier_4_term_custom')}
+                                    content_custom={t('txt_tier_4_content_custom')}
+                                  />
+                                </>
+                              ) : (
+                                <></>
+                              )}
                             </div>
-                            <div className="item_compliant fw-semibold d-flex align-items-center ms-10px">
-                              <img src={check_line} width={24} height={24} />
-                              CCPA
+                          </Tab>
+                          <Tab eventKey="about" title="About" className="px-3">
+                            <div className="d-flex align-items-start">
+                              <span>
+                                <img src={check_circle} width={'14px'} height={'15px'} />
+                              </span>
+                              <div className="ms-10px">
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html: t('txt_about_1', {
+                                      interpolation: { escapeValue: false },
+                                    }),
+                                  }}
+                                />
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      </Tab>
-                    </Tabs>
+                            <div className="d-flex align-items-start">
+                              <span>
+                                <img src={check_circle} width={'14px'} height={'15px'} />
+                              </span>
+                              <div className="ms-10px">
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html: t('txt_about_2', {
+                                      interpolation: { escapeValue: false },
+                                    }),
+                                  }}
+                                />
+                              </div>
+                            </div>
+                            <div className="d-flex align-items-start">
+                              <span>
+                                <img src={check_circle} width={'14px'} height={'15px'} />
+                              </span>
+                              <div className="ms-10px">
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html: t('txt_about_3', {
+                                      interpolation: { escapeValue: false },
+                                    }),
+                                  }}
+                                />
+                              </div>
+                            </div>
+                            <div className="d-flex align-items-start">
+                              <span>
+                                <img src={check_circle} width={'14px'} height={'15px'} />
+                              </span>
+                              <div className="ms-10px">
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html: t('txt_about_4', {
+                                      interpolation: { escapeValue: false },
+                                    }),
+                                  }}
+                                />
+                              </div>
+                            </div>
+                            <div className="d-flex align-items-center mt-3 flex-wrap">
+                              <div className="me-10px">{t('txt_ethical_compliant')}</div>
+                              <div className="d-flex align-items-center">
+                                <div className="item_compliant fw-semibold d-flex align-items-center">
+                                  <img src={check_line} width={24} height={24} />
+                                  GDPR
+                                </div>
+                                <div className="item_compliant fw-semibold d-flex align-items-center ms-10px">
+                                  <img src={check_line} width={24} height={24} />
+                                  CCPA
+                                </div>
+                              </div>
+                            </div>
+                          </Tab>
+                        </Tabs>
+                      </>
+                    )}
                   </>
                 ) : (
                   <>

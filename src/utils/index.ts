@@ -79,10 +79,10 @@ const startTracker = async (
       sessionStorage.getItem('aesirx-analytics-flow') !== (await responseStart)?.flow_uuid
     ) {
       sessionStorage.setItem('aesirx-analytics-flow', (await responseStart)?.flow_uuid);
-      await trackerService(
-        rememberFlow(window.location.origin, (await responseStart)?.flow_uuid),
-        {}
-      );
+      // await trackerService(
+      //   rememberFlow(window.location.origin, (await responseStart)?.flow_uuid),
+      //   {}
+      // );
     }
     return responseStart;
   } catch (error) {

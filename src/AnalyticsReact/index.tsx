@@ -18,19 +18,25 @@ const AnalyticsReact = ({ location, history, oldLayout = false, children }: Anal
     <AnalyticsContextProvider>
       <AnalyticsHandle location={location} history={history}>
         {children}
-        {process.env.REACT_APP_DISABLE_ANALYTICS_CONSENT !== 'true' && (
+        {(process.env.REACT_APP_DISABLE_ANALYTICS_CONSENT !== 'true' ||
+          process.env.REACT_APP_CONSENT_LAYOUT === 'original') && (
           <Suspense fallback={<></>}>
             {oldLayout ? (
               <ConsentComponent
                 endpoint={process.env.REACT_APP_ENDPOINT_ANALYTICS_URL}
                 networkEnv={process.env.REACT_APP_CONCORDIUM_NETWORK}
                 aesirXEndpoint={process.env.REACT_APP_ENDPOINT_URL ?? 'https://api.aesirx.io'}
+                gtagId={process.env.REACT_APP_ANALYTICS_GTAG_ID}
+                gtmId={process.env.REACT_APP_ANALYTICS_GTM_ID}
               />
             ) : (
               <ConsentComponentCustom
-                endpoint={process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL}
-                networkEnv={process.env.NEXT_PUBLIC_CONCORDIUM_NETWORK}
-                aesirXEndpoint={process.env.NEXT_PUBLIC_ENDPOINT_URL ?? 'https://api.aesirx.io'}
+                endpoint={process.env.REACT_APP_ENDPOINT_ANALYTICS_URL}
+                networkEnv={process.env.REACT_APP_CONCORDIUM_NETWORK}
+                aesirXEndpoint={process.env.REACT_APP_ENDPOINT_URL ?? 'https://api.aesirx.io'}
+                gtagId={process.env.REACT_APP_ANALYTICS_GTAG_ID}
+                gtmId={process.env.REACT_APP_ANALYTICS_GTM_ID}
+                layout={process.env.REACT_APP_CONSENT_LAYOUT}
               />
             )}
           </Suspense>

@@ -16,7 +16,7 @@ import { isDesktop } from 'react-device-detect';
 import { useAccount } from 'wagmi';
 import { BlockHash } from '@concordium/web-sdk';
 
-const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
+const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConnectionProps) => {
   const [show, setShow] = useState(false);
   const [showRevoke, setShowRevoke] = useState(false);
   const [level, setLevel] = useState<any>();
@@ -121,7 +121,9 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
         isDesktop &&
         sessionStorage.getItem('aesirx-analytics-revoke') !== '1' &&
         sessionStorage.getItem('aesirx-analytics-revoke') !== '2' &&
-        sessionStorage.getItem('aesirx-analytics-rejected') !== 'true'
+        sessionStorage.getItem('aesirx-analytics-rejected') !== 'true' &&
+        layout !== 'simple-consent-mode' &&
+        layout !== 'simple-web-2'
       ) {
         if (window['concordium']) {
           const address = (await window['concordium']?.requestAccounts()) ?? [];
@@ -192,10 +194,10 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
             }
           }
         } else {
-          setLevel(level ?? 1);
+          setLevel(level ?? layout === 'advance-consent-mode' ? 2 : 1);
         }
       } catch (error) {
-        setLevel(level ?? 1);
+        setLevel(level ?? layout === 'advance-consent-mode' ? 2 : 1);
         console.error(error);
       }
     })();

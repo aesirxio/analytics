@@ -30,7 +30,8 @@ const AnalyticsNext = ({
       <AnalyticsContextProvider>
         <AnalyticsHandle router={router} attributes={attributes}>
           {children}
-          {process.env.NEXT_PUBLIC_DISABLE_ANALYTICS_CONSENT !== 'true' && (
+          {(process.env.NEXT_PUBLIC_DISABLE_ANALYTICS_CONSENT !== 'true' ||
+            process.env.NEXT_PUBLIC_CONSENT_LAYOUT === 'original') && (
             <>
               {oldLayout ? (
                 <ConsentComponent
@@ -39,6 +40,8 @@ const AnalyticsNext = ({
                   aesirXEndpoint={process.env.NEXT_PUBLIC_ENDPOINT_URL ?? 'https://api.aesirx.io'}
                   loginApp={loginApp}
                   isLoggedApp={isLoggedApp}
+                  gtagId={process.env.NEXT_PUBLIC_ANALYTICS_GTAG_ID}
+                  gtmId={process.env.NEXT_PUBLIC_ANALYTICS_GTM_ID}
                 />
               ) : (
                 <ConsentComponentCustom
@@ -47,6 +50,9 @@ const AnalyticsNext = ({
                   aesirXEndpoint={process.env.NEXT_PUBLIC_ENDPOINT_URL ?? 'https://api.aesirx.io'}
                   loginApp={loginApp}
                   isLoggedApp={isLoggedApp}
+                  gtagId={process.env.NEXT_PUBLIC_ANALYTICS_GTAG_ID}
+                  gtmId={process.env.NEXT_PUBLIC_ANALYTICS_GTM_ID}
+                  layout={process.env.NEXT_PUBLIC_CONSENT_LAYOUT}
                 />
               )}
             </>
