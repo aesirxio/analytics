@@ -18,10 +18,9 @@ const AnalyticsReact = ({ location, history, oldLayout = false, children }: Anal
     <AnalyticsContextProvider>
       <AnalyticsHandle location={location} history={history}>
         {children}
-        {(process.env.REACT_APP_DISABLE_ANALYTICS_CONSENT !== 'true' ||
-          process.env.REACT_APP_CONSENT_LAYOUT === 'original') && (
+        {process.env.REACT_APP_DISABLE_ANALYTICS_CONSENT !== 'true' && (
           <Suspense fallback={<></>}>
-            {oldLayout ? (
+            {oldLayout || process.env.REACT_APP_CONSENT_LAYOUT === 'original' ? (
               <ConsentComponent
                 endpoint={process.env.REACT_APP_ENDPOINT_ANALYTICS_URL}
                 networkEnv={process.env.REACT_APP_CONCORDIUM_NETWORK}

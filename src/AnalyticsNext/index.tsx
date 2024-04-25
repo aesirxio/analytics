@@ -30,10 +30,9 @@ const AnalyticsNext = ({
       <AnalyticsContextProvider>
         <AnalyticsHandle router={router} attributes={attributes}>
           {children}
-          {(process.env.NEXT_PUBLIC_DISABLE_ANALYTICS_CONSENT !== 'true' ||
-            process.env.NEXT_PUBLIC_CONSENT_LAYOUT === 'original') && (
+          {process.env.NEXT_PUBLIC_DISABLE_ANALYTICS_CONSENT !== 'true' && (
             <>
-              {oldLayout ? (
+              {oldLayout || process.env.NEXT_PUBLIC_CONSENT_LAYOUT === 'original' ? (
                 <ConsentComponent
                   endpoint={process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL}
                   networkEnv={process.env.NEXT_PUBLIC_CONCORDIUM_NETWORK}

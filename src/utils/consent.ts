@@ -18,8 +18,6 @@ const agreeConsents = async (
 ) => {
   const url = `${endpoint}/consent/v1/level${level}/${uuid}`;
   const urlV2 = `${endpoint}/consent/v2/level${level}/${uuid}`;
-  console.log('gtagIdne', gtagId);
-  console.log('gtmIdne', gtmId);
   if (sessionStorage.getItem('consentGranted') !== 'true') {
     gtagId && consentModeGrant(true, gtagId, layout);
     gtmId && consentModeGrant(false, gtmId, layout);

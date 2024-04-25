@@ -75,8 +75,6 @@ const ConsentComponentCustom = ({
   gtmId,
   layout,
 }: any) => {
-  console.log('gtagId', gtagId);
-  console.log('gtmId', gtmId);
   return (
     <WithWalletConnector network={networkEnv === 'testnet' ? TESTNET : MAINNET}>
       {(props) => (
