@@ -308,6 +308,24 @@ const verifySignature = async (
   }
 };
 
+const getConsentTemplate = async (domain: any) => {
+  try {
+    const endpointWeb3 = 'https://dev.web3id.backend.aesirx.io:8002';
+    const data = await axios.get(`${endpointWeb3}/datastream/template/${domain}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (data) {
+      return data;
+    }
+    throw false;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export {
   agreeConsents,
   getConsents,
@@ -319,4 +337,5 @@ export {
   verifySignature,
   loadGtagScript,
   loadGtmScript,
+  getConsentTemplate,
 };

@@ -1,7 +1,8 @@
-import React, { ReactNode, Suspense } from 'react';
+import React, { ReactNode, Suspense, useEffect, useState } from 'react';
 
 import AnalyticsContextProvider from '../utils/AnalyticsContextProvider';
 import AnalyticsHandle from './handle';
+import { getConsentTemplate } from '../utils/consent';
 
 const ConsentComponent = React.lazy(() => import('../Components/Consent'));
 const ConsentComponentCustom = React.lazy(() => import('../Components/ConsentCustom'));
@@ -14,13 +15,21 @@ interface AnalyticsReact {
 }
 
 const AnalyticsReact = ({ location, history, oldLayout = false, children }: AnalyticsReact) => {
+  const [layout, setLayout] = useState(process.env.REACT_APP_CONSENT_LAYOUT);
+  useEffect(() => {
+    const init = async () => {
+      const data: any = await getConsentTemplate(window.location.host);
+      setLayout(data?.data?.template ?? process.env.REACT_APP_CONSENT_LAYOUT);
+    };
+    init();
+  }, []);
   return (
     <AnalyticsContextProvider>
       <AnalyticsHandle location={location} history={history}>
         {children}
         {process.env.REACT_APP_DISABLE_ANALYTICS_CONSENT !== 'true' && (
           <Suspense fallback={<></>}>
-            {oldLayout || process.env.REACT_APP_CONSENT_LAYOUT === 'original' ? (
+            {oldLayout || layout === 'original' ? (
               <ConsentComponent
                 endpoint={process.env.REACT_APP_ENDPOINT_ANALYTICS_URL}
                 networkEnv={process.env.REACT_APP_CONCORDIUM_NETWORK}
@@ -35,7 +44,7 @@ const AnalyticsReact = ({ location, history, oldLayout = false, children }: Anal
                 aesirXEndpoint={process.env.REACT_APP_ENDPOINT_URL ?? 'https://api.aesirx.io'}
                 gtagId={process.env.REACT_APP_ANALYTICS_GTAG_ID}
                 gtmId={process.env.REACT_APP_ANALYTICS_GTM_ID}
-                layout={process.env.REACT_APP_CONSENT_LAYOUT}
+                layout={layout}
               />
             )}
           </Suspense>

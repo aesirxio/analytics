@@ -1,9 +1,10 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 import AnalyticsContextProvider from '../utils/AnalyticsContextProvider';
 import AnalyticsHandle from './handle';
 import { NextRouter } from 'next/router';
 import dynamic from 'next/dynamic';
+import { getConsentTemplate } from '../utils/consent';
 
 const ConsentComponent = dynamic(() => import('../Components/Consent'), { ssr: false });
 const ConsentComponentCustom = dynamic(() => import('../Components/ConsentCustom'), { ssr: false });
@@ -25,6 +26,14 @@ const AnalyticsNext = ({
   isLoggedApp,
   children,
 }: AnalyticsNext) => {
+  const [layout, setLayout] = useState(process.env.NEXT_PUBLIC_CONSENT_LAYOUT);
+  useEffect(() => {
+    const init = async () => {
+      const data: any = await getConsentTemplate(window.location.host);
+      setLayout(data?.data?.template ?? process.env.NEXT_PUBLIC_CONSENT_LAYOUT);
+    };
+    init();
+  }, []);
   return (
     <>
       <AnalyticsContextProvider>
@@ -32,7 +41,7 @@ const AnalyticsNext = ({
           {children}
           {process.env.NEXT_PUBLIC_DISABLE_ANALYTICS_CONSENT !== 'true' && (
             <>
-              {oldLayout || process.env.NEXT_PUBLIC_CONSENT_LAYOUT === 'original' ? (
+              {oldLayout || layout === 'original' ? (
                 <ConsentComponent
                   endpoint={process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL}
                   networkEnv={process.env.NEXT_PUBLIC_CONCORDIUM_NETWORK}
@@ -51,7 +60,7 @@ const AnalyticsNext = ({
                   isLoggedApp={isLoggedApp}
                   gtagId={process.env.NEXT_PUBLIC_ANALYTICS_GTAG_ID}
                   gtmId={process.env.NEXT_PUBLIC_ANALYTICS_GTM_ID}
-                  layout={process.env.NEXT_PUBLIC_CONSENT_LAYOUT}
+                  layout={layout}
                 />
               )}
             </>

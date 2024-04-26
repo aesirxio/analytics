@@ -169,7 +169,6 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
             setLevel(null);
             l = 3;
             let web3ID = false;
-            console.log('test', account);
             if (account && sessionStorage.getItem('aesirx-analytics-consent-type') !== 'metamask') {
               web3ID = await getWeb3ID(account, rpc, network?.name);
               if (web3ID === true) {
@@ -177,21 +176,29 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
               }
             }
             setWeb3ID(web3ID);
-            setLevel(l);
+            if (layout !== 'simple-consent-mode' && layout !== 'simple-web-2') {
+              setLevel(l);
+            } else {
+              setLevel(1);
+            }
           }
         } else if (connector) {
           // Metamask
-          if (l < 3) {
-            l = 3;
-            const web3ID = false;
-            setWeb3ID(web3ID);
-            setLevel(l);
-          } else {
-            if (l === 4) {
-              setLevel(4);
+          if (layout !== 'simple-consent-mode' && layout !== 'simple-web-2') {
+            if (l < 3) {
+              l = 3;
+              const web3ID = false;
+              setWeb3ID(web3ID);
+              setLevel(l);
             } else {
-              setLevel(3);
+              if (l === 4) {
+                setLevel(4);
+              } else {
+                setLevel(3);
+              }
             }
+          } else {
+            setLevel(1);
           }
         } else {
           setLevel(level ?? layout === 'advance-consent-mode' ? 2 : 1);
@@ -201,16 +208,20 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
         console.error(error);
       }
     })();
-  }, [account, address, connector]);
+  }, [account, address, connector, layout]);
 
   const handleLevel = useCallback(
     async (_level: number) => {
-      setLevel(_level);
-      if (_level > 3 && isDesktop && !connection && window['concordium']) {
-        setActiveConnectorType(BROWSER_WALLET);
+      if (layout !== 'simple-consent-mode' && layout !== 'simple-web-2') {
+        setLevel(_level);
+        if (_level > 3 && isDesktop && !connection && window['concordium']) {
+          setActiveConnectorType(BROWSER_WALLET);
+        }
+      } else {
+        setLevel(1);
       }
     },
-    [level]
+    [level, layout]
   );
 
   const handleRevoke = (status: boolean, level: string) => {
