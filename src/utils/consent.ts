@@ -320,9 +320,8 @@ const getConsentTemplate = async (domain: any) => {
     if (data) {
       return data;
     }
-    throw false;
   } catch (error) {
-    throw error;
+    console.log('error',error);
   }
 };
 
