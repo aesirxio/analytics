@@ -33,8 +33,8 @@ const AnalyticsNext = ({
     const init = async () => {
       const data: any = await getConsentTemplate(window.location.host);
       setLayout(data?.data?.template ?? process.env.NEXT_PUBLIC_CONSENT_LAYOUT);
-      setGtagId(data?.data?.gtagID ?? process.env.NEXT_PUBLIC_ANALYTICS_GTAG_ID);
-      setGtmId(data?.data?.gtmID ?? process.env.NEXT_PUBLIC_ANALYTICS_GTM_ID);
+      setGtagId(data?.data?.gtag_id ?? process.env.NEXT_PUBLIC_ANALYTICS_GTAG_ID);
+      setGtmId(data?.data?.gtm_id ?? process.env.NEXT_PUBLIC_ANALYTICS_GTM_ID);
     };
     init();
   }, []);

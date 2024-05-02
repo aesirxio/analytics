@@ -22,8 +22,8 @@ const AnalyticsReact = ({ location, history, oldLayout = false, children }: Anal
     const init = async () => {
       const data: any = await getConsentTemplate(window.location.host);
       setLayout(data?.data?.template ?? process.env.REACT_APP_CONSENT_LAYOUT);
-      setGtagId(data?.data?.gtagID ?? process.env.REACT_APP_ANALYTICS_GTAG_ID);
-      setGtmId(data?.data?.gtmID ?? process.env.REACT_APP_ANALYTICS_GTM_ID);
+      setGtagId(data?.data?.gtag_id ?? process.env.REACT_APP_ANALYTICS_GTAG_ID);
+      setGtmId(data?.data?.gtm_id ?? process.env.REACT_APP_ANALYTICS_GTM_ID);
     };
     init();
   }, []);

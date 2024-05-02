@@ -32,8 +32,8 @@ const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
     const init = async () => {
       const data: any = await getConsentTemplate(window.location.host);
       setLayout(data?.data?.template ?? window['consentLayout']);
-      setGtagId(data?.data?.gtagID ?? window['analyticsGtagId']);
-      setGtmId(data?.data?.gtmID ?? window['analyticsGtmId']);
+      setGtagId(data?.data?.gtag_id ?? window['analyticsGtagId']);
+      setGtmId(data?.data?.gtm_id ?? window['analyticsGtmId']);
     };
     init();
   }, []);

@@ -310,7 +310,7 @@ const verifySignature = async (
 
 const getConsentTemplate = async (domain: any) => {
   try {
-    const endpointWeb3 = 'https://dev.web3id.backend.aesirx.io:8002';
+    const endpointWeb3 = 'https://web3id.backend.aesirx.io:8001';
     const data = await axios.get(`${endpointWeb3}/datastream/template/${domain}`, {
       headers: {
         'Content-Type': 'application/json',
@@ -321,7 +321,7 @@ const getConsentTemplate = async (domain: any) => {
       return data;
     }
   } catch (error) {
-    console.log('error',error);
+    console.log('error', error);
   }
 };
 
