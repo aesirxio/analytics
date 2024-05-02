@@ -120,7 +120,8 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
       if (
         isDesktop &&
         sessionStorage.getItem('aesirx-analytics-revoke') !== '1' &&
-        sessionStorage.getItem('aesirx-analytics-revoke') !== '2'
+        sessionStorage.getItem('aesirx-analytics-revoke') !== '2' &&
+        sessionStorage.getItem('aesirx-analytics-rejected') !== 'true'
       ) {
         if (window['concordium']) {
           const address = (await window['concordium']?.requestAccounts()) ?? [];
@@ -138,7 +139,7 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
       }
     };
     initConnector();
-  }, []);
+  }, [window['concordium']]);
 
   useEffect(() => {
     if (activeConnector) {

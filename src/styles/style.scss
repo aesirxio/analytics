@@ -96,6 +96,11 @@ $dark: #222328;
   .btn-success:hover {
     color: var(--#{$prefix}white);
   }
+  .nav {
+    @include media-breakpoint-down(lg) {
+      --aesirxconsent-nav-link-padding-y: 5px;
+    }
+  }
   .toast {
     --#{$prefix}toast-zindex: 1049;
     --#{$prefix}toast-font-size: 16px;
@@ -105,6 +110,11 @@ $dark: #222328;
       border: var(--#{$prefix}toast-border-width) solid var(--#{$prefix}toast-border-color);
       box-shadow: var(--#{$prefix}toast-box-shadow);
       border-radius: var(--#{$prefix}toast-border-radius);
+      max-height: 100vh;
+      overflow-y: auto;
+      @include media-breakpoint-down(lg) {
+        font-size: 14px;
+      }
       button {
         @include media-breakpoint-down(lg) {
           font-size: 14px;
@@ -150,16 +160,16 @@ $dark: #222328;
       }
       .status-tier {
         &.tier-1 {
-          background-color: #c8192e;
+          background-color: #F1C40F;
         }
         &.tier-2 {
-          background-color: #e67e22;
+          background-color: #E67E22;
         }
         &.tier-3 {
-          background-color: #ffc700;
+          background-color: #9B59B6;
         }
         &.tier-4 {
-          background-color: #1c9678;
+          background-color: #C8192E;
         }
       }
     }
@@ -396,6 +406,9 @@ $dark: #222328;
     30% {
       opacity: 0;
     }
+  }
+  .header-consent-bg {
+    background-color: #f8f9fd;
   }
 }
 body.modal-open,
