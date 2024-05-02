@@ -27,10 +27,14 @@ const AnalyticsNext = ({
   children,
 }: AnalyticsNext) => {
   const [layout, setLayout] = useState(process.env.NEXT_PUBLIC_CONSENT_LAYOUT);
+  const [gtagId, setGtagId] = useState(process.env.NEXT_PUBLIC_ANALYTICS_GTAG_ID);
+  const [gtmId, setGtmId] = useState(process.env.NEXT_PUBLIC_ANALYTICS_GTM_ID);
   useEffect(() => {
     const init = async () => {
       const data: any = await getConsentTemplate(window.location.host);
       setLayout(data?.data?.template ?? process.env.NEXT_PUBLIC_CONSENT_LAYOUT);
+      setGtagId(data?.data?.gtagID ?? process.env.NEXT_PUBLIC_ANALYTICS_GTAG_ID);
+      setGtmId(data?.data?.gtmID ?? process.env.NEXT_PUBLIC_ANALYTICS_GTM_ID);
     };
     init();
   }, []);
@@ -48,8 +52,8 @@ const AnalyticsNext = ({
                   aesirXEndpoint={process.env.NEXT_PUBLIC_ENDPOINT_URL ?? 'https://api.aesirx.io'}
                   loginApp={loginApp}
                   isLoggedApp={isLoggedApp}
-                  gtagId={process.env.NEXT_PUBLIC_ANALYTICS_GTAG_ID}
-                  gtmId={process.env.NEXT_PUBLIC_ANALYTICS_GTM_ID}
+                  gtagId={gtagId}
+                  gtmId={gtmId}
                 />
               ) : (
                 <ConsentComponentCustom
@@ -58,8 +62,8 @@ const AnalyticsNext = ({
                   aesirXEndpoint={process.env.NEXT_PUBLIC_ENDPOINT_URL ?? 'https://api.aesirx.io'}
                   loginApp={loginApp}
                   isLoggedApp={isLoggedApp}
-                  gtagId={process.env.NEXT_PUBLIC_ANALYTICS_GTAG_ID}
-                  gtmId={process.env.NEXT_PUBLIC_ANALYTICS_GTM_ID}
+                  gtagId={gtagId}
+                  gtmId={gtmId}
                   layout={layout}
                 />
               )}

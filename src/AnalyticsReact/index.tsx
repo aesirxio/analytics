@@ -16,10 +16,14 @@ interface AnalyticsReact {
 
 const AnalyticsReact = ({ location, history, oldLayout = false, children }: AnalyticsReact) => {
   const [layout, setLayout] = useState(process.env.REACT_APP_CONSENT_LAYOUT);
+  const [gtagId, setGtagId] = useState(process.env.REACT_APP_ANALYTICS_GTAG_ID);
+  const [gtmId, setGtmId] = useState(process.env.REACT_APP_ANALYTICS_GTM_ID);
   useEffect(() => {
     const init = async () => {
       const data: any = await getConsentTemplate(window.location.host);
       setLayout(data?.data?.template ?? process.env.REACT_APP_CONSENT_LAYOUT);
+      setGtagId(data?.data?.gtagID ?? process.env.REACT_APP_ANALYTICS_GTAG_ID);
+      setGtmId(data?.data?.gtmID ?? process.env.REACT_APP_ANALYTICS_GTM_ID);
     };
     init();
   }, []);
@@ -34,16 +38,16 @@ const AnalyticsReact = ({ location, history, oldLayout = false, children }: Anal
                 endpoint={process.env.REACT_APP_ENDPOINT_ANALYTICS_URL}
                 networkEnv={process.env.REACT_APP_CONCORDIUM_NETWORK}
                 aesirXEndpoint={process.env.REACT_APP_ENDPOINT_URL ?? 'https://api.aesirx.io'}
-                gtagId={process.env.REACT_APP_ANALYTICS_GTAG_ID}
-                gtmId={process.env.REACT_APP_ANALYTICS_GTM_ID}
+                gtagId={gtagId}
+                gtmId={gtmId}
               />
             ) : (
               <ConsentComponentCustom
                 endpoint={process.env.REACT_APP_ENDPOINT_ANALYTICS_URL}
                 networkEnv={process.env.REACT_APP_CONCORDIUM_NETWORK}
                 aesirXEndpoint={process.env.REACT_APP_ENDPOINT_URL ?? 'https://api.aesirx.io'}
-                gtagId={process.env.REACT_APP_ANALYTICS_GTAG_ID}
-                gtmId={process.env.REACT_APP_ANALYTICS_GTM_ID}
+                gtagId={gtagId}
+                gtmId={gtmId}
                 layout={layout}
               />
             )}

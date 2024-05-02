@@ -26,10 +26,14 @@ declare global {
 const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
   window.process = { env: '' };
   const [layout, setLayout] = useState(window['consentLayout']);
+  const [gtagId, setGtagId] = useState(window['analyticsGtagId']);
+  const [gtmId, setGtmId] = useState(window['analyticsGtmId']);
   useEffect(() => {
     const init = async () => {
       const data: any = await getConsentTemplate(window.location.host);
       setLayout(data?.data?.template ?? window['consentLayout']);
+      setGtagId(data?.data?.gtagID ?? window['analyticsGtagId']);
+      setGtmId(data?.data?.gtmID ?? window['analyticsGtmId']);
     };
     init();
   }, []);
@@ -49,16 +53,16 @@ const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
             endpoint={window['aesirx1stparty'] ?? ''}
             networkEnv={window['concordiumNetwork'] ?? ''}
             aesirXEndpoint={window['aesirxEndpoint'] ?? 'https://api.aesirx.io'}
-            gtagId={window['analyticsGtagId'] ?? ''}
-            gtmId={window['analyticsGtmId'] ?? ''}
+            gtagId={gtagId}
+            gtmId={gtmId}
           />
         ) : (
           <ConsentComponentCustom
             endpoint={window['aesirx1stparty'] ?? ''}
             networkEnv={window['concordiumNetwork'] ?? ''}
             aesirXEndpoint={window['aesirxEndpoint'] ?? 'https://api.aesirx.io'}
-            gtagId={window['analyticsGtagId'] ?? ''}
-            gtmId={window['analyticsGtmId'] ?? ''}
+            gtagId={gtagId}
+            gtmId={gtmId}
             layout={layout}
           />
         )}
