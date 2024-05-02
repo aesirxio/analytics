@@ -18,7 +18,8 @@
       background-color: var(--#{$prefix}dark-bg-subtle);
     }
     .bg-white {
-      background-color: var(--#{$prefix}light-bg-subtle);
+      // background-color: #1B233F !important;
+      background-color: var(--#{$prefix}dark) !important;
     }
     .bg-light {
       background-color: var(--#{$prefix}light-bg-subtle);
@@ -35,6 +36,17 @@
       .text {
         color: $white;
       }
+    }
+    .header-consent-bg {
+      background-color: var(--#{$prefix}light-bg-subtle);
+    }
+    .toast.custom .consent_info_tab .nav-item button.active {
+      color: $white;
+      background-color: #1B233F;
+    }
+    .item_compliant {
+      background-color: #F0F3FB;
+      color: #222328;
     }
   }
 }

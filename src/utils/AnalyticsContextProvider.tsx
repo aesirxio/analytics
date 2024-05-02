@@ -3,7 +3,7 @@
  * @license     GNU General Public License version 3, see LICENSE.
  */
 
-import React, { Dispatch, ReactNode, SetStateAction, useState } from 'react';
+import React, { Dispatch, ReactNode, SetStateAction, useRef, useState } from 'react';
 import { appLanguages } from '../translations';
 import { AesirXI18nextProvider } from './I18nextProvider';
 
@@ -16,6 +16,7 @@ interface AnalyticsContextType {
   visitor_uuid: string;
   setEventID: Dispatch<SetStateAction<string>>;
   setUUID: Dispatch<SetStateAction<string>>;
+  ref: any;
 }
 
 export const AnalyticsContext = React.createContext<AnalyticsContextType>({
@@ -23,11 +24,13 @@ export const AnalyticsContext = React.createContext<AnalyticsContextType>({
   visitor_uuid: undefined,
   setEventID: undefined,
   setUUID: undefined,
+  ref: undefined,
 });
 
 const AnalyticsContextProvider: React.FC<Props> = ({ children }) => {
   const [eventID, setEventID] = useState();
   const [UUID, setUUID] = useState();
+  const ref = useRef();
   return (
     <AnalyticsContext.Provider
       value={{
@@ -35,6 +38,7 @@ const AnalyticsContextProvider: React.FC<Props> = ({ children }) => {
         visitor_uuid: UUID,
         setEventID: setEventID,
         setUUID: setUUID,
+        ref: ref,
       }}
     >
       <AesirXI18nextProvider appLanguages={appLanguages}>{children}</AesirXI18nextProvider>
