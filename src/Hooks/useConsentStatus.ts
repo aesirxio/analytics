@@ -26,7 +26,6 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
 
   const { activeConnector, network, connectedAccounts, genesisHashes, setActiveConnectorType } =
     props;
-
   const { address, connector } = useAccount();
   useEffect(() => {
     const allow = sessionStorage.getItem('aesirx-analytics-allow');
@@ -74,13 +73,30 @@ const useConsentStatus = (endpoint?: string, props?: WalletConnectionProps) => {
     }
   }, [analyticsContext.visitor_uuid]);
 
-  const { connection, setConnection, account } = useConnection(connectedAccounts, genesisHashes);
+  const { connection, setConnection, account } =
+    window['concordium'] || !isDesktop
+      ? useConnection(connectedAccounts, genesisHashes)
+      : {
+          connection: null,
+          setConnection: () => {
+            return;
+          },
+          account: '',
+        };
 
-  const { connect, connectError } = useConnect(activeConnector, setConnection);
+  const { connect, connectError } =
+    window['concordium'] || !isDesktop
+      ? useConnect(activeConnector, setConnection)
+      : {
+          connect: () => {
+            return;
+          },
+          connectError: '',
+        };
 
   const [, setRpcGenesisHash] = useState();
   const [, setRpcError] = useState('');
-  const rpc = useGrpcClient(network);
+  const rpc = window['concordium'] || !isDesktop ? useGrpcClient(network) : '';
 
   useEffect(() => {
     if (rpc) {

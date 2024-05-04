@@ -61,21 +61,45 @@ const ConsentComponentCustom = ({
   isLoggedApp,
 }: any) => {
   return (
-    <WithWalletConnector network={networkEnv === 'testnet' ? TESTNET : MAINNET}>
-      {(props) => (
+    <>
+      {window['concordium'] || !isDesktop ? (
+        <WithWalletConnector network={networkEnv === 'testnet' ? TESTNET : MAINNET}>
+          {(props) => (
+            <div className="aesirxconsent">
+              <SSOEthereumProvider>
+                <ConsentComponentCustomApp
+                  {...props}
+                  endpoint={endpoint}
+                  aesirXEndpoint={aesirXEndpoint}
+                  loginApp={loginApp}
+                  isLoggedApp={isLoggedApp}
+                />
+              </SSOEthereumProvider>
+            </div>
+          )}
+        </WithWalletConnector>
+      ) : (
         <div className="aesirxconsent">
           <SSOEthereumProvider>
             <ConsentComponentCustomApp
-              {...props}
               endpoint={endpoint}
               aesirXEndpoint={aesirXEndpoint}
               loginApp={loginApp}
               isLoggedApp={isLoggedApp}
+              network={undefined}
+              setActiveConnectorType={() => {
+                return;
+              }}
+              activeConnectorType={undefined}
+              activeConnector={undefined}
+              activeConnectorError={''}
+              connectedAccounts={undefined}
+              genesisHashes={undefined}
             />
           </SSOEthereumProvider>
         </div>
       )}
-    </WithWalletConnector>
+    </>
   );
 };
 const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
@@ -92,12 +116,22 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
     setActiveConnectorType,
     network,
   } = props;
-  const { setConnection } = useConnection(connectedAccounts, genesisHashes);
+  const { setConnection } =
+    window['concordium'] || !isDesktop
+      ? useConnection(connectedAccounts, genesisHashes)
+      : {
+          setConnection: () => {
+            return;
+          },
+        };
 
-  const { isConnecting } = useConnect(activeConnector, setConnection);
+  const { isConnecting } =
+    window['concordium'] || !isDesktop
+      ? useConnect(activeConnector, setConnection)
+      : { isConnecting: false };
 
   const handleOnConnect = async (connectorType: ConnectorType, network = 'concordium') => {
-    if (network === 'concordium') {
+    if ((network === 'concordium' && window['concordium']) || !isDesktop) {
       setActiveConnectorType(connectorType);
     }
     setLoading('done');
@@ -129,7 +163,7 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
   const [upgradeLevel, setUpgradeLevel] = useState<any>(0);
   const analyticsContext = useContext(AnalyticsContext);
   const { t } = useTranslation();
-  const gRPCClient = useGrpcClient(network);
+  const gRPCClient: any = window['concordium'] || !isDesktop ? useGrpcClient(network) : {};
 
   // Metamask
   const { address, connector } = useAccount();
@@ -204,7 +238,6 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
       toast.error(error.message);
     },
   });
-
   const handleChange = async ({ target: { value } }: any) => {
     if (consents.indexOf(parseInt(value)) === -1) {
       setConsents([...consents, ...[parseInt(value)]]);
@@ -772,7 +805,7 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                   <>
                     {upgradeLayout ? (
                       <>
-                        <div className="bg-white rounded p-3 w-100">
+                        <div className="bg-white rounded p-3 w-auto">
                           {loading === 'done' ? (
                             <>
                               <p className="mb-2 mb-lg-3">{t('txt_upgrade_consent_text')}</p>

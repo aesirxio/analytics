@@ -131,6 +131,7 @@ $dark: #222328;
             font-weight: 600;
             color: #a5a4b5;
             border: 0;
+            cursor: pointer;
             &.active {
               color: $primary;
               border-bottom: 2px solid $success;
