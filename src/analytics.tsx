@@ -5,7 +5,7 @@ import {
   searchAnalytics,
   viewProductAnalytics,
 } from './utils/woocommerce';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { createRoot } from 'react-dom/client';
 import { AnalyticsContext } from './utils/AnalyticsContextProvider';
@@ -14,6 +14,7 @@ import ConsentComponentCustom from './Components/ConsentCustom';
 import { Buffer } from 'buffer';
 import { appLanguages } from './translations';
 import { AesirXI18nextProvider } from './utils/I18nextProvider';
+import { getConsentTemplate } from './utils/consent';
 
 window.Buffer = Buffer;
 declare global {
@@ -24,6 +25,18 @@ declare global {
 }
 const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
   window.process = { env: '' };
+  const [layout, setLayout] = useState(window['consentLayout']);
+  const [gtagId, setGtagId] = useState(window['analyticsGtagId']);
+  const [gtmId, setGtmId] = useState(window['analyticsGtmId']);
+  useEffect(() => {
+    const init = async () => {
+      const data: any = await getConsentTemplate(window.location.host);
+      setLayout(data?.data?.template ?? window['consentLayout']);
+      setGtagId(data?.data?.gtag_id ?? window['analyticsGtagId']);
+      setGtmId(data?.data?.gtm_id ?? window['analyticsGtmId']);
+    };
+    init();
+  }, []);
   return (
     <AnalyticsContext.Provider
       value={{
@@ -35,17 +48,22 @@ const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
       }}
     >
       <AesirXI18nextProvider appLanguages={appLanguages}>
-        {window['oldLayoutConsent'] === 'true' ? (
+        {layout === 'original' ? (
           <ConsentComponent
             endpoint={window['aesirx1stparty'] ?? ''}
             networkEnv={window['concordiumNetwork'] ?? ''}
             aesirXEndpoint={window['aesirxEndpoint'] ?? 'https://api.aesirx.io'}
+            gtagId={gtagId}
+            gtmId={gtmId}
           />
         ) : (
           <ConsentComponentCustom
             endpoint={window['aesirx1stparty'] ?? ''}
             networkEnv={window['concordiumNetwork'] ?? ''}
             aesirXEndpoint={window['aesirxEndpoint'] ?? 'https://api.aesirx.io'}
+            gtagId={gtagId}
+            gtmId={gtmId}
+            layout={layout}
           />
         )}
       </AesirXI18nextProvider>

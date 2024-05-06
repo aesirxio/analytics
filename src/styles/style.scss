@@ -131,6 +131,7 @@ $dark: #222328;
             font-weight: 600;
             color: #a5a4b5;
             border: 0;
+            cursor: pointer;
             &.active {
               color: $primary;
               border-bottom: 2px solid $success;
@@ -139,9 +140,11 @@ $dark: #222328;
         }
       }
       .about_section {
-        height: 373px;
         overflow: auto;
         padding: 0 10px;
+        &.fix_height {
+          height: 373px;
+        }
         @include media-breakpoint-down(lg) {
           padding: 0;
         }
@@ -160,16 +163,16 @@ $dark: #222328;
       }
       .status-tier {
         &.tier-1 {
-          background-color: #F1C40F;
+          background-color: #f1c40f;
         }
         &.tier-2 {
-          background-color: #E67E22;
+          background-color: #e67e22;
         }
         &.tier-3 {
-          background-color: #9B59B6;
+          background-color: #9b59b6;
         }
         &.tier-4 {
-          background-color: #C8192E;
+          background-color: #c8192e;
         }
       }
     }

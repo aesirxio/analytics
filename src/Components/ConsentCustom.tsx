@@ -6,6 +6,8 @@ import {
   getNonce,
   getSignature,
   getWalletNonce,
+  loadGtagScript,
+  loadGtmScript,
   revokeConsents,
   verifySignature,
 } from '../utils/consent';
@@ -46,12 +48,22 @@ import { useTranslation } from 'react-i18next';
 import { useAccount, useSignMessage } from 'wagmi';
 import SSOEthereumProvider from './Ethereum';
 import { getWeb3ID } from '../utils/Concordium';
+declare global {
+  interface Window {
+    dataLayer: any;
+  }
+}
+declare const dataLayer: any[];
+
 interface WalletConnectionPropsExtends extends WalletConnectionProps {
   endpoint: string;
   aesirXEndpoint: string;
   networkEnv?: string;
   loginApp?: any;
   isLoggedApp: boolean;
+  gtagId: string;
+  gtmId: string;
+  layout: string;
 }
 const ConsentComponentCustom = ({
   endpoint,
@@ -59,6 +71,9 @@ const ConsentComponentCustom = ({
   networkEnv,
   loginApp,
   isLoggedApp,
+  gtagId,
+  gtmId,
+  layout,
 }: any) => {
   return (
     <WithWalletConnector network={networkEnv === 'testnet' ? TESTNET : MAINNET}>
@@ -71,6 +86,9 @@ const ConsentComponentCustom = ({
               aesirXEndpoint={aesirXEndpoint}
               loginApp={loginApp}
               isLoggedApp={isLoggedApp}
+              gtagId={gtagId}
+              gtmId={gtmId}
+              layout={layout}
             />
           </SSOEthereumProvider>
         </div>
@@ -84,6 +102,9 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
     aesirXEndpoint,
     loginApp,
     isLoggedApp,
+    gtagId,
+    gtmId,
+    layout,
     activeConnectorType,
     activeConnector,
     activeConnectorError,
@@ -115,7 +136,7 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
     handleLevel,
     showRevoke,
     handleRevoke,
-  ] = useConsentStatus(endpoint, props);
+  ] = useConsentStatus(endpoint, layout, props);
 
   const [consents, setConsents] = useState<number[]>([1, 2]);
   const [loading, setLoading] = useState('done');
@@ -187,7 +208,10 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
           signature,
           web3ID,
           jwt,
-          'metamask'
+          'metamask',
+          gtagId,
+          gtmId,
+          layout
         );
         sessionStorage.setItem('aesirx-analytics-uuid', uuid);
         sessionStorage.setItem('aesirx-analytics-allow', '1');
@@ -276,7 +300,20 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
               : 'Give consent Tier 4:{nonce} {domain} {time}'
           );
           setLoading('saving');
-          await agreeConsents(endpoint, level, uuid, consents, account, signature, web3ID, jwt);
+          await agreeConsents(
+            endpoint,
+            level,
+            uuid,
+            consents,
+            account,
+            signature,
+            web3ID,
+            jwt,
+            'concordium',
+            gtagId,
+            gtmId,
+            layout
+          );
           sessionStorage.setItem('aesirx-analytics-consent-type', 'concordium');
         } else if (connector) {
           // Metamask
@@ -301,13 +338,39 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
         consents.forEach(async (consent) => {
           const existConsent = consentList.find((item: any) => item?.consent === consent);
           if (!existConsent) {
-            await agreeConsents(endpoint, 1, uuid, consent);
+            await agreeConsents(
+              endpoint,
+              1,
+              uuid,
+              consent,
+              null,
+              null,
+              null,
+              null,
+              null,
+              gtagId,
+              gtmId,
+              layout
+            );
           } else if (
             !!existConsent?.consent_uuid &&
             existConsent?.expiration &&
             new Date(existConsent.expiration) < new Date()
           ) {
-            await agreeConsents(endpoint, 1, uuid, consent);
+            await agreeConsents(
+              endpoint,
+              1,
+              uuid,
+              consent,
+              null,
+              null,
+              null,
+              null,
+              null,
+              gtagId,
+              gtmId,
+              layout
+            );
           }
         });
       }
@@ -371,7 +434,11 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
           account,
           signature,
           null,
-          response?.jwt
+          response?.jwt,
+          'concordium',
+          gtagId,
+          gtmId,
+          layout
         );
         setShow(false);
         handleRevoke(true, level);
@@ -414,7 +481,20 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
           }
           setConsentTier4(response);
         } else {
-          await agreeConsents(endpoint, level, uuid, consents, null, null, null, response?.jwt);
+          await agreeConsents(
+            endpoint,
+            level,
+            uuid,
+            consents,
+            null,
+            null,
+            null,
+            response?.jwt,
+            'concordium',
+            gtagId,
+            gtmId,
+            layout
+          );
           setShow(false);
           handleRevoke(true, level);
           setLoading('done');
@@ -548,6 +628,7 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
     ) {
       window.funcAfterConsent && window.funcAfterConsent();
     }
+    (gtagId || gtmId) && loadConsentDefault(gtagId, gtmId);
   }, []);
 
   console.log('level', uuid, level, web3ID, account, loading);
@@ -610,6 +691,37 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
         )}
       </div>
     );
+  };
+  const loadConsentDefault = (gtagId: any, gtmId: any) => {
+    window.dataLayer = window.dataLayer || [];
+    function gtag( // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      p0: string, // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      p1: any, // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      p2?: any
+    ) {
+      // eslint-disable-next-line prefer-rest-params
+      dataLayer.push(arguments);
+    }
+    gtag('consent', 'default', {
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      ad_storage: 'denied',
+      analytics_storage: 'denied',
+      wait_for_update: 500,
+    });
+    if (gtagId) {
+      gtag('js', new Date());
+      gtag('config', `${gtagId}`);
+    }
+    if (gtmId) {
+      dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+    }
+    if (layout === 'advance-consent-mode') {
+      gtagId && loadGtagScript(gtagId);
+      gtmId && loadGtmScript(gtmId);
+      gtag('set', 'url_passthrough', true);
+      gtag('set', 'ads_data_redaction', true);
+    }
   };
 
   return (
@@ -772,7 +884,7 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                   <>
                     {upgradeLayout ? (
                       <>
-                        <div className="bg-white rounded p-3 w-100">
+                        <div className="bg-white rounded p-3 w-auto">
                           {loading === 'done' ? (
                             <>
                               <p className="mb-2 mb-lg-3">{t('txt_upgrade_consent_text')}</p>
@@ -804,7 +916,7 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                                 </div>
                               </div>
                               <Form>
-                                {level !== 1 && (
+                                {level !== 1 && layout !== 'advance-consent-mode' && (
                                   <ConsentLevelUprade
                                     level={1}
                                     tier={t(`txt_tier_1_tier`)}
@@ -878,7 +990,12 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                       </>
                     ) : (
                       <>
-                        <TermsComponent level={level} handleLevel={handleLevel} isCustom={true}>
+                        <TermsComponent
+                          level={level}
+                          handleLevel={handleLevel}
+                          isCustom={true}
+                          layout={layout}
+                        >
                           <Form className="mb-0 w-100">
                             <Form.Check
                               checked={consents.includes(1)}
@@ -899,15 +1016,21 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                             <div className="d-flex w-100 flex-wrap flex-lg-nowrap">
                               {loading === 'done' ? (
                                 <>
-                                  <Button
-                                    variant="outline-success"
-                                    onClick={() => {
-                                      setUpgradeLayout(true);
-                                    }}
-                                    className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3 text-dark"
-                                  >
-                                    {t('txt_change_consent')}
-                                  </Button>{' '}
+                                  {layout === 'simple-consent-mode' || layout === 'simple-web-2' ? (
+                                    <></>
+                                  ) : (
+                                    <>
+                                      <Button
+                                        variant="outline-success"
+                                        onClick={() => {
+                                          setUpgradeLayout(true);
+                                        }}
+                                        className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3 text-dark"
+                                      >
+                                        {t('txt_change_consent')}
+                                      </Button>{' '}
+                                    </>
+                                  )}
                                   <Button
                                     variant="outline-success"
                                     onClick={handleNotAllow}
