@@ -6,6 +6,8 @@ import {
   getNonce,
   getSignature,
   getWalletNonce,
+  loadGtagScript,
+  loadGtmScript,
   revokeConsents,
   verifySignature,
 } from '../utils/consent';
@@ -44,14 +46,32 @@ import { useTranslation } from 'react-i18next';
 import { useAccount, useSignMessage } from 'wagmi';
 import SSOEthereumProvider from './Ethereum';
 import { getWeb3ID } from '../utils/Concordium';
+declare global {
+  interface Window {
+    dataLayer: any;
+  }
+}
+declare const dataLayer: any[];
 interface WalletConnectionPropsExtends extends WalletConnectionProps {
   endpoint: string;
   aesirXEndpoint: string;
   networkEnv?: string;
   loginApp?: any;
   isLoggedApp?: boolean;
+  gtagId: string;
+  gtmId: string;
+  layout?: string;
 }
-const ConsentComponent = ({ endpoint, aesirXEndpoint, networkEnv, loginApp, isLoggedApp }: any) => {
+const ConsentComponent = ({
+  endpoint,
+  aesirXEndpoint,
+  networkEnv,
+  loginApp,
+  isLoggedApp,
+  gtagId,
+  gtmId,
+  layout,
+}: any) => {
   return (
     <WithWalletConnector network={networkEnv === 'testnet' ? TESTNET : MAINNET}>
       {(props) => (
@@ -63,6 +83,9 @@ const ConsentComponent = ({ endpoint, aesirXEndpoint, networkEnv, loginApp, isLo
               aesirXEndpoint={aesirXEndpoint}
               loginApp={loginApp}
               isLoggedApp={isLoggedApp}
+              gtagId={gtagId}
+              gtmId={gtmId}
+              layout={layout}
             />
           </SSOEthereumProvider>
         </div>
@@ -76,6 +99,9 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     aesirXEndpoint,
     loginApp,
     isLoggedApp,
+    gtagId,
+    gtmId,
+    layout,
     activeConnectorType,
     activeConnector,
     activeConnectorError,
@@ -107,7 +133,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     handleLevel,
     showRevoke,
     handleRevoke,
-  ] = useConsentStatus(endpoint, props);
+  ] = useConsentStatus(endpoint, layout, props);
 
   const [consents, setConsents] = useState<number[]>([1, 2]);
   const [loading, setLoading] = useState('done');
@@ -176,7 +202,10 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
           signature,
           web3ID,
           jwt,
-          'metamask'
+          'metamask',
+          gtagId,
+          gtmId,
+          layout
         );
         sessionStorage.setItem('aesirx-analytics-uuid', uuid);
         sessionStorage.setItem('aesirx-analytics-allow', '1');
@@ -265,7 +294,20 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
               : 'Give consent Tier 4:{nonce} {domain} {time}'
           );
           setLoading('saving');
-          await agreeConsents(endpoint, level, uuid, consents, account, signature, web3ID, jwt);
+          await agreeConsents(
+            endpoint,
+            level,
+            uuid,
+            consents,
+            account,
+            signature,
+            web3ID,
+            jwt,
+            'concordium',
+            gtagId,
+            gtmId,
+            layout
+          );
           sessionStorage.setItem('aesirx-analytics-consent-type', 'concordium');
         } else if (connector) {
           // Metamask
@@ -290,13 +332,39 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
         consents.forEach(async (consent) => {
           const existConsent = consentList.find((item: any) => item?.consent === consent);
           if (!existConsent) {
-            await agreeConsents(endpoint, 1, uuid, consent);
+            await agreeConsents(
+              endpoint,
+              1,
+              uuid,
+              consent,
+              null,
+              null,
+              null,
+              null,
+              'concordium',
+              gtagId,
+              gtmId,
+              layout
+            );
           } else if (
             !!existConsent?.consent_uuid &&
             existConsent?.expiration &&
             new Date(existConsent.expiration) < new Date()
           ) {
-            await agreeConsents(endpoint, 1, uuid, consent);
+            await agreeConsents(
+              endpoint,
+              1,
+              uuid,
+              consent,
+              null,
+              null,
+              null,
+              null,
+              'concordium',
+              gtagId,
+              gtmId,
+              layout
+            );
           }
         });
       }
@@ -360,7 +428,11 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
           account,
           signature,
           null,
-          response?.jwt
+          response?.jwt,
+          'concordium',
+          gtagId,
+          gtmId,
+          layout
         );
         setShow(false);
         handleRevoke(true, level);
@@ -403,7 +475,20 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
           }
           setConsentTier4(response);
         } else {
-          await agreeConsents(endpoint, level, uuid, consents, null, null, null, response?.jwt);
+          await agreeConsents(
+            endpoint,
+            level,
+            uuid,
+            consents,
+            null,
+            null,
+            null,
+            response?.jwt,
+            'concordium',
+            gtagId,
+            gtmId,
+            layout
+          );
           setShow(false);
           handleRevoke(true, level);
           setLoading('done');
@@ -520,6 +605,38 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     element.click();
   };
 
+  const loadConsentDefault = (gtagId: any, gtmId: any) => {
+    window.dataLayer = window.dataLayer || [];
+    function gtag( // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      p0: string, // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      p1: any, // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      p2?: any
+    ) {
+      // eslint-disable-next-line prefer-rest-params
+      dataLayer.push(arguments);
+    }
+    gtag('consent', 'default', {
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      ad_storage: 'denied',
+      analytics_storage: 'denied',
+      wait_for_update: 500,
+    });
+    if (gtagId) {
+      gtag('js', new Date());
+      gtag('config', `${gtagId}`);
+    }
+    if (gtmId) {
+      dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+    }
+    if (layout === 'advance-consent-mode') {
+      gtagId && loadGtagScript(gtagId);
+      gtmId && loadGtmScript(gtmId);
+      gtag('set', 'url_passthrough', true);
+      gtag('set', 'ads_data_redaction', true);
+    }
+  };
+
   useEffect(() => {
     if (activeConnectorError) {
       toast.error(activeConnectorError);
@@ -531,6 +648,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
       setShowBackdrop(false);
       setShowExpandConsent(false);
     }
+    (gtagId || gtmId) && loadConsentDefault(gtagId, gtmId);
   }, []);
 
   console.log('level', uuid, level, web3ID, account, loading);
@@ -690,7 +808,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
               <>
                 {level ? (
                   <>
-                    <TermsComponent level={level} handleLevel={handleLevel}>
+                    <TermsComponent level={level} handleLevel={handleLevel} layout={layout}>
                       <Form className="mb-0">
                         <Form.Check
                           checked={consents.includes(1)}

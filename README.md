@@ -22,6 +22,7 @@ Follow the instructions in: [https://github.com/aesirxio/analytics-1stparty](htt
 <script>
   window.aesirx1stparty = "https://example.com"
   window.aesirxClientID="[REPLACE THIS WITH THE PROVIDED CLIENT_ID]"
+  window.aesirxClientSecret="[REPLACE THIS WITH THE PROVIDED CLIENT_SECRET]"
 </script>
 <script async defer src="YOUR_PROJECT_PATH/analytics.js"></script>
 ```
@@ -46,9 +47,11 @@ Follow the instructions in: [https://github.com/aesirxio/analytics-1stparty](htt
 ```
 REACT_APP_ENDPOINT_ANALYTICS_URL=https://example.com
 REACT_APP_SSO_CLIENT_ID=[REPLACE THIS WITH THE PROVIDED CLIENT_ID]
+REACT_APP_SSO_CLIENT_SECRET=[REPLACE THIS WITH THE PROVIDED CLIENT_SECRET]
 
 (https://example.com is the link to your 1st party server)
 `CLIENT_ID` replace this with the provided `CLIENT_ID` from https://dapp.shield.aesirx.io/
+`CLIENT_SECRET` replace this with the provided `CLIENT_SECRET` fromhttps://dapp.shield.aesirx.io/
 ```
 
 ##### Disable Consent Popup:
@@ -87,9 +90,11 @@ export default AnalyticsContainer;
 ```
 NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL=https://example.com
 NEXT_PUBLIC_SSO_CLIENT_ID=[REPLACE THIS WITH THE PROVIDED CLIENT_ID]
+NEXT_PUBLIC_SSO_CLIENT_SECRET=[REPLACE THIS WITH THE PROVIDED CLIENT_SECRET]
 
 (https://example.com is the link to your 1st party server)
 `CLIENT_ID` replace this with the provided `CLIENT_ID` from https://dapp.shield.aesirx.io/
+`CLIENT_SECRET` replace this with the provided `CLIENT_SECRET` fromhttps://dapp.shield.aesirx.io/
 ```
 
 ##### Disable Consent Popup:
@@ -274,4 +279,37 @@ Please follow below CSS example:
   [data-bs-theme=dark] .aesirxconsent {
     color: #fff;
   }
+```
+
+
+## Choose template for Consent modal
+
+There is 5 template for Consent modal
+1. original
+2. default (recommend)
+3. simple-consent-mode
+   1. Support Basic Consent Mode v2
+4. advance-consent-mode
+   1. Support Advance Consent Mode v2
+5. simple-web-2
+
+#### Usage in SSR site:
+```
+<script>
+  window.consentLayout = "default"
+</script>
+```
+
+#### In ReactJS:
+
+add this environment variable to `.env`
+```
+REACT_APP_CONSENT_LAYOUT=default
+```
+
+#### In NextJS:
+
+add this environment variable to `.env`
+```
+NEXT_PUBLIC_CONSENT_LAYOUT=default
 ```
