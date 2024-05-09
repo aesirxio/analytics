@@ -61,10 +61,10 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
                 const revokeTier = !consent?.consent_uuid
                   ? ''
                   : consent?.web3id && consent?.address
-                  ? '4'
-                  : consent?.address && !consent?.web3id
-                  ? '3'
-                  : '2';
+                    ? '4'
+                    : consent?.address && !consent?.web3id
+                      ? '3'
+                      : '2';
                 revokeTier ? handleRevoke(true, revokeTier) : setShow(true);
               }
             }
@@ -163,45 +163,52 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
     (async () => {
       try {
         let l = level;
-        if (rpc) {
-          // Concordium
-          if (l < 3) {
-            setLevel(null);
-            l = 3;
-            let web3ID = false;
-            if (account && sessionStorage.getItem('aesirx-analytics-consent-type') !== 'metamask') {
-              web3ID = await getWeb3ID(account, rpc, network?.name);
-              if (web3ID === true) {
-                l = 4;
+        if (isDesktop) {
+          if (rpc) {
+            // Concordium
+            if (l < 3) {
+              setLevel(null);
+              l = 3;
+              let web3ID = false;
+              if (
+                account &&
+                sessionStorage.getItem('aesirx-analytics-consent-type') !== 'metamask'
+              ) {
+                web3ID = await getWeb3ID(account, rpc, network?.name);
+                if (web3ID === true) {
+                  l = 4;
+                }
+              }
+              setWeb3ID(web3ID);
+              if (layout !== 'simple-consent-mode' && layout !== 'simple-web-2') {
+                setLevel(l);
+              } else {
+                setLevel(1);
               }
             }
-            setWeb3ID(web3ID);
+          } else if (connector && isDesktop) {
+            // Metamask
             if (layout !== 'simple-consent-mode' && layout !== 'simple-web-2') {
-              setLevel(l);
+              if (l < 3) {
+                l = 3;
+                const web3ID = false;
+                setWeb3ID(web3ID);
+                setLevel(l);
+              } else {
+                if (l === 4) {
+                  setLevel(4);
+                } else {
+                  setLevel(3);
+                }
+              }
             } else {
               setLevel(1);
             }
-          }
-        } else if (connector) {
-          // Metamask
-          if (layout !== 'simple-consent-mode' && layout !== 'simple-web-2') {
-            if (l < 3) {
-              l = 3;
-              const web3ID = false;
-              setWeb3ID(web3ID);
-              setLevel(l);
-            } else {
-              if (l === 4) {
-                setLevel(4);
-              } else {
-                setLevel(3);
-              }
-            }
           } else {
-            setLevel(1);
+            setLevel(level ?? layout === 'advance-consent-mode' ? 2 : 1);
           }
         } else {
-          setLevel(level ?? layout === 'advance-consent-mode' ? 2 : 1);
+          setLevel(1);
         }
       } catch (error) {
         setLevel(level ?? layout === 'advance-consent-mode' ? 2 : 1);
