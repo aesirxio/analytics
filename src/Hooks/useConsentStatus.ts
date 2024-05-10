@@ -215,7 +215,7 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
         console.error(error);
       }
     })();
-  }, [account, address, connector, layout]);
+  }, [account, address, connector, layout, isDesktop]);
 
   const handleLevel = useCallback(
     async (_level: number) => {
