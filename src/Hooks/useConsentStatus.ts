@@ -164,7 +164,7 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
       try {
         let l = level;
         if (isDesktop) {
-          if (rpc) {
+          if (rpc && account) {
             // Concordium
             if (l < 3) {
               setLevel(null);
@@ -186,7 +186,7 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
                 setLevel(1);
               }
             }
-          } else if (connector && isDesktop) {
+          } else if (connector) {
             // Metamask
             if (layout !== 'simple-consent-mode' && layout !== 'simple-web-2') {
               if (l < 3) {
@@ -205,13 +205,13 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
               setLevel(1);
             }
           } else {
-            setLevel(level ?? layout === 'advance-consent-mode' ? 2 : 1);
+            setLevel(layout === 'advance-consent-mode' ? 2 : 1);
           }
         } else {
           setLevel(1);
         }
       } catch (error) {
-        setLevel(level ?? layout === 'advance-consent-mode' ? 2 : 1);
+        setLevel(layout === 'advance-consent-mode' ? 2 : 1);
         console.error(error);
       }
     })();
