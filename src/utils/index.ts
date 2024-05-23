@@ -31,6 +31,10 @@ const startTracker = async (
     ? location.protocol + '//' + location.host + referer
     : document.referrer
     ? document.referrer
+    : window['referer']
+    ? window['referer'] === '/'
+      ? location.protocol + '//' + location.host
+      : location.protocol + '//' + location.host + window['referer']
     : '';
   user_agent = window.navigator.userAgent;
   const browser = Bowser.parse(window.navigator.userAgent);
@@ -60,7 +64,10 @@ const startTracker = async (
       url: url?.replace(/^(https?:\/\/)?(www\.)?/, '$1'),
       ...(referer &&
         (referer !== url || document.referrer) && {
-          referer: referer !== url ? referer : document.referrer,
+          referer:
+            referer !== url
+              ? referer?.replace(/^(https?:\/\/)?(www\.)?/, '$1')
+              : document.referrer?.replace(/^(https?:\/\/)?(www\.)?/, '$1'),
         }),
       user_agent: user_agent,
       ip: ip,
@@ -120,10 +127,10 @@ const trackEvent = async (endpoint: string, referer?: string, data?: object) => 
     [
       JSON.stringify({
         fingerprint: fingerprint,
-        url: url,
+        url: url?.replace(/^(https?:\/\/)?(www\.)?/, '$1'),
         ...(referer !== '/' &&
           referer && {
-            referer: referer,
+            referer: referer?.replace(/^(https?:\/\/)?(www\.)?/, '$1'),
           }),
         user_agent: user_agent,
         ip: ip,
