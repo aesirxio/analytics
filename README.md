@@ -146,7 +146,7 @@ data-aesirx-event-attribute-<attribute-name-2>="<attribute-value-1>"
 ##### Or you can use your own Javascript to Track events:
 
 ```
-window.trackEvent(endpoint, referer, data)
+window.trackEventAnalytics(endpoint, referer, data)
 ```
 
 (`endpoint` is the link to your 1st party server which must be installed)
@@ -158,9 +158,8 @@ window.trackEvent(endpoint, referer, data)
 For example:
 
 ```
-trackEvent(
+trackEventAnalytics(
   "https://example.com",
-  visitor_uuid,
   "https://aesirx.io",
   {
     event_name: "<event_name>",

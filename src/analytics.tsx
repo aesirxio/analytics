@@ -202,3 +202,4 @@ document.addEventListener('DOMContentLoaded', () => {
     WoocommerceAnalytics();
   }
 });
+window['trackEventAnalytics'] = trackEvent;

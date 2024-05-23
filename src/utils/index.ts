@@ -120,7 +120,7 @@ const trackEvent = async (endpoint: string, referer?: string, data?: object) => 
     [
       JSON.stringify({
         fingerprint: fingerprint,
-        url: url,
+        url: url?.replace(/^(https?:\/\/)?(www\.)?/, '$1'),
         ...(referer !== '/' &&
           referer && {
             referer: referer,
