@@ -60,7 +60,10 @@ const startTracker = async (
       url: url?.replace(/^(https?:\/\/)?(www\.)?/, '$1'),
       ...(referer &&
         (referer !== url || document.referrer) && {
-          referer: referer !== url ? referer : document.referrer,
+          referer:
+            referer !== url
+              ? referer?.replace(/^(https?:\/\/)?(www\.)?/, '$1')
+              : document.referrer?.replace(/^(https?:\/\/)?(www\.)?/, '$1'),
         }),
       user_agent: user_agent,
       ip: ip,
@@ -123,7 +126,7 @@ const trackEvent = async (endpoint: string, referer?: string, data?: object) => 
         url: url?.replace(/^(https?:\/\/)?(www\.)?/, '$1'),
         ...(referer !== '/' &&
           referer && {
-            referer: referer,
+            referer: referer?.replace(/^(https?:\/\/)?(www\.)?/, '$1'),
           }),
         user_agent: user_agent,
         ip: ip,
