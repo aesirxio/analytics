@@ -74,7 +74,7 @@ const startTracker = async (
       browser_name: browser_name,
       browser_version: browser_version,
       lang: lang,
-      device: device?.includes("iPhone") ? "mobile" : device?.includes("iPad") ? "tablet" : device,
+      device: device?.includes('iPhone') ? 'mobile' : device?.includes('iPad') ? 'tablet' : device,
       ...(attributes?.length && {
         event_name: 'visit',
         event_type: 'action',
@@ -137,7 +137,11 @@ const trackEvent = async (endpoint: string, referer?: string, data?: object) => 
         browser_name: browser_name,
         browser_version: browser_version,
         lang: lang,
-        device: device?.includes("iPhone") ? "mobile" : device?.includes("iPad") ? "tablet" : device,
+        device: device?.includes('iPhone')
+          ? 'mobile'
+          : device?.includes('iPad')
+          ? 'tablet'
+          : device,
         ...data,
       }),
     ],
