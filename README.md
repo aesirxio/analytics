@@ -155,6 +155,8 @@ window.trackEventAnalytics(endpoint, referer, data)
 
 (`data` is the data you want to track)
 
+(`event_type` should be `conversion` if you want to track event as conversion)
+
 For example:
 
 ```
