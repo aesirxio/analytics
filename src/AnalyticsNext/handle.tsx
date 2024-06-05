@@ -16,6 +16,7 @@ const AnalyticsHandle = ({ router, attributes, children }: AnalyticsHandle) => {
     async (prevRoute: string, attributes: any) => {
       const referer = prevRoute ? prevRoute : '';
       window['referer'] = referer;
+      window['attributes'] = attributes;
       const responseStart = await startTracker(endPoint, '', referer, '', attributes);
       responseStart?.event_uuid && AnalyticsStore.setEventID(responseStart.event_uuid);
       responseStart?.visitor_uuid && AnalyticsStore.setUUID(responseStart.visitor_uuid);

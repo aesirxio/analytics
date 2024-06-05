@@ -196,7 +196,7 @@ const endTrackerVisibilityState = (endPoint: string) => {
       endTracker(endPoint, window['event_uuid'], window['visitor_uuid']);
     }
     if (document.visibilityState === 'visible') {
-      const response = await startTracker(endPoint);
+      const response = await startTracker(endPoint, '', '', '', window['attributes']);
       window['event_uuid'] = response?.event_uuid;
     }
   });
