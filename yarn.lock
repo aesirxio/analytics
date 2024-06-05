@@ -1276,6 +1276,11 @@
   resolved "https://registry.yarnpkg.com/@concordium/rust-bindings/-/rust-bindings-2.0.1.tgz#267fbd6339e14673debe5c3529dcebcf254e11b0"
   integrity sha512-4ZzHt31fUZ5DD8DSCITc7A+n9dY5+FyEfdYjucW0K8g+A9mdy1Rbcj1DrNI1MeKnoK8XdA1+X0pDrBAgVKwRgg==
 
+"@concordium/rust-bindings@^3.1.0":
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/@concordium/rust-bindings/-/rust-bindings-3.1.0.tgz#fe77af1b77f1b32b2d3487389531b7933c83ddbc"
+  integrity sha512-5nr9u0pgZgBIeGooaTebAFNHvChXtVnZ0yz6wOHtQe8zW5+Eumjx0u3YrYB7f3EfGJDLDx0kgF1uSgJaS+yJTA==
+
 "@concordium/wallet-connectors@^0.4.0-rc.6":
   version "0.4.0-rc.6"
   resolved "https://registry.yarnpkg.com/@concordium/wallet-connectors/-/wallet-connectors-0.4.0-rc.6.tgz#fedf832d4ffb73147edd2e874eb887e0496c6636"
@@ -1307,12 +1312,12 @@
     json-bigint "^1.0.0"
     uuid "^8.3.2"
 
-"@concordium/web-sdk@^7.0.4-rc.3":
-  version "7.0.4-rc.3"
-  resolved "https://registry.yarnpkg.com/@concordium/web-sdk/-/web-sdk-7.0.4-rc.3.tgz#f99c5655b646f1a7772eafa423cca5396ab01fcf"
-  integrity sha512-Y9Lt0lzjQoeeGxYxOKmV4YhSkpfrN4OozzJFltgcUZtUnBxmUk9KWTmNOucnpuO3P0wUXxYfbVFyAP6NX+xF/A==
+"@concordium/web-sdk@^7.4.0":
+  version "7.4.0"
+  resolved "https://registry.yarnpkg.com/@concordium/web-sdk/-/web-sdk-7.4.0.tgz#f2f927fa5e83ff21c29af1399a5ea7ad2ace76e6"
+  integrity sha512-3F/aWp1MMIqXCELzosnsd8KkLBxdi2SZQNGlshy26qw+w71BlRwfUKwOQS1IJSZae2hJW6Zu+PSkfgyPXLUwjg==
   dependencies:
-    "@concordium/rust-bindings" "2.0.1"
+    "@concordium/rust-bindings" "^3.1.0"
     "@grpc/grpc-js" "^1.9.4"
     "@noble/ed25519" "^2.0.0"
     "@noble/hashes" "^1.3.2"
@@ -2025,22 +2030,17 @@
   resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.3.0.tgz#085fd70f6d7d9d109671090ccae1d3bec62554a1"
   integrity sha512-ilHEACi9DwqJB0pw7kv+Apvh50jiiSyR/cQ3y4W7lOR5mhvn/50FLUfsnfJz0BDZtl/RR16kXvptiv6q1msYZg==
 
-"@noble/hashes@1.3.2", "@noble/hashes@^1.2.0", "@noble/hashes@^1.3.2":
+"@noble/hashes@1.3.2":
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.3.2.tgz#6f26dbc8fbc7205873ce3cee2f690eba0d421b39"
   integrity sha512-MVC8EAQp7MvEcm30KWENFjgR+Mkmf+D189XJTkFIlwohU5hcBbn1ZkKq7KVTi2Hme3PMGF390DaL52beVrIihQ==
 
-"@noble/hashes@1.4.0", "@noble/hashes@^1.3.3":
+"@noble/hashes@1.4.0", "@noble/hashes@^1.2.0", "@noble/hashes@^1.3.2", "@noble/hashes@^1.3.3":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.4.0.tgz#45814aa329f30e4fe0ba49426f49dfccdd066426"
   integrity sha512-V1JJ1WTRUqHHrOSh597hURcMqVKVGL/ea3kv0gSnEdsEZ0/+VyPghM1lMNGc00z7CIQorSvbKpuJkxvuHbvdbg==
 
-"@noble/hashes@~1.3.0":
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.3.1.tgz#8831ef002114670c603c458ab8b11328406953a9"
-  integrity sha512-EbqwksQwz9xDRGfDST86whPBgM65E0OH/pCgqW0GBVzO22bNE+NuIbeTb714+IfSjU3aRk47EUvXIb5bTsenKA==
-
-"@noble/hashes@~1.3.2":
+"@noble/hashes@~1.3.0", "@noble/hashes@~1.3.2":
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.3.3.tgz#39908da56a4adc270147bb07968bf3b16cfe1699"
   integrity sha512-V7/fPHgl+jsVPXqqeOzT8egNj2iBIVt+ECeMMG8TdcnTikP3oaBtUVqpT/gYCR68aEBJSF+XbYUxStjbFMqIIA==
@@ -2184,24 +2184,12 @@
     "@protobuf-ts/runtime" "^2.9.1"
     "@protobuf-ts/runtime-rpc" "^2.9.1"
 
-"@protobuf-ts/runtime-rpc@^2.8.2":
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/@protobuf-ts/runtime-rpc/-/runtime-rpc-2.9.0.tgz#9431d9dfa1f49c6787bc88c6d3b71b4392082494"
-  integrity sha512-h2S86+u2cNJACjzbBubbjKmNrnXkTmJ9yJHW4t7ZVS9xdV1C68blsVIh3Su4ghR8Nlj0459FuIUTsjWR8hA/7g==
-  dependencies:
-    "@protobuf-ts/runtime" "^2.9.0"
-
-"@protobuf-ts/runtime-rpc@^2.9.1":
+"@protobuf-ts/runtime-rpc@^2.8.2", "@protobuf-ts/runtime-rpc@^2.9.1":
   version "2.9.1"
   resolved "https://registry.yarnpkg.com/@protobuf-ts/runtime-rpc/-/runtime-rpc-2.9.1.tgz#6a1c8f189005de5dc6bce7a18751ef3fe304c8eb"
   integrity sha512-pzO20J6s07LTWcj8hKAXh/dAacU5HIVir6SANKXXH8G0pn0VIIB4FFECq5Hbv25/8PQoOGZ7iApq/DMHaSjGhg==
   dependencies:
     "@protobuf-ts/runtime" "^2.9.1"
-
-"@protobuf-ts/runtime@^2.9.0":
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/@protobuf-ts/runtime/-/runtime-2.9.0.tgz#fca33476d0fcdd8255680321df893af7ed5bab21"
-  integrity sha512-DnJtLZFMglADv9jiawBmg0RaET4a6fNSAaAHuU6Ovw2ZhJ23ehIY0NrlYLS0Lc8HRH0S5rkLI1QF1A1h8uKUnA==
 
 "@protobuf-ts/runtime@^2.9.1":
   version "2.9.1"
