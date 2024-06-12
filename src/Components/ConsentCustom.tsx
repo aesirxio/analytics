@@ -48,6 +48,7 @@ import { useTranslation } from 'react-i18next';
 import { useAccount, useSignMessage } from 'wagmi';
 import SSOEthereumProvider from './Ethereum';
 import { getWeb3ID } from '../utils/Concordium';
+import { trackEvent } from '../utils';
 declare global {
   interface Window {
     dataLayer: any;
@@ -514,6 +515,12 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
     sessionStorage.setItem('aesirx-analytics-rejected', 'true');
     setShowExpandConsent(false);
     setShowBackdrop(false);
+    const hostUrl = endpoint ? endpoint : '';
+    const root = hostUrl ? hostUrl.replace(/\/$/, '') : '';
+    trackEvent(root, '', {
+      event_name: 'Reject consent',
+      event_type: 'reject-consent',
+    });
   };
   const handleRevokeBtn = async () => {
     const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');
@@ -599,6 +606,12 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
         setShowBackdrop(false);
         sessionStorage.removeItem('aesirx-analytics-allow');
       }
+      const hostUrl = endpoint ? endpoint : '';
+      const root = hostUrl ? hostUrl.replace(/\/$/, '') : '';
+      trackEvent(root, '', {
+        event_name: 'Revoke consent',
+        event_type: 'revoke-consent',
+      });
     } catch (error) {
       console.log(error);
       setLoading('done');
