@@ -30,12 +30,12 @@ const startTracker = async (
   referer = referer
     ? location.protocol + '//' + location.host + referer
     : document.referrer
-      ? document.referrer
-      : window['referer']
-        ? window['referer'] === '/'
-          ? location.protocol + '//' + location.host
-          : location.protocol + '//' + location.host + window['referer']
-        : '';
+    ? document.referrer
+    : window['referer']
+    ? window['referer'] === '/'
+      ? location.protocol + '//' + location.host
+      : location.protocol + '//' + location.host + window['referer']
+    : '';
   user_agent = window.navigator.userAgent;
   const browser = Bowser.parse(window.navigator.userAgent);
   const browser_name = browser?.browser?.name;
@@ -112,12 +112,12 @@ const trackEvent = async (endpoint: string, referer?: string, data?: object) => 
   referer = referer
     ? location.protocol + '//' + location.host + referer
     : document.referrer
-      ? document.referrer
-      : window['referer']
-        ? window['referer'] === '/'
-          ? location.protocol + '//' + location.host
-          : location.protocol + '//' + location.host + window['referer']
-        : '';
+    ? document.referrer
+    : window['referer']
+    ? window['referer'] === '/'
+      ? location.protocol + '//' + location.host
+      : location.protocol + '//' + location.host + window['referer']
+    : '';
   const url = location.protocol + '//' + location.host + location.pathname;
   const user_agent = window.navigator.userAgent;
   const browser = Bowser.parse(window.navigator.userAgent);
@@ -146,8 +146,8 @@ const trackEvent = async (endpoint: string, referer?: string, data?: object) => 
         device: device?.includes('iPhone')
           ? 'mobile'
           : device?.includes('iPad')
-            ? 'tablet'
-            : device,
+          ? 'tablet'
+          : device,
         ...data,
       }),
     ],
