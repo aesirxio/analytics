@@ -80,7 +80,7 @@ const ConsentComponentCustom = ({
     <WithWalletConnector network={networkEnv === 'testnet' ? TESTNET : MAINNET}>
       {(props) => (
         <div className="aesirxconsent">
-          <SSOEthereumProvider>
+          <SSOEthereumProvider layout={layout}>
             <ConsentComponentCustomApp
               {...props}
               endpoint={endpoint}
@@ -154,81 +154,87 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
   const gRPCClient = useGrpcClient(network);
 
   // Metamask
-  const { address, connector } = useAccount();
+  const { address, connector } =
+    layout === 'simple-consent-mode' || layout === 'simple-web-2'
+      ? { address: '', connector: '' }
+      : useAccount();
 
-  const { signMessage } = useSignMessage({
-    async onSuccess(data, variables) {
-      const signature = Buffer.from(
-        typeof data === 'object' && data !== null ? JSON.stringify(data) : data,
-        'utf-8'
-      ).toString('base64');
-      const jwt = sessionStorage.getItem('aesirx-analytics-jwt');
-      if (variables?.message.indexOf('Revoke consent') > -1) {
-        // Revoke Metamask
-        const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');
-        const consentList = await getConsents(endpoint, uuid);
-        consentList.forEach(async (consent: any) => {
-          !consent?.expiration &&
-            (await revokeConsents(
-              endpoint,
-              levelRevoke,
-              consent?.consent_uuid,
-              address,
-              signature,
-              web3ID,
-              jwt,
-              'metamask'
-            ));
+  const { signMessage }: any =
+    layout === 'simple-consent-mode' || layout === 'simple-web-2'
+      ? { signMessage: {} }
+      : useSignMessage({
+          async onSuccess(data, variables) {
+            const signature = Buffer.from(
+              typeof data === 'object' && data !== null ? JSON.stringify(data) : data,
+              'utf-8'
+            ).toString('base64');
+            const jwt = sessionStorage.getItem('aesirx-analytics-jwt');
+            if (variables?.message.indexOf('Revoke consent') > -1) {
+              // Revoke Metamask
+              const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');
+              const consentList = await getConsents(endpoint, uuid);
+              consentList.forEach(async (consent: any) => {
+                !consent?.expiration &&
+                  (await revokeConsents(
+                    endpoint,
+                    levelRevoke,
+                    consent?.consent_uuid,
+                    address,
+                    signature,
+                    web3ID,
+                    jwt,
+                    'metamask'
+                  ));
+              });
+              setLoading('done');
+              handleRevoke(false);
+              setShowExpandConsent(false);
+              setShow(true);
+              setShowBackdrop(false);
+              sessionStorage.removeItem('aesirx-analytics-allow');
+            } else if (variables?.message.indexOf('Login with nonce') > -1) {
+              const res = await verifySignature(aesirXEndpoint, 'metamask', address, data);
+              sessionStorage.setItem('aesirx-analytics-jwt', res?.jwt);
+              setLoadingCheckAccount(false);
+              const nonce = await getNonce(
+                endpoint,
+                address,
+                'Give consent Tier 4:{nonce} {domain} {time}',
+                'metamask'
+              );
+              signMessage({ message: `${nonce}` });
+            } else {
+              setLoading('saving');
+              // Consent Metamask
+              await agreeConsents(
+                endpoint,
+                level,
+                uuid,
+                consents,
+                address,
+                signature,
+                web3ID,
+                jwt,
+                'metamask',
+                gtagId,
+                gtmId,
+                layout
+              );
+              sessionStorage.setItem('aesirx-analytics-uuid', uuid);
+              sessionStorage.setItem('aesirx-analytics-allow', '1');
+              sessionStorage.setItem('aesirx-analytics-consent-type', 'metamask');
+
+              setShow(false);
+              setLoading('done');
+              handleRevoke(true, level);
+              setShowBackdrop(false);
+            }
+          },
+          async onError(error) {
+            setLoading('done');
+            toast.error(error.message);
+          },
         });
-        setLoading('done');
-        handleRevoke(false);
-        setShowExpandConsent(false);
-        setShow(true);
-        setShowBackdrop(false);
-        sessionStorage.removeItem('aesirx-analytics-allow');
-      } else if (variables?.message.indexOf('Login with nonce') > -1) {
-        const res = await verifySignature(aesirXEndpoint, 'metamask', address, data);
-        sessionStorage.setItem('aesirx-analytics-jwt', res?.jwt);
-        setLoadingCheckAccount(false);
-        const nonce = await getNonce(
-          endpoint,
-          address,
-          'Give consent Tier 4:{nonce} {domain} {time}',
-          'metamask'
-        );
-        signMessage({ message: `${nonce}` });
-      } else {
-        setLoading('saving');
-        // Consent Metamask
-        await agreeConsents(
-          endpoint,
-          level,
-          uuid,
-          consents,
-          address,
-          signature,
-          web3ID,
-          jwt,
-          'metamask',
-          gtagId,
-          gtmId,
-          layout
-        );
-        sessionStorage.setItem('aesirx-analytics-uuid', uuid);
-        sessionStorage.setItem('aesirx-analytics-allow', '1');
-        sessionStorage.setItem('aesirx-analytics-consent-type', 'metamask');
-
-        setShow(false);
-        setLoading('done');
-        handleRevoke(true, level);
-        setShowBackdrop(false);
-      }
-    },
-    async onError(error) {
-      setLoading('done');
-      toast.error(error.message);
-    },
-  });
 
   const handleChange = async ({ target: { value } }: any) => {
     if (consents.indexOf(parseInt(value)) === -1) {
