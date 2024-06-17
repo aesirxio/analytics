@@ -41,7 +41,7 @@ const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
     <AnalyticsContext.Provider
       value={{
         event_uuid: event_uuid,
-        visitor_uuid: visitor_uuid,
+        visitor_uuid: visitor_uuid ?? sessionStorage.getItem('aesirx-analytics-uuid'),
         setEventID: undefined,
         setUUID: undefined,
         ref: undefined,
@@ -137,8 +137,8 @@ const AesirAnalytics = () => {
       if (window['disableAnalyticsConsent'] !== 'true') {
         rootElement.render(
           <ConsentPopup
-            event_uuid={responseStart.visitor_uuid}
-            visitor_uuid={responseStart.visitor_uuid}
+            event_uuid={responseStart?.visitor_uuid}
+            visitor_uuid={responseStart?.visitor_uuid}
           />
         );
       }
