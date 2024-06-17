@@ -20,8 +20,9 @@ const startTracker = async (
   attributesVisit?: any
 ) => {
   const allow = sessionStorage.getItem('aesirx-analytics-allow');
+  const reject = sessionStorage.getItem('aesirx-analytics-rejected');
 
-  if (allow === '0') {
+  if (allow === '0' || reject === 'true') {
     return null;
   }
   const { location, document } = window;
@@ -103,8 +104,8 @@ const startTracker = async (
 
 const trackEvent = async (endpoint: string, referer?: string, data?: object) => {
   const allow = sessionStorage.getItem('aesirx-analytics-allow');
-
-  if (allow === '0') {
+  const reject = sessionStorage.getItem('aesirx-analytics-rejected');
+  if (allow === '0' || reject === 'true') {
     return null;
   }
 

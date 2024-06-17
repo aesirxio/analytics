@@ -17,8 +17,8 @@ const AnalyticsHandle = ({ location, history, children }: AnalyticsHandle) => {
         const referer = location.pathname ? location.pathname : '';
         window['referer'] = referer;
         const responseStart = await startTracker(endPoint, '', referer);
-        responseStart.event_uuid && AnalyticsStore.setEventID(responseStart.event_uuid);
-        responseStart.visitor_uuid && AnalyticsStore.setUUID(responseStart.visitor_uuid);
+        responseStart?.event_uuid && AnalyticsStore.setEventID(responseStart.event_uuid);
+        responseStart?.visitor_uuid && AnalyticsStore.setUUID(responseStart.visitor_uuid);
       } else {
         endTracker(endPoint, window['event_uuid'], AnalyticsStore.visitor_uuid);
       }
