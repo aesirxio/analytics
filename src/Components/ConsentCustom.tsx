@@ -11,7 +11,7 @@ import {
   revokeConsents,
   verifySignature,
 } from '../utils/consent';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { Suspense, useContext, useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import useConsentStatus from '../Hooks/useConsentStatus';
 import '../styles/style.scss';
@@ -27,7 +27,9 @@ import checkbox from '../Assets/checkbox.svg';
 import checkbox_active from '../Assets/checkbox_active.svg';
 
 import ContentLoader from 'react-content-loader';
-import { SSOButton } from 'aesirx-sso';
+const SSOButton: any = React.lazy(() =>
+  import('aesirx-sso').then((module) => ({ default: module.SSOButton }))
+);
 import {
   MAINNET,
   WithWalletConnector,
@@ -848,12 +850,14 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                           {(sessionStorage.getItem('aesirx-analytics-revoke') === '4' ||
                             sessionStorage.getItem('aesirx-analytics-revoke') === '2') && (
                             <div>
-                              <SSOButton
-                                className="d-none revokeLogin"
-                                text={<>Login Revoke</>}
-                                ssoState={'noscopes'}
-                                onGetData={onGetData}
-                              />
+                              <Suspense fallback={<div>Loading...</div>}>
+                                <SSOButton
+                                  className="d-none revokeLogin"
+                                  text={<>Login Revoke</>}
+                                  ssoState={'noscopes'}
+                                  onGetData={onGetData}
+                                />
+                              </Suspense>
                             </div>
                           )}
                         </div>
@@ -1064,18 +1068,23 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                                         : 'd-none'
                                     }`}
                                   >
-                                    <SSOButton
-                                      className="btn btn-success text-white d-flex align-items-center justify-content-center loginSSO rounded-pill py-2 py-lg-3 w-100"
-                                      text={
-                                        <>
-                                          <img src={yes} className="me-1" />
-                                          {t('txt_yes_i_consent')}
-                                        </>
-                                      }
-                                      ssoState={'noscopes'}
-                                      onGetData={onGetData}
-                                      {...(level === 2 ? { noCreateAccount: true } : {})}
-                                    />
+                                    {layout !== 'simple-consent-mode' &&
+                                      layout !== 'simple-web-2' && (
+                                        <Suspense fallback={<div>Loading...</div>}>
+                                          <SSOButton
+                                            className="btn btn-success text-white d-flex align-items-center justify-content-center loginSSO rounded-pill py-2 py-lg-3 w-100"
+                                            text={
+                                              <>
+                                                <img src={yes} className="me-1" />
+                                                {t('txt_yes_i_consent')}
+                                              </>
+                                            }
+                                            ssoState={'noscopes'}
+                                            onGetData={onGetData}
+                                            {...(level === 2 ? { noCreateAccount: true } : {})}
+                                          />
+                                        </Suspense>
+                                      )}
                                   </div>
                                   {level === 2 || (level === 4 && !account && !address) ? (
                                     <></>
