@@ -35,7 +35,10 @@ const AnalyticsContextProvider: React.FC<Props> = ({ children }) => {
     <AnalyticsContext.Provider
       value={{
         event_uuid: eventID,
-        visitor_uuid: UUID ?? sessionStorage.getItem('aesirx-analytics-uuid'),
+        visitor_uuid:
+          UUID ?? typeof window !== 'undefined'
+            ? sessionStorage.getItem('aesirx-analytics-uuid')
+            : undefined,
         setEventID: setEventID,
         setUUID: setUUID,
         ref: ref,
