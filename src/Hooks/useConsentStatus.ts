@@ -86,7 +86,7 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
   const rpc = useGrpcClient(network);
 
   useEffect(() => {
-    if (rpc) {
+    if (rpc && layout !== 'simple-consent-mode' && layout !== 'simple-web-2') {
       setRpcGenesisHash(undefined);
       rpc
         .getConsensusStatus()
