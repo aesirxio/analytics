@@ -3,7 +3,7 @@
  * @license     GNU General Public License version 3, see LICENSE.
  */
 
-import React, { Dispatch, ReactNode, SetStateAction, useRef, useState } from 'react';
+import React, { Dispatch, ReactNode, SetStateAction, useEffect, useRef, useState } from 'react';
 import { appLanguages } from '../translations';
 import { AesirXI18nextProvider } from './I18nextProvider';
 
@@ -31,6 +31,12 @@ const AnalyticsContextProvider: React.FC<Props> = ({ children }) => {
   const [eventID, setEventID] = useState();
   const [UUID, setUUID] = useState();
   const ref = useRef();
+
+  useEffect(() => {
+    const uuid: any = sessionStorage.getItem('aesirx-analytics-uuid');
+    uuid && setUUID(uuid);
+  }, []);
+
   return (
     <AnalyticsContext.Provider
       value={{
