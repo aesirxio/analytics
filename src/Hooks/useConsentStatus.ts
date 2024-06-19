@@ -27,7 +27,10 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
   const { activeConnector, network, connectedAccounts, genesisHashes, setActiveConnectorType } =
     props;
 
-  const { address, connector } = useAccount();
+  const { address, connector } =
+    layout === 'simple-consent-mode' || layout === 'simple-web-2'
+      ? { address: '', connector: '' }
+      : useAccount();
   useEffect(() => {
     const allow = sessionStorage.getItem('aesirx-analytics-allow');
     const currentUuid = sessionStorage.getItem('aesirx-analytics-uuid');
@@ -83,7 +86,7 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
   const rpc = useGrpcClient(network);
 
   useEffect(() => {
-    if (rpc) {
+    if (rpc && layout !== 'simple-consent-mode' && layout !== 'simple-web-2') {
       setRpcGenesisHash(undefined);
       rpc
         .getConsensusStatus()

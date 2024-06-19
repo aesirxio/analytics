@@ -11,7 +11,7 @@ import {
   revokeConsents,
   verifySignature,
 } from '../utils/consent';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { Suspense, useContext, useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import useConsentStatus from '../Hooks/useConsentStatus';
 import '../styles/style.scss';
@@ -27,7 +27,9 @@ import checkbox from '../Assets/checkbox.svg';
 import checkbox_active from '../Assets/checkbox_active.svg';
 
 import ContentLoader from 'react-content-loader';
-import { SSOButton } from 'aesirx-sso';
+const SSOButton: any = React.lazy(() =>
+  import('aesirx-sso').then((module) => ({ default: module.SSOButton }))
+);
 import {
   MAINNET,
   WithWalletConnector,
@@ -80,7 +82,7 @@ const ConsentComponentCustom = ({
     <WithWalletConnector network={networkEnv === 'testnet' ? TESTNET : MAINNET}>
       {(props) => (
         <div className="aesirxconsent">
-          <SSOEthereumProvider>
+          <SSOEthereumProvider layout={layout}>
             <ConsentComponentCustomApp
               {...props}
               endpoint={endpoint}
@@ -154,81 +156,87 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
   const gRPCClient = useGrpcClient(network);
 
   // Metamask
-  const { address, connector } = useAccount();
+  const { address, connector } =
+    layout === 'simple-consent-mode' || layout === 'simple-web-2'
+      ? { address: '', connector: '' }
+      : useAccount();
 
-  const { signMessage } = useSignMessage({
-    async onSuccess(data, variables) {
-      const signature = Buffer.from(
-        typeof data === 'object' && data !== null ? JSON.stringify(data) : data,
-        'utf-8'
-      ).toString('base64');
-      const jwt = sessionStorage.getItem('aesirx-analytics-jwt');
-      if (variables?.message.indexOf('Revoke consent') > -1) {
-        // Revoke Metamask
-        const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');
-        const consentList = await getConsents(endpoint, uuid);
-        consentList.forEach(async (consent: any) => {
-          !consent?.expiration &&
-            (await revokeConsents(
-              endpoint,
-              levelRevoke,
-              consent?.consent_uuid,
-              address,
-              signature,
-              web3ID,
-              jwt,
-              'metamask'
-            ));
+  const { signMessage }: any =
+    layout === 'simple-consent-mode' || layout === 'simple-web-2'
+      ? { signMessage: {} }
+      : useSignMessage({
+          async onSuccess(data, variables) {
+            const signature = Buffer.from(
+              typeof data === 'object' && data !== null ? JSON.stringify(data) : data,
+              'utf-8'
+            ).toString('base64');
+            const jwt = sessionStorage.getItem('aesirx-analytics-jwt');
+            if (variables?.message.indexOf('Revoke consent') > -1) {
+              // Revoke Metamask
+              const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');
+              const consentList = await getConsents(endpoint, uuid);
+              consentList.forEach(async (consent: any) => {
+                !consent?.expiration &&
+                  (await revokeConsents(
+                    endpoint,
+                    levelRevoke,
+                    consent?.consent_uuid,
+                    address,
+                    signature,
+                    web3ID,
+                    jwt,
+                    'metamask'
+                  ));
+              });
+              setLoading('done');
+              handleRevoke(false);
+              setShowExpandConsent(false);
+              setShow(true);
+              setShowBackdrop(false);
+              sessionStorage.removeItem('aesirx-analytics-allow');
+            } else if (variables?.message.indexOf('Login with nonce') > -1) {
+              const res = await verifySignature(aesirXEndpoint, 'metamask', address, data);
+              sessionStorage.setItem('aesirx-analytics-jwt', res?.jwt);
+              setLoadingCheckAccount(false);
+              const nonce = await getNonce(
+                endpoint,
+                address,
+                'Give consent Tier 4:{nonce} {domain} {time}',
+                'metamask'
+              );
+              signMessage({ message: `${nonce}` });
+            } else {
+              setLoading('saving');
+              // Consent Metamask
+              await agreeConsents(
+                endpoint,
+                level,
+                uuid,
+                consents,
+                address,
+                signature,
+                web3ID,
+                jwt,
+                'metamask',
+                gtagId,
+                gtmId,
+                layout
+              );
+              sessionStorage.setItem('aesirx-analytics-uuid', uuid);
+              sessionStorage.setItem('aesirx-analytics-allow', '1');
+              sessionStorage.setItem('aesirx-analytics-consent-type', 'metamask');
+
+              setShow(false);
+              setLoading('done');
+              handleRevoke(true, level);
+              setShowBackdrop(false);
+            }
+          },
+          async onError(error) {
+            setLoading('done');
+            toast.error(error.message);
+          },
         });
-        setLoading('done');
-        handleRevoke(false);
-        setShowExpandConsent(false);
-        setShow(true);
-        setShowBackdrop(false);
-        sessionStorage.removeItem('aesirx-analytics-allow');
-      } else if (variables?.message.indexOf('Login with nonce') > -1) {
-        const res = await verifySignature(aesirXEndpoint, 'metamask', address, data);
-        sessionStorage.setItem('aesirx-analytics-jwt', res?.jwt);
-        setLoadingCheckAccount(false);
-        const nonce = await getNonce(
-          endpoint,
-          address,
-          'Give consent Tier 4:{nonce} {domain} {time}',
-          'metamask'
-        );
-        signMessage({ message: `${nonce}` });
-      } else {
-        setLoading('saving');
-        // Consent Metamask
-        await agreeConsents(
-          endpoint,
-          level,
-          uuid,
-          consents,
-          address,
-          signature,
-          web3ID,
-          jwt,
-          'metamask',
-          gtagId,
-          gtmId,
-          layout
-        );
-        sessionStorage.setItem('aesirx-analytics-uuid', uuid);
-        sessionStorage.setItem('aesirx-analytics-allow', '1');
-        sessionStorage.setItem('aesirx-analytics-consent-type', 'metamask');
-
-        setShow(false);
-        setLoading('done');
-        handleRevoke(true, level);
-        setShowBackdrop(false);
-      }
-    },
-    async onError(error) {
-      setLoading('done');
-      toast.error(error.message);
-    },
-  });
 
   const handleChange = async ({ target: { value } }: any) => {
     if (consents.indexOf(parseInt(value)) === -1) {
@@ -842,12 +850,14 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                           {(sessionStorage.getItem('aesirx-analytics-revoke') === '4' ||
                             sessionStorage.getItem('aesirx-analytics-revoke') === '2') && (
                             <div>
-                              <SSOButton
-                                className="d-none revokeLogin"
-                                text={<>Login Revoke</>}
-                                ssoState={'noscopes'}
-                                onGetData={onGetData}
-                              />
+                              <Suspense fallback={<div>Loading...</div>}>
+                                <SSOButton
+                                  className="d-none revokeLogin"
+                                  text={<>Login Revoke</>}
+                                  ssoState={'noscopes'}
+                                  onGetData={onGetData}
+                                />
+                              </Suspense>
                             </div>
                           )}
                         </div>
@@ -1058,18 +1068,23 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                                         : 'd-none'
                                     }`}
                                   >
-                                    <SSOButton
-                                      className="btn btn-success text-white d-flex align-items-center justify-content-center loginSSO rounded-pill py-2 py-lg-3 w-100"
-                                      text={
-                                        <>
-                                          <img src={yes} className="me-1" />
-                                          {t('txt_yes_i_consent')}
-                                        </>
-                                      }
-                                      ssoState={'noscopes'}
-                                      onGetData={onGetData}
-                                      {...(level === 2 ? { noCreateAccount: true } : {})}
-                                    />
+                                    {layout !== 'simple-consent-mode' &&
+                                      layout !== 'simple-web-2' && (
+                                        <Suspense fallback={<div>Loading...</div>}>
+                                          <SSOButton
+                                            className="btn btn-success text-white d-flex align-items-center justify-content-center loginSSO rounded-pill py-2 py-lg-3 w-100"
+                                            text={
+                                              <>
+                                                <img src={yes} className="me-1" />
+                                                {t('txt_yes_i_consent')}
+                                              </>
+                                            }
+                                            ssoState={'noscopes'}
+                                            onGetData={onGetData}
+                                            {...(level === 2 ? { noCreateAccount: true } : {})}
+                                          />
+                                        </Suspense>
+                                      )}
                                   </div>
                                   {level === 2 || (level === 4 && !account && !address) ? (
                                     <></>
