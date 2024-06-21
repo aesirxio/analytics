@@ -149,6 +149,10 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false, layout
                                   <img src={check_line} width={24} height={24} />
                                   CCPA
                                 </div>
+                                <div className="item_compliant fw-semibold d-flex align-items-center ms-10px">
+                                  <img src={check_line} width={24} height={24} />
+                                  ePD 5.3
+                                </div>
                               </div>
                             </div>
                             <div className="fw-semibold mt-2 mt-lg-3 mb-0 text-dark">
@@ -331,6 +335,10 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false, layout
                                 <div className="item_compliant fw-semibold d-flex align-items-center ms-10px">
                                   <img src={check_line} width={24} height={24} />
                                   CCPA
+                                </div>
+                                <div className="item_compliant fw-semibold d-flex align-items-center ms-10px">
+                                  <img src={check_line} width={24} height={24} />
+                                  ePD 5.3
                                 </div>
                               </div>
                             </div>
