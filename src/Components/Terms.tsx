@@ -94,7 +94,12 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false, layout
                 <div className="d-flex align-items-center fs-14 text-primary">
                   {isCustom ? (
                     <>
-                      <div className="minimize-shield-wrapper position-relative">
+                      <a
+                        href="https://shield.aesirx.io/"
+                        rel="noreferrer"
+                        target="_blank"
+                        className="minimize-shield-wrapper position-relative text-decoration-none"
+                      >
                         <img
                           className="cover-img position-absolute h-100 w-100 object-fit-cover z-1"
                           src={bg}
@@ -103,7 +108,7 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false, layout
                           <img src={privacy} alt="Shield of Privacy" />
                           {t('txt_shield_of_privacy')}
                         </div>
-                      </div>
+                      </a>
                     </>
                   ) : (
                     <>
