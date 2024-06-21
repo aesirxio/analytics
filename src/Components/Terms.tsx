@@ -120,12 +120,30 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false, layout
                   <>
                     {layout === 'simple-web-2' ? (
                       <div className="px-3">
+                        <div className="d-flex align-items-center flex-wrap mt-3">
+                          <div className="me-10px">{t('txt_ethical_compliant')}</div>
+                          <div className="d-flex align-items-center">
+                            <div className="item_compliant fw-semibold d-flex align-items-center">
+                              <img src={check_line} width={24} height={24} />
+                              GDPR
+                            </div>
+                            <div className="item_compliant fw-semibold d-flex align-items-center ms-10px">
+                              <img src={check_line} width={24} height={24} />
+                              CCPA
+                            </div>
+                            <div className="item_compliant fw-semibold d-flex align-items-center ms-10px">
+                              <img src={check_line} width={24} height={24} />
+                              ePD 5.3
+                            </div>
+                          </div>
+                        </div>
                         <ConsentLevel
                           level={1}
                           tier={t('txt_tier_1_tier')}
                           levelname={t('txt_tier_1_levelname')}
                           term_custom={t('txt_tier_1_term_custom')}
                           content_custom={t('txt_tier_1_content_custom')}
+                          personal_data={t('txt_no_personal_data')}
                         />
                       </div>
                     ) : (
@@ -415,7 +433,14 @@ const TermsComponent = ({ children, level, handleLevel, isCustom = false, layout
   );
 };
 
-const ConsentLevel = ({ level, tier, levelname, term_custom, content_custom }: any) => {
+const ConsentLevel = ({
+  level,
+  tier,
+  levelname,
+  term_custom,
+  content_custom,
+  personal_data,
+}: any) => {
   return (
     <div className="consent_level mt-2 mt-lg-3">
       <div className="d-flex align-items-center justify-content-between flex-wrap mb-2">
@@ -427,7 +452,9 @@ const ConsentLevel = ({ level, tier, levelname, term_custom, content_custom }: a
         </div>
         <div className="fw-semibold fs-14 text-primary">{term_custom}</div>
       </div>
-      <div>{content_custom}</div>
+      <div>
+        {content_custom} {personal_data ? <span className="mt-2">{personal_data}</span> : <></>}
+      </div>
     </div>
   );
 };

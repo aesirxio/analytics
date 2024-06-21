@@ -73,5 +73,6 @@
   "txt_upgrade_consent": "Opgraderingssamtykke",
   "txt_change_consent": "Skift samtykke",
   "txt_upgrade_consent_text": "Opgrader dit samtykkeniveau og lås op for de fulde fordele ved Shield of Privacy for tilpassede, sikre, ID-godkendte digitale oplevelser.",
-  "txt_cancel": "Annuller"
+  "txt_cancel": "Annuller",
+  "txt_no_personal_data": "Ingen personlige data deles eller sælges til 3. part."
 }
