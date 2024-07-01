@@ -45,6 +45,8 @@ $dark: #222328;
   color: #5f5e70;
   font-size: 16px;
   --w3m-z-index: 1060;
+  z-index: 1050;
+  position: relative;
   --#{$prefix}modal-margin: 1.75rem;
   --#{$prefix}btn-padding-y: 9px;
   --#{$prefix}btn-padding-x: 20px;
