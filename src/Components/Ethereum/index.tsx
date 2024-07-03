@@ -111,14 +111,14 @@ const chains = [
 import { Web3Modal } from '@web3modal/react';
 import { CONCORDIUM_WALLET_CONNECT_PROJECT_ID } from '@concordium/react-components';
 
-const SSOEthereumProvider = ({ children, layout }: any) => {
+const SSOEthereumProvider = ({ children, layout, level }: any) => {
   const projectId = CONCORDIUM_WALLET_CONNECT_PROJECT_ID;
 
   const { publicClient, webSocketPublicClient } = configureChains(chains, [
     w3mProvider({ projectId }),
   ]);
   const wagmiConfig: any =
-    layout === 'simple-consent-mode' || layout === 'simple-web-2'
+    layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1
       ? {}
       : createConfig({
           autoConnect: true,
@@ -130,7 +130,7 @@ const SSOEthereumProvider = ({ children, layout }: any) => {
   const ethereumClient = new EthereumClient(wagmiConfig, chains);
   return (
     <>
-      {layout === 'simple-consent-mode' || layout === 'simple-web-2' ? (
+      {layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1 ? (
         <>{children}</>
       ) : (
         <>

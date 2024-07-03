@@ -77,29 +77,68 @@ const ConsentComponentCustom = ({
   gtagId,
   gtmId,
   layout,
-}: any) => {
+}: WalletConnectionPropsExtends) => {
   return (
     <WithWalletConnector network={networkEnv === 'testnet' ? TESTNET : MAINNET}>
-      {(props) => (
-        <div className="aesirxconsent">
-          <SSOEthereumProvider layout={layout}>
-            <ConsentComponentCustomApp
-              {...props}
-              endpoint={endpoint}
-              aesirXEndpoint={aesirXEndpoint}
-              loginApp={loginApp}
-              isLoggedApp={isLoggedApp}
-              gtagId={gtagId}
-              gtmId={gtmId}
-              layout={layout}
-            />
-          </SSOEthereumProvider>
-        </div>
+      {(props: any) => (
+        <ConsentComponentCustomWrapper
+          {...props}
+          endpoint={endpoint}
+          aesirXEndpoint={aesirXEndpoint}
+          loginApp={loginApp}
+          isLoggedApp={isLoggedApp}
+          gtagId={gtagId}
+          gtmId={gtmId}
+          layout={layout}
+        />
       )}
     </WithWalletConnector>
   );
 };
-const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
+const ConsentComponentCustomWrapper = (props: any) => {
+  const [
+    uuid,
+    level,
+    connection,
+    account,
+    show,
+    setShow,
+    web3ID,
+    setWeb3ID,
+    handleLevel,
+    showRevoke,
+    handleRevoke,
+  ] = useConsentStatus(props?.endpoint, props?.layout, props);
+
+  return (
+    <div className="aesirxconsent">
+      <SSOEthereumProvider layout={props?.layout} level={level}>
+        <ConsentComponentCustomApp
+          {...props}
+          endpoint={props?.endpoint}
+          aesirXEndpoint={props?.aesirXEndpoint}
+          loginApp={props?.loginApp}
+          isLoggedApp={props?.isLoggedApp}
+          gtagId={props?.gtagId}
+          gtmId={props?.gtmId}
+          layout={props?.layout}
+          uuid={uuid}
+          level={level}
+          connection={connection}
+          account={account}
+          show={show}
+          setShow={setShow}
+          web3ID={web3ID}
+          setWeb3ID={setWeb3ID}
+          handleLevel={handleLevel}
+          showRevoke={showRevoke}
+          handleRevoke={handleRevoke}
+        />
+      </SSOEthereumProvider>
+    </div>
+  );
+};
+const ConsentComponentCustomApp = (props: any) => {
   const {
     endpoint,
     aesirXEndpoint,
@@ -115,6 +154,17 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
     genesisHashes,
     setActiveConnectorType,
     network,
+    uuid,
+    level,
+    connection,
+    account,
+    show,
+    setShow,
+    web3ID,
+    setWeb3ID,
+    handleLevel,
+    showRevoke,
+    handleRevoke,
   } = props;
   const { setConnection } = useConnection(connectedAccounts, genesisHashes);
 
@@ -127,19 +177,19 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
     setLoading('done');
   };
 
-  const [
-    uuid,
-    level,
-    connection,
-    account,
-    show,
-    setShow,
-    web3ID,
-    setWeb3ID,
-    handleLevel,
-    showRevoke,
-    handleRevoke,
-  ] = useConsentStatus(endpoint, layout, props);
+  // const [
+  //   uuid,
+  //   level,
+  //   connection,
+  //   account,
+  //   show,
+  //   setShow,
+  //   web3ID,
+  //   setWeb3ID,
+  //   handleLevel,
+  //   showRevoke,
+  //   handleRevoke,
+  // ] = useConsentStatus(endpoint, layout, props);
 
   const [consents, setConsents] = useState<number[]>([1, 2]);
   const [loading, setLoading] = useState('done');
@@ -157,15 +207,14 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
 
   // Metamask
   const { address, connector } =
-    layout === 'simple-consent-mode' || layout === 'simple-web-2'
+    layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1
       ? { address: '', connector: '' }
       : useAccount();
-
   const { signMessage }: any =
-    layout === 'simple-consent-mode' || layout === 'simple-web-2'
+    layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1
       ? { signMessage: {} }
       : useSignMessage({
-          async onSuccess(data, variables) {
+          async onSuccess(data: any, variables: any) {
             const signature = Buffer.from(
               typeof data === 'object' && data !== null ? JSON.stringify(data) : data,
               'utf-8'
@@ -232,7 +281,7 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
               setShowBackdrop(false);
             }
           },
-          async onError(error) {
+          async onError(error: any) {
             setLoading('done');
             toast.error(error.message);
           },
@@ -1069,7 +1118,8 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                                     }`}
                                   >
                                     {layout !== 'simple-consent-mode' &&
-                                      layout !== 'simple-web-2' && (
+                                      layout !== 'simple-web-2' &&
+                                      level !== 1 && (
                                         <Suspense fallback={<div>Loading...</div>}>
                                           <SSOButton
                                             className="btn btn-success text-white d-flex align-items-center justify-content-center loginSSO rounded-pill py-2 py-lg-3 w-100"

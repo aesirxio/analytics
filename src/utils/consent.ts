@@ -311,11 +311,14 @@ const verifySignature = async (
 const getConsentTemplate = async (domain: any) => {
   try {
     const endpointWeb3 = 'https://web3id.backend.aesirx.io:8001';
-    const data = await axios.get(`${endpointWeb3}/datastream/template/${domain}`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    const data = await axios.get(
+      `${endpointWeb3}/datastream/template/${domain?.replace(/^(https?:\/\/)?(www\.)?/, '$1')}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
 
     if (data) {
       return data;
