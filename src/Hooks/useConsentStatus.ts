@@ -120,8 +120,8 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
   useEffect(() => {
     const initConnector = async () => {
       if (
-        sessionStorage.getItem('aesirx-analytics-revoke') !== '1' &&
-        sessionStorage.getItem('aesirx-analytics-revoke') !== '2' &&
+        (sessionStorage.getItem('aesirx-analytics-revoke') === '3' ||
+          sessionStorage.getItem('aesirx-analytics-revoke') === '4') &&
         sessionStorage.getItem('aesirx-analytics-rejected') !== 'true'
       ) {
         if (window['concordium']) {
