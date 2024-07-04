@@ -117,8 +117,10 @@ const SSOEthereumProvider = ({ children, layout, level }: any) => {
   const { publicClient, webSocketPublicClient } = configureChains(chains, [
     w3mProvider({ projectId }),
   ]);
+  const revoke = sessionStorage.getItem('aesirx-analytics-revoke');
   const wagmiConfig: any =
-    layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1
+    (layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1) &&
+    (!revoke || revoke === '0')
       ? {}
       : createConfig({
           autoConnect: true,
@@ -130,7 +132,8 @@ const SSOEthereumProvider = ({ children, layout, level }: any) => {
   const ethereumClient = new EthereumClient(wagmiConfig, chains);
   return (
     <>
-      {layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1 ? (
+      {(layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1) &&
+      (!revoke || revoke === '0') ? (
         <>{children}</>
       ) : (
         <>

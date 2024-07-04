@@ -179,14 +179,16 @@ const ConsentComponentCustomApp = (props: any) => {
   const analyticsContext = useContext(AnalyticsContext);
   const { t } = useTranslation();
   const gRPCClient = useGrpcClient(network);
-
+  const revoke = sessionStorage.getItem('aesirx-analytics-revoke');
   // Metamask
   const { address, connector } =
-    layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1
+    (layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1) &&
+    (!revoke || revoke === '0')
       ? { address: '', connector: '' }
       : useAccount();
   const { signMessage }: any =
-    layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1
+    (layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1) &&
+    (!revoke || revoke === '0')
       ? { signMessage: {} }
       : useSignMessage({
           async onSuccess(data: any, variables: any) {

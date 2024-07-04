@@ -63,7 +63,11 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
                   : consent?.address && !consent?.web3id
                   ? '3'
                   : '2';
-                revokeTier ? handleRevoke(true, revokeTier) : setShow(true);
+                if (revokeTier) {
+                  handleRevoke(true, revokeTier);
+                } else {
+                  handleRevoke(true, '1');
+                }
               }
             }
           });
@@ -112,6 +116,31 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
         });
     }
   }, [rpc, level]);
+
+  useEffect(() => {
+    const initConnector = async () => {
+      if (
+        sessionStorage.getItem('aesirx-analytics-revoke') !== '1' &&
+        sessionStorage.getItem('aesirx-analytics-revoke') !== '2' &&
+        sessionStorage.getItem('aesirx-analytics-rejected') !== 'true'
+      ) {
+        if (window['concordium']) {
+          const address = (await window['concordium']?.requestAccounts()) ?? [];
+          if (window['concordium'] && address?.length) {
+            setActiveConnectorType(BROWSER_WALLET);
+          }
+        } else {
+          window.addEventListener('load', async function () {
+            const address = (await window['concordium']?.requestAccounts()) ?? [];
+            if (window['concordium'] && address?.length) {
+              setActiveConnectorType(BROWSER_WALLET);
+            }
+          });
+        }
+      }
+    };
+    initConnector();
+  }, [window['concordium']]);
 
   useEffect(() => {
     if (activeConnector) {
