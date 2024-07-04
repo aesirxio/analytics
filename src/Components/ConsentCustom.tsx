@@ -33,7 +33,6 @@ const SSOButton: any = React.lazy(() =>
 import {
   MAINNET,
   WithWalletConnector,
-  WalletConnectionProps,
   useConnection,
   useConnect,
   ConnectorType,
@@ -58,16 +57,6 @@ declare global {
 }
 declare const dataLayer: any[];
 
-interface WalletConnectionPropsExtends extends WalletConnectionProps {
-  endpoint: string;
-  aesirXEndpoint: string;
-  networkEnv?: string;
-  loginApp?: any;
-  isLoggedApp: boolean;
-  gtagId: string;
-  gtmId: string;
-  layout: string;
-}
 const ConsentComponentCustom = ({
   endpoint,
   aesirXEndpoint,
@@ -77,7 +66,7 @@ const ConsentComponentCustom = ({
   gtagId,
   gtmId,
   layout,
-}: WalletConnectionPropsExtends) => {
+}: any) => {
   return (
     <WithWalletConnector network={networkEnv === 'testnet' ? TESTNET : MAINNET}>
       {(props: any) => (
@@ -176,20 +165,6 @@ const ConsentComponentCustomApp = (props: any) => {
     }
     setLoading('done');
   };
-
-  // const [
-  //   uuid,
-  //   level,
-  //   connection,
-  //   account,
-  //   show,
-  //   setShow,
-  //   web3ID,
-  //   setWeb3ID,
-  //   handleLevel,
-  //   showRevoke,
-  //   handleRevoke,
-  // ] = useConsentStatus(endpoint, layout, props);
 
   const [consents, setConsents] = useState<number[]>([1, 2]);
   const [loading, setLoading] = useState('done');
