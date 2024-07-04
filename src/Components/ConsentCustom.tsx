@@ -1097,7 +1097,13 @@ const ConsentComponentCustomApp = (props: any) => {
                                     {layout !== 'simple-consent-mode' &&
                                       layout !== 'simple-web-2' &&
                                       level !== 1 && (
-                                        <Suspense fallback={<div>Loading...</div>}>
+                                        <Suspense
+                                          fallback={
+                                            <div className="d-flex h-100 justify-content-center align-items-center">
+                                              Loading...
+                                            </div>
+                                          }
+                                        >
                                           <SSOButton
                                             className="btn btn-success text-white d-flex align-items-center justify-content-center loginSSO rounded-pill py-2 py-lg-3 w-100"
                                             text={
