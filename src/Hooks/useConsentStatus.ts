@@ -1,7 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
 import { getConsents } from '../utils/consent';
-import { getWeb3ID } from '../utils/Concordium';
 import { toast } from 'react-toastify';
 import {
   MAINNET,
