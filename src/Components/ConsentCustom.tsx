@@ -609,22 +609,27 @@ const ConsentComponentCustomApp = (props: any) => {
             flag = false;
           }
         } else {
-          setLoading('saving');
-          const consentList = await getConsents(endpoint, uuid);
-          consentList.forEach(async (consent: any) => {
-            !consent?.expiration &&
-              (await revokeConsents(
-                endpoint,
-                levelRevoke,
-                consent?.consent_uuid,
-                null,
-                null,
-                null,
-                jwt
-              ));
-          });
-          setLoading('done');
-          handleRevoke(false);
+          if (!jwt && parseInt(levelRevoke) === 2) {
+            SSOClick('.revokeLogin');
+            return;
+          } else {
+            setLoading('saving');
+            const consentList = await getConsents(endpoint, uuid);
+            consentList.forEach(async (consent: any) => {
+              !consent?.expiration &&
+                (await revokeConsents(
+                  endpoint,
+                  levelRevoke,
+                  consent?.consent_uuid,
+                  null,
+                  null,
+                  null,
+                  jwt
+                ));
+            });
+            setLoading('done');
+            handleRevoke(false);
+          }
         }
 
         if (flag && ((account && consentType !== 'metamask') || level < 3)) {
@@ -677,6 +682,17 @@ const ConsentComponentCustomApp = (props: any) => {
     }
     (gtagId || gtmId) && loadConsentDefault(gtagId, gtmId);
   }, []);
+
+  useEffect(() => {
+    if (
+      showExpandRevoke &&
+      isDesktop &&
+      (sessionStorage.getItem('aesirx-analytics-revoke') === '3' ||
+        sessionStorage.getItem('aesirx-analytics-revoke') === '4')
+    ) {
+      setActiveConnectorType(BROWSER_WALLET);
+    }
+  }, [showExpandRevoke]);
 
   console.log('level', uuid, level, web3ID, account, loading);
 
