@@ -30,7 +30,10 @@ const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
   const [gtmId, setGtmId] = useState(window['analyticsGtmId']);
   useEffect(() => {
     const init = async () => {
-      const data: any = await getConsentTemplate(window.location.host);
+      const data: any = await getConsentTemplate(
+        window['aesirx1stparty'] ?? '',
+        window.location.host
+      );
       setLayout(data?.data?.template ?? window['consentLayout']);
       setGtagId(data?.data?.gtag_id ?? window['analyticsGtagId']);
       setGtmId(data?.data?.gtm_id ?? window['analyticsGtmId']);
