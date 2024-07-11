@@ -507,7 +507,10 @@ const ConsentComponentCustomApp = (props: any) => {
           'aesirx-analytics-consent-type',
           response?.loginType === 'concordium' ? 'concordium' : 'metamask'
         );
-        handleRevokeBtn();
+        await handleRevokeBtn();
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       } else {
         // Agree Consent
         if (level === 4) {
@@ -881,7 +884,12 @@ const ConsentComponentCustomApp = (props: any) => {
                           {loading === 'done' ? (
                             <Button
                               variant="success"
-                              onClick={handleRevokeBtn}
+                              onClick={async () => {
+                                await handleRevokeBtn();
+                                setTimeout(() => {
+                                  window.location.reload();
+                                }, 1000);
+                              }}
                               className={'text-white d-flex align-items-center revoke-btn fs-14'}
                             >
                               {t('txt_revoke_consent')}
