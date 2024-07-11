@@ -120,7 +120,7 @@ const SSOEthereumProvider = ({ children, layout, level }: any) => {
   const revoke = sessionStorage.getItem('aesirx-analytics-revoke');
   const wagmiConfig: any =
     (layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1) &&
-    (!revoke || revoke === '0')
+    (!revoke || revoke === '0' || revoke === '1')
       ? {}
       : createConfig({
           autoConnect: true,
@@ -133,7 +133,7 @@ const SSOEthereumProvider = ({ children, layout, level }: any) => {
   return (
     <>
       {(layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1) &&
-      (!revoke || revoke === '0') ? (
+      (!revoke || revoke === '0' || revoke === '1') ? (
         <>{children}</>
       ) : (
         <>

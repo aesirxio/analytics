@@ -183,12 +183,12 @@ const ConsentComponentCustomApp = (props: any) => {
   // Metamask
   const { address, connector } =
     (layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1) &&
-    (!revoke || revoke === '0')
+    (!revoke || revoke === '0' || revoke === '1')
       ? { address: '', connector: '' }
       : useAccount();
   const { signMessage }: any =
     (layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1) &&
-    (!revoke || revoke === '0')
+    (!revoke || revoke === '0' || revoke === '1')
       ? { signMessage: {} }
       : useSignMessage({
           async onSuccess(data: any, variables: any) {
