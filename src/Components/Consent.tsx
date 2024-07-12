@@ -11,7 +11,7 @@ import {
   revokeConsents,
   verifySignature,
 } from '../utils/consent';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { Suspense, useContext, useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import useConsentStatus from '../Hooks/useConsentStatus';
 import '../styles/style.scss';
@@ -25,7 +25,9 @@ import bg from '../Assets/bg.png';
 import privacy from '../Assets/privacy.svg';
 
 import ContentLoader from 'react-content-loader';
-import { SSOButton } from 'aesirx-sso';
+const SSOButton: any = React.lazy(() =>
+  import('aesirx-sso').then((module) => ({ default: module.SSOButton }))
+);
 import {
   MAINNET,
   WithWalletConnector,
@@ -758,12 +760,14 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                           {(sessionStorage.getItem('aesirx-analytics-revoke') === '4' ||
                             sessionStorage.getItem('aesirx-analytics-revoke') === '2') && (
                             <div>
-                              <SSOButton
-                                className="d-none revokeLogin"
-                                text={<>Login Revoke</>}
-                                ssoState={'noscopes'}
-                                onGetData={onGetData}
-                              />
+                              <Suspense fallback={<div>Loading...</div>}>
+                                <SSOButton
+                                  className="d-none revokeLogin"
+                                  text={<>Login Revoke</>}
+                                  ssoState={'noscopes'}
+                                  onGetData={onGetData}
+                                />
+                              </Suspense>
                             </div>
                           )}
                         </div>
@@ -836,18 +840,20 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                                     : 'd-none'
                                 }`}
                               >
-                                <SSOButton
-                                  className="btn btn-success text-white d-flex align-items-center loginSSO"
-                                  text={
-                                    <>
-                                      <img src={yes} className="me-1" />
-                                      {t('txt_yes_i_consent')}
-                                    </>
-                                  }
-                                  ssoState={'noscopes'}
-                                  onGetData={onGetData}
-                                  {...(level === 2 ? { noCreateAccount: true } : {})}
-                                />
+                                <Suspense fallback={<div>Loading...</div>}>
+                                  <SSOButton
+                                    className="btn btn-success text-white d-flex align-items-center loginSSO"
+                                    text={
+                                      <>
+                                        <img src={yes} className="me-1" />
+                                        {t('txt_yes_i_consent')}
+                                      </>
+                                    }
+                                    ssoState={'noscopes'}
+                                    onGetData={onGetData}
+                                    {...(level === 2 ? { noCreateAccount: true } : {})}
+                                  />
+                                </Suspense>
                               </div>
                               {level === 2 || (level === 4 && !account && !address) ? (
                                 <></>

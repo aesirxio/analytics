@@ -20,8 +20,9 @@ const startTracker = async (
   attributesVisit?: any
 ) => {
   const allow = sessionStorage.getItem('aesirx-analytics-allow');
+  const reject = sessionStorage.getItem('aesirx-analytics-rejected');
 
-  if (allow === '0') {
+  if (allow === '0' || reject === 'true') {
     return null;
   }
   const { location, document } = window;
@@ -103,15 +104,21 @@ const startTracker = async (
 
 const trackEvent = async (endpoint: string, referer?: string, data?: object) => {
   const allow = sessionStorage.getItem('aesirx-analytics-allow');
-
-  if (allow === '0') {
+  const reject = sessionStorage.getItem('aesirx-analytics-rejected');
+  if (allow === '0' || reject === 'true') {
     return null;
   }
 
   const { location, document } = window;
   referer = referer
     ? location.protocol + '//' + location.host + referer
-    : document.referrer.split('?')[0];
+    : document.referrer
+    ? document.referrer
+    : window['referer']
+    ? window['referer'] === '/'
+      ? location.protocol + '//' + location.host
+      : location.protocol + '//' + location.host + window['referer']
+    : '';
   const url = location.protocol + '//' + location.host + location.pathname;
   const user_agent = window.navigator.userAgent;
   const browser = Bowser.parse(window.navigator.userAgent);

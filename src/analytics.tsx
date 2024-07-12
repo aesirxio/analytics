@@ -25,12 +25,15 @@ declare global {
 }
 const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
   window.process = { env: '' };
-  const [layout, setLayout] = useState(window['consentLayout']);
+  const [layout, setLayout] = useState(window['consentLayout'] ?? 'simple-web-2');
   const [gtagId, setGtagId] = useState(window['analyticsGtagId']);
   const [gtmId, setGtmId] = useState(window['analyticsGtmId']);
   useEffect(() => {
     const init = async () => {
-      const data: any = await getConsentTemplate(window.location.host);
+      const data: any = await getConsentTemplate(
+        window['aesirx1stparty'] ?? '',
+        window.location.host
+      );
       setLayout(data?.data?.template ?? window['consentLayout']);
       setGtagId(data?.data?.gtag_id ?? window['analyticsGtagId']);
       setGtmId(data?.data?.gtm_id ?? window['analyticsGtmId']);
@@ -41,7 +44,7 @@ const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
     <AnalyticsContext.Provider
       value={{
         event_uuid: event_uuid,
-        visitor_uuid: visitor_uuid,
+        visitor_uuid: visitor_uuid ?? sessionStorage.getItem('aesirx-analytics-uuid'),
         setEventID: undefined,
         setUUID: undefined,
         ref: undefined,
@@ -137,8 +140,8 @@ const AesirAnalytics = () => {
       if (window['disableAnalyticsConsent'] !== 'true') {
         rootElement.render(
           <ConsentPopup
-            event_uuid={responseStart.visitor_uuid}
-            visitor_uuid={responseStart.visitor_uuid}
+            event_uuid={responseStart?.visitor_uuid}
+            visitor_uuid={responseStart?.visitor_uuid}
           />
         );
       }

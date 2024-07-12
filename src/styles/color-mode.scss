@@ -32,6 +32,10 @@
     .text-primary {
       color: $white;
     }
+    .text-dark,
+    .text-black {
+      color: $white !important;
+    }
     .minimize-shield-wrapper {
       .text {
         color: $white;
@@ -42,11 +46,16 @@
     }
     .toast.custom .consent_info_tab .nav-item button.active {
       color: $white;
-      background-color: #1B233F;
+      background-color: #1b233f;
     }
     .item_compliant {
-      background-color: #F0F3FB;
+      background-color: #f0f3fb;
       color: #222328;
+    }
+    .consent_level {
+      &.active {
+        background-color: transparent;
+      }
     }
   }
 }
