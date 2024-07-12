@@ -1128,6 +1128,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                 variant="outline-success"
                                 onClick={() => {
                                   setUpgradeLayout(false);
+                                  handleLevel(1);
                                 }}
                                 className="d-flex align-items-center justify-content-center fs-14 w-100 w-lg-30 me-3 mb-2 mb-lg-0 rounded-pill py-3"
                               >
