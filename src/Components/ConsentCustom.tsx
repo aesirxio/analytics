@@ -173,6 +173,7 @@ const ConsentComponentCustomApp = (props: any) => {
   const [loading, setLoading] = useState('done');
   const [loadingCheckAccount, setLoadingCheckAccount] = useState(false);
   const [showExpandConsent, setShowExpandConsent] = useState(true);
+  const [showRejectedConsent, setShowRejectedConsent] = useState(false);
   const [showExpandRevoke, setShowExpandRevoke] = useState(false);
   const [showBackdrop, setShowBackdrop] = useState(true);
   const [consentTier4, setConsentTier4] = useState<any>({});
@@ -910,6 +911,8 @@ const ConsentComponentCustomApp = (props: any) => {
                     ref={analyticsContext?.ref}
                     onClick={() => {
                       setShowExpandConsent(true);
+                      const rejectConsent = sessionStorage.getItem('aesirx-analytics-rejected');
+                      rejectConsent && setShowRejectedConsent(true);
                       sessionStorage.removeItem('aesirx-analytics-rejected');
                     }}
                   >
@@ -1115,6 +1118,86 @@ const ConsentComponentCustomApp = (props: any) => {
                             </div>
                           </>
                         </div>
+                      </>
+                    ) : showRejectedConsent ? (
+                      <>
+                        <TermsComponent
+                          level={level}
+                          handleLevel={handleLevel}
+                          isCustom={true}
+                          layout={layout}
+                          isRejectedLayout={true}
+                        >
+                          <Form className="mb-0 w-100">
+                            <Form.Check
+                              checked={consents.includes(1)}
+                              type="switch"
+                              label="Personal data share consent."
+                              value={1}
+                              onChange={handleChange}
+                              className="d-none"
+                            />
+                            <Form.Check
+                              checked={consents.includes(2)}
+                              type="switch"
+                              label="Personal data cross site share consent."
+                              value={2}
+                              onChange={handleChange}
+                              className="d-none"
+                            />
+                            <div className="d-flex w-100 flex-wrap flex-lg-nowrap">
+                              {loading === 'done' ? (
+                                <>
+                                  <Button
+                                    variant="outline-success"
+                                    onClick={handleNotAllow}
+                                    className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
+                                  >
+                                    {t('txt_reject_consent')}
+                                  </Button>
+
+                                  {level === 2 || (level === 4 && !account && !address) ? (
+                                    <></>
+                                  ) : (
+                                    <Button
+                                      variant="outline-success"
+                                      onClick={handleAgree}
+                                      className="w-100 me-3 d-flex align-items-center justify-content-center fs-14 rounded-pill py-2 py-lg-3"
+                                    >
+                                      {loadingCheckAccount ? (
+                                        <span
+                                          className="spinner-border spinner-border-sm me-1"
+                                          role="status"
+                                          aria-hidden="true"
+                                        ></span>
+                                      ) : (
+                                        <></>
+                                      )}
+                                      {t('txt_yes_i_consent')}
+                                    </Button>
+                                  )}
+                                  {layout === 'simple-consent-mode' || layout === 'simple-web-2' ? (
+                                    <></>
+                                  ) : (
+                                    <>
+                                      <Button
+                                        variant="outline-success"
+                                        onClick={() => {
+                                          setUpgradeLayout(true);
+                                        }}
+                                        className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
+                                      >
+                                        {t('txt_change_consent')}
+                                      </Button>{' '}
+                                    </>
+                                  )}
+                                </>
+                              ) : (
+                                <></>
+                              )}
+                            </div>
+                          </Form>
+                        </TermsComponent>
                       </>
                     ) : (
                       <>

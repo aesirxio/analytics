@@ -110,5 +110,9 @@
   "txt_users_can_revoke_dapp": "Users can revoke consent on-site or from the AesirX dApp at any time.",
   "txt_users_can_earn": "Users can earn rewards from digital marketing activities.",
   "txt_continue": "Continue",
-  "txt_back": "Back"
+  "txt_back": "Back",
+  "txt_you_have_chosen": "You've chosen to reject data collection:",
+  "txt_only_anonymized": "Only anonymized page views & limited features will be available. To access all website features, including personalized content & enhanced functionality, please choose an option:",
+  "txt_consent_allow_data": "<span class='fw-semibold text-primary'>Consent:</span> Allow data collection for analytics, form data (when you contact us), & behavioral & event tracking, with the option to opt-in for specific features.",
+  "txt_decentralized_consent_allow_data": "<span class='fw-semibold text-primary'>Decentralized Consent:</span> Allow data collection for analytics, form data (when you contact us), & behavioral & event tracking, with the option to revoke consent, opt-in for specific features, & earn rewards from digital marketing activities."
 }
