@@ -34,7 +34,7 @@
     }
     .text-dark,
     .text-black {
-      color: $white;
+      color: $white !important;
     }
     .minimize-shield-wrapper {
       .text {
