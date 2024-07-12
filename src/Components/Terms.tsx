@@ -181,7 +181,11 @@ const TermsComponent = ({
                             <p className="mt-0 mb-2 text-black fw-semibold">
                               {t('txt_manage_your_consent')}
                             </p>
-                            <p className="mt-0 mb-3">{t('txt_choose_how_we_use')}</p>
+                            <p className="mt-0 mb-3">
+                              {layout === 'simple-consent-mode'
+                                ? t('txt_choose_how_we_use_simple')
+                                : t('txt_choose_how_we_use')}
+                            </p>
                             <div className="mb-3">
                               <p className="mb-2 text-black">{t('txt_by_consenting')}</p>
                               <div className="d-flex align-items-start">
@@ -236,7 +240,11 @@ const TermsComponent = ({
                           <p className="mt-0 mb-2 text-black fw-semibold">
                             {t('txt_manage_your_consent')}
                           </p>
-                          <p className="mt-0 mb-3">{t('txt_choose_how_we_use')}</p>
+                          <p className="mt-0 mb-3">
+                            {layout === 'simple-consent-mode'
+                              ? t('txt_choose_how_we_use_simple')
+                              : t('txt_choose_how_we_use')}
+                          </p>
                           <div className="mb-3">
                             <p className="mb-2 text-black fw-semibold">{t('txt_benefit')}</p>
                             <div className="d-flex align-items-start">
@@ -314,20 +322,24 @@ const TermsComponent = ({
                                 />
                               </div>
                             </div>
-                            <div className="d-flex align-items-start">
-                              <span>
-                                <img src={check_circle} width={'14px'} height={'15px'} />
-                              </span>
-                              <div className="ms-10px">
-                                <div
-                                  dangerouslySetInnerHTML={{
-                                    __html: t('txt_decentralizered_consent_choose', {
-                                      interpolation: { escapeValue: false },
-                                    }),
-                                  }}
-                                />
+                            {layout === 'simple-consent-mode' ? (
+                              <></>
+                            ) : (
+                              <div className="d-flex align-items-start">
+                                <span>
+                                  <img src={check_circle} width={'14px'} height={'15px'} />
+                                </span>
+                                <div className="ms-10px">
+                                  <div
+                                    dangerouslySetInnerHTML={{
+                                      __html: t('txt_decentralizered_consent_choose', {
+                                        interpolation: { escapeValue: false },
+                                      }),
+                                    }}
+                                  />
+                                </div>
                               </div>
-                            </div>
+                            )}
                           </div>
                         </div>
                       </Tab>

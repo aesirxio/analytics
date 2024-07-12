@@ -425,6 +425,7 @@ const ConsentComponentCustomApp = (props: any) => {
         handleRevoke(true, level);
         setUpgradeLayout(false);
         setShowBackdrop(false);
+        setShowExpandRevoke(false);
       }
     } catch (error) {
       console.log(error);
@@ -862,9 +863,11 @@ const ConsentComponentCustomApp = (props: any) => {
                               variant="success"
                               onClick={async () => {
                                 await handleRevokeBtn();
-                                setTimeout(() => {
-                                  window.location.reload();
-                                }, 1000);
+                                if (level > 1) {
+                                  setTimeout(() => {
+                                    window.location.reload();
+                                  }, 1000);
+                                }
                               }}
                               className={'text-white d-flex align-items-center revoke-btn fs-14'}
                             >

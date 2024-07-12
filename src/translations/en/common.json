@@ -77,6 +77,7 @@
   "txt_no_personal_data": "No personal data is shared or sold to 3rd party.",
   "txt_manage_your_consent": "Manage Your Consent Preferences",
   "txt_choose_how_we_use": "Choose how we use your data: “Reject” data collection, allow tracking [“Consent”], or use “Decentralized Consent” for more control over your personal data & rewards.",
+  "txt_choose_how_we_use_simple": "Choose how we use your data: “Reject” data collection, allow tracking [“Consent”].",
   "txt_by_consenting": "By consenting, you allow us to collect & use your data for:",
   "txt_analytics_behavioral": "Analytics & Behavioral Data: To improve our services & personalize your experience.",
   "txt_form_data": "Form Data: When you contact us.",
