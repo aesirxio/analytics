@@ -216,12 +216,11 @@ $dark: #222328;
     }
   }
   .revoke-toast {
-    width: 530px;
     .toast-body {
       .minimize-revoke {
         position: absolute;
-        top: 5px;
-        right: 5px;
+        top: 1px;
+        right: 1px;
         cursor: pointer;
       }
       .manage-consent {
@@ -351,11 +350,17 @@ $dark: #222328;
     &.w-lg-30 {
       width: 30%;
     }
+    &.w-lg-35 {
+      width: 35%;
+    }
     &.justify-content-between {
       justify-content: space-between;
     }
     &.justify-content-center {
       justify-content: center;
+    }
+    &.justify-content-end {
+      justify-content: end;
     }
   }
   .btn.rounded-pill {
