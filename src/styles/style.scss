@@ -51,6 +51,10 @@ $dark: #222328;
   --#{$prefix}btn-padding-y: 9px;
   --#{$prefix}btn-padding-x: 20px;
   line-height: 24px;
+  box-sizing: border-box;
+  * {
+    box-sizing: border-box;
+  }
   &-modal .modal-dialog {
     max-width: 500px;
   }
@@ -68,6 +72,7 @@ $dark: #222328;
   }
   button {
     text-transform: none;
+    font-family: var(--bs-body-font-family);
   }
   .text-primary {
     color: $primary;
@@ -88,9 +93,8 @@ $dark: #222328;
   .btn-dark {
     @include button-variant(#222328, #222328, #fff, #222328, #222328, #fff);
   }
-  .btn-success-outline {
-    @include button-variant(transparent, $success, $success, transparent, $success, $success);
-    color: $success;
+  .btn-outline-success {
+    @include button-variant($white, $success, $dark, $success, $success, $white);
   }
   .btn-gray {
     @include button-variant(#a5a4b5, #a5a4b5, #fff, transparent, #a5a4b5, #fff);
@@ -312,7 +316,7 @@ $dark: #222328;
 
   .consent_level {
     border: 2px solid #dedede;
-    border-radius: 6px;
+    border-radius: 8px;
     padding: 20px;
     position: relative;
     &.active {
@@ -321,7 +325,7 @@ $dark: #222328;
     }
     .checkbox_img {
       position: absolute;
-      bottom: 20px;
+      top: 20px;
       right: 20px;
     }
     .consent_upgrade_content {
@@ -330,7 +334,7 @@ $dark: #222328;
     @include media-breakpoint-down(lg) {
       padding: 10px;
       .checkbox_img {
-        bottom: 10px;
+        top: 10px;
         right: 10px;
       }
     }
@@ -343,6 +347,9 @@ $dark: #222328;
     flex-direction: unset;
     &.w-100 {
       width: 100%;
+    }
+    &.w-lg-30 {
+      width: 30%;
     }
     &.justify-content-between {
       justify-content: space-between;
