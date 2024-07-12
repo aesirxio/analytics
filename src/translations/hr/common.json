@@ -115,5 +115,8 @@
   "txt_you_have_chosen": "Odabrali ste odbiti prikupljanje podataka:",
   "txt_only_anonymized": "Bit će dostupni samo anonimizirani prikazi stranica i ograničene značajke. Za pristup svim značajkama web stranice, uključujući personalizirani sadržaj i poboljšanu funkcionalnost, odaberite opciju:",
   "txt_consent_allow_data": "<span class='fw-semibold text-primary'>Pristanak:</span> Dopustite prikupljanje podataka za analitiku, podatke obrazaca (kada nas kontaktirate), te praćenje ponašanja i događaja, s opcijom odabira -in za specifične značajke.",
-  "txt_decentralized_consent_allow_data": "<span class='fw-semibold text-primary'>Decentralizirani pristanak:</span> Dopustite prikupljanje podataka za analitiku, podatke obrasca (kada nas kontaktirate), te praćenje ponašanja i događaja, s opcijom opozvati privolu, uključiti se za određene značajke i zaraditi nagrade od aktivnosti digitalnog marketinga."
+  "txt_decentralized_consent_allow_data": "<span class='fw-semibold text-primary'>Decentralizirani pristanak:</span> Dopustite prikupljanje podataka za analitiku, podatke obrasca (kada nas kontaktirate), te praćenje ponašanja i događaja, s opcijom opozvati privolu, uključiti se za određene značajke i zaraditi nagrade od aktivnosti digitalnog marketinga.",
+  "txt_you_can_revoke_on_the_site": "Možete opozvati pristanak na web mjestu ili bilo koji izričiti pristanak, kao što je obrada plaćanja, u bilo kojem trenutku",
+  "txt_revoke_opt_in": "Opozovi pristanak za uključivanje u obradu plaćanja",
+  "txt_revoke_consent_for_the_site": "Opozovi privolu za web mjesto"
 }

@@ -788,7 +788,11 @@ const ConsentComponentCustomApp = (props: any) => {
         >
           <LoadingStatus loading={loading} />
           <div className="toast-body p-0 shadow mx-3 mx-md-0">
-            <div className="revoke-wrapper minimize-shield-wrapper position-relative">
+            <div
+              className={`revoke-wrapper minimize-shield-wrapper position-relative ${
+                showExpandRevoke ? 'bg-white' : ''
+              }`}
+            >
               {!showExpandRevoke && (
                 <>
                   <img

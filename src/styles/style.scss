@@ -40,6 +40,7 @@ $dark: #222328;
   @import 'bootstrap/scss/card';
   @import 'bootstrap/scss/nav';
   @import 'bootstrap/scss/_grid';
+  @import 'bootstrap/scss/forms';
   // 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
   @import 'bootstrap/scss/utilities/api';
   color: #5f5e70;
@@ -381,6 +382,10 @@ $dark: #222328;
   }
   .cursor-pointer {
     cursor: pointer;
+  }
+  .form-check-input {
+    width: 16px;
+    height: 16px;
   }
 
   @-webkit-keyframes flash {

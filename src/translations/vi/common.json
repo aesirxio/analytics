@@ -115,5 +115,8 @@
   "txt_you_have_chosen": "Bạn đã chọn từ chối thu thập dữ liệu:",
   "txt_only_anonymized": "Chỉ khả dụng các lượt xem trang ẩn danh và các tính năng hạn chế. Để truy cập tất cả các tính năng của trang web, bao gồm nội dung được cá nhân hóa và chức năng nâng cao, vui lòng chọn một tùy chọn:",
   "txt_consent_allow_data": "<span class='fw-semibold text-primary'>Đồng ý:</span> Cho phép thu thập dữ liệu để phân tích, dữ liệu biểu mẫu (khi bạn liên hệ với chúng tôi), theo dõi hành vi và sự kiện, cùng với tùy chọn chọn -in để biết các tính năng cụ thể.",
-  "txt_decentralized_consent_allow_data": "<span class='fw-semibold text-primary'>Sự đồng ý phi tập trung:</span> Cho phép thu thập dữ liệu để phân tích, dữ liệu biểu mẫu (khi bạn liên hệ với chúng tôi), theo dõi hành vi và sự kiện, với tùy chọn thu hồi sự đồng ý, chọn tham gia các tính năng cụ thể và kiếm phần thưởng từ các hoạt động tiếp thị kỹ thuật số."
+  "txt_decentralized_consent_allow_data": "<span class='fw-semibold text-primary'>Sự đồng ý phi tập trung:</span> Cho phép thu thập dữ liệu để phân tích, dữ liệu biểu mẫu (khi bạn liên hệ với chúng tôi), theo dõi hành vi và sự kiện, với tùy chọn thu hồi sự đồng ý, chọn tham gia các tính năng cụ thể và kiếm phần thưởng từ các hoạt động tiếp thị kỹ thuật số.",
+  "txt_you_can_revoke_on_the_site": "Bạn có thể thu hồi sự đồng ý trên trang web hoặc bất kỳ sự đồng ý chọn tham gia rõ ràng nào, chẳng hạn như xử lý thanh toán, bất kỳ lúc nào",
+  "txt_revoke_opt_in": "Thu hồi sự đồng ý chọn tham gia để xử lý thanh toán",
+  "txt_revoke_consent_for_the_site": "Thu hồi sự đồng ý đối với trang web"
 }
