@@ -905,6 +905,9 @@ const ConsentComponentCustomApp = (props: any) => {
                                   sessionStorage.removeItem('aesirx-analytics-payment');
                                   setShowExpandRevoke(false);
                                   setRevokeConsentOption('consent');
+                                  setTimeout(() => {
+                                    window.location.reload();
+                                  }, 1000);
                                 } else {
                                   await handleRevokeBtn();
                                   if (level > 1) {
