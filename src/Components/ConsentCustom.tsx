@@ -18,11 +18,9 @@ import '../styles/style.scss';
 import { TermsComponent } from './Terms';
 import { ToastContainer, toast } from 'react-toastify';
 
-import yes from '../Assets/yes.svg';
 import no from '../Assets/no.svg';
 import bg from '../Assets/bg.png';
 import privacy from '../Assets/privacy.svg';
-import arrow from '../Assets/arrow.svg';
 import checkbox from '../Assets/checkbox.svg';
 import checkbox_active from '../Assets/checkbox_active.svg';
 import check_circle from '../Assets/check_circle.svg';

@@ -5,7 +5,6 @@ import shield_of_privacy from '../Assets/shield_of_privacy.png';
 import concordium from '../Assets/concordium.svg';
 import privacy from '../Assets/privacy.svg';
 import arrow from '../Assets/arrow.svg';
-import check_line from '../Assets/check_line.svg';
 import check_circle from '../Assets/check_circle.svg';
 import { useTranslation } from 'react-i18next';
 import { Tab, Tabs } from 'react-bootstrap';
@@ -510,32 +509,6 @@ const TermsComponent = ({
           )
       )}
     </>
-  );
-};
-
-const ConsentLevel = ({
-  level,
-  tier,
-  levelname,
-  term_custom,
-  content_custom,
-  personal_data,
-}: any) => {
-  return (
-    <div className="consent_level mt-2 mt-lg-3">
-      <div className="d-flex align-items-center justify-content-between flex-wrap mb-2">
-        <div className="d-flex align-items-center">
-          <div className={`status-tier tier-${level} rounded-circle`}></div>
-          <div className="status-tier-text fw-semibold fs-14 text-primary">
-            {tier} - {levelname}
-          </div>
-        </div>
-        <div className="fw-semibold fs-14 text-primary">{term_custom}</div>
-      </div>
-      <div>
-        {content_custom} {personal_data ? <span className="mt-2">{personal_data}</span> : <></>}
-      </div>
-    </div>
   );
 };
 
