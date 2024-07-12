@@ -168,6 +168,7 @@ const ConsentComponentCustomApp = (props: any) => {
   };
 
   const [consents, setConsents] = useState<number[]>([1, 2]);
+  const [revokeConsentOption, setRevokeConsentOption] = useState<string>('consent');
   const [loading, setLoading] = useState('done');
   const [loadingCheckAccount, setLoadingCheckAccount] = useState(false);
   const [showExpandConsent, setShowExpandConsent] = useState(true);
@@ -764,6 +765,7 @@ const ConsentComponentCustomApp = (props: any) => {
       gtag('set', 'ads_data_redaction', true);
     }
   };
+  const paymentRevoke = sessionStorage.getItem('aesirx-analytics-payment');
   console.log('loading', loading);
   return (
     <div>
@@ -776,7 +778,7 @@ const ConsentComponentCustomApp = (props: any) => {
         }`}
       >
         <div
-          className={`toast revoke-toast ${
+          className={`toast revoke-toast custom ${
             showRevoke ||
             (sessionStorage.getItem('aesirx-analytics-revoke') &&
               sessionStorage.getItem('aesirx-analytics-revoke') !== '0')
@@ -786,7 +788,11 @@ const ConsentComponentCustomApp = (props: any) => {
         >
           <LoadingStatus loading={loading} />
           <div className="toast-body p-0 shadow mx-3 mx-md-0">
-            <div className="revoke-wrapper minimize-shield-wrapper position-relative">
+            <div
+              className={`revoke-wrapper minimize-shield-wrapper position-relative ${
+                showExpandRevoke ? 'bg-white' : ''
+              }`}
+            >
               {!showExpandRevoke && (
                 <>
                   <img
@@ -817,6 +823,31 @@ const ConsentComponentCustomApp = (props: any) => {
               {showExpandRevoke && (
                 <>
                   <div
+                    className={`d-flex rounded-top align-items-center justify-content-between p-2 p-lg-3 fw-medium flex-wrap py-2 py-lg-3 px-4 header-consent-bg`}
+                    style={{
+                      borderBottom: '1px solid #DEDEDE',
+                    }}
+                  >
+                    <div className="text-primary text-nowrap">{t('txt_tracking_data_privacy')}</div>
+                    <div className="d-flex align-items-center fs-14 text-primary">
+                      <a
+                        href="https://shield.aesirx.io/"
+                        rel="noreferrer"
+                        target="_blank"
+                        className="minimize-shield-wrapper position-relative text-decoration-none"
+                      >
+                        <img
+                          className="cover-img position-absolute h-100 w-100 object-fit-cover z-1"
+                          src={bg}
+                        />
+                        <div className="minimize-shield position-relative z-2 py-2">
+                          <img src={privacy} alt="Shield of Privacy" />
+                          {t('txt_shield_of_privacy')}
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                  <div
                     className="minimize-revoke"
                     onClick={() => {
                       setShowExpandRevoke(false);
@@ -824,32 +855,42 @@ const ConsentComponentCustomApp = (props: any) => {
                   >
                     <img src={no} />
                   </div>
-                  <div className="p-3 bg-white text">
-                    {t('txt_you_can_revoke')} <br />
-                    {t('txt_visit')}{' '}
-                    <a
-                      href="https://nft.shield.aesirx.io"
-                      className="text-success text-decoration-underline"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {t('txt_link')}
-                    </a>{' '}
-                    {t('txt_for_more_information')}
+                  <div className="p-3 bg-white">
+                    {paymentRevoke ? t('txt_you_can_revoke_on_the_site') : t('txt_you_can_revoke')}
                   </div>
-                  <div className="rounded-bottom position-relative overflow-hidden text-white">
-                    <img
-                      className="cover-img position-absolute h-100 w-100 object-fit-cover"
-                      src={bg}
+                  <Form className="mb-0 w-100 bg-white px-3">
+                    {paymentRevoke ? (
+                      <Form.Check
+                        id={`option-revoke-payment`}
+                        checked={revokeConsentOption === 'payment'}
+                        type="checkbox"
+                        label={t('txt_revoke_opt_in')}
+                        value={'payment'}
+                        onChange={({ target: { value } }) => {
+                          setRevokeConsentOption(value);
+                        }}
+                      />
+                    ) : (
+                      <></>
+                    )}
+                    <Form.Check
+                      id={`option-revoke-consent`}
+                      checked={revokeConsentOption === 'consent'}
+                      type="checkbox"
+                      label={t('txt_revoke_consent_for_the_site')}
+                      value={'consent'}
+                      onChange={({ target: { value } }) => {
+                        setRevokeConsentOption(value);
+                      }}
                     />
+                  </Form>
+
+                  <div className="rounded-bottom position-relative overflow-hidden bg-white">
                     <div className="position-relative p-3">
-                      <div className="d-flex align-items-center justify-content-between flex-wrap">
-                        <div className="me-2">
-                          <img src={privacy} alt="Shield of Privacy" /> {t('txt_shield_of_privacy')}
-                        </div>
-                        <div className="d-flex align-items-center">
+                      <div className="d-flex align-items-center flex-wrap">
+                        <div className="d-flex align-items-center w-100 justify-content-end">
                           <a
-                            className="text-success text-decoration-underline manage-consent fs-14"
+                            className="manage-consent fs-14 btn btn-outline-success rounded-pill py-2 py-lg-3 d-flex align-items-center justify-content-center w-100 w-lg-35"
                             href="https://dapp.shield.aesirx.io/revoke-consent"
                             target="_blank"
                             rel="noreferrer"
@@ -858,16 +899,27 @@ const ConsentComponentCustomApp = (props: any) => {
                           </a>
                           {loading === 'done' ? (
                             <Button
-                              variant="success"
+                              variant="outline-success"
                               onClick={async () => {
-                                await handleRevokeBtn();
-                                if (level > 1) {
+                                if (paymentRevoke) {
+                                  sessionStorage.removeItem('aesirx-analytics-payment');
+                                  setShowExpandRevoke(false);
+                                  setRevokeConsentOption('consent');
                                   setTimeout(() => {
                                     window.location.reload();
                                   }, 1000);
+                                } else {
+                                  await handleRevokeBtn();
+                                  if (level > 1) {
+                                    setTimeout(() => {
+                                      window.location.reload();
+                                    }, 1000);
+                                  }
                                 }
                               }}
-                              className={'text-white d-flex align-items-center revoke-btn fs-14'}
+                              className={
+                                'd-flex align-items-center justify-content-center w-100 w-lg-35 revoke-btn fs-14 rounded-pill py-2 py-lg-3'
+                              }
                             >
                               {t('txt_revoke_consent')}
                             </Button>
