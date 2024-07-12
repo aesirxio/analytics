@@ -144,7 +144,7 @@ const TermsComponent = ({
                       >
                         {isRejectedLayout ? (
                           <>
-                            <p className="mt-4 mb-2">{t('txt_you_have_chosen')}</p>
+                            <p className="mt-0 pt-4 mb-2">{t('txt_you_have_chosen')}</p>
                             <p className="mt-2 mb-3">{t('txt_only_anonymized')}</p>
                             <div className="d-flex align-items-start">
                               <span>

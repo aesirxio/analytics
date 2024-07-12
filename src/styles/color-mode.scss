@@ -32,7 +32,8 @@
     .text-primary {
       color: $white;
     }
-    .text-dark {
+    .text-dark,
+    .text-black {
       color: $white;
     }
     .minimize-shield-wrapper {
@@ -53,9 +54,7 @@
     }
     .consent_level {
       &.active {
-        .text-primary {
-          color: #222328 !important;
-        }
+        background-color: transparent;
       }
     }
   }
