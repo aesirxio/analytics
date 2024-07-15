@@ -84,7 +84,7 @@
   "txt_please_note": "Veuillez noter",
   "txt_we_do_not_share": "Nous ne partageons pas vos données avec des tiers sans votre consentement explicite.",
   "txt_you_can_opt_in": "Vous pouvez vous inscrire ultérieurement pour des fonctionnalités spécifiques sans donner votre consentement général.",
-  "txt_for_more_details": "Pour plus de détails, consultez notre politique de confidentialité.",
+  "txt_for_more_details": "Pour plus de détails, consultez notre <a class='text-success fw-semibold text-decoration-underline' href='https://aesirx.io/privacy-policy' target='_blank'>politique de confidentialité</a>.",
   "txt_benefit": "Avantages",
   "txt_control_your_data": "<span class='fw-semibold text-primary'>Contrôlez vos données :</span> Choisissez votre niveau préféré de collecte et de suivi des données.",
   "txt_earn_rewards": "<span class='fw-semibold text-primary'>Gagnez des récompenses :</span> Participez au consentement décentralisé pour la confidentialité et les récompenses.",

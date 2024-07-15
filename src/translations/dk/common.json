@@ -84,7 +84,7 @@
   "txt_please_note": "Bemærk venligst",
   "txt_we_do_not_share": "Vi deler ikke dine data med tredjeparter uden dit udtrykkelige samtykke.",
   "txt_you_can_opt_in": "Du kan senere tilmelde dig specifikke funktioner uden at give generel samtykke.",
-  "txt_for_more_details": "For flere detaljer, se vores privatlivspolitik.",
+  "txt_for_more_details": "For flere detaljer, se vores <a class='text-success fw-semibold text-decoration-underline' href='https://aesirx.io/privacy-policy' target='_blank'>privatlivspolitik</a>.",
   "txt_benefit": "Fordele",
   "txt_control_your_data": "<span class='fw-semibold text-primary'>Styr dine data:</span> Vælg dit foretrukne niveau for dataindsamling og sporing.",
   "txt_earn_rewards": "<span class='fw-semibold text-primary'>Optjen belønninger:</span> Deltag i decentraliseret samtykke for privatliv og belønninger.",
