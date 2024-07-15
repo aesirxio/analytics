@@ -84,7 +84,7 @@
   "txt_please_note": "Napomena",
   "txt_we_do_not_share": "Ne dijelimo vaše podatke s trećim stranama bez vašeg izričitog pristanka.",
   "txt_you_can_opt_in": "Možete se kasnije uključiti za određene značajke bez davanja općeg pristanka.",
-  "txt_for_more_details": "Za više detalja pogledajte naša pravila privatnosti.",
+  "txt_for_more_details": "Za više detalja pogledajte naša <a class='text-success fw-semibold text-decoration-underline' href='https://aesirx.io/privacy-policy' target='_blank'>pravila privatnosti</a>.",
   "txt_benefit": "Prednosti",
   "txt_control_your_data": "<span class='fw-semibold text-primary'>Kontrolirajte svoje podatke:</span> Odaberite željenu razinu prikupljanja i praćenja podataka.",
   "txt_earn_rewards": "<span class='fw-semibold text-primary'>Osvojite nagrade:</span> Sudjelujte u decentraliziranom pristanku za privatnost i nagrade.",

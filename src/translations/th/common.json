@@ -84,7 +84,7 @@
   "txt_please_note": "โปรดทราบ",
   "txt_we_do_not_share": "เราไม่แบ่งปันข้อมูลของคุณกับบุคคลที่สามโดยไม่ได้รับความยินยอมอย่างชัดแจ้งจากคุณ",
   "txt_you_can_opt_in": "คุณสามารถเลือกใช้คุณสมบัติบางอย่างในภายหลังได้โดยไม่ต้องให้ความยินยอมแบบครอบคลุม",
-  "txt_for_more_details": "สำหรับรายละเอียดเพิ่มเติม โปรดดูนโยบายความเป็นส่วนตัวของเรา",
+  "txt_for_more_details": "สำหรับรายละเอียดเพิ่มเติม โปรดดู<a class='text-success fw-semibold text- decoration-underline' href='https://aesirx.io/privacy-policy' target='_blank'>นโยบายความเป็นส่วนตัว</a>ของเรา",
   "txt_benefit": "สิทธิประโยชน์",
   "txt_control_your_data": "<span class='fw-semibold text-primary'>ควบคุมข้อมูลของคุณ:</span> เลือกระดับการรวบรวมและติดตามข้อมูลที่คุณต้องการ",
   "txt_earn_rewards": "<span class='fw-semibold text-primary'>รับรางวัล:</span> เข้าร่วมในการกระจายความยินยอมเพื่อความเป็นส่วนตัวและรางวัล",
