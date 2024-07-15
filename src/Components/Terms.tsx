@@ -227,7 +227,13 @@ const TermsComponent = ({
                                   <img src={check_circle} width={'14px'} height={'15px'} />
                                 </span>
                                 <div className="ms-10px">
-                                  <div>{t('txt_for_more_details')}</div>
+                                  <div
+                                    dangerouslySetInnerHTML={{
+                                      __html: t('txt_for_more_details', {
+                                        interpolation: { escapeValue: false },
+                                      }),
+                                    }}
+                                  />
                                 </div>
                               </div>
                             </div>
