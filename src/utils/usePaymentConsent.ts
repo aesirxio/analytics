@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 declare global {
   interface Window {
@@ -19,6 +19,13 @@ const usePaymentConsent = () => {
   const closePaymentConsent = () => {
     setShowPaymentConsent(false);
   };
+
+  useEffect(() => {
+    if (sessionStorage.getItem('aesirx-analytics-payment') === 'true') {
+      window.funcAfterPaymentConsent && window.funcAfterPaymentConsent();
+    }
+  }, []);
+
   return {
     showPaymentConsent,
     openPaymentConsent,
