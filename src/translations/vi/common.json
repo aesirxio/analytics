@@ -118,5 +118,10 @@
   "txt_decentralized_consent_allow_data": "<span class='fw-semibold text-primary'>Sự đồng ý phi tập trung:</span> Cho phép thu thập dữ liệu để phân tích, dữ liệu biểu mẫu (khi bạn liên hệ với chúng tôi), theo dõi hành vi và sự kiện, với tùy chọn thu hồi sự đồng ý, chọn tham gia các tính năng cụ thể và kiếm phần thưởng từ các hoạt động tiếp thị kỹ thuật số.",
   "txt_you_can_revoke_on_the_site": "Bạn có thể thu hồi sự đồng ý trên trang web hoặc bất kỳ sự đồng ý chọn tham gia rõ ràng nào, chẳng hạn như xử lý thanh toán, bất kỳ lúc nào",
   "txt_revoke_opt_in": "Thu hồi sự đồng ý chọn tham gia để xử lý thanh toán",
-  "txt_revoke_consent_for_the_site": "Thu hồi sự đồng ý đối với trang web"
+  "txt_revoke_consent_for_the_site": "Thu hồi sự đồng ý đối với trang web",
+  "txt_payment_notice": "Thông báo: Xử lý Thanh toán",
+  "txt_payment_1": "Dịch vụ này sẽ cài đặt cookie và thu thập dữ liệu để hỗ trợ xử lý cổng thanh toán.",
+  "txt_payment_2": "Để hoàn tất việc mua hàng, <span class='fw-semibold'>dữ liệu đơn hàng & người dùng</span> sẽ được chia sẻ với <span class='fw-semibold'>Sellix & Stripe</span> là những <span class='fw-semibold'>bộ xử lý thanh toán</span> của chúng tôi. (*<span class='fw-semibold'>Google reCaptcha</span> được các <span class='fw-semibold'>bộ xử lý thanh toán</span> sử dụng cho mục đích <span class='fw-semibold'>security</span> bảo mật.)",
+  "txt_payment_3": "Nếu bạn không đồng ý chia sẻ dữ liệu này, bạn sẽ không thể hoàn tất thanh toán.",
+  "txt_payment_4": "Để biết thêm thông tin, vui lòng tham khảo <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>chính sách bảo mật</a> của chúng tôi."
 }

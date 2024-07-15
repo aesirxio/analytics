@@ -118,5 +118,10 @@
   "txt_decentralized_consent_allow_data": "<span class='fw-semibold text-primary'>Consentimiento descentralizado:</span> permite la recopilación de datos para análisis, datos de formularios (cuando nos contacta) y seguimiento de comportamiento y eventos, con la opción de revocar el consentimiento, optar por funciones específicas y ganar recompensas por actividades de marketing digital.",
   "txt_you_can_revoke_on_the_site": "Puedes revocar el consentimiento en el sitio o cualquier consentimiento explícito, como el procesamiento de pagos, en cualquier momento",
   "txt_revoke_opt_in": "Revocar el consentimiento para el procesamiento de pagos",
-  "txt_revoke_consent_for_the_site": "Revocar el consentimiento para el sitio"
+  "txt_revoke_consent_for_the_site": "Revocar el consentimiento para el sitio",
+  "txt_payment_notice": "Aviso: Procesamiento de Pagos",
+  "txt_payment_1": "Este servicio establecerá cookies y recopilará datos para respaldar el procesamiento de la pasarela de pagos.",
+  "txt_payment_2": "Para completar su compra, los <span class='fw-semibold'>datos del pedido & del usuario</span> se compartirán con <span class='fw-semibold'>Sellix & Stripe</span> como nuestros <span class='fw-semibold'>procesadores de pagos.</span> (*<span class='fw-semibold'>Google reCaptcha</span> es utilizado por los <span class='fw-semibold'>procesadores de pagos</span> por razones de <span class='fw-semibold'>seguridad</span>.)",
+  "txt_payment_3": "Si no consiente compartir estos datos, no podrá completar el pago.",
+  "txt_payment_4": "Para más información, por favor consulte nuestra <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>política de privacidad</a>."
 }

@@ -51,6 +51,7 @@ import { useAccount, useSignMessage } from 'wagmi';
 import SSOEthereumProvider from './Ethereum';
 import { getWeb3ID } from '../utils/Concordium';
 import { trackEvent } from '../utils';
+import PaymentConsent from './PaymentConsent';
 declare global {
   interface Window {
     dataLayer: any;
@@ -1368,7 +1369,7 @@ const ConsentComponentCustomApp = (props: any) => {
           </div>
         </div>
       </div>
-
+      <PaymentConsent />
       {!account && loading === 'connect' && (
         <ConnectModal
           isConnecting={isConnecting}

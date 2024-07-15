@@ -118,5 +118,10 @@
   "txt_decentralized_consent_allow_data": "<span class='fw-semibold text-primary'>Decentraliseret samtykke:</span> Tillad dataindsamling til analyser, formulardata (når du kontakter os) og adfærds- og hændelsessporing med mulighed for at tilbagekald samtykke, tilmeld dig specifikke funktioner, og optjen belønninger fra digitale marketingaktiviteter.",
   "txt_you_can_revoke_on_the_site": "Du kan til enhver tid tilbagekalde samtykke på webstedet eller ethvert eksplicit samtykke, såsom betalingsbehandling",
   "txt_revoke_opt_in": "Tilbagekald opt-in samtykke til betalingsbehandling",
-  "txt_revoke_consent_for_the_site": "Tilbagekald samtykke for webstedet"
+  "txt_revoke_consent_for_the_site": "Tilbagekald samtykke for webstedet",
+  "txt_payment_notice": "Bemærk: Betalingsbehandling",
+  "txt_payment_1": "Denne tjeneste vil sætte cookies og indsamle data for at understøtte betalingsgateway-behandling.",
+  "txt_payment_2": "For at fuldføre dit køb vil <span class='fw-semibold'>ordre- & brugerdata</span> blive delt med <span class='fw-semibold'>Sellix & Stripe</span> som vores <span class='fw-semibold'>betalingsbehandlere.</span> (*<span class='fw-semibold'>Google reCaptcha</span> bruges af <span class='fw-semibold'>betalingsbehandlerne</span> af <span class='fw-semibold'>sikkerhedsmæssige</span> årsager.)",
+  "txt_payment_3": "Hvis du ikke giver samtykke til denne dataudveksling, vil du ikke kunne fuldføre betalingen.",
+  "txt_payment_4": "For mere information, henvises til vores <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>privatlivspolitik.</a>."
 }
