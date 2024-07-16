@@ -118,6 +118,7 @@
   "txt_decentralized_consent_allow_data": "<span class='fw-semibold text-primary'>Decentraliseret samtykke:</span> Tillad dataindsamling til analyser, formulardata (når du kontakter os) og adfærds- og hændelsessporing med mulighed for at tilbagekald samtykke, tilmeld dig specifikke funktioner, og optjen belønninger fra digitale marketingaktiviteter.",
   "txt_you_can_revoke_on_the_site": "Du kan til enhver tid tilbagekalde samtykke på webstedet eller ethvert eksplicit samtykke, såsom betalingsbehandling",
   "txt_revoke_opt_in": "Tilbagekald opt-in samtykke til betalingsbehandling",
+  "txt_revoke_opt_in_advisor": "Tilbagekald Samtykke til AesirX Privacy Advisor AI",
   "txt_revoke_consent_for_the_site": "Tilbagekald samtykke for webstedet",
   "txt_payment_notice": "Bemærk: Betalingsbehandling",
   "txt_payment_1": "Denne tjeneste vil sætte cookies og indsamle data for at understøtte betalingsgateway-behandling.",

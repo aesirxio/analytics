@@ -118,6 +118,7 @@
   "txt_decentralized_consent_allow_data": "<span class='fw-semibold text-primary'>Decentralizirani pristanak:</span> Dopustite prikupljanje podataka za analitiku, podatke obrasca (kada nas kontaktirate), te praćenje ponašanja i događaja, s opcijom opozvati privolu, uključiti se za određene značajke i zaraditi nagrade od aktivnosti digitalnog marketinga.",
   "txt_you_can_revoke_on_the_site": "Možete opozvati pristanak na web mjestu ili bilo koji izričiti pristanak, kao što je obrada plaćanja, u bilo kojem trenutku",
   "txt_revoke_opt_in": "Opozovi pristanak za uključivanje u obradu plaćanja",
+  "txt_revoke_opt_in_advisor": "Opozovi pristanak za uključivanje za AesirX Privacy Advisor AI",
   "txt_revoke_consent_for_the_site": "Opozovi privolu za web mjesto",
   "txt_payment_notice": "Napomena: Obrada Plaćanja",
   "txt_payment_1": "Ova usluga postavit će kolačiće i prikupljati podatke za podršku obradi platnog prolaza.",

@@ -118,6 +118,7 @@
   "txt_decentralized_consent_allow_data": "<span class='fw-semibold text-primary'>Consentement décentralisé :</span> Autoriser la collecte de données à des fins d'analyse, de données de formulaire (lorsque vous nous contactez) et de suivi des comportements et des événements, avec la possibilité de révoquer le consentement, activer des fonctionnalités spécifiques et gagner des récompenses grâce aux activités de marketing numérique.",
   "txt_you_can_revoke_on_the_site": "Vous pouvez révoquer votre consentement sur le site ou tout consentement explicite, tel que le traitement des paiements, à tout moment",
   "txt_revoke_opt_in": "Révoquer le consentement d'inscription pour le traitement des paiements",
+  "txt_revoke_opt_in_advisor": "Révoquer le Consentement pour AesirX Privacy Advisor AI",
   "txt_revoke_consent_for_the_site": "Révoquer le consentement pour le site",
   "txt_payment_notice": "Avis : Traitement des Paiements",
   "txt_payment_1": "Ce service installera des cookies et collectera des données pour prendre en charge le traitement de la passerelle de paiement.",
