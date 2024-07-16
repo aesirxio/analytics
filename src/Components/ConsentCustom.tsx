@@ -1368,7 +1368,6 @@ const ConsentComponentCustomApp = (props: any) => {
           </div>
         </div>
       </div>
-
       {!account && loading === 'connect' && (
         <ConnectModal
           isConnecting={isConnecting}
