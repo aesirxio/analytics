@@ -766,6 +766,7 @@ const ConsentComponentCustomApp = (props: any) => {
     }
   };
   const paymentRevoke = sessionStorage.getItem('aesirx-analytics-payment');
+  const advisorRevoke = sessionStorage.getItem('aesirx-analytics-advisor');
   console.log('loading', loading);
   return (
     <div>
@@ -873,6 +874,20 @@ const ConsentComponentCustomApp = (props: any) => {
                     ) : (
                       <></>
                     )}
+                    {advisorRevoke ? (
+                      <Form.Check
+                        id={`option-revoke-advisor`}
+                        checked={revokeConsentOption === 'advisor'}
+                        type="checkbox"
+                        label={t('txt_revoke_opt_in_advisor')}
+                        value={'advisor'}
+                        onChange={({ target: { value } }) => {
+                          setRevokeConsentOption(value);
+                        }}
+                      />
+                    ) : (
+                      <></>
+                    )}
                     <Form.Check
                       id={`option-revoke-consent`}
                       checked={revokeConsentOption === 'consent'}
@@ -901,8 +916,15 @@ const ConsentComponentCustomApp = (props: any) => {
                             <Button
                               variant="outline-success"
                               onClick={async () => {
-                                if (paymentRevoke) {
+                                if (revokeConsentOption === 'payment') {
                                   sessionStorage.removeItem('aesirx-analytics-payment');
+                                  setShowExpandRevoke(false);
+                                  setRevokeConsentOption('consent');
+                                  setTimeout(() => {
+                                    window.location.reload();
+                                  }, 1000);
+                                } else if (revokeConsentOption === 'advisor') {
+                                  sessionStorage.removeItem('aesirx-analytics-advisor');
                                   setShowExpandRevoke(false);
                                   setRevokeConsentOption('consent');
                                   setTimeout(() => {
