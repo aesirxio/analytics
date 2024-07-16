@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 
 interface Props {
-  show: Boolean;
+  show: boolean;
   handleClose: () => void;
 }
 declare global {
