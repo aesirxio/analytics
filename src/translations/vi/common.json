@@ -84,7 +84,7 @@
   "txt_please_note": "Xin lưu ý",
   "txt_we_do_not_share": "Chúng tôi không chia sẻ dữ liệu của bạn với bên thứ ba mà không có sự đồng ý rõ ràng của bạn.",
   "txt_you_can_opt_in": "Bạn có thể chọn tham gia các tính năng cụ thể sau mà không cần đưa ra sự đồng ý chung chung.",
-  "txt_for_more_details": "Để biết thêm chi tiết, hãy tham khảo chính sách quyền riêng tư của chúng tôi.",
+  "txt_for_more_details": "Để biết thêm chi tiết, hãy tham khảo <a class='text-success fw-semibold text-decoration-underline' href='https://aesirx.io/privacy-policy' target='_blank'>chính sách quyền riêng tư</a> của chúng tôi.",
   "txt_benefit": "Lợi ích",
   "txt_control_your_data": "<span class='fw-semibold text-primary'>Kiểm soát dữ liệu của bạn:</span> Chọn mức độ thu thập và theo dõi dữ liệu ưa thích của bạn.",
   "txt_earn_rewards": "<span class='fw-semibold text-primary'>Kiếm phần thưởng:</span> Tham gia vào sự đồng ý phi tập trung về quyền riêng tư và phần thưởng.",
@@ -118,5 +118,11 @@
   "txt_decentralized_consent_allow_data": "<span class='fw-semibold text-primary'>Sự đồng ý phi tập trung:</span> Cho phép thu thập dữ liệu để phân tích, dữ liệu biểu mẫu (khi bạn liên hệ với chúng tôi), theo dõi hành vi và sự kiện, với tùy chọn thu hồi sự đồng ý, chọn tham gia các tính năng cụ thể và kiếm phần thưởng từ các hoạt động tiếp thị kỹ thuật số.",
   "txt_you_can_revoke_on_the_site": "Bạn có thể thu hồi sự đồng ý trên trang web hoặc bất kỳ sự đồng ý chọn tham gia rõ ràng nào, chẳng hạn như xử lý thanh toán, bất kỳ lúc nào",
   "txt_revoke_opt_in": "Thu hồi sự đồng ý chọn tham gia để xử lý thanh toán",
-  "txt_revoke_consent_for_the_site": "Thu hồi sự đồng ý đối với trang web"
+  "txt_revoke_opt_in_advisor": "Thu hồi sự đồng ý cho AesirX Privacy Advisor AI",
+  "txt_revoke_consent_for_the_site": "Thu hồi sự đồng ý đối với trang web",
+  "txt_payment_notice": "Thông báo: Xử lý Thanh toán",
+  "txt_payment_1": "Dịch vụ này sẽ cài đặt cookie và thu thập dữ liệu để hỗ trợ xử lý cổng thanh toán.",
+  "txt_payment_2": "Để hoàn tất việc mua hàng, <span class='fw-semibold'>dữ liệu đơn hàng & người dùng</span> sẽ được chia sẻ với <span class='fw-semibold'>Sellix & Stripe</span> là những <span class='fw-semibold'>bộ xử lý thanh toán</span> của chúng tôi. (*<span class='fw-semibold'>Google reCaptcha</span> được các <span class='fw-semibold'>bộ xử lý thanh toán</span> sử dụng cho mục đích <span class='fw-semibold'>security</span> bảo mật.)",
+  "txt_payment_3": "Nếu bạn không đồng ý chia sẻ dữ liệu này, bạn sẽ không thể hoàn tất thanh toán.",
+  "txt_payment_4": "Để biết thêm thông tin, vui lòng tham khảo <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>chính sách bảo mật</a> của chúng tôi."
 }

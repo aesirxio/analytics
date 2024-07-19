@@ -84,7 +84,7 @@
   "txt_please_note": "โปรดทราบ",
   "txt_we_do_not_share": "เราไม่แบ่งปันข้อมูลของคุณกับบุคคลที่สามโดยไม่ได้รับความยินยอมอย่างชัดแจ้งจากคุณ",
   "txt_you_can_opt_in": "คุณสามารถเลือกใช้คุณสมบัติบางอย่างในภายหลังได้โดยไม่ต้องให้ความยินยอมแบบครอบคลุม",
-  "txt_for_more_details": "สำหรับรายละเอียดเพิ่มเติม โปรดดูนโยบายความเป็นส่วนตัวของเรา",
+  "txt_for_more_details": "สำหรับรายละเอียดเพิ่มเติม โปรดดู<a class='text-success fw-semibold text- decoration-underline' href='https://aesirx.io/privacy-policy' target='_blank'>นโยบายความเป็นส่วนตัว</a>ของเรา",
   "txt_benefit": "สิทธิประโยชน์",
   "txt_control_your_data": "<span class='fw-semibold text-primary'>ควบคุมข้อมูลของคุณ:</span> เลือกระดับการรวบรวมและติดตามข้อมูลที่คุณต้องการ",
   "txt_earn_rewards": "<span class='fw-semibold text-primary'>รับรางวัล:</span> เข้าร่วมในการกระจายความยินยอมเพื่อความเป็นส่วนตัวและรางวัล",
@@ -118,5 +118,11 @@
   "txt_decentralized_consent_allow_data": "<span class='fw-semibold text-primary'>ความยินยอมแบบกระจายอำนาจ:</span> อนุญาตให้รวบรวมข้อมูลสำหรับการวิเคราะห์ ข้อมูลแบบฟอร์ม (เมื่อคุณติดต่อเรา) และการติดตามพฤติกรรมและเหตุการณ์ พร้อมตัวเลือกในการ เพิกถอนความยินยอม เลือกใช้คุณสมบัติเฉพาะ และรับรางวัลจากกิจกรรมการตลาดดิจิทัล",
   "txt_you_can_revoid_on_the_site": "คุณสามารถเพิกถอนความยินยอมบนไซต์หรือการยินยอมที่เลือกอย่างชัดแจ้ง เช่น การประมวลผลการชำระเงิน ได้ตลอดเวลา",
   "txt_revoid_opt_in": "เพิกถอนความยินยอมในการประมวลผลการชำระเงิน",
-  "txt_revoid_consent_for_the_site": "เพิกถอนความยินยอมสำหรับไซต์"
+  "txt_revoke_opt_in_advisor": "เพิกถอนความยินยอมสำหรับ AesirX Privacy Advisor AI",
+  "txt_revoid_consent_for_the_site": "เพิกถอนความยินยอมสำหรับไซต์",
+  "txt_payment_notice": "แจ้งเตือน: การประมวลผลการชำระเงิน",
+  "txt_payment_1": "บริการนี้จะตั้งค่าคุกกี้และรวบรวมข้อมูลเพื่อรองรับการประมวลผลเกตเวย์การชำระเงิน.",
+  "txt_payment_2": "เพื่อทำการซื้อให้เสร็จสมบูรณ์ <span class='fw-semibold'>ข้อมูลการสั่งซื้อและข้อมูลผู้ใช้</span> จะถูกแบ่งปันกับ <span class='fw-semibold'>Sellix & Stripe</span> ในฐานะ <span class='fw-semibold'>ตัวประมวลผลการชำระเงิน</span> ของเรา (*<span class='fw-semibold'>Google reCaptcha</span> ถูกใช้โดย <span class='fw-semibold'>ตัวประมวลผลการชำระเงิน</span> เพื่อวัตถุประสงค์ด้าน <span class='fw-semibold'>ความปลอดภัย</span>)",
+  "txt_payment_3": "หากคุณไม่ยินยอมให้แบ่งปันข้อมูลนี้ คุณจะไม่สามารถทำการชำระเงินให้เสร็จสมบูรณ์ได้",
+  "txt_payment_4": "สำหรับข้อมูลเพิ่มเติม โปรดดู <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>นโยบายความเป็นส่วนตัว</a> ของเรา"
 }
