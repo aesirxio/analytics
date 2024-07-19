@@ -40,15 +40,22 @@ $dark: #222328;
   @import 'bootstrap/scss/card';
   @import 'bootstrap/scss/nav';
   @import 'bootstrap/scss/_grid';
+  @import 'bootstrap/scss/forms';
   // 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
   @import 'bootstrap/scss/utilities/api';
   color: #5f5e70;
   font-size: 16px;
   --w3m-z-index: 1060;
+  z-index: 1050;
+  position: relative;
   --#{$prefix}modal-margin: 1.75rem;
   --#{$prefix}btn-padding-y: 9px;
   --#{$prefix}btn-padding-x: 20px;
   line-height: 24px;
+  box-sizing: border-box;
+  * {
+    box-sizing: border-box;
+  }
   &-modal .modal-dialog {
     max-width: 500px;
   }
@@ -66,6 +73,7 @@ $dark: #222328;
   }
   button {
     text-transform: none;
+    font-family: var(--bs-body-font-family);
   }
   .text-primary {
     color: $primary;
@@ -86,9 +94,8 @@ $dark: #222328;
   .btn-dark {
     @include button-variant(#222328, #222328, #fff, #222328, #222328, #fff);
   }
-  .btn-success-outline {
-    @include button-variant(transparent, $success, $success, transparent, $success, $success);
-    color: $success;
+  .btn-outline-success {
+    @include button-variant($white, $success, $dark, $success, $success, $white);
   }
   .btn-gray {
     @include button-variant(#a5a4b5, #a5a4b5, #fff, transparent, #a5a4b5, #fff);
@@ -210,12 +217,11 @@ $dark: #222328;
     }
   }
   .revoke-toast {
-    width: 530px;
     .toast-body {
       .minimize-revoke {
         position: absolute;
-        top: 5px;
-        right: 5px;
+        top: 1px;
+        right: 1px;
         cursor: pointer;
       }
       .manage-consent {
@@ -310,16 +316,16 @@ $dark: #222328;
 
   .consent_level {
     border: 2px solid #dedede;
-    border-radius: 6px;
+    border-radius: 8px;
     padding: 20px;
     position: relative;
     &.active {
       border: 2px solid $success;
-      background-color: #eaffff;
+      background-color: #faffff;
     }
     .checkbox_img {
       position: absolute;
-      bottom: 20px;
+      top: 20px;
       right: 20px;
     }
     .consent_upgrade_content {
@@ -328,7 +334,7 @@ $dark: #222328;
     @include media-breakpoint-down(lg) {
       padding: 10px;
       .checkbox_img {
-        bottom: 10px;
+        top: 10px;
         right: 10px;
       }
     }
@@ -342,11 +348,20 @@ $dark: #222328;
     &.w-100 {
       width: 100%;
     }
+    &.w-lg-30 {
+      width: 30%;
+    }
+    &.w-lg-35 {
+      width: 35%;
+    }
     &.justify-content-between {
       justify-content: space-between;
     }
     &.justify-content-center {
       justify-content: center;
+    }
+    &.justify-content-end {
+      justify-content: end;
     }
   }
   .btn.rounded-pill {
@@ -367,6 +382,10 @@ $dark: #222328;
   }
   .cursor-pointer {
     cursor: pointer;
+  }
+  .form-check-input {
+    width: 16px;
+    height: 16px;
   }
 
   @-webkit-keyframes flash {

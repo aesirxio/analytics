@@ -111,26 +111,36 @@ const chains = [
 import { Web3Modal } from '@web3modal/react';
 import { CONCORDIUM_WALLET_CONNECT_PROJECT_ID } from '@concordium/react-components';
 
-const projectId = CONCORDIUM_WALLET_CONNECT_PROJECT_ID;
+const SSOEthereumProvider = ({ children, layout, level }: any) => {
+  const projectId = CONCORDIUM_WALLET_CONNECT_PROJECT_ID;
 
-const { publicClient, webSocketPublicClient } = configureChains(chains, [
-  w3mProvider({ projectId }),
-]);
-const wagmiConfig = createConfig({
-  autoConnect: true,
-  connectors: w3mConnectors({ projectId, chains }),
-  publicClient,
-  webSocketPublicClient,
-});
+  const { publicClient, webSocketPublicClient } = configureChains(chains, [
+    w3mProvider({ projectId }),
+  ]);
+  const revoke = sessionStorage.getItem('aesirx-analytics-revoke');
+  const wagmiConfig: any =
+    (layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1) &&
+    (!revoke || revoke === '0' || revoke === '1')
+      ? {}
+      : createConfig({
+          autoConnect: true,
+          connectors: w3mConnectors({ projectId, chains }),
+          publicClient,
+          webSocketPublicClient,
+        });
 
-const ethereumClient = new EthereumClient(wagmiConfig, chains);
-
-const SSOEthereumProvider = ({ children }: any) => {
+  const ethereumClient = new EthereumClient(wagmiConfig, chains);
   return (
     <>
-      <WagmiConfig config={wagmiConfig}>{children}</WagmiConfig>
-
-      <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+      {(layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1) &&
+      (!revoke || revoke === '0' || revoke === '1') ? (
+        <>{children}</>
+      ) : (
+        <>
+          <WagmiConfig config={wagmiConfig}>{children}</WagmiConfig>
+          <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+        </>
+      )}
     </>
   );
 };

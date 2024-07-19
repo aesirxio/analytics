@@ -11,27 +11,29 @@ import {
   revokeConsents,
   verifySignature,
 } from '../utils/consent';
-import React, { useContext, useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import React, { Suspense, useContext, useEffect, useState } from 'react';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 import useConsentStatus from '../Hooks/useConsentStatus';
 import '../styles/style.scss';
 import { TermsComponent } from './Terms';
 import { ToastContainer, toast } from 'react-toastify';
 
-import yes from '../Assets/yes.svg';
 import no from '../Assets/no.svg';
 import bg from '../Assets/bg.png';
 import privacy from '../Assets/privacy.svg';
-import arrow from '../Assets/arrow.svg';
 import checkbox from '../Assets/checkbox.svg';
 import checkbox_active from '../Assets/checkbox_active.svg';
+import check_circle from '../Assets/check_circle.svg';
+import wallet_consent from '../Assets/wallet_consent.png';
+import wallet_shield_consent from '../Assets/wallet_shield_consent.png';
 
 import ContentLoader from 'react-content-loader';
-import { SSOButton } from 'aesirx-sso';
+const SSOButton: any = React.lazy(() =>
+  import('aesirx-sso').then((module) => ({ default: module.SSOButton }))
+);
 import {
   MAINNET,
   WithWalletConnector,
-  WalletConnectionProps,
   useConnection,
   useConnect,
   ConnectorType,
@@ -48,6 +50,7 @@ import { useTranslation } from 'react-i18next';
 import { useAccount, useSignMessage } from 'wagmi';
 import SSOEthereumProvider from './Ethereum';
 import { getWeb3ID } from '../utils/Concordium';
+import { trackEvent } from '../utils';
 declare global {
   interface Window {
     dataLayer: any;
@@ -55,16 +58,6 @@ declare global {
 }
 declare const dataLayer: any[];
 
-interface WalletConnectionPropsExtends extends WalletConnectionProps {
-  endpoint: string;
-  aesirXEndpoint: string;
-  networkEnv?: string;
-  loginApp?: any;
-  isLoggedApp: boolean;
-  gtagId: string;
-  gtmId: string;
-  layout: string;
-}
 const ConsentComponentCustom = ({
   endpoint,
   aesirXEndpoint,
@@ -77,26 +70,65 @@ const ConsentComponentCustom = ({
 }: any) => {
   return (
     <WithWalletConnector network={networkEnv === 'testnet' ? TESTNET : MAINNET}>
-      {(props) => (
-        <div className="aesirxconsent">
-          <SSOEthereumProvider>
-            <ConsentComponentCustomApp
-              {...props}
-              endpoint={endpoint}
-              aesirXEndpoint={aesirXEndpoint}
-              loginApp={loginApp}
-              isLoggedApp={isLoggedApp}
-              gtagId={gtagId}
-              gtmId={gtmId}
-              layout={layout}
-            />
-          </SSOEthereumProvider>
-        </div>
+      {(props: any) => (
+        <ConsentComponentCustomWrapper
+          {...props}
+          endpoint={endpoint}
+          aesirXEndpoint={aesirXEndpoint}
+          loginApp={loginApp}
+          isLoggedApp={isLoggedApp}
+          gtagId={gtagId}
+          gtmId={gtmId}
+          layout={layout}
+        />
       )}
     </WithWalletConnector>
   );
 };
-const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
+const ConsentComponentCustomWrapper = (props: any) => {
+  const [
+    uuid,
+    level,
+    connection,
+    account,
+    show,
+    setShow,
+    web3ID,
+    setWeb3ID,
+    handleLevel,
+    showRevoke,
+    handleRevoke,
+  ] = useConsentStatus(props?.endpoint, props?.layout, props);
+
+  return (
+    <div className="aesirxconsent">
+      <SSOEthereumProvider layout={props?.layout} level={level}>
+        <ConsentComponentCustomApp
+          {...props}
+          endpoint={props?.endpoint}
+          aesirXEndpoint={props?.aesirXEndpoint}
+          loginApp={props?.loginApp}
+          isLoggedApp={props?.isLoggedApp}
+          gtagId={props?.gtagId}
+          gtmId={props?.gtmId}
+          layout={props?.layout}
+          uuid={uuid}
+          level={level}
+          connection={connection}
+          account={account}
+          show={show}
+          setShow={setShow}
+          web3ID={web3ID}
+          setWeb3ID={setWeb3ID}
+          handleLevel={handleLevel}
+          showRevoke={showRevoke}
+          handleRevoke={handleRevoke}
+        />
+      </SSOEthereumProvider>
+    </div>
+  );
+};
+const ConsentComponentCustomApp = (props: any) => {
   const {
     endpoint,
     aesirXEndpoint,
@@ -112,6 +144,17 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
     genesisHashes,
     setActiveConnectorType,
     network,
+    uuid,
+    level,
+    connection,
+    account,
+    show,
+    setShow,
+    web3ID,
+    setWeb3ID,
+    handleLevel,
+    showRevoke,
+    handleRevoke,
   } = props;
   const { setConnection } = useConnection(connectedAccounts, genesisHashes);
 
@@ -124,110 +167,106 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
     setLoading('done');
   };
 
-  const [
-    uuid,
-    level,
-    connection,
-    account,
-    show,
-    setShow,
-    web3ID,
-    setWeb3ID,
-    handleLevel,
-    showRevoke,
-    handleRevoke,
-  ] = useConsentStatus(endpoint, layout, props);
-
   const [consents, setConsents] = useState<number[]>([1, 2]);
+  const [revokeConsentOption, setRevokeConsentOption] = useState<string>('consent');
   const [loading, setLoading] = useState('done');
   const [loadingCheckAccount, setLoadingCheckAccount] = useState(false);
   const [showExpandConsent, setShowExpandConsent] = useState(true);
+  const [showRejectedConsent, setShowRejectedConsent] = useState(false);
   const [showExpandRevoke, setShowExpandRevoke] = useState(false);
   const [showBackdrop, setShowBackdrop] = useState(true);
   const [consentTier4, setConsentTier4] = useState<any>({});
-  const [upgradeLayout, setUpgradeLayout] = useState<any>(false);
-  const [upgradeShowDetail, setUpgradeShowDetail] = useState<any>(false);
-  const [upgradeLevel, setUpgradeLevel] = useState<any>(0);
+  const [upgradeLayout, setUpgradeLayout] = useState<any>(
+    level === 3 || level === 4 ? true : false
+  );
+  const [upgradeLevel, setUpgradeLevel] = useState<any>(level === 4 || level === 3 ? level : 0);
   const analyticsContext = useContext(AnalyticsContext);
   const { t } = useTranslation();
   const gRPCClient = useGrpcClient(network);
-
+  const revoke = sessionStorage.getItem('aesirx-analytics-revoke');
   // Metamask
-  const { address, connector } = useAccount();
+  const { address, connector } =
+    (layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1) &&
+    (!revoke || revoke === '0' || revoke === '1')
+      ? { address: '', connector: '' }
+      : useAccount();
+  const { signMessage }: any =
+    (layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1) &&
+    (!revoke || revoke === '0' || revoke === '1')
+      ? { signMessage: {} }
+      : useSignMessage({
+          async onSuccess(data: any, variables: any) {
+            const signature = Buffer.from(
+              typeof data === 'object' && data !== null ? JSON.stringify(data) : data,
+              'utf-8'
+            ).toString('base64');
+            const jwt = sessionStorage.getItem('aesirx-analytics-jwt');
+            if (variables?.message.indexOf('Revoke consent') > -1) {
+              // Revoke Metamask
+              const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');
+              const consentList = await getConsents(endpoint, uuid);
+              consentList.forEach(async (consent: any) => {
+                !consent?.expiration &&
+                  (await revokeConsents(
+                    endpoint,
+                    levelRevoke,
+                    consent?.consent_uuid,
+                    address,
+                    signature,
+                    web3ID,
+                    jwt,
+                    'metamask'
+                  ));
+              });
+              setLoading('done');
+              handleRevoke(false);
+              setShowExpandConsent(false);
+              setShow(true);
+              setShowBackdrop(false);
+              sessionStorage.removeItem('aesirx-analytics-allow');
+            } else if (variables?.message.indexOf('Login with nonce') > -1) {
+              const res = await verifySignature(aesirXEndpoint, 'metamask', address, data);
+              sessionStorage.setItem('aesirx-analytics-jwt', res?.jwt);
+              setLoadingCheckAccount(false);
+              const nonce = await getNonce(
+                endpoint,
+                address,
+                'Give consent Tier 4:{nonce} {domain} {time}',
+                'metamask'
+              );
+              signMessage({ message: `${nonce}` });
+            } else {
+              setLoading('saving');
+              // Consent Metamask
+              await agreeConsents(
+                endpoint,
+                level,
+                uuid,
+                consents,
+                address,
+                signature,
+                web3ID,
+                jwt,
+                'metamask',
+                gtagId,
+                gtmId,
+                layout
+              );
+              sessionStorage.setItem('aesirx-analytics-uuid', uuid);
+              sessionStorage.setItem('aesirx-analytics-allow', '1');
+              sessionStorage.setItem('aesirx-analytics-consent-type', 'metamask');
 
-  const { signMessage } = useSignMessage({
-    async onSuccess(data, variables) {
-      const signature = Buffer.from(
-        typeof data === 'object' && data !== null ? JSON.stringify(data) : data,
-        'utf-8'
-      ).toString('base64');
-      const jwt = sessionStorage.getItem('aesirx-analytics-jwt');
-      if (variables?.message.indexOf('Revoke consent') > -1) {
-        // Revoke Metamask
-        const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');
-        const consentList = await getConsents(endpoint, uuid);
-        consentList.forEach(async (consent: any) => {
-          !consent?.expiration &&
-            (await revokeConsents(
-              endpoint,
-              levelRevoke,
-              consent?.consent_uuid,
-              address,
-              signature,
-              web3ID,
-              jwt,
-              'metamask'
-            ));
+              setShow(false);
+              setLoading('done');
+              handleRevoke(true, level);
+              setShowBackdrop(false);
+            }
+          },
+          async onError(error: any) {
+            setLoading('done');
+            toast.error(error.message);
+          },
         });
-        setLoading('done');
-        handleRevoke(false);
-        setShowExpandConsent(false);
-        setShow(true);
-        setShowBackdrop(false);
-        sessionStorage.removeItem('aesirx-analytics-allow');
-      } else if (variables?.message.indexOf('Login with nonce') > -1) {
-        const res = await verifySignature(aesirXEndpoint, 'metamask', address, data);
-        sessionStorage.setItem('aesirx-analytics-jwt', res?.jwt);
-        setLoadingCheckAccount(false);
-        const nonce = await getNonce(
-          endpoint,
-          address,
-          'Give consent Tier 4:{nonce} {domain} {time}',
-          'metamask'
-        );
-        signMessage({ message: `${nonce}` });
-      } else {
-        setLoading('saving');
-        // Consent Metamask
-        await agreeConsents(
-          endpoint,
-          level,
-          uuid,
-          consents,
-          address,
-          signature,
-          web3ID,
-          jwt,
-          'metamask',
-          gtagId,
-          gtmId,
-          layout
-        );
-        sessionStorage.setItem('aesirx-analytics-uuid', uuid);
-        sessionStorage.setItem('aesirx-analytics-allow', '1');
-        sessionStorage.setItem('aesirx-analytics-consent-type', 'metamask');
-
-        setShow(false);
-        setLoading('done');
-        handleRevoke(true, level);
-        setShowBackdrop(false);
-      }
-    },
-    async onError(error) {
-      setLoading('done');
-      toast.error(error.message);
-    },
-  });
 
   const handleChange = async ({ target: { value } }: any) => {
     if (consents.indexOf(parseInt(value)) === -1) {
@@ -315,6 +354,7 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
             layout
           );
           sessionStorage.setItem('aesirx-analytics-consent-type', 'concordium');
+          setUpgradeLayout(false);
         } else if (connector) {
           // Metamask
           if (level === 3) {
@@ -382,7 +422,9 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
         setShow(false);
         setLoading('done');
         handleRevoke(true, level);
+        setUpgradeLayout(false);
         setShowBackdrop(false);
+        setShowExpandRevoke(false);
       }
     } catch (error) {
       console.log(error);
@@ -442,6 +484,7 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
         );
         setShow(false);
         handleRevoke(true, level);
+        setUpgradeLayout(false);
         setLoading('done');
       } else if (response?.loginType === 'metamask') {
         // Metamask
@@ -472,7 +515,10 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
           'aesirx-analytics-consent-type',
           response?.loginType === 'concordium' ? 'concordium' : 'metamask'
         );
-        handleRevokeBtn();
+        await handleRevokeBtn();
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
       } else {
         // Agree Consent
         if (level === 4) {
@@ -497,6 +543,7 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
           );
           setShow(false);
           handleRevoke(true, level);
+          setUpgradeLayout(false);
           setLoading('done');
         }
       }
@@ -514,6 +561,12 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
     sessionStorage.setItem('aesirx-analytics-rejected', 'true');
     setShowExpandConsent(false);
     setShowBackdrop(false);
+    const hostUrl = endpoint ? endpoint : '';
+    const root = hostUrl ? hostUrl.replace(/\/$/, '') : '';
+    trackEvent(root, '', {
+      event_name: 'Reject consent',
+      event_type: 'reject-consent',
+    });
   };
   const handleRevokeBtn = async () => {
     const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');
@@ -568,22 +621,27 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
             flag = false;
           }
         } else {
-          setLoading('saving');
-          const consentList = await getConsents(endpoint, uuid);
-          consentList.forEach(async (consent: any) => {
-            !consent?.expiration &&
-              (await revokeConsents(
-                endpoint,
-                levelRevoke,
-                consent?.consent_uuid,
-                null,
-                null,
-                null,
-                jwt
-              ));
-          });
-          setLoading('done');
-          handleRevoke(false);
+          if (!jwt && parseInt(levelRevoke) === 2) {
+            SSOClick('.revokeLogin');
+            return;
+          } else {
+            setLoading('saving');
+            const consentList = await getConsents(endpoint, uuid);
+            consentList.forEach(async (consent: any) => {
+              !consent?.expiration &&
+                (await revokeConsents(
+                  endpoint,
+                  levelRevoke,
+                  consent?.consent_uuid,
+                  null,
+                  null,
+                  null,
+                  jwt
+                ));
+            });
+            setLoading('done');
+            handleRevoke(false);
+          }
         }
 
         if (flag && ((account && consentType !== 'metamask') || level < 3)) {
@@ -599,6 +657,12 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
         setShowBackdrop(false);
         sessionStorage.removeItem('aesirx-analytics-allow');
       }
+      const hostUrl = endpoint ? endpoint : '';
+      const root = hostUrl ? hostUrl.replace(/\/$/, '') : '';
+      trackEvent(root, '', {
+        event_name: 'Revoke consent',
+        event_type: 'revoke-consent',
+      });
     } catch (error) {
       console.log(error);
       setLoading('done');
@@ -631,64 +695,42 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
     (gtagId || gtmId) && loadConsentDefault(gtagId, gtmId);
   }, []);
 
+  useEffect(() => {
+    if (
+      showExpandRevoke &&
+      isDesktop &&
+      (sessionStorage.getItem('aesirx-analytics-revoke') === '3' ||
+        sessionStorage.getItem('aesirx-analytics-revoke') === '4')
+    ) {
+      setActiveConnectorType(BROWSER_WALLET);
+    }
+  }, [showExpandRevoke]);
+
   console.log('level', uuid, level, web3ID, account, loading);
 
-  const ConsentLevelUprade = ({
-    level,
-    tier,
-    levelname,
-    term_custom,
-    content_custom,
-    isUpgrade = false,
-  }: any) => {
+  const ConsentLevelUprade = ({ level, levelname, image, content, isUpgrade = false }: any) => {
     return (
       <div
-        className={`consent_level mt-2 ${
+        className={`consent_level mt-2 h-100 ${
           isUpgrade ? `cursor-pointer ${upgradeLevel === level ? 'active' : ''}` : ''
         } `}
         onClick={() => {
           setUpgradeLevel(level);
+          handleLevel(level);
         }}
       >
         <div className="d-flex align-items-center justify-content-between flex-wrap">
-          <div className="d-flex align-items-center">
-            <div className={`status-tier tier-${level} rounded-circle`}></div>
-            <div className="status-tier-text fw-semibold fs-14 text-primary">
-              {tier} - {levelname}
-            </div>
-          </div>
-          {!isUpgrade ? (
-            <div className="fw-semibold fs-14 text-primary">{term_custom}</div>
-          ) : (
-            <>
-              {upgradeShowDetail ? (
-                <div className="fw-semibold fs-14 text-primary">{term_custom}</div>
-              ) : (
-                <></>
-              )}
-            </>
-          )}
+          <img className="level-img mb-2" src={image} alt="level" />
+          <div className="status-tier-text fw-semibold text-primary w-100 mb-1">{levelname}</div>
+          <div className="fs-14">{content}</div>
         </div>
-        {!isUpgrade ? (
-          <div className={`${isUpgrade ? 'consent_upgrade_content' : ''} mt-2`}>
-            {content_custom}
-          </div>
-        ) : (
-          <>{upgradeShowDetail ? <div className="mt-2">{content_custom}</div> : <></>}</>
-        )}
-        {isUpgrade ? (
-          <>
-            <div className="checkbox_img">
-              <img
-                width={'23px'}
-                height={'23px'}
-                src={upgradeLevel === level ? checkbox_active : checkbox}
-              />
-            </div>
-          </>
-        ) : (
-          <></>
-        )}
+        <div className="checkbox_img">
+          <img
+            width={'23px'}
+            height={'23px'}
+            src={upgradeLevel === level ? checkbox_active : checkbox}
+          />
+        </div>
       </div>
     );
   };
@@ -723,7 +765,8 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
       gtag('set', 'ads_data_redaction', true);
     }
   };
-
+  const paymentRevoke = sessionStorage.getItem('aesirx-analytics-payment');
+  console.log('loading', loading);
   return (
     <div>
       <ToastContainer />
@@ -735,7 +778,7 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
         }`}
       >
         <div
-          className={`toast revoke-toast ${
+          className={`toast revoke-toast custom ${
             showRevoke ||
             (sessionStorage.getItem('aesirx-analytics-revoke') &&
               sessionStorage.getItem('aesirx-analytics-revoke') !== '0')
@@ -745,7 +788,11 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
         >
           <LoadingStatus loading={loading} />
           <div className="toast-body p-0 shadow mx-3 mx-md-0">
-            <div className="revoke-wrapper minimize-shield-wrapper position-relative">
+            <div
+              className={`revoke-wrapper minimize-shield-wrapper position-relative ${
+                showExpandRevoke ? 'bg-white' : ''
+              }`}
+            >
               {!showExpandRevoke && (
                 <>
                   <img
@@ -776,6 +823,31 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
               {showExpandRevoke && (
                 <>
                   <div
+                    className={`d-flex rounded-top align-items-center justify-content-between p-2 p-lg-3 fw-medium flex-wrap py-2 py-lg-3 px-4 header-consent-bg`}
+                    style={{
+                      borderBottom: '1px solid #DEDEDE',
+                    }}
+                  >
+                    <div className="text-primary text-nowrap">{t('txt_tracking_data_privacy')}</div>
+                    <div className="d-flex align-items-center fs-14 text-primary">
+                      <a
+                        href="https://shield.aesirx.io/"
+                        rel="noreferrer"
+                        target="_blank"
+                        className="minimize-shield-wrapper position-relative text-decoration-none"
+                      >
+                        <img
+                          className="cover-img position-absolute h-100 w-100 object-fit-cover z-1"
+                          src={bg}
+                        />
+                        <div className="minimize-shield position-relative z-2 py-2">
+                          <img src={privacy} alt="Shield of Privacy" />
+                          {t('txt_shield_of_privacy')}
+                        </div>
+                      </a>
+                    </div>
+                  </div>
+                  <div
                     className="minimize-revoke"
                     onClick={() => {
                       setShowExpandRevoke(false);
@@ -783,32 +855,42 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                   >
                     <img src={no} />
                   </div>
-                  <div className="p-3 bg-white text">
-                    {t('txt_you_can_revoke')} <br />
-                    {t('txt_visit')}{' '}
-                    <a
-                      href="https://nft.shield.aesirx.io"
-                      className="text-success text-decoration-underline"
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {t('txt_link')}
-                    </a>{' '}
-                    {t('txt_for_more_information')}
+                  <div className="p-3 bg-white">
+                    {paymentRevoke ? t('txt_you_can_revoke_on_the_site') : t('txt_you_can_revoke')}
                   </div>
-                  <div className="rounded-bottom position-relative overflow-hidden text-white">
-                    <img
-                      className="cover-img position-absolute h-100 w-100 object-fit-cover"
-                      src={bg}
+                  <Form className="mb-0 w-100 bg-white px-3">
+                    {paymentRevoke ? (
+                      <Form.Check
+                        id={`option-revoke-payment`}
+                        checked={revokeConsentOption === 'payment'}
+                        type="checkbox"
+                        label={t('txt_revoke_opt_in')}
+                        value={'payment'}
+                        onChange={({ target: { value } }) => {
+                          setRevokeConsentOption(value);
+                        }}
+                      />
+                    ) : (
+                      <></>
+                    )}
+                    <Form.Check
+                      id={`option-revoke-consent`}
+                      checked={revokeConsentOption === 'consent'}
+                      type="checkbox"
+                      label={t('txt_revoke_consent_for_the_site')}
+                      value={'consent'}
+                      onChange={({ target: { value } }) => {
+                        setRevokeConsentOption(value);
+                      }}
                     />
+                  </Form>
+
+                  <div className="rounded-bottom position-relative overflow-hidden bg-white">
                     <div className="position-relative p-3">
-                      <div className="d-flex align-items-center justify-content-between flex-wrap">
-                        <div className="me-2">
-                          <img src={privacy} alt="Shield of Privacy" /> {t('txt_shield_of_privacy')}
-                        </div>
-                        <div className="d-flex align-items-center">
+                      <div className="d-flex align-items-center flex-wrap">
+                        <div className="d-flex align-items-center w-100 justify-content-end">
                           <a
-                            className="text-success text-decoration-underline manage-consent fs-14"
+                            className="manage-consent fs-14 btn btn-outline-success rounded-pill py-2 py-lg-3 d-flex align-items-center justify-content-center w-100 w-lg-35"
                             href="https://dapp.shield.aesirx.io/revoke-consent"
                             target="_blank"
                             rel="noreferrer"
@@ -817,9 +899,27 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                           </a>
                           {loading === 'done' ? (
                             <Button
-                              variant="success"
-                              onClick={handleRevokeBtn}
-                              className={'text-white d-flex align-items-center revoke-btn fs-14'}
+                              variant="outline-success"
+                              onClick={async () => {
+                                if (paymentRevoke) {
+                                  sessionStorage.removeItem('aesirx-analytics-payment');
+                                  setShowExpandRevoke(false);
+                                  setRevokeConsentOption('consent');
+                                  setTimeout(() => {
+                                    window.location.reload();
+                                  }, 1000);
+                                } else {
+                                  await handleRevokeBtn();
+                                  if (level > 1) {
+                                    setTimeout(() => {
+                                      window.location.reload();
+                                    }, 1000);
+                                  }
+                                }
+                              }}
+                              className={
+                                'd-flex align-items-center justify-content-center w-100 w-lg-35 revoke-btn fs-14 rounded-pill py-2 py-lg-3'
+                              }
                             >
                               {t('txt_revoke_consent')}
                             </Button>
@@ -829,12 +929,14 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                           {(sessionStorage.getItem('aesirx-analytics-revoke') === '4' ||
                             sessionStorage.getItem('aesirx-analytics-revoke') === '2') && (
                             <div>
-                              <SSOButton
-                                className="d-none revokeLogin"
-                                text={<>Login Revoke</>}
-                                ssoState={'noscopes'}
-                                onGetData={onGetData}
-                              />
+                              <Suspense fallback={<div>Loading...</div>}>
+                                <SSOButton
+                                  className="d-none revokeLogin"
+                                  text={<>Login Revoke</>}
+                                  ssoState={'noscopes'}
+                                  onGetData={onGetData}
+                                />
+                              </Suspense>
                             </div>
                           )}
                         </div>
@@ -870,6 +972,8 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                     ref={analyticsContext?.ref}
                     onClick={() => {
                       setShowExpandConsent(true);
+                      const rejectConsent = sessionStorage.getItem('aesirx-analytics-rejected');
+                      rejectConsent && setShowRejectedConsent(true);
                       sessionStorage.removeItem('aesirx-analytics-rejected');
                     }}
                   >
@@ -885,108 +989,277 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                     {upgradeLayout ? (
                       <>
                         <div className="bg-white rounded p-3 w-auto">
-                          {loading === 'done' ? (
-                            <>
-                              <p className="mb-2 mb-lg-3">{t('txt_upgrade_consent_text')}</p>
-                              <p className="fw-semibold text-dark">{t('txt_your_current_level')}</p>
-                              <ConsentLevelUprade
-                                level={level}
-                                tier={t(`txt_tier_${level}_tier`)}
-                                levelname={t(`txt_tier_${level}_levelname`)}
-                                term_custom={t(`txt_tier_${level}_term_custom`)}
-                                content_custom={t(`txt_tier_${level}_content_custom`)}
-                              />
-                              <div className="d-flex align-items-center justify-content-between w-100 mt-3 flex-wrap">
-                                <p className="fw-semibold text-dark w-100 w-lg-auto mb-0">
-                                  {t('txt_upgrade_consent_to')}
-                                </p>
-                                <div
-                                  className="ms-auto read-more-btn fs-7 text-primary cursor-pointer"
-                                  onClick={() => {
-                                    setUpgradeShowDetail(!upgradeShowDetail ? true : false);
-                                  }}
-                                >
-                                  {!upgradeShowDetail
-                                    ? t('txt_show_details')
-                                    : t('txt_hide_details')}{' '}
-                                  <img
-                                    src={arrow}
-                                    className={`ms-1 ${upgradeShowDetail ? 'revert' : ''}`}
-                                  />
-                                </div>
-                              </div>
-                              <Form>
-                                {level !== 1 && layout !== 'advance-consent-mode' && (
-                                  <ConsentLevelUprade
-                                    level={1}
-                                    tier={t(`txt_tier_1_tier`)}
-                                    levelname={t(`txt_tier_1_levelname`)}
-                                    term_custom={t(`txt_tier_1_term_custom`)}
-                                    content_custom={t(`txt_tier_1_content_custom`)}
-                                    isUpgrade={true}
-                                  />
-                                )}
-                                {level !== 2 && (
-                                  <ConsentLevelUprade
-                                    level={2}
-                                    tier={t(`txt_tier_2_tier`)}
-                                    levelname={t(`txt_tier_2_levelname`)}
-                                    term_custom={t(`txt_tier_2_term_custom`)}
-                                    content_custom={t(`txt_tier_2_content_custom`)}
-                                    isUpgrade={true}
-                                  />
-                                )}
-                                {level !== 3 && (
+                          <>
+                            <p className="mb-2 mb-lg-3">{t('txt_select_your_preferred')}</p>
+                            <Form>
+                              <Row>
+                                <Col lg={6}>
                                   <ConsentLevelUprade
                                     level={3}
-                                    tier={t(`txt_tier_3_tier`)}
-                                    levelname={t(`txt_tier_3_levelname`)}
-                                    term_custom={t(`txt_tier_3_term_custom`)}
-                                    content_custom={t(`txt_tier_3_content_custom`)}
+                                    levelname={t(`txt_decentralized_wallet`)}
+                                    image={wallet_consent}
+                                    content={
+                                      <>
+                                        <div className="d-flex align-items-start">
+                                          <span>
+                                            <img
+                                              src={check_circle}
+                                              width={'14px'}
+                                              height={'15px'}
+                                            />
+                                          </span>
+                                          <div className="ms-10px">
+                                            {t('txt_decentralized_wallet_will_be_loaded')}
+                                          </div>
+                                        </div>
+                                        <div className="d-flex align-items-start">
+                                          <span>
+                                            <img
+                                              src={check_circle}
+                                              width={'14px'}
+                                              height={'15px'}
+                                            />
+                                          </span>
+                                          <div className="ms-10px">
+                                            {t('txt_both_first_party_third_party')}
+                                          </div>
+                                        </div>
+                                        <div className="d-flex align-items-start">
+                                          <span>
+                                            <img
+                                              src={check_circle}
+                                              width={'14px'}
+                                              height={'15px'}
+                                            />
+                                          </span>
+                                          <div className="ms-10px">
+                                            {t('txt_all_consented_data_will_be_collected')}
+                                          </div>
+                                        </div>
+                                        <div className="d-flex align-items-start">
+                                          <span>
+                                            <img
+                                              src={check_circle}
+                                              width={'14px'}
+                                              height={'15px'}
+                                            />
+                                          </span>
+                                          <div className="ms-10px">{t('txt_users_can_revoke')}</div>
+                                        </div>
+                                      </>
+                                    }
                                     isUpgrade={true}
                                   />
-                                )}
-                                {level !== 4 && (
+                                </Col>
+                                <Col lg={6}>
                                   <ConsentLevelUprade
                                     level={4}
-                                    tier={t(`txt_tier_4_tier`)}
-                                    levelname={t(`txt_tier_4_levelname`)}
-                                    term_custom={t(`txt_tier_4_term_custom`)}
-                                    content_custom={t(`txt_tier_4_content_custom`)}
+                                    levelname={t(`txt_decentralized_wallet_shield`)}
+                                    image={wallet_shield_consent}
+                                    content={
+                                      <>
+                                        <div className="d-flex align-items-start">
+                                          <span>
+                                            <img
+                                              src={check_circle}
+                                              width={'14px'}
+                                              height={'15px'}
+                                            />
+                                          </span>
+                                          <div className="ms-10px">
+                                            {t('txt_decentralized_wallet_will_be_loaded')}
+                                          </div>
+                                        </div>
+                                        <div className="d-flex align-items-start">
+                                          <span>
+                                            <img
+                                              src={check_circle}
+                                              width={'14px'}
+                                              height={'15px'}
+                                            />
+                                          </span>
+                                          <div className="ms-10px">
+                                            {t('txt_both_first_party_third_party')}
+                                          </div>
+                                        </div>
+                                        <div className="d-flex align-items-start">
+                                          <span>
+                                            <img
+                                              src={check_circle}
+                                              width={'14px'}
+                                              height={'15px'}
+                                            />
+                                          </span>
+                                          <div className="ms-10px">
+                                            {t('txt_all_consented_data_will_be_collected')}
+                                          </div>
+                                        </div>
+                                        <div className="d-flex align-items-start">
+                                          <span>
+                                            <img
+                                              src={check_circle}
+                                              width={'14px'}
+                                              height={'15px'}
+                                            />
+                                          </span>
+                                          <div className="ms-10px">
+                                            {t('txt_users_can_revoke_dapp')}
+                                          </div>
+                                        </div>
+                                        <div className="d-flex align-items-start">
+                                          <span>
+                                            <img
+                                              src={check_circle}
+                                              width={'14px'}
+                                              height={'15px'}
+                                            />
+                                          </span>
+                                          <div className="ms-10px">{t('txt_users_can_earn')}</div>
+                                        </div>
+                                      </>
+                                    }
                                     isUpgrade={true}
                                   />
+                                </Col>
+                              </Row>
+                            </Form>
+                            <div className="d-flex w-100 flex-wrap flex-lg-nowrap justify-content-between mt-4">
+                              <Button
+                                variant="outline-success"
+                                onClick={() => {
+                                  setUpgradeLayout(false);
+                                  handleLevel(1);
+                                }}
+                                className="d-flex align-items-center justify-content-center fs-14 w-100 w-lg-30 me-3 mb-2 mb-lg-0 rounded-pill py-3"
+                              >
+                                {t('txt_back')}
+                              </Button>
+                              <div
+                                className={`ssoBtnWrapper d-flex align-items-center justify-content-center w-100 w-lg-30 me-3 bg-success rounded-pill ${
+                                  level === 4 && !account && !address ? '' : 'd-none'
+                                }`}
+                              >
+                                {layout !== 'simple-consent-mode' && layout !== 'simple-web-2' && (
+                                  <Suspense
+                                    fallback={
+                                      <div className="d-flex h-100 justify-content-center align-items-center">
+                                        Loading...
+                                      </div>
+                                    }
+                                  >
+                                    <SSOButton
+                                      className="btn btn-success d-flex align-items-center justify-content-center loginSSO rounded-pill py-2 py-lg-3 w-100 w-lg-30 fs-14 text-white"
+                                      text={<>{t('txt_continue')}</>}
+                                      ssoState={'noscopes'}
+                                      onGetData={onGetData}
+                                      {...(level === 2 ? { noCreateAccount: true } : {})}
+                                    />
+                                  </Suspense>
                                 )}
-                              </Form>
-                              <div className="d-flex w-100 flex-wrap flex-lg-nowrap justify-content-end mt-4">
-                                <Button
-                                  variant="outline-success"
-                                  onClick={() => {
-                                    setUpgradeLayout(false);
-                                  }}
-                                  className="d-flex align-items-center justify-content-center fs-14 w-100 w-lg-30 me-3 mb-2 mb-lg-0 rounded-pill py-3 text-dark"
-                                >
-                                  {t('txt_cancel')}
-                                </Button>
+                              </div>
+                              {level === 4 && !account && !address ? (
+                                <></>
+                              ) : (
                                 <Button
                                   variant="success"
-                                  onClick={() => {
-                                    if (upgradeLevel) {
-                                      handleLevel(upgradeLevel);
-                                      setUpgradeLayout(false);
-                                    } else {
-                                      toast('Please choose upgrade level');
-                                    }
-                                  }}
-                                  className="d-flex align-items-center justify-content-center fs-14 w-100 w-lg-30 me-3 rounded-pill py-3 text-white"
+                                  onClick={handleAgree}
+                                  className="w-100 me-3 d-flex align-items-center justify-content-center fs-14 rounded-pill py-2 py-lg-3 w-100 w-lg-30 fs-14 text-white"
                                 >
-                                  {t('txt_change_consent')}
+                                  {loadingCheckAccount ? (
+                                    <span
+                                      className="spinner-border spinner-border-sm me-1"
+                                      role="status"
+                                      aria-hidden="true"
+                                    ></span>
+                                  ) : (
+                                    <></>
+                                  )}
+                                  {t('txt_continue')}
                                 </Button>
-                              </div>
-                            </>
-                          ) : (
-                            <></>
-                          )}
+                              )}
+                            </div>
+                          </>
                         </div>
+                      </>
+                    ) : showRejectedConsent ? (
+                      <>
+                        <TermsComponent
+                          level={level}
+                          handleLevel={handleLevel}
+                          isCustom={true}
+                          layout={layout}
+                          isRejectedLayout={true}
+                        >
+                          <Form className="mb-0 w-100">
+                            <Form.Check
+                              checked={consents.includes(1)}
+                              type="switch"
+                              label="Personal data share consent."
+                              value={1}
+                              onChange={handleChange}
+                              className="d-none"
+                            />
+                            <Form.Check
+                              checked={consents.includes(2)}
+                              type="switch"
+                              label="Personal data cross site share consent."
+                              value={2}
+                              onChange={handleChange}
+                              className="d-none"
+                            />
+                            <div className="d-flex w-100 flex-wrap flex-lg-nowrap">
+                              {loading === 'done' ? (
+                                <>
+                                  <Button
+                                    variant="outline-success"
+                                    onClick={handleNotAllow}
+                                    className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
+                                  >
+                                    {t('txt_reject_consent')}
+                                  </Button>
+
+                                  {level === 2 || (level === 4 && !account && !address) ? (
+                                    <></>
+                                  ) : (
+                                    <Button
+                                      variant="outline-success"
+                                      onClick={handleAgree}
+                                      className="w-100 me-3 d-flex align-items-center justify-content-center fs-14 rounded-pill py-2 py-lg-3"
+                                    >
+                                      {loadingCheckAccount ? (
+                                        <span
+                                          className="spinner-border spinner-border-sm me-1"
+                                          role="status"
+                                          aria-hidden="true"
+                                        ></span>
+                                      ) : (
+                                        <></>
+                                      )}
+                                      {t('txt_yes_i_consent')}
+                                    </Button>
+                                  )}
+                                  {layout === 'simple-consent-mode' || layout === 'simple-web-2' ? (
+                                    <></>
+                                  ) : (
+                                    <>
+                                      <Button
+                                        variant="outline-success"
+                                        onClick={() => {
+                                          setUpgradeLayout(true);
+                                        }}
+                                        className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
+                                      >
+                                        {t('txt_change_consent')}
+                                      </Button>{' '}
+                                    </>
+                                  )}
+                                </>
+                              ) : (
+                                <></>
+                              )}
+                            </div>
+                          </Form>
+                        </TermsComponent>
                       </>
                     ) : (
                       <>
@@ -1016,6 +1289,34 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                             <div className="d-flex w-100 flex-wrap flex-lg-nowrap">
                               {loading === 'done' ? (
                                 <>
+                                  <Button
+                                    variant="outline-success"
+                                    onClick={handleNotAllow}
+                                    className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
+                                  >
+                                    {t('txt_reject_consent')}
+                                  </Button>
+
+                                  {level === 2 || (level === 4 && !account && !address) ? (
+                                    <></>
+                                  ) : (
+                                    <Button
+                                      variant="outline-success"
+                                      onClick={handleAgree}
+                                      className="w-100 me-3 d-flex align-items-center justify-content-center fs-14 rounded-pill py-2 py-lg-3"
+                                    >
+                                      {loadingCheckAccount ? (
+                                        <span
+                                          className="spinner-border spinner-border-sm me-1"
+                                          role="status"
+                                          aria-hidden="true"
+                                        ></span>
+                                      ) : (
+                                        <></>
+                                      )}
+                                      {t('txt_yes_i_consent')}
+                                    </Button>
+                                  )}
                                   {layout === 'simple-consent-mode' || layout === 'simple-web-2' ? (
                                     <></>
                                   ) : (
@@ -1025,58 +1326,11 @@ const ConsentComponentCustomApp = (props: WalletConnectionPropsExtends) => {
                                         onClick={() => {
                                           setUpgradeLayout(true);
                                         }}
-                                        className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3 text-dark"
+                                        className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
                                       >
                                         {t('txt_change_consent')}
                                       </Button>{' '}
                                     </>
-                                  )}
-                                  <Button
-                                    variant="outline-success"
-                                    onClick={handleNotAllow}
-                                    className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3 text-dark"
-                                  >
-                                    {t('txt_reject_consent')}
-                                  </Button>
-                                  <div
-                                    className={`ssoBtnWrapper w-100 me-3 bg-success rounded-pill ${
-                                      level === 2 || (level === 4 && !account && !address)
-                                        ? ''
-                                        : 'd-none'
-                                    }`}
-                                  >
-                                    <SSOButton
-                                      className="btn btn-success text-white d-flex align-items-center justify-content-center loginSSO rounded-pill py-2 py-lg-3 w-100"
-                                      text={
-                                        <>
-                                          <img src={yes} className="me-1" />
-                                          {t('txt_yes_i_consent')}
-                                        </>
-                                      }
-                                      ssoState={'noscopes'}
-                                      onGetData={onGetData}
-                                      {...(level === 2 ? { noCreateAccount: true } : {})}
-                                    />
-                                  </div>
-                                  {level === 2 || (level === 4 && !account && !address) ? (
-                                    <></>
-                                  ) : (
-                                    <Button
-                                      variant="success"
-                                      onClick={handleAgree}
-                                      className="w-100 me-3 text-white d-flex align-items-center justify-content-center fs-14 rounded-pill py-2 py-lg-3"
-                                    >
-                                      {loadingCheckAccount ? (
-                                        <span
-                                          className="spinner-border spinner-border-sm me-1"
-                                          role="status"
-                                          aria-hidden="true"
-                                        ></span>
-                                      ) : (
-                                        <img src={yes} className="me-1" />
-                                      )}
-                                      {t('txt_yes_i_consent')}
-                                    </Button>
                                   )}
                                 </>
                               ) : (

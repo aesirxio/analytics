@@ -1,7 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { AnalyticsContext } from '../utils/AnalyticsContextProvider';
 import { getConsents } from '../utils/consent';
-import { getWeb3ID } from '../utils/Concordium';
 import { toast } from 'react-toastify';
 import {
   MAINNET,
@@ -13,13 +12,12 @@ import {
 } from '@concordium/react-components';
 import { BROWSER_WALLET } from './config';
 import { isDesktop } from 'react-device-detect';
-import { useAccount } from 'wagmi';
 import { BlockHash } from '@concordium/web-sdk';
 
 const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConnectionProps) => {
   const [show, setShow] = useState(false);
   const [showRevoke, setShowRevoke] = useState(false);
-  const [level, setLevel] = useState<any>();
+  const [level, setLevel] = useState<any>(1);
   const [web3ID, setWeb3ID] = useState<boolean>();
 
   const analyticsContext = useContext(AnalyticsContext);
@@ -27,7 +25,6 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
   const { activeConnector, network, connectedAccounts, genesisHashes, setActiveConnectorType } =
     props;
 
-  const { address, connector } = useAccount();
   useEffect(() => {
     const allow = sessionStorage.getItem('aesirx-analytics-allow');
     const currentUuid = sessionStorage.getItem('aesirx-analytics-uuid');
@@ -65,7 +62,11 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
                   : consent?.address && !consent?.web3id
                   ? '3'
                   : '2';
-                revokeTier ? handleRevoke(true, revokeTier) : setShow(true);
+                if (revokeTier) {
+                  handleRevoke(true, revokeTier);
+                } else {
+                  handleRevoke(true, '1');
+                }
               }
             }
           });
@@ -83,11 +84,11 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
   const rpc = useGrpcClient(network);
 
   useEffect(() => {
-    if (rpc) {
+    if (rpc && layout !== 'simple-consent-mode' && layout !== 'simple-web-2' && level !== 1) {
       setRpcGenesisHash(undefined);
       rpc
         .getConsensusStatus()
-        .then((status) => {
+        .then((status: any) => {
           return status.genesisBlock;
         })
         .then((hash: any) => {
@@ -107,41 +108,13 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
           setRpcGenesisHash(hash);
           setRpcError('');
         })
-        .catch((err) => {
+        .catch((err: any) => {
           setRpcGenesisHash(undefined);
           toast(err.message);
           setRpcError(err.message);
         });
     }
-  }, [rpc]);
-
-  useEffect(() => {
-    const initConnector = async () => {
-      if (
-        isDesktop &&
-        sessionStorage.getItem('aesirx-analytics-revoke') !== '1' &&
-        sessionStorage.getItem('aesirx-analytics-revoke') !== '2' &&
-        sessionStorage.getItem('aesirx-analytics-rejected') !== 'true' &&
-        layout !== 'simple-consent-mode' &&
-        layout !== 'simple-web-2'
-      ) {
-        if (window['concordium']) {
-          const address = (await window['concordium']?.requestAccounts()) ?? [];
-          if (window['concordium'] && address?.length) {
-            setActiveConnectorType(BROWSER_WALLET);
-          }
-        } else {
-          window.addEventListener('load', async function () {
-            const address = (await window['concordium']?.requestAccounts()) ?? [];
-            if (window['concordium'] && address?.length) {
-              setActiveConnectorType(BROWSER_WALLET);
-            }
-          });
-        }
-      }
-    };
-    initConnector();
-  }, [window['concordium']]);
+  }, [rpc, level]);
 
   useEffect(() => {
     if (activeConnector) {
@@ -158,64 +131,6 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
       toast.error(connectError);
     }
   }, [connectError]);
-
-  useEffect(() => {
-    (async () => {
-      try {
-        let l = level;
-        if (isDesktop) {
-          if (rpc && account) {
-            // Concordium
-            if (l < 3) {
-              setLevel(null);
-              l = 3;
-              let web3ID = false;
-              if (
-                account &&
-                sessionStorage.getItem('aesirx-analytics-consent-type') !== 'metamask'
-              ) {
-                web3ID = await getWeb3ID(account, rpc, network?.name);
-                if (web3ID === true) {
-                  l = 4;
-                }
-              }
-              setWeb3ID(web3ID);
-              if (layout !== 'simple-consent-mode' && layout !== 'simple-web-2') {
-                setLevel(l);
-              } else {
-                setLevel(1);
-              }
-            }
-          } else if (connector) {
-            // Metamask
-            if (layout !== 'simple-consent-mode' && layout !== 'simple-web-2') {
-              if (l < 3) {
-                l = 3;
-                const web3ID = false;
-                setWeb3ID(web3ID);
-                setLevel(l);
-              } else {
-                if (l === 4) {
-                  setLevel(4);
-                } else {
-                  setLevel(3);
-                }
-              }
-            } else {
-              setLevel(1);
-            }
-          } else {
-            setLevel(layout === 'advance-consent-mode' ? 2 : 1);
-          }
-        } else {
-          setLevel(1);
-        }
-      } catch (error) {
-        setLevel(layout === 'advance-consent-mode' ? 2 : 1);
-        console.error(error);
-      }
-    })();
-  }, [account, address, connector, layout]);
 
   const handleLevel = useCallback(
     async (_level: number) => {

@@ -26,12 +26,15 @@ const AnalyticsNext = ({
   isLoggedApp,
   children,
 }: AnalyticsNext) => {
-  const [layout, setLayout] = useState(process.env.NEXT_PUBLIC_CONSENT_LAYOUT);
+  const [layout, setLayout] = useState(process.env.NEXT_PUBLIC_CONSENT_LAYOUT ?? 'simple-web-2');
   const [gtagId, setGtagId] = useState(process.env.NEXT_PUBLIC_ANALYTICS_GTAG_ID);
   const [gtmId, setGtmId] = useState(process.env.NEXT_PUBLIC_ANALYTICS_GTM_ID);
   useEffect(() => {
     const init = async () => {
-      const data: any = await getConsentTemplate(window.location.host);
+      const data: any = await getConsentTemplate(
+        process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL,
+        window.location.host
+      );
       setLayout(data?.data?.template ?? process.env.NEXT_PUBLIC_CONSENT_LAYOUT);
       setGtagId(data?.data?.gtag_id ?? process.env.NEXT_PUBLIC_ANALYTICS_GTAG_ID);
       setGtmId(data?.data?.gtm_id ?? process.env.NEXT_PUBLIC_ANALYTICS_GTM_ID);
