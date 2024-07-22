@@ -510,6 +510,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     sessionStorage.setItem('aesirx-analytics-rejected', 'true');
     setShowExpandConsent(false);
     setShowBackdrop(false);
+    window.funcAfterReject && window.funcAfterReject();
   };
   const handleRevokeBtn = async () => {
     const levelRevoke = sessionStorage.getItem('aesirx-analytics-revoke');
