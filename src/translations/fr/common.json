@@ -84,7 +84,7 @@
   "txt_please_note": "Veuillez noter",
   "txt_we_do_not_share": "Nous ne partageons pas vos données avec des tiers sans votre consentement explicite.",
   "txt_you_can_opt_in": "Vous pouvez vous inscrire ultérieurement pour des fonctionnalités spécifiques sans donner votre consentement général.",
-  "txt_for_more_details": "Pour plus de détails, consultez notre politique de confidentialité.",
+  "txt_for_more_details": "Pour plus de détails, consultez notre <a class='text-success fw-semibold text-decoration-underline' href='https://aesirx.io/privacy-policy' target='_blank'>politique de confidentialité</a>.",
   "txt_benefit": "Avantages",
   "txt_control_your_data": "<span class='fw-semibold text-primary'>Contrôlez vos données :</span> Choisissez votre niveau préféré de collecte et de suivi des données.",
   "txt_earn_rewards": "<span class='fw-semibold text-primary'>Gagnez des récompenses :</span> Participez au consentement décentralisé pour la confidentialité et les récompenses.",
@@ -118,5 +118,11 @@
   "txt_decentralized_consent_allow_data": "<span class='fw-semibold text-primary'>Consentement décentralisé :</span> Autoriser la collecte de données à des fins d'analyse, de données de formulaire (lorsque vous nous contactez) et de suivi des comportements et des événements, avec la possibilité de révoquer le consentement, activer des fonctionnalités spécifiques et gagner des récompenses grâce aux activités de marketing numérique.",
   "txt_you_can_revoke_on_the_site": "Vous pouvez révoquer votre consentement sur le site ou tout consentement explicite, tel que le traitement des paiements, à tout moment",
   "txt_revoke_opt_in": "Révoquer le consentement d'inscription pour le traitement des paiements",
-  "txt_revoke_consent_for_the_site": "Révoquer le consentement pour le site"
+  "txt_revoke_opt_in_advisor": "Révoquer le Consentement pour AesirX Privacy Advisor AI",
+  "txt_revoke_consent_for_the_site": "Révoquer le consentement pour le site",
+  "txt_payment_notice": "Avis : Traitement des Paiements",
+  "txt_payment_1": "Ce service installera des cookies et collectera des données pour prendre en charge le traitement de la passerelle de paiement.",
+  "txt_payment_2": "Pour finaliser votre achat, les <span class='fw-semibold'>données de commande & d'utilisateur</span> seront partagées avec <span class='fw-semibold'>Sellix & Stripe</span> nos <span class='fw-semibold'>processeurs de paiement.</span> (*<span class='fw-semibold'>Google reCaptcha</span> est utilisé par les <span class='fw-semibold'>processeurs de paiement</span> pour des raisons de <span class='fw-semibold'>sécurité</span>.)",
+  "txt_payment_3": "Si vous ne consentez pas à ce partage de données, vous ne pourrez pas finaliser le paiement.",
+  "txt_payment_4": "Pour plus d'informations, veuillez consulter notre <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>politique de confidentialité</a>."
 }

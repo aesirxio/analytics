@@ -84,7 +84,7 @@
   "txt_please_note": "Please note",
   "txt_we_do_not_share": "We do not share your data with third parties without your explicit consent.",
   "txt_you_can_opt_in": "You can opt-in later for specific features without giving blanket consent.",
-  "txt_for_more_details": "For more details, refer to our privacy policy.",
+  "txt_for_more_details": "For more details, refer to our <a class='text-success fw-semibold text-decoration-underline' href='https://aesirx.io/privacy-policy' target='_blank'>privacy policy.</a>",
   "txt_benefit": "Benefits",
   "txt_control_your_data": "<span class='fw-semibold text-primary'>Control your data:</span> Choose your preferred level of data collection & tracking.",
   "txt_earn_rewards": "<span class='fw-semibold text-primary'>Earn rewards:</span> Participate in decentralized consent for privacy & rewards.",
@@ -118,5 +118,11 @@
   "txt_decentralized_consent_allow_data": "<span class='fw-semibold text-primary'>Decentralized Consent:</span> Allow data collection for analytics, form data (when you contact us), & behavioral & event tracking, with the option to revoke consent, opt-in for specific features, & earn rewards from digital marketing activities.",
   "txt_you_can_revoke_on_the_site": "You can revoke consent on the site or any explicit opt-in consent, such as payment processing, at any time",
   "txt_revoke_opt_in": "Revoke Opt-In Consent for Payment Processing",
-  "txt_revoke_consent_for_the_site": "Revoke Consent for the site"
+  "txt_revoke_opt_in_advisor": "Revoke Opt-In Consent for AesirX Privacy Advisor AI",
+  "txt_revoke_consent_for_the_site": "Revoke Consent for the site",
+  "txt_payment_notice": "Notice: Payment Processing",
+  "txt_payment_1": "This service will set cookies & collect data to support payment gateway processing.",
+  "txt_payment_2": "To complete your purchase, <span class='fw-semibold'>order & user data</span> will be shared with <span class='fw-semibold'>Sellix & Stripe</span> as our <span class='fw-semibold'>payment processors.</span> (*<span class='fw-semibold'>Google reCaptcha</span> is used by the <span class='fw-semibold'>payment processors</span> for <span class='fw-semibold'>security</span> purposes.)",
+  "txt_payment_3": "If you do not consent to this data sharing, you will not be able to complete the payment.",
+  "txt_payment_4": "For more information, please refer to our <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>privacy policy</a>."
 }

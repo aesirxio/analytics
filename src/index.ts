@@ -3,3 +3,4 @@ export { default as AnalyticsReact } from './AnalyticsReact';
 export { trackEvent } from './utils';
 export { AnalyticsContext } from './utils/AnalyticsContextProvider';
 export { default as getFingerprint } from './lib/fingerprint';
+export { default as PaymentConsent } from './Components/PaymentConsent';
