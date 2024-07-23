@@ -85,7 +85,7 @@ const TermsComponent = ({
               <div
                 className={`rounded-top align-items-center justify-content-between p-2 p-lg-3 fw-medium flex-wrap  ${
                   isCustom
-                    ? 'py-2 py-lg-3 px-4 header-consent-bg'
+                    ? 'py-2 py-lg-3 px-lg-4 header-consent-bg'
                     : 'p-2 p-lg-3 border-bottom bg-white'
                 } ${isRejectedLayout ? 'd-none' : 'd-flex'}`}
                 style={{
@@ -126,27 +126,27 @@ const TermsComponent = ({
                   )}
                 </div>
               </div>
-              <div className={`pb-3 ${isCustom ? 'pt-0' : 'p-3'} bg-white`}>
+              <div className={`pb-1 pb-lg-3 ${isCustom ? 'pt-0' : 'p-3'} bg-white`}>
                 {isCustom ? (
                   <>
                     <Tabs
                       id="consent_info_tab"
                       activeKey={activeTab}
                       onSelect={(k) => setActiveTab(k)}
-                      className={`mb-2 mb-lg-4 w-100 flex-nowrap consent_info_tab ${
+                      className={`mb-2 mb-lg-4 w-100 flex-nowrap align-items-center consent_info_tab ${
                         isRejectedLayout ? 'd-none' : ''
                       }`}
                     >
                       <Tab
                         eventKey="consent"
                         title="Consent Management"
-                        className="w-auto px-3 px-lg-4"
+                        className="w-auto px-2 px-lg-4"
                       >
                         {isRejectedLayout ? (
                           <>
                             <p className="mt-0 pt-4 mb-2">{t('txt_you_have_chosen')}</p>
                             <p className="mt-2 mb-3">{t('txt_only_anonymized')}</p>
-                            <div className="d-flex align-items-start">
+                            <div className="d-flex align-items-start check-line">
                               <span>
                                 <img src={check_circle} width={'14px'} height={'15px'} />
                               </span>
@@ -160,7 +160,7 @@ const TermsComponent = ({
                                 />
                               </div>
                             </div>
-                            <div className="d-flex align-items-start">
+                            <div className="d-flex align-items-start check-line">
                               <span>
                                 <img src={check_circle} width={'14px'} height={'15px'} />
                               </span>
@@ -177,17 +177,17 @@ const TermsComponent = ({
                           </>
                         ) : (
                           <>
-                            <p className="mt-0 mb-2 text-black fw-semibold">
+                            <p className="mt-0 mb-1 mb-lg-2 text-black fw-semibold">
                               {t('txt_manage_your_consent')}
                             </p>
-                            <p className="mt-0 mb-3">
+                            <p className="mt-0 mb-1 mb-lg-3">
                               {layout === 'simple-consent-mode'
                                 ? t('txt_choose_how_we_use_simple')
                                 : t('txt_choose_how_we_use')}
                             </p>
-                            <div className="mb-3">
-                              <p className="mb-2 text-black">{t('txt_by_consenting')}</p>
-                              <div className="d-flex align-items-start">
+                            <div className="mb-1 mb-lg-3">
+                              <p className="mb-1 mb-lg-2 text-black">{t('txt_by_consenting')}</p>
+                              <div className="d-flex align-items-start check-line">
                                 <span>
                                   <img src={check_circle} width={'14px'} height={'15px'} />
                                 </span>
@@ -195,7 +195,7 @@ const TermsComponent = ({
                                   <div>{t('txt_analytics_behavioral')}</div>
                                 </div>
                               </div>
-                              <div className="d-flex align-items-start">
+                              <div className="d-flex align-items-start check-line">
                                 <span>
                                   <img src={check_circle} width={'14px'} height={'15px'} />
                                 </span>
@@ -205,8 +205,8 @@ const TermsComponent = ({
                               </div>
                             </div>
                             <div>
-                              <p className="mb-2 text-black">{t('txt_please_note')}</p>
-                              <div className="d-flex align-items-start">
+                              <p className="mb-1 mb-lg-2 text-black">{t('txt_please_note')}</p>
+                              <div className="d-flex align-items-start check-line">
                                 <span>
                                   <img src={check_circle} width={'14px'} height={'15px'} />
                                 </span>
@@ -214,7 +214,7 @@ const TermsComponent = ({
                                   <div>{t('txt_we_do_not_share')}</div>
                                 </div>
                               </div>
-                              <div className="d-flex align-items-start">
+                              <div className="d-flex align-items-start check-line">
                                 <span>
                                   <img src={check_circle} width={'14px'} height={'15px'} />
                                 </span>
@@ -222,7 +222,7 @@ const TermsComponent = ({
                                   <div>{t('txt_you_can_opt_in')}</div>
                                 </div>
                               </div>
-                              <div className="d-flex align-items-start">
+                              <div className="d-flex align-items-start check-line">
                                 <span>
                                   <img src={check_circle} width={'14px'} height={'15px'} />
                                 </span>
@@ -234,19 +234,21 @@ const TermsComponent = ({
                           </>
                         )}
                       </Tab>
-                      <Tab eventKey="detail" title="Details" className="px-3 px-lg-4">
+                      <Tab eventKey="detail" title="Details" className="px-2 px-lg-4">
                         <div className={`about_section`}>
-                          <p className="mt-0 mb-2 text-black fw-semibold">
+                          <p className="mt-0 mb-1 mb-lg-2 text-black fw-semibold">
                             {t('txt_manage_your_consent')}
                           </p>
-                          <p className="mt-0 mb-3">
+                          <p className="mt-0 mb-1 mb-lg-3">
                             {layout === 'simple-consent-mode'
                               ? t('txt_choose_how_we_use_simple')
                               : t('txt_choose_how_we_use')}
                           </p>
-                          <div className="mb-3">
-                            <p className="mb-2 text-black fw-semibold">{t('txt_benefit')}</p>
-                            <div className="d-flex align-items-start">
+                          <div className="mb-1 mb-lg-3">
+                            <p className="mb-1 mb-lg-2 text-black fw-semibold">
+                              {t('txt_benefit')}
+                            </p>
+                            <div className="d-flex align-items-start check-line">
                               <span>
                                 <img src={check_circle} width={'14px'} height={'15px'} />
                               </span>
@@ -260,7 +262,7 @@ const TermsComponent = ({
                                 />
                               </div>
                             </div>
-                            <div className="d-flex align-items-start">
+                            <div className="d-flex align-items-start check-line">
                               <span>
                                 <img src={check_circle} width={'14px'} height={'15px'} />
                               </span>
@@ -274,7 +276,7 @@ const TermsComponent = ({
                                 />
                               </div>
                             </div>
-                            <div className="d-flex align-items-start">
+                            <div className="d-flex align-items-start check-line">
                               <span>
                                 <img src={check_circle} width={'14px'} height={'15px'} />
                               </span>
@@ -289,11 +291,11 @@ const TermsComponent = ({
                               </div>
                             </div>
                           </div>
-                          <div className="mb-3">
-                            <p className="mb-2 text-black fw-semibold">
+                          <div className="mb-1 mb-lg-3">
+                            <p className="mb-1 mb-lg-2 text-black fw-semibold">
                               {t('txt_understanding_your_privacy')}
                             </p>
-                            <div className="d-flex align-items-start">
+                            <div className="d-flex align-items-start check-line">
                               <span>
                                 <img src={check_circle} width={'14px'} height={'15px'} />
                               </span>
@@ -307,7 +309,7 @@ const TermsComponent = ({
                                 />
                               </div>
                             </div>
-                            <div className="d-flex align-items-start">
+                            <div className="d-flex align-items-start check-line">
                               <span>
                                 <img src={check_circle} width={'14px'} height={'15px'} />
                               </span>
@@ -324,7 +326,7 @@ const TermsComponent = ({
                             {layout === 'simple-consent-mode' ? (
                               <></>
                             ) : (
-                              <div className="d-flex align-items-start">
+                              <div className="d-flex align-items-start check-line">
                                 <span>
                                   <img src={check_circle} width={'14px'} height={'15px'} />
                                 </span>
@@ -342,12 +344,12 @@ const TermsComponent = ({
                           </div>
                         </div>
                       </Tab>
-                      <Tab eventKey="about" title="About" className="px-3 px-lg-4">
-                        <div className="mb-3">
-                          <p className="mb-2 text-black fw-semibold">
+                      <Tab eventKey="about" title="About" className="px-2 px-lg-4">
+                        <div className="mb-1 mb-lg-3">
+                          <p className="mb-1 mb-lg-2 text-black fw-semibold">
                             {t('txt_our_commitment_in_action')}
                           </p>
-                          <div className="d-flex align-items-start">
+                          <div className="d-flex align-items-start check-line">
                             <span>
                               <img src={check_circle} width={'14px'} height={'15px'} />
                             </span>
@@ -361,7 +363,7 @@ const TermsComponent = ({
                               />
                             </div>
                           </div>
-                          <div className="d-flex align-items-start">
+                          <div className="d-flex align-items-start check-line">
                             <span>
                               <img src={check_circle} width={'14px'} height={'15px'} />
                             </span>
@@ -375,7 +377,7 @@ const TermsComponent = ({
                               />
                             </div>
                           </div>
-                          <div className="d-flex align-items-start">
+                          <div className="d-flex align-items-start check-line">
                             <span>
                               <img src={check_circle} width={'14px'} height={'15px'} />
                             </span>
@@ -389,7 +391,7 @@ const TermsComponent = ({
                               />
                             </div>
                           </div>
-                          <div className="d-flex align-items-start">
+                          <div className="d-flex align-items-start check-line">
                             <span>
                               <img src={check_circle} width={'14px'} height={'15px'} />
                             </span>
@@ -403,7 +405,7 @@ const TermsComponent = ({
                               />
                             </div>
                           </div>
-                          <div className="d-flex align-items-start">
+                          <div className="d-flex align-items-start check-line">
                             <span>
                               <img src={check_circle} width={'14px'} height={'15px'} />
                             </span>
@@ -417,7 +419,7 @@ const TermsComponent = ({
                               />
                             </div>
                           </div>
-                          <div className="d-flex align-items-start">
+                          <div className="d-flex align-items-start check-line">
                             <span>
                               <img src={check_circle} width={'14px'} height={'15px'} />
                             </span>
@@ -489,7 +491,7 @@ const TermsComponent = ({
                   <div className="position-relative pt-2 pt-lg-3 p-3">
                     {showReadmore && (
                       <>
-                        <div className="mb-3">
+                        <div className="mb-1 mb-lg-3">
                           {term.upgrade && t(term.upgrade)}
                           {t(term.upgradetext)}
                           <div className="fs-14 fst-italic">* {t('txt_no_collect')}</div>

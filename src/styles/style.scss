@@ -120,11 +120,11 @@ $dark: #222328;
       max-height: 100vh;
       overflow-y: auto;
       @include media-breakpoint-down(lg) {
-        font-size: 14px;
+        font-size: 13px;
       }
       button {
         @include media-breakpoint-down(lg) {
-          font-size: 14px;
+          font-size: 13px;
         }
       }
     }
@@ -312,6 +312,18 @@ $dark: #222328;
     padding: 6px 14px 6px 8px;
     background-color: #f0f3fb;
     border-radius: 17px;
+  }
+
+  .check-line {
+    @include media-breakpoint-down(lg) {
+      line-height: 22px;
+    }
+    & > span {
+      width: 14px;
+    }
+    & > div {
+      width: calc(100% - 24px);
+    }
   }
 
   .consent_level {
