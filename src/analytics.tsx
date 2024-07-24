@@ -21,6 +21,7 @@ declare global {
   interface Window {
     process: any;
     funcAfterConsent: any;
+    funcAfterReject: any;
   }
 }
 const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
