@@ -789,7 +789,7 @@ const ConsentComponentCustomApp = (props: any) => {
           } ${showExpandRevoke ? '' : 'minimize'}`}
         >
           <LoadingStatus loading={loading} />
-          <div className="toast-body p-0 shadow mx-3 mx-md-0">
+          <div className="toast-body p-0 shadow mx-1 mx-md-0 mb-2 mb-md-0">
             <div
               className={`revoke-wrapper minimize-shield-wrapper position-relative ${
                 showExpandRevoke ? 'bg-white' : ''
@@ -982,7 +982,7 @@ const ConsentComponentCustomApp = (props: any) => {
           className={`toast custom ${show ? 'show' : ''} ${showExpandConsent ? '' : 'minimize'}`}
         >
           <LoadingStatus loading={loading} />
-          <div className="toast-body p-0 shadow mx-3 mx-md-0">
+          <div className="toast-body p-0 shadow mx-1 mx-md-0 mb-2 mb-md-0">
             {!showExpandConsent ? (
               <>
                 <div className="minimize-shield-wrapper position-relative">
@@ -1013,17 +1013,17 @@ const ConsentComponentCustomApp = (props: any) => {
                       <>
                         <div className="bg-white rounded p-3 w-auto">
                           <>
-                            <p className="mb-2 mb-lg-3">{t('txt_select_your_preferred')}</p>
+                            <p className="mb-1 mb-lg-3">{t('txt_select_your_preferred')}</p>
                             <Form>
                               <Row>
-                                <Col lg={6}>
+                                <Col lg={6} className="mb-2 mb-lg-0">
                                   <ConsentLevelUprade
                                     level={3}
                                     levelname={t(`txt_decentralized_wallet`)}
                                     image={wallet_consent}
                                     content={
                                       <>
-                                        <div className="d-flex align-items-start">
+                                        <div className="d-flex align-items-start check-line">
                                           <span>
                                             <img
                                               src={check_circle}
@@ -1035,7 +1035,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                             {t('txt_decentralized_wallet_will_be_loaded')}
                                           </div>
                                         </div>
-                                        <div className="d-flex align-items-start">
+                                        <div className="d-flex align-items-start check-line">
                                           <span>
                                             <img
                                               src={check_circle}
@@ -1047,7 +1047,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                             {t('txt_both_first_party_third_party')}
                                           </div>
                                         </div>
-                                        <div className="d-flex align-items-start">
+                                        <div className="d-flex align-items-start check-line">
                                           <span>
                                             <img
                                               src={check_circle}
@@ -1059,7 +1059,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                             {t('txt_all_consented_data_will_be_collected')}
                                           </div>
                                         </div>
-                                        <div className="d-flex align-items-start">
+                                        <div className="d-flex align-items-start check-line">
                                           <span>
                                             <img
                                               src={check_circle}
@@ -1081,7 +1081,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                     image={wallet_shield_consent}
                                     content={
                                       <>
-                                        <div className="d-flex align-items-start">
+                                        <div className="d-flex align-items-start check-line">
                                           <span>
                                             <img
                                               src={check_circle}
@@ -1093,7 +1093,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                             {t('txt_decentralized_wallet_will_be_loaded')}
                                           </div>
                                         </div>
-                                        <div className="d-flex align-items-start">
+                                        <div className="d-flex align-items-start check-line">
                                           <span>
                                             <img
                                               src={check_circle}
@@ -1105,7 +1105,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                             {t('txt_both_first_party_third_party')}
                                           </div>
                                         </div>
-                                        <div className="d-flex align-items-start">
+                                        <div className="d-flex align-items-start check-line">
                                           <span>
                                             <img
                                               src={check_circle}
@@ -1117,7 +1117,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                             {t('txt_all_consented_data_will_be_collected')}
                                           </div>
                                         </div>
-                                        <div className="d-flex align-items-start">
+                                        <div className="d-flex align-items-start check-line">
                                           <span>
                                             <img
                                               src={check_circle}
@@ -1129,7 +1129,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                             {t('txt_users_can_revoke_dapp')}
                                           </div>
                                         </div>
-                                        <div className="d-flex align-items-start">
+                                        <div className="d-flex align-items-start check-line">
                                           <span>
                                             <img
                                               src={check_circle}
@@ -1247,7 +1247,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                     <Button
                                       variant="outline-success"
                                       onClick={handleAgree}
-                                      className="w-100 me-3 d-flex align-items-center justify-content-center fs-14 rounded-pill py-2 py-lg-3"
+                                      className="w-100 me-3 mb-2 mb-lg-0 d-flex align-items-center justify-content-center fs-14 rounded-pill py-2 py-lg-3"
                                     >
                                       {loadingCheckAccount ? (
                                         <span
@@ -1326,7 +1326,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                     <Button
                                       variant="outline-success"
                                       onClick={handleAgree}
-                                      className="w-100 me-3 d-flex align-items-center justify-content-center fs-14 rounded-pill py-2 py-lg-3"
+                                      className="w-100 me-3 mb-2 mb-lg-0 d-flex align-items-center justify-content-center fs-14 rounded-pill py-2 py-lg-3"
                                     >
                                       {loadingCheckAccount ? (
                                         <span
