@@ -1149,7 +1149,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                     }
                                   >
                                     <SSOButton
-                                      className="btn btn-success d-flex align-items-center justify-content-center loginSSO rounded-pill py-2 py-lg-3 w-100 w-lg-30 fs-14 text-white"
+                                      className="btn btn-success d-flex align-items-center justify-content-center loginSSO rounded-pill py-2 py-lg-3 w-100 fs-14 text-white"
                                       text={<>{t('txt_continue')}</>}
                                       ssoState={'noscopes'}
                                       onGetData={onGetData}
