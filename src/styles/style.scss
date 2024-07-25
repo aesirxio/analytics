@@ -480,8 +480,13 @@ body.modal-sso-open {
     var(--#{$prefix}backdrop-opacity)
   );
 }
-.aesirxsso {
-  color: #5f5e70;
+body {
+  .aesirxsso {
+    color: #5f5e70;
+    .btn {
+      --aesirxsso-btn-font-size: 16px;
+    }
+  }
 }
 .aesirxconsent {
   .aesirxsso {
