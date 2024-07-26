@@ -444,6 +444,32 @@ $dark: #222328;
   .header-consent-bg {
     background-color: #f8f9fd;
   }
+  &.opt-in-consent {
+    &.show {
+      .toast-container {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 1;
+        bottom: auto;
+        right: auto;
+      }
+      .toast {
+        display: block;
+        &:not(.show) {
+          display: block;
+        }
+      }
+    }
+    .toast-container {
+      bottom: 0;
+      right: 0;
+      opacity: 0;
+    }
+    .toast {
+      display: none;
+    }
+  }
 }
 body.modal-open,
 body.modal-sso-open {
