@@ -150,7 +150,13 @@ const AesirAnalytics = () => {
           />
         );
       }
-      if (window['optInConsent'] || window['optInReplaceAnalyticsConsent'] === 'true') {
+      const isOptInReplaceAnalytics = window['optInConsent']
+        ? JSON.parse(window?.optInConsent)?.some((obj: any) =>
+            Object.keys(obj).includes('replaceAnalyticsConsent')
+          )
+        : false;
+      console.log('isOptInReplaceAnalytics', isOptInReplaceAnalytics);
+      if (window['optInConsent'] && isOptInReplaceAnalytics) {
         rootElement.render(
           <AesirXI18nextProvider appLanguages={appLanguages}>
             <OptInConsent />

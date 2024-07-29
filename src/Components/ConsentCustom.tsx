@@ -768,7 +768,9 @@ const ConsentComponentCustomApp = (props: any) => {
   };
   const paymentRevoke = sessionStorage.getItem('aesirx-analytics-payment');
   const advisorRevoke = sessionStorage.getItem('aesirx-analytics-advisor');
-  console.log('loading', loading);
+  const optInRevokes = Object.keys(sessionStorage)
+    .filter((key) => key.startsWith('aesirx-analytics-optin'))
+    .map((key) => key);
   return (
     <div>
       <ToastContainer />
@@ -866,7 +868,7 @@ const ConsentComponentCustomApp = (props: any) => {
                         id={`option-revoke-payment`}
                         checked={revokeConsentOption === 'payment'}
                         type="checkbox"
-                        label={t('txt_revoke_opt_in')}
+                        label={t('txt_revoke_opt_in_payment')}
                         value={'payment'}
                         onChange={({ target: { value } }) => {
                           setRevokeConsentOption(value);
@@ -889,6 +891,26 @@ const ConsentComponentCustomApp = (props: any) => {
                     ) : (
                       <></>
                     )}
+                    {optInRevokes?.map((item) => {
+                      return (
+                        <Form.Check
+                          id={`option-revoke-${item}`}
+                          checked={revokeConsentOption === item}
+                          type="checkbox"
+                          label={
+                            item === 'aesirx-analytics-optin-default'
+                              ? t('txt_revoke_opt_in')
+                              : t('txt_revoke_opt_in') +
+                                ' ' +
+                                item?.replace('aesirx-analytics-optin-', '')
+                          }
+                          value={item}
+                          onChange={({ target: { value } }) => {
+                            setRevokeConsentOption(value);
+                          }}
+                        />
+                      );
+                    })}
                     <Form.Check
                       id={`option-revoke-consent`}
                       checked={revokeConsentOption === 'consent'}
