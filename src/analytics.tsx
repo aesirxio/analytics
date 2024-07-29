@@ -139,28 +139,26 @@ const AesirAnalytics = () => {
         window['event_uuid'] = responseStart.event_uuid;
         window['visitor_uuid'] = responseStart.visitor_uuid;
       }
-      if (
-        window['disableAnalyticsConsent'] !== 'true' ||
-        window['optInReplaceAnalyticsConsent'] !== 'true'
-      ) {
-        rootElement.render(
-          <ConsentPopup
-            event_uuid={responseStart?.visitor_uuid}
-            visitor_uuid={responseStart?.visitor_uuid}
-          />
-        );
-      }
       const isOptInReplaceAnalytics = window['optInConsent']
         ? JSON.parse(window?.optInConsent)?.some((obj: any) =>
             Object.keys(obj).includes('replaceAnalyticsConsent')
           )
         : false;
-      console.log('isOptInReplaceAnalytics', isOptInReplaceAnalytics);
-      if (window['optInConsent'] && isOptInReplaceAnalytics) {
+      if (window['disableAnalyticsConsent'] !== 'true' || !isOptInReplaceAnalytics) {
         rootElement.render(
-          <AesirXI18nextProvider appLanguages={appLanguages}>
-            <OptInConsent />
-          </AesirXI18nextProvider>
+          <>
+            {!isOptInReplaceAnalytics && (
+              <ConsentPopup
+                event_uuid={responseStart?.visitor_uuid}
+                visitor_uuid={responseStart?.visitor_uuid}
+              />
+            )}
+            {window['optInConsent'] && (
+              <AesirXI18nextProvider appLanguages={appLanguages}>
+                <OptInConsent />
+              </AesirXI18nextProvider>
+            )}
+          </>
         );
       }
 

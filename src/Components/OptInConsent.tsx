@@ -47,149 +47,151 @@ const OptInConsent = ({
           setShowRevoke={setShowRevoke}
         />
       ))}
-      <div className="aesirxconsent">
-        <div
-          tabIndex={-1}
-          className={`toast-container position-fixed m-md-3 ${
-            showExpandRevoke ? 'top-50 start-50 translate-middle' : 'bottom-0 end-0'
-          }`}
-        >
+      {optInReplace && (
+        <div className="aesirxconsent">
           <div
-            className={`toast revoke-toast custom ${showRevoke ? 'show' : ''} ${
-              showExpandRevoke ? '' : 'minimize'
+            tabIndex={-1}
+            className={`toast-container position-fixed m-md-3 ${
+              showExpandRevoke ? 'top-50 start-50 translate-middle' : 'bottom-0 end-0'
             }`}
           >
-            <div className="toast-body p-0 shadow mx-1 mx-md-0 mb-2 mb-md-0">
-              <div
-                className={`revoke-wrapper minimize-shield-wrapper position-relative ${
-                  showExpandRevoke ? 'bg-white' : ''
-                }`}
-              >
-                {!showExpandRevoke && (
-                  <>
-                    <img
-                      className="cover-img position-absolute h-100 w-100 object-fit-cover"
-                      src={bg}
-                    />
-                    <div
-                      className="minimize-shield"
-                      onClick={() => {
-                        setShowExpandRevoke(true);
-                      }}
-                    >
-                      <img src={privacy} alt="Shield of Privacy" />
-                      {t('txt_shield_of_privacy')}
-                    </div>
-                  </>
-                )}
-
-                {showExpandRevoke && (
-                  <>
-                    <div
-                      className={`d-flex rounded-top align-items-center justify-content-between p-2 p-lg-3 fw-medium flex-wrap py-2 py-lg-3 px-4 header-consent-bg`}
-                      style={{
-                        borderBottom: '1px solid #DEDEDE',
-                      }}
-                    >
-                      <div className="text-primary text-nowrap">
-                        {t('txt_tracking_data_privacy')}
+            <div
+              className={`toast revoke-toast custom ${showRevoke ? 'show' : ''} ${
+                showExpandRevoke ? '' : 'minimize'
+              }`}
+            >
+              <div className="toast-body p-0 shadow mx-1 mx-md-0 mb-2 mb-md-0">
+                <div
+                  className={`revoke-wrapper minimize-shield-wrapper position-relative ${
+                    showExpandRevoke ? 'bg-white' : ''
+                  }`}
+                >
+                  {!showExpandRevoke && (
+                    <>
+                      <img
+                        className="cover-img position-absolute h-100 w-100 object-fit-cover"
+                        src={bg}
+                      />
+                      <div
+                        className="minimize-shield"
+                        onClick={() => {
+                          setShowExpandRevoke(true);
+                        }}
+                      >
+                        <img src={privacy} alt="Shield of Privacy" />
+                        {t('txt_shield_of_privacy')}
                       </div>
-                      <div className="d-flex align-items-center fs-14 text-primary">
-                        <a
-                          href="https://shield.aesirx.io/"
-                          rel="noreferrer"
-                          target="_blank"
-                          className="minimize-shield-wrapper position-relative text-decoration-none"
-                        >
-                          <img
-                            className="cover-img position-absolute h-100 w-100 object-fit-cover z-1"
-                            src={bg}
-                          />
-                          <div className="minimize-shield position-relative z-2 py-2">
-                            <img src={privacy} alt="Shield of Privacy" />
-                            {t('txt_shield_of_privacy')}
-                          </div>
-                        </a>
-                      </div>
-                    </div>
-                    <div
-                      className="minimize-revoke"
-                      onClick={() => {
-                        setShowExpandRevoke(false);
-                      }}
-                    >
-                      <img src={no} />
-                    </div>
-                    <div className="p-3 bg-white">{t('txt_you_can_revoke')}</div>
-                    <Form className="mb-0 w-100 bg-white px-3">
-                      {optInRevokes?.map((item) => {
-                        return (
-                          <Form.Check
-                            id={`option-revoke-${item}`}
-                            checked={revokeConsentOption === item}
-                            type="checkbox"
-                            label={
-                              item === 'aesirx-analytics-optin-default'
-                                ? t('txt_revoke_opt_in')
-                                : t('txt_revoke_opt_in') +
-                                  ' ' +
-                                  item?.replace('aesirx-analytics-optin-', '')
-                            }
-                            value={item}
-                            onChange={({ target: { value } }) => {
-                              setRevokeConsentOption(value);
-                            }}
-                          />
-                        );
-                      })}
-                    </Form>
+                    </>
+                  )}
 
-                    <div className="rounded-bottom position-relative overflow-hidden bg-white">
-                      <div className="position-relative p-3">
-                        <div className="d-flex align-items-center flex-wrap">
-                          <div className="d-flex align-items-center w-100 justify-content-end">
-                            <a
-                              className="manage-consent fs-14 btn btn-outline-success rounded-pill py-2 py-lg-3 d-flex align-items-center justify-content-center w-100 w-lg-35"
-                              href="https://dapp.shield.aesirx.io/revoke-consent"
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              {t('txt_manage_consent')}
-                            </a>
-                            <Button
-                              variant="outline-success"
-                              onClick={async () => {
-                                if (revokeConsentOption) {
-                                  sessionStorage.removeItem(revokeConsentOption);
-                                  setShowExpandRevoke(false);
-                                  if (
-                                    revokeConsentOption ===
-                                      `aesirx-analytics-optin-${optInReplace?.title}` ||
-                                    revokeConsentOption === 'aesirx-analytics-optin-default'
-                                  ) {
-                                    setTimeout(() => {
-                                      window.location.reload();
-                                    }, 1000);
-                                  }
-                                }
-                              }}
-                              className={
-                                'd-flex align-items-center justify-content-center w-100 w-lg-35 revoke-btn fs-14 rounded-pill py-2 py-lg-3'
+                  {showExpandRevoke && (
+                    <>
+                      <div
+                        className={`d-flex rounded-top align-items-center justify-content-between p-2 p-lg-3 fw-medium flex-wrap py-2 py-lg-3 px-4 header-consent-bg`}
+                        style={{
+                          borderBottom: '1px solid #DEDEDE',
+                        }}
+                      >
+                        <div className="text-primary text-nowrap">
+                          {t('txt_tracking_data_privacy')}
+                        </div>
+                        <div className="d-flex align-items-center fs-14 text-primary">
+                          <a
+                            href="https://shield.aesirx.io/"
+                            rel="noreferrer"
+                            target="_blank"
+                            className="minimize-shield-wrapper position-relative text-decoration-none"
+                          >
+                            <img
+                              className="cover-img position-absolute h-100 w-100 object-fit-cover z-1"
+                              src={bg}
+                            />
+                            <div className="minimize-shield position-relative z-2 py-2">
+                              <img src={privacy} alt="Shield of Privacy" />
+                              {t('txt_shield_of_privacy')}
+                            </div>
+                          </a>
+                        </div>
+                      </div>
+                      <div
+                        className="minimize-revoke"
+                        onClick={() => {
+                          setShowExpandRevoke(false);
+                        }}
+                      >
+                        <img src={no} />
+                      </div>
+                      <div className="p-3 bg-white">{t('txt_you_can_revoke')}</div>
+                      <Form className="mb-0 w-100 bg-white px-3">
+                        {optInRevokes?.map((item) => {
+                          return (
+                            <Form.Check
+                              id={`option-revoke-${item}`}
+                              checked={revokeConsentOption === item}
+                              type="checkbox"
+                              label={
+                                item === 'aesirx-analytics-optin-default'
+                                  ? t('txt_revoke_opt_in')
+                                  : t('txt_revoke_opt_in') +
+                                    ' ' +
+                                    item?.replace('aesirx-analytics-optin-', '')
                               }
-                            >
-                              {t('txt_revoke_consent')}
-                            </Button>
+                              value={item}
+                              onChange={({ target: { value } }) => {
+                                setRevokeConsentOption(value);
+                              }}
+                            />
+                          );
+                        })}
+                      </Form>
+
+                      <div className="rounded-bottom position-relative overflow-hidden bg-white">
+                        <div className="position-relative p-3">
+                          <div className="d-flex align-items-center flex-wrap">
+                            <div className="d-flex align-items-center w-100 justify-content-end">
+                              <a
+                                className="manage-consent fs-14 btn btn-outline-success rounded-pill py-2 py-lg-3 d-flex align-items-center justify-content-center w-100 w-lg-35"
+                                href="https://dapp.shield.aesirx.io/revoke-consent"
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                {t('txt_manage_consent')}
+                              </a>
+                              <Button
+                                variant="outline-success"
+                                onClick={async () => {
+                                  if (revokeConsentOption) {
+                                    sessionStorage.removeItem(revokeConsentOption);
+                                    setShowExpandRevoke(false);
+                                    if (
+                                      revokeConsentOption ===
+                                        `aesirx-analytics-optin-${optInReplace?.title}` ||
+                                      revokeConsentOption === 'aesirx-analytics-optin-default'
+                                    ) {
+                                      setTimeout(() => {
+                                        window.location.reload();
+                                      }, 1000);
+                                    }
+                                  }
+                                }}
+                                className={
+                                  'd-flex align-items-center justify-content-center w-100 w-lg-35 revoke-btn fs-14 rounded-pill py-2 py-lg-3'
+                                }
+                              >
+                                {t('txt_revoke_consent')}
+                              </Button>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </>
-                )}
+                    </>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 };
@@ -197,9 +199,11 @@ const OptInConsent = ({
 const OptIntConsentLayout = ({ optIn, optInRevokes, setShowRevoke }: any) => {
   const { t } = useTranslation();
   const [show, setShow] = useState(false);
+  const [showBackdrop, setShowBackdrop] = useState(true);
   const [showExpandConsent, setShowExpandConsent] = useState(true);
   const handleConsent = () => {
     setShow(false);
+    setShowBackdrop(false);
     sessionStorage.setItem(
       optIn?.title ? `aesirx-analytics-optin-${optIn?.title}` : 'aesirx-analytics-optin-default',
       'true'
@@ -214,6 +218,7 @@ const OptIntConsentLayout = ({ optIn, optInRevokes, setShowRevoke }: any) => {
 
   const handleClose = () => {
     setShow(false);
+    setShowBackdrop(false);
     if (optIn?.replaceAnalyticsConsent) {
       setShowExpandConsent(false);
       sessionStorage.setItem('aesirx-analytics-rejected', 'true');
@@ -252,6 +257,7 @@ const OptIntConsentLayout = ({ optIn, optInRevokes, setShowRevoke }: any) => {
           : ''
       } ${showExpandConsent ? '' : 'show-minimize'}`}
     >
+      <div className={`offcanvas-backdrop fade ${showBackdrop && show ? 'show' : 'd-none'}`} />
       <div tabIndex={-1} className={`toast-container position-fixed m-md-3 `}>
         <div
           className={`toast ${show ? 'show' : ''} custom ${showExpandConsent ? '' : 'minimize'}`}
