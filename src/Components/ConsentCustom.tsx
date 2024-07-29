@@ -652,6 +652,7 @@ const ConsentComponentCustomApp = (props: any) => {
           sessionStorage.removeItem('aesirx-analytics-allow');
         }
       } else {
+        await revokeConsents(endpoint, levelRevoke, uuid, null, null, null, jwt);
         handleRevoke(false);
         setShowExpandConsent(false);
         setShow(true);

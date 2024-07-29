@@ -177,6 +177,14 @@ const revokeConsents = async (
   sessionStorage.setItem('consentGranted', 'false');
   try {
     switch (level) {
+      case '1':
+        await axios.put(`${url}`, null, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + jwt,
+          },
+        });
+        break;
       case '2':
         await axios.put(`${url}`, null, {
           headers: {
