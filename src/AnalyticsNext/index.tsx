@@ -15,6 +15,7 @@ interface AnalyticsNext {
   oldLayout?: boolean;
   loginApp?: any;
   isLoggedApp?: boolean;
+  isOptInReplaceAnalytics?: boolean;
   children?: ReactNode;
 }
 
@@ -24,6 +25,7 @@ const AnalyticsNext = ({
   oldLayout = false,
   loginApp,
   isLoggedApp,
+  isOptInReplaceAnalytics = false,
   children,
 }: AnalyticsNext) => {
   const [layout, setLayout] = useState(process.env.NEXT_PUBLIC_CONSENT_LAYOUT ?? 'simple-web-2');
@@ -68,6 +70,7 @@ const AnalyticsNext = ({
                   gtagId={gtagId}
                   gtmId={gtmId}
                   layout={layout}
+                  isOptInReplaceAnalytics={isOptInReplaceAnalytics}
                 />
               )}
             </>

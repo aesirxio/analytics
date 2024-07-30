@@ -314,3 +314,145 @@ add this environment variable to `.env`
 ```
 NEXT_PUBLIC_CONSENT_LAYOUT=default
 ```
+
+## Opt-in Consent
+
+#### Usage in SSR site:
+```
+<script>
+   window.optInConsentData = `[
+      {
+        "title":"payment",
+        "content":"<div>YOUR_CONTENT_INPUT_HERE</div>"
+      }
+    ]`
+</script>
+```
+
+(We also provive option `replaceAnalyticsConsent` to replace Analytics Consent with Opt-in Consent)
+```
+<script>
+   window.optInConsentData = `[
+      {
+        "title":"payment",
+        "content":"<div>YOUR_CONTENT_INPUT_HERE</div>",
+        "replaceAnalyticsConsent": "true"
+      }
+    ]`
+</script>
+```
+
+#### In ReactJS:
+```
+const OptInConsent = React.lazy(
+  () => import('./OptInConsent').then(module => ({ default: module.OptInConsent }))
+);
+const ConsentComponent = () => {
+  const [showModal, setShowModal] = useState(false);
+  const handleClose = () => {
+    setShowModal(false);
+  };
+   const handleConsent = () => {
+    setShowModal(false);
+  };
+  const handleReject = () => {
+    setShowModal(false);
+  };
+  return (
+    <>
+      <OptInConsent
+        optInConsentData={[
+          {
+            title: 'payment',
+            content: `<div>YOUR_CONTENT_INPUT_HERE</div>`,
+            show: showModal,
+            handleConsent: handleConsent,
+            handleReject: handleReject
+          },
+        ]}
+      />
+    </>
+  );
+};
+```
+(We also provive option `replaceAnalyticsConsent` to replace Analytics Consent with Opt-in Consent)
+To use this in ReactJS please add `isOptInReplaceAnalytics` to our provider first
+```
+<AnalyticsReact location={location} history={history} isOptInReplaceAnalytics={true}>
+  {children}
+</AnalyticsReact>
+```
+```
+<OptInConsent
+  optInConsentData={[
+    {
+      title: 'payment',
+      content: `<div>YOUR_CONTENT_INPUT_HERE</div>`,
+      show: showModal,
+      handleConsent: handleConsent,
+      handleReject: handleReject,
+      replaceAnalyticsConsent: "true"
+    },
+  ]}
+/>
+```
+#### In NextJS:
+```
+import dynamic from "next/dynamic";
+const OptInConsent = dynamic(
+  () => import("aesirx-analytics").then((module) => module.OptInConsent),
+  {
+    loading: () => <div>Loading...</div>,
+    ssr: false,
+  }
+);
+
+const ConsentComponent = () => {
+  const [showModal, setShowModal] = useState(false);
+  const handleOpen = () => {
+    setShowModal(true);
+  };
+  const handleConsent = () => {
+    setShowModal(false);
+  };
+  const handleReject = () => {
+    setShowModal(false);
+  };
+  return (
+    <>
+      <OptInConsent
+        optInConsentData={[
+          {
+            title: 'payment',
+            content: `<div>YOUR_CONTENT_INPUT_HERE</div>`,
+            show: showModal,
+            handleConsent: handleConsent,
+            handleReject: handleReject
+          },
+        ]}
+      />
+    </>
+  );
+};
+```
+(We also provive option `replaceAnalyticsConsent` to replace Analytics Consent with Opt-in Consent)
+To use this in NextJS please add `isOptInReplaceAnalytics` to our provider first
+```
+<AnalyticsNext router={useRouter()} isOptInReplaceAnalytics={true}>
+  <[YOUR-COMPONENT]/>
+</AnalyticsNext>
+```
+```
+<OptInConsent
+  optInConsentData={[
+    {
+      title: 'payment',
+      content: `<div>YOUR_CONTENT_INPUT_HERE</div>`,
+      show: showModal,
+      handleConsent: handleConsent,
+      handleReject: handleReject,
+      replaceAnalyticsConsent: "true"
+    },
+  ]}
+/>
+```
