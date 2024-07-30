@@ -210,6 +210,7 @@ const OptIntConsentDetail = ({ optIn, setShowRevoke }: any) => {
     if (optIn?.replaceAnalyticsConsent) {
       setShowRevoke(true);
     }
+    optIn?.handleConsent && optIn?.handleConsent();
     window?.funcAfterOptInConsent && window.funcAfterOptInConsent();
     window?.optInConsentData &&
       document.querySelector(`.opt-in-consent.${optIn?.title}`).classList.remove('show');
@@ -222,10 +223,10 @@ const OptIntConsentDetail = ({ optIn, setShowRevoke }: any) => {
       setShowExpandConsent(false);
       sessionStorage.setItem('aesirx-analytics-rejected', 'true');
     }
+    optIn?.handleClose && optIn?.handleClose();
     window.funcAfterRejectOptIn && window.funcAfterRejectOptIn();
     window?.optInConsentData &&
       document.querySelector(`.opt-in-consent.${optIn?.title}`).classList.remove('show');
-    optIn?.handleClose && optIn?.handleClose();
   };
 
   useEffect(() => {
