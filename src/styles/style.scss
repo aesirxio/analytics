@@ -450,7 +450,7 @@ $dark: #222328;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        opacity: 1;
+        opacity: 1 !important;
         bottom: auto;
         right: auto;
       }
@@ -463,7 +463,7 @@ $dark: #222328;
     }
     &.show-minimize {
       .toast-container {
-        opacity: 1;
+        opacity: 1 !important;
       }
       .toast {
         &.minimize {

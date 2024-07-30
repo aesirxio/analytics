@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 interface Props {
   optInConsent?: any;
-  show?: boolean;
 }
 declare global {
   interface Window {
@@ -15,9 +14,8 @@ declare global {
     optInConsent: any;
   }
 }
-const OptInConsent = ({
+const OptinConsent = ({
   optInConsent = window?.optInConsent ? JSON.parse(window?.optInConsent) : [],
-  show = false,
 }: Props) => {
   const optInReplace = optInConsent?.find((obj: any) => obj.replaceAnalyticsConsent);
   const { t } = useTranslation();
@@ -42,13 +40,10 @@ const OptInConsent = ({
   });
   return (
     <>
-      {optInConsent?.map((optIn: any) => (
-        <OptIntConsentLayout
-          optIn={optIn}
-          optInRevokes={optInRevokes}
-          setShowRevoke={setShowRevoke}
-          showState={show}
-        />
+      {optInConsent?.map((optIn: any, key: any) => (
+        <React.Fragment key={key}>
+          <OptIntConsentLayout optIn={optIn} setShowRevoke={setShowRevoke} />
+        </React.Fragment>
       ))}
       {optInReplace && (
         <div className="aesirxconsent">
@@ -199,9 +194,9 @@ const OptInConsent = ({
   );
 };
 
-const OptIntConsentLayout = ({ optIn, optInRevokes, setShowRevoke, showState }: any) => {
+const OptIntConsentLayout = ({ optIn, setShowRevoke }: any) => {
   const { t } = useTranslation();
-  const [show, setShow] = useState(showState);
+  const [show, setShow] = useState(false);
   const [showBackdrop, setShowBackdrop] = useState(true);
   const [showExpandConsent, setShowExpandConsent] = useState(true);
   const handleConsent = () => {
@@ -229,6 +224,7 @@ const OptIntConsentLayout = ({ optIn, optInRevokes, setShowRevoke, showState }: 
     window.funcAfterRejectOptIn && window.funcAfterRejectOptIn();
     window?.optInConsent &&
       document.querySelector(`.opt-in-consent.${optIn?.title}`).classList.remove('show');
+    optIn?.handleClose && optIn?.handleClose();
   };
 
   useEffect(() => {
@@ -247,105 +243,115 @@ const OptIntConsentLayout = ({ optIn, optInRevokes, setShowRevoke, showState }: 
       }
     }
   }, []);
+  useEffect(() => {
+    if (optIn?.show) {
+      setShow(true);
+    }
+  }, [optIn]);
   return (
-    <div
-      className={`aesirxconsent opt-in-consent ${optIn?.title ?? ''} ${
-        show &&
-        optIn?.replaceAnalyticsConsent &&
-        (optIn?.title
-          ? !optInRevokes?.includes(`aesirx-analytics-optin-${optIn?.title}`)
-          : !optInRevokes?.includes(`aesirx-analytics-optin-default`))
-          ? 'show'
-          : ''
-      } ${showExpandConsent ? '' : 'show-minimize'}`}
-    >
-      <div className={`offcanvas-backdrop fade ${showBackdrop && show ? 'show' : 'd-none'}`} />
-      <div tabIndex={-1} className={`toast-container position-fixed m-md-3 `}>
+    <>
+      {(show || optIn?.replaceAnalyticsConsent || window?.optInConsent) && (
         <div
-          className={`toast ${show ? 'show' : ''} custom ${showExpandConsent ? '' : 'minimize'}`}
+          className={`aesirxconsent opt-in-consent ${optIn?.title ?? ''} ${show ? 'show' : ''} ${
+            showExpandConsent ? '' : 'show-minimize'
+          }`}
         >
-          <div className="toast-body p-0 shadow mx-3 mx-md-0">
-            {!showExpandConsent && optIn?.replaceAnalyticsConsent ? (
-              <>
-                <div className="minimize-shield-wrapper position-relative">
-                  <img
-                    className="cover-img position-absolute h-100 w-100 object-fit-cover"
-                    src={bg}
-                  />
-                  <div
-                    className="minimize-shield"
-                    onClick={() => {
-                      setShow(true);
-                      setShowExpandConsent(true);
-                      sessionStorage.removeItem('aesirx-analytics-rejected');
-                    }}
-                  >
-                    <img src={privacy} alt="Shield of Privacy" />
-                    {t('txt_shield_of_privacy')}
-                  </div>
-                </div>
-              </>
-            ) : (
-              <div className="bg-white">
-                <div
-                  className={`d-flex rounded-top align-items-center justify-content-between p-2 p-lg-3 fw-medium flex-wrap py-2 py-lg-3 px-4 header-consent-bg`}
-                  style={{
-                    borderBottom: '1px solid #DEDEDE',
-                  }}
-                >
-                  <div className="text-primary text-nowrap">{t('txt_tracking_data_privacy')}</div>
-                  <div className="d-flex align-items-center fs-14 text-primary">
-                    <a
-                      href="https://shield.aesirx.io/"
-                      rel="noreferrer"
-                      target="_blank"
-                      className="minimize-shield-wrapper position-relative text-decoration-none"
-                    >
+          <div className={`offcanvas-backdrop fade ${showBackdrop && show ? 'show' : 'd-none'}`} />
+          <div
+            tabIndex={-1}
+            className={`toast-container position-fixed m-md-3 ${show ? '' : 'opacity-0'}`}
+          >
+            <div
+              className={`toast ${show ? 'show' : ''} custom ${
+                showExpandConsent ? '' : 'minimize'
+              }`}
+            >
+              <div className="toast-body p-0 shadow mx-3 mx-md-0">
+                {!showExpandConsent && optIn?.replaceAnalyticsConsent ? (
+                  <>
+                    <div className="minimize-shield-wrapper position-relative">
                       <img
-                        className="cover-img position-absolute h-100 w-100 object-fit-cover z-1"
+                        className="cover-img position-absolute h-100 w-100 object-fit-cover"
                         src={bg}
                       />
-                      <div className="minimize-shield position-relative z-2 py-2">
+                      <div
+                        className="minimize-shield"
+                        onClick={() => {
+                          setShow(true);
+                          setShowExpandConsent(true);
+                          sessionStorage.removeItem('aesirx-analytics-rejected');
+                        }}
+                      >
                         <img src={privacy} alt="Shield of Privacy" />
                         {t('txt_shield_of_privacy')}
                       </div>
-                    </a>
-                  </div>
-                </div>
-                <div className="p-4 pt-3 pb-0 bg-white">
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: optIn?.content ?? '',
-                    }}
-                  />
-                </div>
-                <div className="rounded-bottom position-relative overflow-hidden text-white bg-white">
-                  <div className="position-relative pt-2 pt-lg-3 p-3">
-                    <div className="d-flex align-items-center justify-content-between flex-wrap">
-                      <Button
-                        onClick={handleClose}
-                        variant="outline-success"
-                        className="border-2 fs-7 fw-bold text-primary rounded-pill"
-                      >
-                        {t('txt_reject_consent')}
-                      </Button>
-                      <Button
-                        onClick={handleConsent}
-                        variant="outline-success"
-                        className="border-2 fs-7 fw-bold text-primary rounded-pill"
-                      >
-                        {t('txt_yes_i_consent')}
-                      </Button>
+                    </div>
+                  </>
+                ) : (
+                  <div className="bg-white">
+                    <div
+                      className={`d-flex rounded-top align-items-center justify-content-between p-2 p-lg-3 fw-medium flex-wrap py-2 py-lg-3 px-4 header-consent-bg`}
+                      style={{
+                        borderBottom: '1px solid #DEDEDE',
+                      }}
+                    >
+                      <div className="text-primary text-nowrap">
+                        {t('txt_tracking_data_privacy')}
+                      </div>
+                      <div className="d-flex align-items-center fs-14 text-primary">
+                        <a
+                          href="https://shield.aesirx.io/"
+                          rel="noreferrer"
+                          target="_blank"
+                          className="minimize-shield-wrapper position-relative text-decoration-none"
+                        >
+                          <img
+                            className="cover-img position-absolute h-100 w-100 object-fit-cover z-1"
+                            src={bg}
+                          />
+                          <div className="minimize-shield position-relative z-2 py-2">
+                            <img src={privacy} alt="Shield of Privacy" />
+                            {t('txt_shield_of_privacy')}
+                          </div>
+                        </a>
+                      </div>
+                    </div>
+                    <div className="p-4 pt-3 pb-0 bg-white">
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: optIn?.content ?? '',
+                        }}
+                      />
+                    </div>
+                    <div className="rounded-bottom position-relative overflow-hidden text-white bg-white">
+                      <div className="position-relative pt-2 pt-lg-3 p-3">
+                        <div className="d-flex align-items-center justify-content-between flex-wrap">
+                          <Button
+                            onClick={handleClose}
+                            variant="outline-success"
+                            className="border-2 fs-7 fw-bold text-primary rounded-pill"
+                          >
+                            {t('txt_reject_consent')}
+                          </Button>
+                          <Button
+                            onClick={handleConsent}
+                            variant="outline-success"
+                            className="border-2 fs-7 fw-bold text-primary rounded-pill"
+                          >
+                            {t('txt_yes_i_consent')}
+                          </Button>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
               </div>
-            )}
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 
-export default OptInConsent;
+export default OptinConsent;

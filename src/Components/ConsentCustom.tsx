@@ -67,22 +67,31 @@ const ConsentComponentCustom = ({
   gtagId,
   gtmId,
   layout,
+  isOptInReplaceAnalytics,
 }: any) => {
   return (
-    <WithWalletConnector network={networkEnv === 'testnet' ? TESTNET : MAINNET}>
-      {(props: any) => (
-        <ConsentComponentCustomWrapper
-          {...props}
-          endpoint={endpoint}
-          aesirXEndpoint={aesirXEndpoint}
-          loginApp={loginApp}
-          isLoggedApp={isLoggedApp}
-          gtagId={gtagId}
-          gtmId={gtmId}
-          layout={layout}
-        />
+    <>
+      {!isOptInReplaceAnalytics ? (
+        <>
+          <WithWalletConnector network={networkEnv === 'testnet' ? TESTNET : MAINNET}>
+            {(props: any) => (
+              <ConsentComponentCustomWrapper
+                {...props}
+                endpoint={endpoint}
+                aesirXEndpoint={aesirXEndpoint}
+                loginApp={loginApp}
+                isLoggedApp={isLoggedApp}
+                gtagId={gtagId}
+                gtmId={gtmId}
+                layout={layout}
+              />
+            )}
+          </WithWalletConnector>
+        </>
+      ) : (
+        <></>
       )}
-    </WithWalletConnector>
+    </>
   );
 };
 const ConsentComponentCustomWrapper = (props: any) => {

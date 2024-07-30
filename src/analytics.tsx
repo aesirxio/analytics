@@ -11,7 +11,7 @@ import { createRoot } from 'react-dom/client';
 import { AnalyticsContext } from './utils/AnalyticsContextProvider';
 import ConsentComponent from './Components/Consent';
 import ConsentComponentCustom from './Components/ConsentCustom';
-import OptInConsent from './Components/OptInConsent';
+import OptinConsent from './Components/OptinConsent';
 import { Buffer } from 'buffer';
 import { appLanguages } from './translations';
 import { AesirXI18nextProvider } from './utils/I18nextProvider';
@@ -155,7 +155,7 @@ const AesirAnalytics = () => {
             )}
             {window['optInConsent'] && (
               <AesirXI18nextProvider appLanguages={appLanguages}>
-                <OptInConsent />
+                <OptinConsent />
               </AesirXI18nextProvider>
             )}
           </>
