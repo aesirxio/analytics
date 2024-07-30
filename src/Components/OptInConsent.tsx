@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Button, Col, Form, Row } from 'react-bootstrap';
 interface Props {
   optInConsent?: any;
+  show?: boolean;
 }
 declare global {
   interface Window {
@@ -16,6 +17,7 @@ declare global {
 }
 const OptInConsent = ({
   optInConsent = window?.optInConsent ? JSON.parse(window?.optInConsent) : [],
+  show = false,
 }: Props) => {
   const optInReplace = optInConsent?.find((obj: any) => obj.replaceAnalyticsConsent);
   const { t } = useTranslation();
@@ -45,6 +47,7 @@ const OptInConsent = ({
           optIn={optIn}
           optInRevokes={optInRevokes}
           setShowRevoke={setShowRevoke}
+          showState={show}
         />
       ))}
       {optInReplace && (
@@ -196,9 +199,9 @@ const OptInConsent = ({
   );
 };
 
-const OptIntConsentLayout = ({ optIn, optInRevokes, setShowRevoke }: any) => {
+const OptIntConsentLayout = ({ optIn, optInRevokes, setShowRevoke, showState }: any) => {
   const { t } = useTranslation();
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(showState);
   const [showBackdrop, setShowBackdrop] = useState(true);
   const [showExpandConsent, setShowExpandConsent] = useState(true);
   const handleConsent = () => {
@@ -230,7 +233,7 @@ const OptIntConsentLayout = ({ optIn, optInRevokes, setShowRevoke }: any) => {
 
   useEffect(() => {
     if (
-      sessionStorage.getItem(optIn?.title) === 'true' ||
+      sessionStorage.getItem(`aesirx-analytics-optin-${optIn?.title}`) === 'true' ||
       sessionStorage.getItem('aesirx-analytics-optin-default') === 'true'
     ) {
       window.funcAfterOptInConsent && window.funcAfterOptInConsent();
@@ -239,12 +242,11 @@ const OptIntConsentLayout = ({ optIn, optInRevokes, setShowRevoke }: any) => {
       if (sessionStorage.getItem('aesirx-analytics-rejected') === 'true') {
         setShow(false);
         setShowExpandConsent(false);
-      } else {
+      } else if (sessionStorage.getItem(`aesirx-analytics-optin-${optIn?.title}`) !== 'true') {
         setShow(true);
       }
     }
   }, []);
-
   return (
     <div
       className={`aesirxconsent opt-in-consent ${optIn?.title ?? ''} ${

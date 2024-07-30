@@ -863,6 +863,16 @@ const ConsentComponentCustomApp = (props: any) => {
                     {paymentRevoke ? t('txt_you_can_revoke_on_the_site') : t('txt_you_can_revoke')}
                   </div>
                   <Form className="mb-0 w-100 bg-white px-3">
+                    <Form.Check
+                      id={`option-revoke-consent`}
+                      checked={revokeConsentOption === 'consent'}
+                      type="checkbox"
+                      label={t('txt_revoke_consent_for_the_site')}
+                      value={'consent'}
+                      onChange={({ target: { value } }) => {
+                        setRevokeConsentOption(value);
+                      }}
+                    />
                     {paymentRevoke ? (
                       <Form.Check
                         id={`option-revoke-payment`}
@@ -911,16 +921,6 @@ const ConsentComponentCustomApp = (props: any) => {
                         />
                       );
                     })}
-                    <Form.Check
-                      id={`option-revoke-consent`}
-                      checked={revokeConsentOption === 'consent'}
-                      type="checkbox"
-                      label={t('txt_revoke_consent_for_the_site')}
-                      value={'consent'}
-                      onChange={({ target: { value } }) => {
-                        setRevokeConsentOption(value);
-                      }}
-                    />
                   </Form>
 
                   <div className="rounded-bottom position-relative overflow-hidden bg-white">
@@ -939,27 +939,20 @@ const ConsentComponentCustomApp = (props: any) => {
                             <Button
                               variant="outline-success"
                               onClick={async () => {
-                                if (revokeConsentOption === 'payment') {
-                                  sessionStorage.removeItem('aesirx-analytics-payment');
-                                  setShowExpandRevoke(false);
-                                  setRevokeConsentOption('consent');
-                                  setTimeout(() => {
-                                    window.location.reload();
-                                  }, 1000);
-                                } else if (revokeConsentOption === 'advisor') {
-                                  sessionStorage.removeItem('aesirx-analytics-advisor');
-                                  setShowExpandRevoke(false);
-                                  setRevokeConsentOption('consent');
-                                  setTimeout(() => {
-                                    window.location.reload();
-                                  }, 1000);
-                                } else {
+                                if (revokeConsentOption === 'consent') {
                                   await handleRevokeBtn();
                                   if (level > 1) {
                                     setTimeout(() => {
                                       window.location.reload();
                                     }, 1000);
                                   }
+                                } else {
+                                  sessionStorage.removeItem(revokeConsentOption);
+                                  setShowExpandRevoke(false);
+                                  setRevokeConsentOption('consent');
+                                  setTimeout(() => {
+                                    window.location.reload();
+                                  }, 1000);
                                 }
                               }}
                               className={
