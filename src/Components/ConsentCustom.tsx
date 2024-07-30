@@ -883,34 +883,6 @@ const ConsentComponentCustomApp = (props: any) => {
                         setRevokeConsentOption(value);
                       }}
                     />
-                    {paymentRevoke ? (
-                      <Form.Check
-                        id={`option-revoke-payment`}
-                        checked={revokeConsentOption === 'payment'}
-                        type="checkbox"
-                        label={t('txt_revoke_opt_in_payment')}
-                        value={'payment'}
-                        onChange={({ target: { value } }) => {
-                          setRevokeConsentOption(value);
-                        }}
-                      />
-                    ) : (
-                      <></>
-                    )}
-                    {advisorRevoke ? (
-                      <Form.Check
-                        id={`option-revoke-advisor`}
-                        checked={revokeConsentOption === 'advisor'}
-                        type="checkbox"
-                        label={t('txt_revoke_opt_in_advisor')}
-                        value={'advisor'}
-                        onChange={({ target: { value } }) => {
-                          setRevokeConsentOption(value);
-                        }}
-                      />
-                    ) : (
-                      <></>
-                    )}
                     {optInRevokes?.map((item, key) => {
                       return (
                         <Form.Check
@@ -921,6 +893,10 @@ const ConsentComponentCustomApp = (props: any) => {
                           label={
                             item === 'aesirx-analytics-optin-default'
                               ? t('txt_revoke_opt_in')
+                              : item === 'aesirx-analytics-optin-payment'
+                              ? t('txt_revoke_opt_in_payment')
+                              : item === 'aesirx-analytics-optin-advisor'
+                              ? t('txt_revoke_opt_in_advisor')
                               : t('txt_revoke_opt_in') +
                                 ' ' +
                                 item?.replace('aesirx-analytics-optin-', '')
