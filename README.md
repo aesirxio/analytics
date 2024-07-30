@@ -329,7 +329,7 @@ NEXT_PUBLIC_CONSENT_LAYOUT=default
 </script>
 ```
 
-(We also provive option `replaceAnalyticsConsent` to replace Analytics Consent to Opt-in Consent)
+(We also provive option `replaceAnalyticsConsent` to replace Analytics Consent with Opt-in Consent)
 ```
 <script>
    window.optInConsentData = `[
@@ -375,7 +375,7 @@ const ConsentComponent = () => {
   );
 };
 ```
-(We also provive option `replaceAnalyticsConsent` to replace Analytics Consent to Opt-in Consent)
+(We also provive option `replaceAnalyticsConsent` to replace Analytics Consent with Opt-in Consent)
 To use this in ReactJS please add `isOptInReplaceAnalytics` to our provider first
 ```
 <AnalyticsReact location={location} history={history} isOptInReplaceAnalytics={true}>
@@ -435,7 +435,7 @@ const ConsentComponent = () => {
   );
 };
 ```
-(We also provive option `replaceAnalyticsConsent` to replace Analytics Consent to Opt-in Consent)
+(We also provive option `replaceAnalyticsConsent` to replace Analytics Consent with Opt-in Consent)
 To use this in NextJS please add `isOptInReplaceAnalytics` to our provider first
 ```
 <AnalyticsNext router={useRouter()} isOptInReplaceAnalytics={true}>
