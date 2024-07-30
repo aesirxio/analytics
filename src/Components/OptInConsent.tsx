@@ -5,19 +5,19 @@ import privacy from '../Assets/privacy.svg';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
 interface Props {
-  optInConsent?: any;
+  optInConsentData?: any;
 }
 declare global {
   interface Window {
     funcAfterOptInConsent: any;
     funcAfterRejectOptIn: any;
-    optInConsent: any;
+    optInConsentData: any;
   }
 }
-const OptinConsent = ({
-  optInConsent = window?.optInConsent ? JSON.parse(window?.optInConsent) : [],
+const OptInConsent = ({
+  optInConsentData = window?.optInConsentData ? JSON.parse(window?.optInConsentData) : [],
 }: Props) => {
-  const optInReplace = optInConsent?.find((obj: any) => obj.replaceAnalyticsConsent);
+  const optInReplace = optInConsentData?.find((obj: any) => obj.replaceAnalyticsConsent);
   const { t } = useTranslation();
   const [showExpandRevoke, setShowExpandRevoke] = useState(false);
   const [showRevoke, setShowRevoke] = useState(false);
@@ -40,9 +40,9 @@ const OptinConsent = ({
   });
   return (
     <>
-      {optInConsent?.map((optIn: any, key: any) => (
+      {optInConsentData?.map((optIn: any, key: any) => (
         <React.Fragment key={key}>
-          <OptIntConsentLayout optIn={optIn} setShowRevoke={setShowRevoke} />
+          <OptIntConsentDetail optIn={optIn} setShowRevoke={setShowRevoke} />
         </React.Fragment>
       ))}
       {optInReplace && (
@@ -195,7 +195,7 @@ const OptinConsent = ({
   );
 };
 
-const OptIntConsentLayout = ({ optIn, setShowRevoke }: any) => {
+const OptIntConsentDetail = ({ optIn, setShowRevoke }: any) => {
   const { t } = useTranslation();
   const [show, setShow] = useState(false);
   const [showBackdrop, setShowBackdrop] = useState(true);
@@ -211,7 +211,7 @@ const OptIntConsentLayout = ({ optIn, setShowRevoke }: any) => {
       setShowRevoke(true);
     }
     window?.funcAfterOptInConsent && window.funcAfterOptInConsent();
-    window?.optInConsent &&
+    window?.optInConsentData &&
       document.querySelector(`.opt-in-consent.${optIn?.title}`).classList.remove('show');
   };
 
@@ -223,7 +223,7 @@ const OptIntConsentLayout = ({ optIn, setShowRevoke }: any) => {
       sessionStorage.setItem('aesirx-analytics-rejected', 'true');
     }
     window.funcAfterRejectOptIn && window.funcAfterRejectOptIn();
-    window?.optInConsent &&
+    window?.optInConsentData &&
       document.querySelector(`.opt-in-consent.${optIn?.title}`).classList.remove('show');
     optIn?.handleClose && optIn?.handleClose();
   };
@@ -251,7 +251,7 @@ const OptIntConsentLayout = ({ optIn, setShowRevoke }: any) => {
   }, [optIn]);
   return (
     <>
-      {(show || optIn?.replaceAnalyticsConsent || window?.optInConsent) && (
+      {(show || optIn?.replaceAnalyticsConsent || window?.optInConsentData) && (
         <div
           className={`aesirxconsent opt-in-consent ${optIn?.title ?? ''} ${show ? 'show' : ''} ${
             showExpandConsent ? '' : 'show-minimize'
@@ -355,4 +355,4 @@ const OptIntConsentLayout = ({ optIn, setShowRevoke }: any) => {
   );
 };
 
-export default OptinConsent;
+export default OptInConsent;
