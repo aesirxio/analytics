@@ -776,8 +776,7 @@ const ConsentComponentCustomApp = (props: any) => {
       gtag('set', 'ads_data_redaction', true);
     }
   };
-  const paymentRevoke = sessionStorage.getItem('aesirx-analytics-payment');
-  const advisorRevoke = sessionStorage.getItem('aesirx-analytics-advisor');
+  const paymentRevoke = sessionStorage.getItem('aesirx-analytics-opt-payment');
   const optInRevokes = Object.keys(sessionStorage)
     .filter((key) => key.startsWith('aesirx-analytics-optin'))
     .map((key) => key);
