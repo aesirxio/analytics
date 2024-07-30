@@ -223,7 +223,7 @@ const OptIntConsentDetail = ({ optIn, setShowRevoke }: any) => {
       setShowExpandConsent(false);
       sessionStorage.setItem('aesirx-analytics-rejected', 'true');
     }
-    optIn?.handleClose && optIn?.handleClose();
+    optIn?.handleReject && optIn?.handleReject();
     window.funcAfterRejectOptIn && window.funcAfterRejectOptIn();
     window?.optInConsentData &&
       document.querySelector(`.opt-in-consent.${optIn?.title}`).classList.remove('show');
