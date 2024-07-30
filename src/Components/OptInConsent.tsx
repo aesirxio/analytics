@@ -3,7 +3,7 @@ import bg from '../Assets/bg.png';
 import no from '../Assets/no.svg';
 import privacy from '../Assets/privacy.svg';
 import { useTranslation } from 'react-i18next';
-import { Button, Col, Form, Row } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 interface Props {
   optInConsent?: any;
 }
@@ -121,9 +121,10 @@ const OptinConsent = ({
                       </div>
                       <div className="p-3 bg-white">{t('txt_you_can_revoke')}</div>
                       <Form className="mb-0 w-100 bg-white px-3">
-                        {optInRevokes?.map((item) => {
+                        {optInRevokes?.map((item, key) => {
                           return (
                             <Form.Check
+                              key={key}
                               id={`option-revoke-${item}`}
                               checked={revokeConsentOption === item}
                               type="checkbox"

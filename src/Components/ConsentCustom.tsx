@@ -911,9 +911,10 @@ const ConsentComponentCustomApp = (props: any) => {
                     ) : (
                       <></>
                     )}
-                    {optInRevokes?.map((item) => {
+                    {optInRevokes?.map((item, key) => {
                       return (
                         <Form.Check
+                          key={key}
                           id={`option-revoke-${item}`}
                           checked={revokeConsentOption === item}
                           type="checkbox"

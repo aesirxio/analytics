@@ -8,7 +8,6 @@ import { getConsentTemplate } from '../utils/consent';
 
 const ConsentComponent = dynamic(() => import('../Components/Consent'), { ssr: false });
 const ConsentComponentCustom = dynamic(() => import('../Components/ConsentCustom'), { ssr: false });
-const OptinConsent = dynamic(() => import('../Components/OptinConsent'), { ssr: false });
 
 interface AnalyticsNext {
   router: NextRouter;
