@@ -349,8 +349,8 @@ const OptInConsent = React.lazy(
 );
 const ConsentComponent = () => {
   const [showModal, setShowModal] = useState(false);
-  const handleClose = () => {
-    setShowModal(false);
+  const handleOpen = () => {
+    setShowModal(true);
   };
    const handleConsent = () => {
     setShowModal(false);
