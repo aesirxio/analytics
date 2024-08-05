@@ -188,7 +188,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
         const nonce = await getNonce(
           endpoint,
           address,
-          'Give consent Tier 4:{nonce} {domain} {time}',
+          'Decentralized Consent + Shield of Privacy:{nonce} {domain} {time}',
           'metamask'
         );
         signMessage({ message: `${nonce}` });
@@ -292,8 +292,8 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
             account,
             connection,
             level === 3
-              ? 'Give consent:{nonce} {domain} {time}'
-              : 'Give consent Tier 4:{nonce} {domain} {time}'
+              ? 'Decentralized Consent:{nonce} {domain} {time}'
+              : 'Decentralized Consent + Shield of Privacy:{nonce} {domain} {time}'
           );
           setLoading('saving');
           await agreeConsents(
@@ -318,8 +318,8 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
               endpoint,
               address,
               level === 3
-                ? 'Give consent:{nonce} {domain} {time}'
-                : 'Give consent Tier 4:{nonce} {domain} {time}',
+                ? 'Decentralized Consent:{nonce} {domain} {time}'
+                : 'Decentralized Consent + Shield of Privacy:{nonce} {domain} {time}',
               'metamask'
             );
             signMessage({ message: `${nonce}` });
@@ -420,7 +420,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
           endpoint,
           account,
           connection,
-          'Give consent Tier 4:{nonce} {domain} {time}'
+          'Decentralized Consent + Shield of Privacy:{nonce} {domain} {time}'
         );
         await agreeConsents(
           endpoint,
@@ -445,7 +445,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
         const nonce = await getNonce(
           endpoint,
           address,
-          'Give consent Tier 4:{nonce} {domain} {time}',
+          'Decentralized Consent + Shield of Privacy:{nonce} {domain} {time}',
           'metamask'
         );
         signMessage({ message: `${nonce}` });
