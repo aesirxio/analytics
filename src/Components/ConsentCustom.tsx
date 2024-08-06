@@ -565,17 +565,17 @@ const ConsentComponentCustomApp = (props: any) => {
     }
   };
 
-  const handleNotAllow = () => {
+  const handleNotAllow = async () => {
     sessionStorage.setItem('aesirx-analytics-uuid', uuid);
-    sessionStorage.setItem('aesirx-analytics-rejected', 'true');
     setShowExpandConsent(false);
     setShowBackdrop(false);
     const hostUrl = endpoint ? endpoint : '';
     const root = hostUrl ? hostUrl.replace(/\/$/, '') : '';
-    trackEvent(root, '', {
+    await trackEvent(root, '', {
       event_name: 'Reject consent',
       event_type: 'reject-consent',
     });
+    sessionStorage.setItem('aesirx-analytics-rejected', 'true');
     window.funcAfterReject && window.funcAfterReject();
   };
   const handleRevokeBtn = async () => {
