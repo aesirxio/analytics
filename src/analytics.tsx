@@ -11,6 +11,7 @@ import { createRoot } from 'react-dom/client';
 import { AnalyticsContext } from './utils/AnalyticsContextProvider';
 import ConsentComponent from './Components/Consent';
 import ConsentComponentCustom from './Components/ConsentCustom';
+import OptinConsent from './Components/OptInConsent';
 import { Buffer } from 'buffer';
 import { appLanguages } from './translations';
 import { AesirXI18nextProvider } from './utils/I18nextProvider';
@@ -138,12 +139,26 @@ const AesirAnalytics = () => {
         window['event_uuid'] = responseStart.event_uuid;
         window['visitor_uuid'] = responseStart.visitor_uuid;
       }
-      if (window['disableAnalyticsConsent'] !== 'true') {
+      const isOptInReplaceAnalytics = window['optInConsentData']
+        ? JSON.parse(window?.optInConsentData)?.some((obj: any) =>
+            Object.keys(obj).includes('replaceAnalyticsConsent')
+          )
+        : false;
+      if (window['disableAnalyticsConsent'] !== 'true' || !isOptInReplaceAnalytics) {
         rootElement.render(
-          <ConsentPopup
-            event_uuid={responseStart?.visitor_uuid}
-            visitor_uuid={responseStart?.visitor_uuid}
-          />
+          <>
+            {!isOptInReplaceAnalytics && (
+              <ConsentPopup
+                event_uuid={responseStart?.visitor_uuid}
+                visitor_uuid={responseStart?.visitor_uuid}
+              />
+            )}
+            {window['optInConsentData'] && (
+              <AesirXI18nextProvider appLanguages={appLanguages}>
+                <OptinConsent />
+              </AesirXI18nextProvider>
+            )}
+          </>
         );
       }
 

@@ -12,9 +12,16 @@ interface AnalyticsReact {
   history: { replace: (_: object) => void };
   children?: ReactNode;
   oldLayout?: boolean;
+  isOptInReplaceAnalytics?: boolean;
 }
 
-const AnalyticsReact = ({ location, history, oldLayout = false, children }: AnalyticsReact) => {
+const AnalyticsReact = ({
+  location,
+  history,
+  oldLayout = false,
+  isOptInReplaceAnalytics = false,
+  children,
+}: AnalyticsReact) => {
   const [layout, setLayout] = useState(process.env.REACT_APP_CONSENT_LAYOUT ?? 'simple-web-2');
   const [gtagId, setGtagId] = useState(process.env.REACT_APP_ANALYTICS_GTAG_ID);
   const [gtmId, setGtmId] = useState(process.env.REACT_APP_ANALYTICS_GTM_ID);
@@ -52,6 +59,7 @@ const AnalyticsReact = ({ location, history, oldLayout = false, children }: Anal
                 gtagId={gtagId}
                 gtmId={gtmId}
                 layout={layout}
+                isOptInReplaceAnalytics={isOptInReplaceAnalytics}
               />
             )}
           </Suspense>

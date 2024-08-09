@@ -67,22 +67,31 @@ const ConsentComponentCustom = ({
   gtagId,
   gtmId,
   layout,
+  isOptInReplaceAnalytics,
 }: any) => {
   return (
-    <WithWalletConnector network={networkEnv === 'testnet' ? TESTNET : MAINNET}>
-      {(props: any) => (
-        <ConsentComponentCustomWrapper
-          {...props}
-          endpoint={endpoint}
-          aesirXEndpoint={aesirXEndpoint}
-          loginApp={loginApp}
-          isLoggedApp={isLoggedApp}
-          gtagId={gtagId}
-          gtmId={gtmId}
-          layout={layout}
-        />
+    <>
+      {!isOptInReplaceAnalytics ? (
+        <>
+          <WithWalletConnector network={networkEnv === 'testnet' ? TESTNET : MAINNET}>
+            {(props: any) => (
+              <ConsentComponentCustomWrapper
+                {...props}
+                endpoint={endpoint}
+                aesirXEndpoint={aesirXEndpoint}
+                loginApp={loginApp}
+                isLoggedApp={isLoggedApp}
+                gtagId={gtagId}
+                gtmId={gtmId}
+                layout={layout}
+              />
+            )}
+          </WithWalletConnector>
+        </>
+      ) : (
+        <></>
       )}
-    </WithWalletConnector>
+    </>
   );
 };
 const ConsentComponentCustomWrapper = (props: any) => {
@@ -231,7 +240,7 @@ const ConsentComponentCustomApp = (props: any) => {
               const nonce = await getNonce(
                 endpoint,
                 address,
-                'Give consent Tier 4:{nonce} {domain} {time}',
+                'Decentralized Consent + Shield of Privacy:{nonce} {domain} {time}',
                 'metamask'
               );
               signMessage({ message: `${nonce}` });
@@ -335,8 +344,8 @@ const ConsentComponentCustomApp = (props: any) => {
             account,
             connection,
             level === 3
-              ? 'Give consent:{nonce} {domain} {time}'
-              : 'Give consent Tier 4:{nonce} {domain} {time}'
+              ? 'Decentralized Consent:{nonce} {domain} {time}'
+              : 'Decentralized Consent + Shield of Privacy:{nonce} {domain} {time}'
           );
           setLoading('saving');
           await agreeConsents(
@@ -362,8 +371,8 @@ const ConsentComponentCustomApp = (props: any) => {
               endpoint,
               address,
               level === 3
-                ? 'Give consent:{nonce} {domain} {time}'
-                : 'Give consent Tier 4:{nonce} {domain} {time}',
+                ? 'Decentralized Consent:{nonce} {domain} {time}'
+                : 'Decentralized Consent + Shield of Privacy:{nonce} {domain} {time}',
               'metamask'
             );
             signMessage({ message: `${nonce}` });
@@ -466,7 +475,7 @@ const ConsentComponentCustomApp = (props: any) => {
           endpoint,
           account,
           connection,
-          'Give consent Tier 4:{nonce} {domain} {time}'
+          'Decentralized Consent + Shield of Privacy:{nonce} {domain} {time}'
         );
         await agreeConsents(
           endpoint,
@@ -492,7 +501,7 @@ const ConsentComponentCustomApp = (props: any) => {
         const nonce = await getNonce(
           endpoint,
           address,
-          'Give consent Tier 4:{nonce} {domain} {time}',
+          'Decentralized Consent + Shield of Privacy:{nonce} {domain} {time}',
           'metamask'
         );
         signMessage({ message: `${nonce}` });
@@ -556,17 +565,17 @@ const ConsentComponentCustomApp = (props: any) => {
     }
   };
 
-  const handleNotAllow = () => {
+  const handleNotAllow = async () => {
     sessionStorage.setItem('aesirx-analytics-uuid', uuid);
-    sessionStorage.setItem('aesirx-analytics-rejected', 'true');
     setShowExpandConsent(false);
     setShowBackdrop(false);
     const hostUrl = endpoint ? endpoint : '';
     const root = hostUrl ? hostUrl.replace(/\/$/, '') : '';
-    trackEvent(root, '', {
+    await trackEvent(root, '', {
       event_name: 'Reject consent',
       event_type: 'reject-consent',
     });
+    sessionStorage.setItem('aesirx-analytics-rejected', 'true');
     window.funcAfterReject && window.funcAfterReject();
   };
   const handleRevokeBtn = async () => {
@@ -767,9 +776,10 @@ const ConsentComponentCustomApp = (props: any) => {
       gtag('set', 'ads_data_redaction', true);
     }
   };
-  const paymentRevoke = sessionStorage.getItem('aesirx-analytics-payment');
-  const advisorRevoke = sessionStorage.getItem('aesirx-analytics-advisor');
-  console.log('loading', loading);
+  const paymentRevoke = sessionStorage.getItem('aesirx-analytics-opt-payment');
+  const optInRevokes = Object.keys(sessionStorage)
+    .filter((key) => key.startsWith('aesirx-analytics-optin'))
+    .map((key) => key);
   return (
     <div>
       <ToastContainer />
@@ -862,34 +872,6 @@ const ConsentComponentCustomApp = (props: any) => {
                     {paymentRevoke ? t('txt_you_can_revoke_on_the_site') : t('txt_you_can_revoke')}
                   </div>
                   <Form className="mb-0 w-100 bg-white px-3">
-                    {paymentRevoke ? (
-                      <Form.Check
-                        id={`option-revoke-payment`}
-                        checked={revokeConsentOption === 'payment'}
-                        type="checkbox"
-                        label={t('txt_revoke_opt_in')}
-                        value={'payment'}
-                        onChange={({ target: { value } }) => {
-                          setRevokeConsentOption(value);
-                        }}
-                      />
-                    ) : (
-                      <></>
-                    )}
-                    {advisorRevoke ? (
-                      <Form.Check
-                        id={`option-revoke-advisor`}
-                        checked={revokeConsentOption === 'advisor'}
-                        type="checkbox"
-                        label={t('txt_revoke_opt_in_advisor')}
-                        value={'advisor'}
-                        onChange={({ target: { value } }) => {
-                          setRevokeConsentOption(value);
-                        }}
-                      />
-                    ) : (
-                      <></>
-                    )}
                     <Form.Check
                       id={`option-revoke-consent`}
                       checked={revokeConsentOption === 'consent'}
@@ -900,6 +882,31 @@ const ConsentComponentCustomApp = (props: any) => {
                         setRevokeConsentOption(value);
                       }}
                     />
+                    {optInRevokes?.map((item, key) => {
+                      return (
+                        <Form.Check
+                          key={key}
+                          id={`option-revoke-${item}`}
+                          checked={revokeConsentOption === item}
+                          type="checkbox"
+                          label={
+                            item === 'aesirx-analytics-optin-default'
+                              ? t('txt_revoke_opt_in')
+                              : item === 'aesirx-analytics-optin-payment'
+                              ? t('txt_revoke_opt_in_payment')
+                              : item === 'aesirx-analytics-optin-advisor'
+                              ? t('txt_revoke_opt_in_advisor')
+                              : t('txt_revoke_opt_in') +
+                                ' ' +
+                                item?.replace('aesirx-analytics-optin-', '')
+                          }
+                          value={item}
+                          onChange={({ target: { value } }) => {
+                            setRevokeConsentOption(value);
+                          }}
+                        />
+                      );
+                    })}
                   </Form>
 
                   <div className="rounded-bottom position-relative overflow-hidden bg-white">
@@ -918,27 +925,20 @@ const ConsentComponentCustomApp = (props: any) => {
                             <Button
                               variant="outline-success"
                               onClick={async () => {
-                                if (revokeConsentOption === 'payment') {
-                                  sessionStorage.removeItem('aesirx-analytics-payment');
-                                  setShowExpandRevoke(false);
-                                  setRevokeConsentOption('consent');
-                                  setTimeout(() => {
-                                    window.location.reload();
-                                  }, 1000);
-                                } else if (revokeConsentOption === 'advisor') {
-                                  sessionStorage.removeItem('aesirx-analytics-advisor');
-                                  setShowExpandRevoke(false);
-                                  setRevokeConsentOption('consent');
-                                  setTimeout(() => {
-                                    window.location.reload();
-                                  }, 1000);
-                                } else {
+                                if (revokeConsentOption === 'consent') {
                                   await handleRevokeBtn();
                                   if (level > 1) {
                                     setTimeout(() => {
                                       window.location.reload();
                                     }, 1000);
                                   }
+                                } else {
+                                  sessionStorage.removeItem(revokeConsentOption);
+                                  setShowExpandRevoke(false);
+                                  setRevokeConsentOption('consent');
+                                  setTimeout(() => {
+                                    window.location.reload();
+                                  }, 1000);
                                 }
                               }}
                               className={

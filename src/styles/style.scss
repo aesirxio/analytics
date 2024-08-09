@@ -444,6 +444,45 @@ $dark: #222328;
   .header-consent-bg {
     background-color: #f8f9fd;
   }
+  &.opt-in-consent {
+    &.show {
+      .toast-container {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        opacity: 1 !important;
+        bottom: auto;
+        right: auto;
+      }
+      .toast {
+        display: block;
+        &:not(.show) {
+          display: block;
+        }
+      }
+    }
+    &.show-minimize {
+      .toast-container {
+        opacity: 1 !important;
+      }
+      .toast {
+        &.minimize {
+          display: block;
+        }
+      }
+    }
+    .toast-container {
+      bottom: 0;
+      right: 0;
+      opacity: 0;
+    }
+    .toast {
+      display: none;
+    }
+    .btn {
+      padding: 13px 60px 13px 60px;
+    }
+  }
 }
 body.modal-open,
 body.modal-sso-open {
