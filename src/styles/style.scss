@@ -537,4 +537,14 @@ body {
     }
   }
 }
+.aesirxsso .fade,
+.aesirxconsent .fade,
+.aesirxsso.fade,
+.aesirxconsent.fade {
+  opacity: 1;
+}
+.aesirxsso.modal.fade .modal-dialog,
+.aesirxconsent.modal.fade .modal-dialog {
+  transform: none;
+}
 @import './color-mode.scss';
