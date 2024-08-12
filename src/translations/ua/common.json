@@ -125,5 +125,7 @@
   "txt_payment_1": "Ця послуга буде встановлювати файли cookie та збирати дані для підтримки обробки платіжного шлюзу.",
   "txt_payment_2": "To complete your purchase, <span class='fw-semibold'>order & user data</span> will be shared with <span class='fw-semibold'>Sellix & Stripe</span> as our <span class='fw-semibold'>payment processors.</span> (*<span class='fw-semibold'>Google reCaptcha</span> is used by the <span class='fw-semibold'>payment processors</span> for <span class='fw-semibold'>security</span> purposes.)",
   "txt_payment_3": "Якщо ви не погоджуєтеся на передачу цих даних, ви не зможете завершити платіж.",
-  "txt_payment_4": "Для отримання додаткової інформації, будь ласка, ознайомтеся з нашою <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>політикою конфіденційності</a>."
+  "txt_payment_4": "Для отримання додаткової інформації, будь ласка, ознайомтеся з нашою <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>політикою конфіденційності</a>.",
+  "txt_consent_nanagement": "Керування згодою",
+  "txt_details": "Деталі"
 }

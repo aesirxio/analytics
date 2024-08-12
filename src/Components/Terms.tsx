@@ -139,7 +139,7 @@ const TermsComponent = ({
                     >
                       <Tab
                         eventKey="consent"
-                        title="Consent Management"
+                        title={t('txt_consent_nanagement')}
                         className="w-auto px-2 px-lg-4"
                       >
                         {isRejectedLayout ? (
@@ -240,7 +240,7 @@ const TermsComponent = ({
                           </>
                         )}
                       </Tab>
-                      <Tab eventKey="detail" title="Details" className="px-2 px-lg-4">
+                      <Tab eventKey="detail" title={t('txt_details')} className="px-2 px-lg-4">
                         <div className={`about_section`}>
                           <p className="mt-0 mb-1 mb-lg-2 text-black fw-semibold">
                             {t('txt_manage_your_consent')}
@@ -350,7 +350,7 @@ const TermsComponent = ({
                           </div>
                         </div>
                       </Tab>
-                      <Tab eventKey="about" title="About" className="px-2 px-lg-4">
+                      <Tab eventKey="about" title={t('txt_about')} className="px-2 px-lg-4">
                         <div className="mb-1 mb-lg-3">
                           <p className="mb-1 mb-lg-2 text-black fw-semibold">
                             {t('txt_our_commitment_in_action')}
