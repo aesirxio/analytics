@@ -537,14 +537,19 @@ body {
     }
   }
 }
-.aesirxsso .fade,
-.aesirxconsent .fade,
-.aesirxsso.fade,
-.aesirxconsent.fade {
-  opacity: 1;
-}
-.aesirxsso.modal.fade .modal-dialog,
-.aesirxconsent.modal.fade .modal-dialog {
-  transform: none;
+
+.aesirxsso,
+.aesirxconsent {
+  .fade,
+  &.fade {
+    opacity: 1;
+  }
+  &.modal.fade .modal-dialog {
+    transform: none;
+  }
+  .btn {
+    text-transform: unset;
+    white-space: normal;
+  }
 }
 @import './color-mode.scss';
