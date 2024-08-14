@@ -286,13 +286,10 @@ Please follow below CSS example:
 ## Choose template for Consent modal
 
 There is 5 template for Consent modal
-1. original
-2. default (recommend)
-3. simple-consent-mode
-   1. Support Basic Consent Mode v2
-4. advance-consent-mode
+1. default (recommend)
    1. Support Advance Consent Mode v2
-5. simple-web-2
+2. simple-consent-mode
+   1. Support Basic Consent Mode v2
 
 #### Usage in SSR site:
 ```

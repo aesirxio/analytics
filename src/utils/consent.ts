@@ -71,7 +71,7 @@ const agreeConsents = async (
 
 declare const dataLayer: any[];
 const consentModeGrant = async (isGtag: any, id: any, layout: any) => {
-  if (layout !== 'advance-consent-mode') {
+  if (layout === 'simple-consent-mode') {
     isGtag ? loadGtagScript(id) : loadGtmScript(id);
   }
   sessionStorage.setItem('consentGranted', 'true');

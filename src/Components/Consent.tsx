@@ -632,7 +632,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
     if (gtmId) {
       dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
     }
-    if (layout === 'advance-consent-mode') {
+    if (layout !== 'simple-consent-mode') {
       gtagId && loadGtagScript(gtagId);
       gtmId && loadGtmScript(gtmId);
       gtag('set', 'url_passthrough', true);

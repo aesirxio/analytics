@@ -195,12 +195,12 @@ const ConsentComponentCustomApp = (props: any) => {
   const revoke = sessionStorage.getItem('aesirx-analytics-revoke');
   // Metamask
   const { address, connector } =
-    (layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1) &&
+    (layout === 'simple-consent-mode' || level === 1) &&
     (!revoke || revoke === '0' || revoke === '1')
       ? { address: '', connector: '' }
       : useAccount();
   const { signMessage }: any =
-    (layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1) &&
+    (layout === 'simple-consent-mode' || level === 1) &&
     (!revoke || revoke === '0' || revoke === '1')
       ? { signMessage: {} }
       : useSignMessage({
@@ -769,7 +769,7 @@ const ConsentComponentCustomApp = (props: any) => {
     if (gtmId) {
       dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
     }
-    if (layout === 'advance-consent-mode') {
+    if (layout !== 'simple-consent-mode') {
       gtagId && loadGtagScript(gtagId);
       gtmId && loadGtmScript(gtmId);
       gtag('set', 'url_passthrough', true);
@@ -1163,7 +1163,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                   level === 4 && !account && !address ? '' : 'd-none'
                                 }`}
                               >
-                                {layout !== 'simple-consent-mode' && layout !== 'simple-web-2' && (
+                                {layout !== 'simple-consent-mode' && (
                                   <Suspense
                                     fallback={
                                       <div className="d-flex h-100 justify-content-center align-items-center">
@@ -1262,7 +1262,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                       {t('txt_yes_i_consent')}
                                     </Button>
                                   )}
-                                  {layout === 'simple-consent-mode' || layout === 'simple-web-2' ? (
+                                  {layout === 'simple-consent-mode' ? (
                                     <></>
                                   ) : (
                                     <>
@@ -1341,7 +1341,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                       {t('txt_yes_i_consent')}
                                     </Button>
                                   )}
-                                  {layout === 'simple-consent-mode' || layout === 'simple-web-2' ? (
+                                  {layout === 'simple-consent-mode' ? (
                                     <></>
                                   ) : (
                                     <>
