@@ -618,6 +618,17 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
       // eslint-disable-next-line prefer-rest-params
       dataLayer.push(arguments);
     }
+    if (layout !== 'simple-consent-mode' && sessionStorage.getItem('consentGranted') !== 'true') {
+      gtag('consent', 'default', {
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        ad_storage: 'denied',
+        analytics_storage: 'denied',
+        wait_for_update: 500,
+      });
+      gtag('set', 'url_passthrough', true);
+      gtag('set', 'ads_data_redaction', true);
+    }
     if (
       (layout !== 'simple-consent-mode' || sessionStorage.getItem('consentGranted') === 'true') &&
       ((gtmId &&
@@ -639,17 +650,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
         dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
       }
     }
-    if (layout !== 'simple-consent-mode' && sessionStorage.getItem('consentGranted') !== 'true') {
-      gtag('set', 'url_passthrough', true);
-      gtag('set', 'ads_data_redaction', true);
-      gtag('consent', 'default', {
-        ad_user_data: 'denied',
-        ad_personalization: 'denied',
-        ad_storage: 'denied',
-        analytics_storage: 'denied',
-        wait_for_update: 500,
-      });
-    }
+
     if (sessionStorage.getItem('consentGranted') === 'true') {
       gtag('consent', 'update', {
         ad_user_data: 'granted',
