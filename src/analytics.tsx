@@ -27,7 +27,7 @@ declare global {
 }
 const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
   window.process = { env: '' };
-  const [layout, setLayout] = useState(window['consentLayout'] ?? 'simple-web-2');
+  const [layout, setLayout] = useState(window['consentLayout'] ?? 'simple-consent-mode');
   const [gtagId, setGtagId] = useState(window['analyticsGtagId']);
   const [gtmId, setGtmId] = useState(window['analyticsGtmId']);
   useEffect(() => {

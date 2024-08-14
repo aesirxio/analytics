@@ -125,5 +125,7 @@
   "txt_payment_1": "Ova usluga postavit će kolačiće i prikupljati podatke za podršku obradi platnog prolaza.",
   "txt_payment_2": "Za dovršetak kupnje, <span class='fw-semibold'>podaci o narudžbi & korisniku</span> će biti podijeljeni s <span class='fw-semibold'>Sellix & Stripe</span> kao našim <span class='fw-semibold'>procesorima plaćanja.</span> (*<span class='fw-semibold'>Google reCaptcha</span> koristi se od strane <span class='fw-semibold'>procesora plaćanja</span> iz <span class='fw-semibold'>sigurnosnih</span> razloga.)",
   "txt_payment_3": "Ako ne pristanete na ovo dijeljenje podataka, nećete moći dovršiti plaćanje.",
-  "txt_payment_4": "Za više informacija, molimo pogledajte našu <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>politiku privatnosti</a>."
+  "txt_payment_4": "Za više informacija, molimo pogledajte našu <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>politiku privatnosti</a>.",
+  "txt_consent_nanagement": "Upravljanje pristankom",
+  "txt_details": "Detalji"
 }

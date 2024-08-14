@@ -84,7 +84,7 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
   const rpc = useGrpcClient(network);
 
   useEffect(() => {
-    if (rpc && layout !== 'simple-consent-mode' && layout !== 'simple-web-2' && level !== 1) {
+    if (rpc && layout !== 'simple-consent-mode' && level !== 1) {
       setRpcGenesisHash(undefined);
       rpc
         .getConsensusStatus()
@@ -134,7 +134,7 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
 
   const handleLevel = useCallback(
     async (_level: number) => {
-      if (layout !== 'simple-consent-mode' && layout !== 'simple-web-2') {
+      if (layout !== 'simple-consent-mode') {
         setLevel(_level);
         if (_level > 3 && isDesktop && !connection && window['concordium']) {
           setActiveConnectorType(BROWSER_WALLET);

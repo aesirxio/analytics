@@ -125,5 +125,7 @@
   "txt_payment_1": "Ce service installera des cookies et collectera des données pour prendre en charge le traitement de la passerelle de paiement.",
   "txt_payment_2": "Pour finaliser votre achat, les <span class='fw-semibold'>données de commande & d'utilisateur</span> seront partagées avec <span class='fw-semibold'>Sellix & Stripe</span> nos <span class='fw-semibold'>processeurs de paiement.</span> (*<span class='fw-semibold'>Google reCaptcha</span> est utilisé par les <span class='fw-semibold'>processeurs de paiement</span> pour des raisons de <span class='fw-semibold'>sécurité</span>.)",
   "txt_payment_3": "Si vous ne consentez pas à ce partage de données, vous ne pourrez pas finaliser le paiement.",
-  "txt_payment_4": "Pour plus d'informations, veuillez consulter notre <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>politique de confidentialité</a>."
+  "txt_payment_4": "Pour plus d'informations, veuillez consulter notre <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>politique de confidentialité</a>.",
+  "txt_consent_nanagement": "Gestion du consentement",
+  "txt_details": "Détails"
 }

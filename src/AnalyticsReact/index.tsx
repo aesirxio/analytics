@@ -22,7 +22,9 @@ const AnalyticsReact = ({
   isOptInReplaceAnalytics = false,
   children,
 }: AnalyticsReact) => {
-  const [layout, setLayout] = useState(process.env.REACT_APP_CONSENT_LAYOUT ?? 'simple-web-2');
+  const [layout, setLayout] = useState(
+    process.env.REACT_APP_CONSENT_LAYOUT ?? 'simple-consent-mode'
+  );
   const [gtagId, setGtagId] = useState(process.env.REACT_APP_ANALYTICS_GTAG_ID);
   const [gtmId, setGtmId] = useState(process.env.REACT_APP_ANALYTICS_GTM_ID);
   useEffect(() => {

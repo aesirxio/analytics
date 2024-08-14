@@ -71,18 +71,32 @@ const agreeConsents = async (
 
 declare const dataLayer: any[];
 const consentModeGrant = async (isGtag: any, id: any, layout: any) => {
-  if (layout !== 'advance-consent-mode') {
-    isGtag ? loadGtagScript(id) : loadGtmScript(id);
-  }
-  sessionStorage.setItem('consentGranted', 'true');
-  function gtag( // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async function gtag( // eslint-disable-next-line @typescript-eslint/no-unused-vars
     p0: any, // eslint-disable-next-line @typescript-eslint/no-unused-vars
     p1: any, // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    p2: any
+    p2?: any
   ) {
     // eslint-disable-next-line prefer-rest-params
     dataLayer.push(arguments);
   }
+  if (layout === 'simple-consent-mode') {
+    if (
+      isGtag &&
+      !document.querySelector(`script[src="https://www.googletagmanager.com/gtag/js?id=${id}"]`)
+    ) {
+      await loadGtagScript(id);
+      gtag('js', new Date());
+      gtag('config', `${id}`);
+    } else if (
+      !isGtag &&
+      !document.querySelector(`script[src="https://www.googletagmanager.com/gtm.js?id=${id}"]`)
+    ) {
+      await loadGtmScript(id);
+      dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+    }
+  }
+  sessionStorage.setItem('consentGranted', 'true');
+
   gtag('consent', 'update', {
     ad_user_data: 'granted',
     ad_personalization: 'granted',
@@ -91,7 +105,7 @@ const consentModeGrant = async (isGtag: any, id: any, layout: any) => {
   });
 };
 
-const loadGtagScript = (gtagId: any) => {
+const loadGtagScript = async (gtagId: any) => {
   // Load gtag.js script.
   const gtagScript = document.createElement('script');
   gtagScript.async = true;
@@ -101,7 +115,7 @@ const loadGtagScript = (gtagId: any) => {
   firstScript.parentNode.insertBefore(gtagScript, firstScript);
 };
 
-const loadGtmScript = (gtmId: any) => {
+const loadGtmScript = async (gtmId: any) => {
   // Load Tag Manager script.
   const gtmScript = document.createElement('script');
   gtmScript.async = true;
