@@ -703,8 +703,11 @@ const ConsentComponentCustomApp = (props: any) => {
     ) {
       window.funcAfterConsent && window.funcAfterConsent();
     }
-    (gtagId || gtmId) && loadConsentDefault(gtagId, gtmId);
   }, []);
+
+  useEffect(() => {
+    (gtagId || gtmId) && loadConsentDefault(gtagId, gtmId);
+  }, [layout]);
 
   useEffect(() => {
     if (
@@ -745,7 +748,7 @@ const ConsentComponentCustomApp = (props: any) => {
       </div>
     );
   };
-  const loadConsentDefault = (gtagId: any, gtmId: any) => {
+  const loadConsentDefault = async (gtagId: any, gtmId: any) => {
     window.dataLayer = window.dataLayer || [];
     function gtag( // eslint-disable-next-line @typescript-eslint/no-unused-vars
       p0: string, // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -755,25 +758,45 @@ const ConsentComponentCustomApp = (props: any) => {
       // eslint-disable-next-line prefer-rest-params
       dataLayer.push(arguments);
     }
-    gtag('consent', 'default', {
-      ad_user_data: 'denied',
-      ad_personalization: 'denied',
-      ad_storage: 'denied',
-      analytics_storage: 'denied',
-      wait_for_update: 500,
-    });
-    if (gtagId) {
-      gtag('js', new Date());
-      gtag('config', `${gtagId}`);
+    if (
+      (layout !== 'simple-consent-mode' || sessionStorage.getItem('consentGranted') === 'true') &&
+      ((gtmId &&
+        !document.querySelector(
+          `script[src="https://www.googletagmanager.com/gtm.js?id=${gtmId}"]`
+        )) ||
+        (gtagId &&
+          !document.querySelector(
+            `script[src="https://www.googletagmanager.com/gtag/js?id=${gtagId}"]`
+          )))
+    ) {
+      gtagId && (await loadGtagScript(gtagId));
+      gtmId && (await loadGtmScript(gtmId));
+      if (gtagId) {
+        gtag('js', new Date());
+        gtag('config', `${gtagId}`);
+      }
+      if (gtmId) {
+        dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+      }
     }
-    if (gtmId) {
-      dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-    }
-    if (layout !== 'simple-consent-mode') {
-      gtagId && loadGtagScript(gtagId);
-      gtmId && loadGtmScript(gtmId);
+    if (layout !== 'simple-consent-mode' && sessionStorage.getItem('consentGranted') !== 'true') {
       gtag('set', 'url_passthrough', true);
       gtag('set', 'ads_data_redaction', true);
+      gtag('consent', 'default', {
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        ad_storage: 'denied',
+        analytics_storage: 'denied',
+        wait_for_update: 500,
+      });
+    }
+    if (sessionStorage.getItem('consentGranted') === 'true') {
+      gtag('consent', 'update', {
+        ad_user_data: 'granted',
+        ad_personalization: 'granted',
+        ad_storage: 'granted',
+        analytics_storage: 'granted',
+      });
     }
   };
   const paymentRevoke = sessionStorage.getItem('aesirx-analytics-opt-payment');

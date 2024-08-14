@@ -28,7 +28,9 @@ const AnalyticsNext = ({
   isOptInReplaceAnalytics = false,
   children,
 }: AnalyticsNext) => {
-  const [layout, setLayout] = useState(process.env.NEXT_PUBLIC_CONSENT_LAYOUT ?? 'simple-web-2');
+  const [layout, setLayout] = useState(
+    process.env.NEXT_PUBLIC_CONSENT_LAYOUT ?? 'simple-consent-mode'
+  );
   const [gtagId, setGtagId] = useState(process.env.NEXT_PUBLIC_ANALYTICS_GTAG_ID);
   const [gtmId, setGtmId] = useState(process.env.NEXT_PUBLIC_ANALYTICS_GTM_ID);
   useEffect(() => {
