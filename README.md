@@ -322,7 +322,10 @@ NEXT_PUBLIC_CONSENT_LAYOUT=default
         "title":"payment",
         "content":"<div>YOUR_CONTENT_INPUT_HERE</div>"
       }
-    ]`
+    ]`;
+
+    //trigger open optIn consent with Javascript
+    document.querySelector('.opt-in-consent.payment').classList.add('show');
 </script>
 ```
 
