@@ -68,6 +68,7 @@ const ConsentComponentCustom = ({
   gtmId,
   layout,
   isOptInReplaceAnalytics,
+  customConsentText,
 }: any) => {
   return (
     <>
@@ -84,6 +85,7 @@ const ConsentComponentCustom = ({
                 gtagId={gtagId}
                 gtmId={gtmId}
                 layout={layout}
+                customConsentText={customConsentText}
               />
             )}
           </WithWalletConnector>
@@ -121,6 +123,7 @@ const ConsentComponentCustomWrapper = (props: any) => {
           gtagId={props?.gtagId}
           gtmId={props?.gtmId}
           layout={props?.layout}
+          customConsentText={props?.customConsentText}
           uuid={uuid}
           level={level}
           connection={connection}
@@ -146,6 +149,7 @@ const ConsentComponentCustomApp = (props: any) => {
     gtagId,
     gtmId,
     layout,
+    customConsentText,
     activeConnectorType,
     activeConnector,
     activeConnectorError,
@@ -1315,6 +1319,7 @@ const ConsentComponentCustomApp = (props: any) => {
                           handleLevel={handleLevel}
                           isCustom={true}
                           layout={layout}
+                          customConsentText={customConsentText}
                         >
                           <Form className="mb-0 w-100">
                             <Form.Check
