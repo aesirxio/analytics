@@ -69,6 +69,7 @@ const TermsComponent = ({
   isCustom = false,
   layout,
   isRejectedLayout,
+  customConsentText,
 }: any) => {
   const { t } = useTranslation();
   const handleReadmore = (status: boolean) => {
@@ -177,66 +178,81 @@ const TermsComponent = ({
                           </>
                         ) : (
                           <>
-                            <p className="mt-0 mb-1 mb-lg-2 text-black fw-semibold">
-                              {t('txt_manage_your_consent')}
-                            </p>
-                            <p className="mt-0 mb-1 mb-lg-3">
-                              {layout === 'simple-consent-mode'
-                                ? t('txt_choose_how_we_use_simple')
-                                : t('txt_choose_how_we_use')}
-                            </p>
-                            <div className="mb-1 mb-lg-3">
-                              <p className="mb-1 mb-lg-2 text-black">{t('txt_by_consenting')}</p>
-                              <div className="d-flex align-items-start check-line">
-                                <span>
-                                  <img src={check_circle} width={'14px'} height={'15px'} />
-                                </span>
-                                <div className="ms-10px">
-                                  <div>{t('txt_analytics_behavioral')}</div>
+                            {customConsentText ? (
+                              <>
+                                <div
+                                  dangerouslySetInnerHTML={{
+                                    __html: customConsentText,
+                                  }}
+                                />
+                              </>
+                            ) : (
+                              <>
+                                {' '}
+                                <p className="mt-0 mb-1 mb-lg-2 text-black fw-semibold">
+                                  {t('txt_manage_your_consent')}
+                                </p>
+                                <p className="mt-0 mb-1 mb-lg-3">
+                                  {layout === 'simple-consent-mode'
+                                    ? t('txt_choose_how_we_use_simple')
+                                    : t('txt_choose_how_we_use')}
+                                </p>
+                                <div className="mb-1 mb-lg-3">
+                                  <p className="mb-1 mb-lg-2 text-black">
+                                    {t('txt_by_consenting')}
+                                  </p>
+                                  <div className="d-flex align-items-start check-line">
+                                    <span>
+                                      <img src={check_circle} width={'14px'} height={'15px'} />
+                                    </span>
+                                    <div className="ms-10px">
+                                      <div>{t('txt_analytics_behavioral')}</div>
+                                    </div>
+                                  </div>
+                                  <div className="d-flex align-items-start check-line">
+                                    <span>
+                                      <img src={check_circle} width={'14px'} height={'15px'} />
+                                    </span>
+                                    <div className="ms-10px">
+                                      <div>{t('txt_form_data')}</div>
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                              <div className="d-flex align-items-start check-line">
-                                <span>
-                                  <img src={check_circle} width={'14px'} height={'15px'} />
-                                </span>
-                                <div className="ms-10px">
-                                  <div>{t('txt_form_data')}</div>
+                                <div>
+                                  <p className="mb-1 mb-lg-2 text-black">{t('txt_please_note')}</p>
+                                  <div className="d-flex align-items-start check-line">
+                                    <span>
+                                      <img src={check_circle} width={'14px'} height={'15px'} />
+                                    </span>
+                                    <div className="ms-10px">
+                                      <div>{t('txt_we_do_not_share')}</div>
+                                    </div>
+                                  </div>
+                                  <div className="d-flex align-items-start check-line">
+                                    <span>
+                                      <img src={check_circle} width={'14px'} height={'15px'} />
+                                    </span>
+                                    <div className="ms-10px">
+                                      <div>{t('txt_you_can_opt_in')}</div>
+                                    </div>
+                                  </div>
+                                  <div className="d-flex align-items-start check-line">
+                                    <span>
+                                      <img src={check_circle} width={'14px'} height={'15px'} />
+                                    </span>
+                                    <div className="ms-10px">
+                                      <div
+                                        dangerouslySetInnerHTML={{
+                                          __html: t('txt_for_more_details', {
+                                            interpolation: { escapeValue: false },
+                                          }),
+                                        }}
+                                      />
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            </div>
-                            <div>
-                              <p className="mb-1 mb-lg-2 text-black">{t('txt_please_note')}</p>
-                              <div className="d-flex align-items-start check-line">
-                                <span>
-                                  <img src={check_circle} width={'14px'} height={'15px'} />
-                                </span>
-                                <div className="ms-10px">
-                                  <div>{t('txt_we_do_not_share')}</div>
-                                </div>
-                              </div>
-                              <div className="d-flex align-items-start check-line">
-                                <span>
-                                  <img src={check_circle} width={'14px'} height={'15px'} />
-                                </span>
-                                <div className="ms-10px">
-                                  <div>{t('txt_you_can_opt_in')}</div>
-                                </div>
-                              </div>
-                              <div className="d-flex align-items-start check-line">
-                                <span>
-                                  <img src={check_circle} width={'14px'} height={'15px'} />
-                                </span>
-                                <div className="ms-10px">
-                                  <div
-                                    dangerouslySetInnerHTML={{
-                                      __html: t('txt_for_more_details', {
-                                        interpolation: { escapeValue: false },
-                                      }),
-                                    }}
-                                  />
-                                </div>
-                              </div>
-                            </div>
+                              </>
+                            )}
                           </>
                         )}
                       </Tab>
