@@ -1,6 +1,6 @@
 import React, { Suspense, useState } from 'react';
 import { Modal } from 'react-bootstrap';
-import { isMobile, isDesktop } from 'react-device-detect';
+import { isMobile, isDesktop, OsTypes, osName } from 'react-device-detect';
 import { BROWSER_WALLET, WALLET_CONNECT } from '../Hooks/config';
 import concordium_logo from '../Assets/concordium_logo.png';
 import { useTranslation } from 'react-i18next';
@@ -65,31 +65,36 @@ const ConnectModal = ({
                     )}
                   </button>
                 )}
-
-                <button
-                  className="btn btn-primary btn-concordium flex-grow-1 fw-medium py-2 px-4 lh-sm text-white d-flex align-items-center justify-content-start text-start"
-                  onClick={() => handleOnConnect(WALLET_CONNECT)}
-                >
-                  {!activeConnectorError && activeConnectorType && !activeConnector ? (
-                    <span
-                      className="spinner-border spinner-border-sm me-1"
-                      role="status"
-                      aria-hidden="true"
-                    ></span>
-                  ) : (
-                    <>
-                      {' '}
-                      <img
-                        src={concordium_logo}
-                        className="me-3 align-text-bottom"
-                        alt="Concordium"
-                      />
-                      {isMobile
-                        ? 'Concordium or CryptoX'
-                        : 'QR Code (Concordium Mobile or CryptoX Mobile)'}
-                    </>
-                  )}
-                </button>
+                {osName !== OsTypes?.IOS ? (
+                  <>
+                    <button
+                      className="btn btn-primary btn-concordium flex-grow-1 fw-medium py-2 px-4 lh-sm text-white d-flex align-items-center justify-content-start text-start"
+                      onClick={() => handleOnConnect(WALLET_CONNECT)}
+                    >
+                      {!activeConnectorError && activeConnectorType && !activeConnector ? (
+                        <span
+                          className="spinner-border spinner-border-sm me-1"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                      ) : (
+                        <>
+                          {' '}
+                          <img
+                            src={concordium_logo}
+                            className="me-3 align-text-bottom"
+                            alt="Concordium"
+                          />
+                          {isMobile
+                            ? 'Concordium or CryptoX'
+                            : 'QR Code (Concordium Mobile or CryptoX Mobile)'}
+                        </>
+                      )}
+                    </button>
+                  </>
+                ) : (
+                  <></>
+                )}
               </div>{' '}
             </div>
           </div>
