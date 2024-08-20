@@ -22,9 +22,14 @@ const AnalyticsReact = ({
   isOptInReplaceAnalytics = false,
   children,
 }: AnalyticsReact) => {
-  const [layout, setLayout] = useState(process.env.REACT_APP_CONSENT_LAYOUT ?? 'simple-web-2');
+  const [layout, setLayout] = useState(
+    process.env.REACT_APP_CONSENT_LAYOUT ?? 'simple-consent-mode'
+  );
   const [gtagId, setGtagId] = useState(process.env.REACT_APP_ANALYTICS_GTAG_ID);
   const [gtmId, setGtmId] = useState(process.env.REACT_APP_ANALYTICS_GTM_ID);
+  const [customConsentText, setCustomConsentText] = useState(
+    process.env.REACT_APP_ANALYTICS_CONSENT_TEXT
+  );
   useEffect(() => {
     const init = async () => {
       const data: any = await getConsentTemplate(
@@ -34,6 +39,9 @@ const AnalyticsReact = ({
       setLayout(data?.data?.template ?? process.env.REACT_APP_CONSENT_LAYOUT);
       setGtagId(data?.data?.gtag_id ?? process.env.REACT_APP_ANALYTICS_GTAG_ID);
       setGtmId(data?.data?.gtm_id ?? process.env.REACT_APP_ANALYTICS_GTM_ID);
+      setCustomConsentText(
+        data?.data?.consent_text ?? process.env.REACT_APP_ANALYTICS_CONSENT_TEXT
+      );
     };
     init();
   }, []);
@@ -50,6 +58,7 @@ const AnalyticsReact = ({
                 aesirXEndpoint={process.env.REACT_APP_ENDPOINT_URL ?? 'https://api.aesirx.io'}
                 gtagId={gtagId}
                 gtmId={gtmId}
+                customConsentText={customConsentText}
               />
             ) : (
               <ConsentComponentCustom
@@ -58,6 +67,7 @@ const AnalyticsReact = ({
                 aesirXEndpoint={process.env.REACT_APP_ENDPOINT_URL ?? 'https://api.aesirx.io'}
                 gtagId={gtagId}
                 gtmId={gtmId}
+                customConsentText={customConsentText}
                 layout={layout}
                 isOptInReplaceAnalytics={isOptInReplaceAnalytics}
               />
