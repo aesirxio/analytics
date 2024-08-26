@@ -109,9 +109,10 @@ const TermsComponent = ({
                         <img
                           className="cover-img position-absolute h-100 w-100 object-fit-cover z-1"
                           src={bg}
+                          alt="Background Image"
                         />
                         <div className="minimize-shield position-relative z-2 py-2">
-                          <img src={privacy} alt="Shield of Privacy" />
+                          <img src={privacy} alt="SoP Icon" />
                           {t('txt_shield_of_privacy')}
                         </div>
                       </a>
@@ -148,7 +149,12 @@ const TermsComponent = ({
                             <p className="mt-2 mb-3">{t('txt_only_anonymized')}</p>
                             <div className="d-flex align-items-start check-line">
                               <span>
-                                <img src={check_circle} width={'14px'} height={'15px'} />
+                                <img
+                                  src={check_circle}
+                                  width={'14px'}
+                                  height={'15px'}
+                                  alt="Check Icon"
+                                />
                               </span>
                               <div className="ms-10px">
                                 <div
@@ -162,7 +168,12 @@ const TermsComponent = ({
                             </div>
                             <div className="d-flex align-items-start check-line">
                               <span>
-                                <img src={check_circle} width={'14px'} height={'15px'} />
+                                <img
+                                  src={check_circle}
+                                  width={'14px'}
+                                  height={'15px'}
+                                  alt="Check Icon"
+                                />
                               </span>
                               <div className="ms-10px">
                                 <div
@@ -189,7 +200,12 @@ const TermsComponent = ({
                               <p className="mb-1 mb-lg-2 text-black">{t('txt_by_consenting')}</p>
                               <div className="d-flex align-items-start check-line">
                                 <span>
-                                  <img src={check_circle} width={'14px'} height={'15px'} />
+                                  <img
+                                    src={check_circle}
+                                    width={'14px'}
+                                    height={'15px'}
+                                    alt="Check Icon"
+                                  />
                                 </span>
                                 <div className="ms-10px">
                                   <div>{t('txt_analytics_behavioral')}</div>
@@ -197,7 +213,12 @@ const TermsComponent = ({
                               </div>
                               <div className="d-flex align-items-start check-line">
                                 <span>
-                                  <img src={check_circle} width={'14px'} height={'15px'} />
+                                  <img
+                                    src={check_circle}
+                                    width={'14px'}
+                                    height={'15px'}
+                                    alt="Check Icon"
+                                  />
                                 </span>
                                 <div className="ms-10px">
                                   <div>{t('txt_form_data')}</div>
@@ -208,7 +229,12 @@ const TermsComponent = ({
                               <p className="mb-1 mb-lg-2 text-black">{t('txt_please_note')}</p>
                               <div className="d-flex align-items-start check-line">
                                 <span>
-                                  <img src={check_circle} width={'14px'} height={'15px'} />
+                                  <img
+                                    src={check_circle}
+                                    width={'14px'}
+                                    height={'15px'}
+                                    alt="Check Icon"
+                                  />
                                 </span>
                                 <div className="ms-10px">
                                   <div>{t('txt_we_do_not_share')}</div>
@@ -216,7 +242,12 @@ const TermsComponent = ({
                               </div>
                               <div className="d-flex align-items-start check-line">
                                 <span>
-                                  <img src={check_circle} width={'14px'} height={'15px'} />
+                                  <img
+                                    src={check_circle}
+                                    width={'14px'}
+                                    height={'15px'}
+                                    alt="Check Icon"
+                                  />
                                 </span>
                                 <div className="ms-10px">
                                   <div>{t('txt_you_can_opt_in')}</div>
@@ -224,7 +255,12 @@ const TermsComponent = ({
                               </div>
                               <div className="d-flex align-items-start check-line">
                                 <span>
-                                  <img src={check_circle} width={'14px'} height={'15px'} />
+                                  <img
+                                    src={check_circle}
+                                    width={'14px'}
+                                    height={'15px'}
+                                    alt="Check Icon"
+                                  />
                                 </span>
                                 <div className="ms-10px">
                                   <div
@@ -256,7 +292,12 @@ const TermsComponent = ({
                             </p>
                             <div className="d-flex align-items-start check-line">
                               <span>
-                                <img src={check_circle} width={'14px'} height={'15px'} />
+                                <img
+                                  src={check_circle}
+                                  width={'14px'}
+                                  height={'15px'}
+                                  alt="Check Icon"
+                                />
                               </span>
                               <div className="ms-10px">
                                 <div
@@ -270,7 +311,12 @@ const TermsComponent = ({
                             </div>
                             <div className="d-flex align-items-start check-line">
                               <span>
-                                <img src={check_circle} width={'14px'} height={'15px'} />
+                                <img
+                                  src={check_circle}
+                                  width={'14px'}
+                                  height={'15px'}
+                                  alt="Check Icon"
+                                />
                               </span>
                               <div className="ms-10px">
                                 <div
@@ -284,7 +330,12 @@ const TermsComponent = ({
                             </div>
                             <div className="d-flex align-items-start check-line">
                               <span>
-                                <img src={check_circle} width={'14px'} height={'15px'} />
+                                <img
+                                  src={check_circle}
+                                  width={'14px'}
+                                  height={'15px'}
+                                  alt="Check Icon"
+                                />
                               </span>
                               <div className="ms-10px">
                                 <div
@@ -303,7 +354,12 @@ const TermsComponent = ({
                             </p>
                             <div className="d-flex align-items-start check-line">
                               <span>
-                                <img src={check_circle} width={'14px'} height={'15px'} />
+                                <img
+                                  src={check_circle}
+                                  width={'14px'}
+                                  height={'15px'}
+                                  alt="Check Icon"
+                                />
                               </span>
                               <div className="ms-10px">
                                 <div
@@ -317,7 +373,12 @@ const TermsComponent = ({
                             </div>
                             <div className="d-flex align-items-start check-line">
                               <span>
-                                <img src={check_circle} width={'14px'} height={'15px'} />
+                                <img
+                                  src={check_circle}
+                                  width={'14px'}
+                                  height={'15px'}
+                                  alt="Check Icon"
+                                />
                               </span>
                               <div className="ms-10px">
                                 <div
@@ -334,7 +395,12 @@ const TermsComponent = ({
                             ) : (
                               <div className="d-flex align-items-start check-line">
                                 <span>
-                                  <img src={check_circle} width={'14px'} height={'15px'} />
+                                  <img
+                                    src={check_circle}
+                                    width={'14px'}
+                                    height={'15px'}
+                                    alt="Check Icon"
+                                  />
                                 </span>
                                 <div className="ms-10px">
                                   <div
@@ -357,7 +423,12 @@ const TermsComponent = ({
                           </p>
                           <div className="d-flex align-items-start check-line">
                             <span>
-                              <img src={check_circle} width={'14px'} height={'15px'} />
+                              <img
+                                src={check_circle}
+                                width={'14px'}
+                                height={'15px'}
+                                alt="Check Icon"
+                              />
                             </span>
                             <div className="ms-10px">
                               <div
@@ -371,7 +442,12 @@ const TermsComponent = ({
                           </div>
                           <div className="d-flex align-items-start check-line">
                             <span>
-                              <img src={check_circle} width={'14px'} height={'15px'} />
+                              <img
+                                src={check_circle}
+                                width={'14px'}
+                                height={'15px'}
+                                alt="Check Icon"
+                              />
                             </span>
                             <div className="ms-10px">
                               <div
@@ -385,7 +461,12 @@ const TermsComponent = ({
                           </div>
                           <div className="d-flex align-items-start check-line">
                             <span>
-                              <img src={check_circle} width={'14px'} height={'15px'} />
+                              <img
+                                src={check_circle}
+                                width={'14px'}
+                                height={'15px'}
+                                alt="Check Icon"
+                              />
                             </span>
                             <div className="ms-10px">
                               <div
@@ -399,7 +480,12 @@ const TermsComponent = ({
                           </div>
                           <div className="d-flex align-items-start check-line">
                             <span>
-                              <img src={check_circle} width={'14px'} height={'15px'} />
+                              <img
+                                src={check_circle}
+                                width={'14px'}
+                                height={'15px'}
+                                alt="Check Icon"
+                              />
                             </span>
                             <div className="ms-10px">
                               <div
@@ -413,7 +499,12 @@ const TermsComponent = ({
                           </div>
                           <div className="d-flex align-items-start check-line">
                             <span>
-                              <img src={check_circle} width={'14px'} height={'15px'} />
+                              <img
+                                src={check_circle}
+                                width={'14px'}
+                                height={'15px'}
+                                alt="Check Icon"
+                              />
                             </span>
                             <div className="ms-10px">
                               <div
@@ -427,7 +518,12 @@ const TermsComponent = ({
                           </div>
                           <div className="d-flex align-items-start check-line">
                             <span>
-                              <img src={check_circle} width={'14px'} height={'15px'} />
+                              <img
+                                src={check_circle}
+                                width={'14px'}
+                                height={'15px'}
+                                alt="Check Icon"
+                              />
                             </span>
                             <div className="ms-10px">
                               <div
@@ -473,7 +569,11 @@ const TermsComponent = ({
                         }}
                       >
                         {!showReadmore ? t('txt_show_details') : t('txt_hide_details')}{' '}
-                        <img src={arrow} className={`ms-1 ${showReadmore ? 'revert' : ''}`} />
+                        <img
+                          src={arrow}
+                          className={`ms-1 ${showReadmore ? 'revert' : ''}`}
+                          alt="Arrow Icon"
+                        />
                       </div>
                     </div>
                   </>
@@ -489,10 +589,15 @@ const TermsComponent = ({
                 </div>
               ) : (
                 <div className="rounded-bottom position-relative overflow-hidden text-white">
-                  <img className="position-absolute h-100 w-100 object-fit-cover" src={bg} />
+                  <img
+                    className="position-absolute h-100 w-100 object-fit-cover"
+                    src={bg}
+                    alt="Background Image"
+                  />
                   <img
                     className="position-absolute h-100 w-100 object-fit-cover lightning flash-effect"
                     src={bg}
+                    alt="Background Image"
                   />
                   <div className="position-relative pt-2 pt-lg-3 p-3">
                     {showReadmore && (
@@ -506,7 +611,7 @@ const TermsComponent = ({
                     )}
                     <div className="d-flex align-items-center justify-content-between flex-wrap">
                       <div className="me-2">
-                        <img src={privacy} alt={t(term.name)} /> {t('txt_shield_of_privacy')}
+                        <img src={privacy} alt={'SoP Icon'} /> {t('txt_shield_of_privacy')}
                       </div>
                       {children}
                     </div>

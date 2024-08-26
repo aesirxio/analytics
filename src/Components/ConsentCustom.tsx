@@ -740,6 +740,7 @@ const ConsentComponentCustomApp = (props: any) => {
             width={'23px'}
             height={'23px'}
             src={upgradeLevel === level ? checkbox_active : checkbox}
+            alt="Checkbox icon"
           />
         </div>
       </div>
@@ -811,6 +812,7 @@ const ConsentComponentCustomApp = (props: any) => {
                   <img
                     className="cover-img position-absolute h-100 w-100 object-fit-cover"
                     src={bg}
+                    alt="Background Image"
                   />
                   <div
                     className="minimize-shield"
@@ -827,7 +829,7 @@ const ConsentComponentCustomApp = (props: any) => {
                       setShowExpandRevoke(true);
                     }}
                   >
-                    <img src={privacy} alt="Shield of Privacy" />
+                    <img src={privacy} alt="SoP Icon" />
                     {t('txt_shield_of_privacy')}
                   </div>
                 </>
@@ -852,9 +854,10 @@ const ConsentComponentCustomApp = (props: any) => {
                         <img
                           className="cover-img position-absolute h-100 w-100 object-fit-cover z-1"
                           src={bg}
+                          alt="Background Image"
                         />
                         <div className="minimize-shield position-relative z-2 py-2">
-                          <img src={privacy} alt="Shield of Privacy" />
+                          <img src={privacy} alt="SoP Icon" />
                           {t('txt_shield_of_privacy')}
                         </div>
                       </a>
@@ -866,7 +869,7 @@ const ConsentComponentCustomApp = (props: any) => {
                       setShowExpandRevoke(false);
                     }}
                   >
-                    <img src={no} />
+                    <img src={no} alt="No Icon" />
                   </div>
                   <div className="p-3 bg-white">
                     {paymentRevoke ? t('txt_you_can_revoke_on_the_site') : t('txt_you_can_revoke')}
@@ -893,12 +896,12 @@ const ConsentComponentCustomApp = (props: any) => {
                             item === 'aesirx-analytics-optin-default'
                               ? t('txt_revoke_opt_in')
                               : item === 'aesirx-analytics-optin-payment'
-                              ? t('txt_revoke_opt_in_payment')
-                              : item === 'aesirx-analytics-optin-advisor'
-                              ? t('txt_revoke_opt_in_advisor')
-                              : t('txt_revoke_opt_in') +
-                                ' ' +
-                                item?.replace('aesirx-analytics-optin-', '')
+                                ? t('txt_revoke_opt_in_payment')
+                                : item === 'aesirx-analytics-optin-advisor'
+                                  ? t('txt_revoke_opt_in_advisor')
+                                  : t('txt_revoke_opt_in') +
+                                    ' ' +
+                                    item?.replace('aesirx-analytics-optin-', '')
                           }
                           value={item}
                           onChange={({ target: { value } }) => {
@@ -990,6 +993,7 @@ const ConsentComponentCustomApp = (props: any) => {
                   <img
                     className="cover-img position-absolute h-100 w-100 object-fit-cover"
                     src={bg}
+                    alt="Background Image"
                   />
                   <div
                     className="minimize-shield"
@@ -1001,7 +1005,7 @@ const ConsentComponentCustomApp = (props: any) => {
                       sessionStorage.removeItem('aesirx-analytics-rejected');
                     }}
                   >
-                    <img src={privacy} alt="Shield of Privacy" />
+                    <img src={privacy} alt="SoP Icon" />
                     {t('txt_shield_of_privacy')}
                   </div>
                 </div>
@@ -1030,6 +1034,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                               src={check_circle}
                                               width={'14px'}
                                               height={'15px'}
+                                              alt="Check Icon"
                                             />
                                           </span>
                                           <div className="ms-10px">
@@ -1042,6 +1047,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                               src={check_circle}
                                               width={'14px'}
                                               height={'15px'}
+                                              alt="Check Icon"
                                             />
                                           </span>
                                           <div className="ms-10px">
@@ -1054,6 +1060,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                               src={check_circle}
                                               width={'14px'}
                                               height={'15px'}
+                                              alt="Check Icon"
                                             />
                                           </span>
                                           <div className="ms-10px">
@@ -1066,6 +1073,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                               src={check_circle}
                                               width={'14px'}
                                               height={'15px'}
+                                              alt="Check Icon"
                                             />
                                           </span>
                                           <div className="ms-10px">{t('txt_users_can_revoke')}</div>
@@ -1088,6 +1096,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                               src={check_circle}
                                               width={'14px'}
                                               height={'15px'}
+                                              alt="Check Icon"
                                             />
                                           </span>
                                           <div className="ms-10px">
@@ -1100,6 +1109,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                               src={check_circle}
                                               width={'14px'}
                                               height={'15px'}
+                                              alt="Check Icon"
                                             />
                                           </span>
                                           <div className="ms-10px">
@@ -1112,6 +1122,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                               src={check_circle}
                                               width={'14px'}
                                               height={'15px'}
+                                              alt="Check Icon"
                                             />
                                           </span>
                                           <div className="ms-10px">
@@ -1124,6 +1135,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                               src={check_circle}
                                               width={'14px'}
                                               height={'15px'}
+                                              alt="Check Icon"
                                             />
                                           </span>
                                           <div className="ms-10px">
@@ -1136,6 +1148,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                               src={check_circle}
                                               width={'14px'}
                                               height={'15px'}
+                                              alt="Check Icon"
                                             />
                                           </span>
                                           <div className="ms-10px">{t('txt_users_can_earn')}</div>
