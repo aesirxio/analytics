@@ -537,4 +537,19 @@ body {
     }
   }
 }
+
+.aesirxsso,
+.aesirxconsent {
+  .fade,
+  &.fade {
+    opacity: 1;
+  }
+  &.modal.fade .modal-dialog {
+    transform: none;
+  }
+  .btn {
+    text-transform: unset;
+    white-space: normal;
+  }
+}
 @import './color-mode.scss';

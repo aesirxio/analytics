@@ -125,5 +125,7 @@
   "txt_payment_1": "บริการนี้จะตั้งค่าคุกกี้และรวบรวมข้อมูลเพื่อรองรับการประมวลผลเกตเวย์การชำระเงิน.",
   "txt_payment_2": "เพื่อทำการซื้อให้เสร็จสมบูรณ์ <span class='fw-semibold'>ข้อมูลการสั่งซื้อและข้อมูลผู้ใช้</span> จะถูกแบ่งปันกับ <span class='fw-semibold'>Sellix & Stripe</span> ในฐานะ <span class='fw-semibold'>ตัวประมวลผลการชำระเงิน</span> ของเรา (*<span class='fw-semibold'>Google reCaptcha</span> ถูกใช้โดย <span class='fw-semibold'>ตัวประมวลผลการชำระเงิน</span> เพื่อวัตถุประสงค์ด้าน <span class='fw-semibold'>ความปลอดภัย</span>)",
   "txt_payment_3": "หากคุณไม่ยินยอมให้แบ่งปันข้อมูลนี้ คุณจะไม่สามารถทำการชำระเงินให้เสร็จสมบูรณ์ได้",
-  "txt_payment_4": "สำหรับข้อมูลเพิ่มเติม โปรดดู <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>นโยบายความเป็นส่วนตัว</a> ของเรา"
+  "txt_payment_4": "สำหรับข้อมูลเพิ่มเติม โปรดดู <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>นโยบายความเป็นส่วนตัว</a> ของเรา",
+  "txt_consent_nanagement": "การจัดการความยินยอม",
+  "txt_details": "รายละเอียด"
 }

@@ -68,6 +68,7 @@ const ConsentComponentCustom = ({
   gtmId,
   layout,
   isOptInReplaceAnalytics,
+  customConsentText,
 }: any) => {
   return (
     <>
@@ -84,6 +85,7 @@ const ConsentComponentCustom = ({
                 gtagId={gtagId}
                 gtmId={gtmId}
                 layout={layout}
+                customConsentText={customConsentText}
               />
             )}
           </WithWalletConnector>
@@ -121,6 +123,7 @@ const ConsentComponentCustomWrapper = (props: any) => {
           gtagId={props?.gtagId}
           gtmId={props?.gtmId}
           layout={props?.layout}
+          customConsentText={props?.customConsentText}
           uuid={uuid}
           level={level}
           connection={connection}
@@ -146,6 +149,7 @@ const ConsentComponentCustomApp = (props: any) => {
     gtagId,
     gtmId,
     layout,
+    customConsentText,
     activeConnectorType,
     activeConnector,
     activeConnectorError,
@@ -195,12 +199,12 @@ const ConsentComponentCustomApp = (props: any) => {
   const revoke = sessionStorage.getItem('aesirx-analytics-revoke');
   // Metamask
   const { address, connector } =
-    (layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1) &&
+    (layout === 'simple-consent-mode' || level === 1) &&
     (!revoke || revoke === '0' || revoke === '1')
       ? { address: '', connector: '' }
       : useAccount();
   const { signMessage }: any =
-    (layout === 'simple-consent-mode' || layout === 'simple-web-2' || level === 1) &&
+    (layout === 'simple-consent-mode' || level === 1) &&
     (!revoke || revoke === '0' || revoke === '1')
       ? { signMessage: {} }
       : useSignMessage({
@@ -703,8 +707,11 @@ const ConsentComponentCustomApp = (props: any) => {
     ) {
       window.funcAfterConsent && window.funcAfterConsent();
     }
-    (gtagId || gtmId) && loadConsentDefault(gtagId, gtmId);
   }, []);
+
+  useEffect(() => {
+    (gtagId || gtmId) && loadConsentDefault(gtagId, gtmId);
+  }, [layout]);
 
   useEffect(() => {
     if (
@@ -746,7 +753,7 @@ const ConsentComponentCustomApp = (props: any) => {
       </div>
     );
   };
-  const loadConsentDefault = (gtagId: any, gtmId: any) => {
+  const loadConsentDefault = async (gtagId: any, gtmId: any) => {
     window.dataLayer = window.dataLayer || [];
     function gtag( // eslint-disable-next-line @typescript-eslint/no-unused-vars
       p0: string, // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -756,25 +763,45 @@ const ConsentComponentCustomApp = (props: any) => {
       // eslint-disable-next-line prefer-rest-params
       dataLayer.push(arguments);
     }
-    gtag('consent', 'default', {
-      ad_user_data: 'denied',
-      ad_personalization: 'denied',
-      ad_storage: 'denied',
-      analytics_storage: 'denied',
-      wait_for_update: 500,
-    });
-    if (gtagId) {
-      gtag('js', new Date());
-      gtag('config', `${gtagId}`);
+    if (
+      (layout !== 'simple-consent-mode' || sessionStorage.getItem('consentGranted') === 'true') &&
+      ((gtmId &&
+        !document.querySelector(
+          `script[src="https://www.googletagmanager.com/gtm.js?id=${gtmId}"]`
+        )) ||
+        (gtagId &&
+          !document.querySelector(
+            `script[src="https://www.googletagmanager.com/gtag/js?id=${gtagId}"]`
+          )))
+    ) {
+      gtagId && (await loadGtagScript(gtagId));
+      gtmId && (await loadGtmScript(gtmId));
+      if (gtagId) {
+        gtag('js', new Date());
+        gtag('config', `${gtagId}`);
+      }
+      if (gtmId) {
+        dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+      }
     }
-    if (gtmId) {
-      dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-    }
-    if (layout === 'advance-consent-mode') {
-      gtagId && loadGtagScript(gtagId);
-      gtmId && loadGtmScript(gtmId);
+    if (layout !== 'simple-consent-mode' && sessionStorage.getItem('consentGranted') !== 'true') {
       gtag('set', 'url_passthrough', true);
       gtag('set', 'ads_data_redaction', true);
+      gtag('consent', 'default', {
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        ad_storage: 'denied',
+        analytics_storage: 'denied',
+        wait_for_update: 500,
+      });
+    }
+    if (sessionStorage.getItem('consentGranted') === 'true') {
+      gtag('consent', 'update', {
+        ad_user_data: 'granted',
+        ad_personalization: 'granted',
+        ad_storage: 'granted',
+        analytics_storage: 'granted',
+      });
     }
   };
   const paymentRevoke = sessionStorage.getItem('aesirx-analytics-opt-payment');
@@ -1176,7 +1203,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                   level === 4 && !account && !address ? '' : 'd-none'
                                 }`}
                               >
-                                {layout !== 'simple-consent-mode' && layout !== 'simple-web-2' && (
+                                {layout !== 'simple-consent-mode' && (
                                   <Suspense
                                     fallback={
                                       <div className="d-flex h-100 justify-content-center align-items-center">
@@ -1275,7 +1302,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                       {t('txt_yes_i_consent')}
                                     </Button>
                                   )}
-                                  {layout === 'simple-consent-mode' || layout === 'simple-web-2' ? (
+                                  {layout === 'simple-consent-mode' ? (
                                     <></>
                                   ) : (
                                     <>
@@ -1305,6 +1332,7 @@ const ConsentComponentCustomApp = (props: any) => {
                           handleLevel={handleLevel}
                           isCustom={true}
                           layout={layout}
+                          customConsentText={customConsentText}
                         >
                           <Form className="mb-0 w-100">
                             <Form.Check
@@ -1354,7 +1382,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                       {t('txt_yes_i_consent')}
                                     </Button>
                                   )}
-                                  {layout === 'simple-consent-mode' || layout === 'simple-web-2' ? (
+                                  {layout === 'simple-consent-mode' ? (
                                     <></>
                                   ) : (
                                     <>

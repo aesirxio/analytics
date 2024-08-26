@@ -103,7 +103,7 @@
   "txt_more_info_at": "Mere info på <a class='text-success fw-semibold text-decoration-underline' href='https://shield.aesirx.io' target='_blank'>https://shield. aesirx.io</a>.",
   "txt_select_your_preferred": "Vælg din foretrukne mulighed for decentraliseret samtykke:",
   "txt_decentralized_wallet": "Decentraliseret samtykke",
-  "txt_decentralized_wallet_will_be_loaded": "Se cargará el consentimiento descentralizado",
+  "txt_decentralized_wallet_will_be_loaded": "Decentraliseret samtykke vil blive indlæst",
   "txt_both_first_party_third_party": "Både førsteparts- og tredjepartssporingsdata vil blive aktiveret.",
   "txt_all_consented_data_will_be_collected": "Alle samtykkede data vil blive indsamlet.",
   "txt_users_can_revoke": "Brugere kan til enhver tid tilbagekalde samtykke på stedet.",
@@ -125,5 +125,7 @@
   "txt_payment_1": "Denne tjeneste vil sætte cookies og indsamle data for at understøtte betalingsgateway-behandling.",
   "txt_payment_2": "For at fuldføre dit køb vil <span class='fw-semibold'>ordre- & brugerdata</span> blive delt med <span class='fw-semibold'>Sellix & Stripe</span> som vores <span class='fw-semibold'>betalingsbehandlere.</span> (*<span class='fw-semibold'>Google reCaptcha</span> bruges af <span class='fw-semibold'>betalingsbehandlerne</span> af <span class='fw-semibold'>sikkerhedsmæssige</span> årsager.)",
   "txt_payment_3": "Hvis du ikke giver samtykke til denne dataudveksling, vil du ikke kunne fuldføre betalingen.",
-  "txt_payment_4": "For mere information, henvises til vores <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>privatlivspolitik.</a>."
+  "txt_payment_4": "For mere information, henvises til vores <a target='_blank' rel='noopener noreferrer' href='https://aesirx.io/privacy-policy' class='text-success fw-semibold'>privatlivspolitik.</a>.",
+  "txt_consent_nanagement": "Samtykkestyring",
+  "txt_details": "Detaljer"
 }

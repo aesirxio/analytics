@@ -27,9 +27,10 @@ declare global {
 }
 const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
   window.process = { env: '' };
-  const [layout, setLayout] = useState(window['consentLayout'] ?? 'simple-web-2');
+  const [layout, setLayout] = useState(window['consentLayout'] ?? 'simple-consent-mode');
   const [gtagId, setGtagId] = useState(window['analyticsGtagId']);
   const [gtmId, setGtmId] = useState(window['analyticsGtmId']);
+  const [customConsentText, setCustomConsentText] = useState(window['analyticsConsentText']);
   useEffect(() => {
     const init = async () => {
       const data: any = await getConsentTemplate(
@@ -39,6 +40,7 @@ const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
       setLayout(data?.data?.template ?? window['consentLayout']);
       setGtagId(data?.data?.gtag_id ?? window['analyticsGtagId']);
       setGtmId(data?.data?.gtm_id ?? window['analyticsGtmId']);
+      setCustomConsentText(data?.data?.consent_text ?? window['analyticsConsentText']);
     };
     init();
   }, []);
@@ -60,6 +62,7 @@ const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
             aesirXEndpoint={window['aesirxEndpoint'] ?? 'https://api.aesirx.io'}
             gtagId={gtagId}
             gtmId={gtmId}
+            customConsentText={customConsentText}
           />
         ) : (
           <ConsentComponentCustom
@@ -69,6 +72,7 @@ const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
             gtagId={gtagId}
             gtmId={gtmId}
             layout={layout}
+            customConsentText={customConsentText}
           />
         )}
       </AesirXI18nextProvider>
