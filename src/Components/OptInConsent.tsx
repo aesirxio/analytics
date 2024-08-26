@@ -69,6 +69,7 @@ const OptInConsent = ({
                       <img
                         className="cover-img position-absolute h-100 w-100 object-fit-cover"
                         src={bg}
+                        alt="Background Image"
                       />
                       <div
                         className="minimize-shield"
@@ -76,7 +77,7 @@ const OptInConsent = ({
                           setShowExpandRevoke(true);
                         }}
                       >
-                        <img src={privacy} alt="Shield of Privacy" />
+                        <img src={privacy} alt="SoP Icon" />
                         {t('txt_shield_of_privacy')}
                       </div>
                     </>
@@ -103,9 +104,10 @@ const OptInConsent = ({
                             <img
                               className="cover-img position-absolute h-100 w-100 object-fit-cover z-1"
                               src={bg}
+                              alt="Background Image"
                             />
                             <div className="minimize-shield position-relative z-2 py-2">
-                              <img src={privacy} alt="Shield of Privacy" />
+                              <img src={privacy} alt="SoP Icon" />
                               {t('txt_shield_of_privacy')}
                             </div>
                           </a>
@@ -117,7 +119,7 @@ const OptInConsent = ({
                           setShowExpandRevoke(false);
                         }}
                       >
-                        <img src={no} />
+                        <img src={no} alt="No Icon" />
                       </div>
                       <div className="p-3 bg-white">{t('txt_you_can_revoke')}</div>
                       <Form className="mb-0 w-100 bg-white px-3">
@@ -275,6 +277,7 @@ const OptIntConsentDetail = ({ optIn, setShowRevoke }: any) => {
                       <img
                         className="cover-img position-absolute h-100 w-100 object-fit-cover"
                         src={bg}
+                        alt="Background Image"
                       />
                       <div
                         className="minimize-shield"
@@ -284,7 +287,7 @@ const OptIntConsentDetail = ({ optIn, setShowRevoke }: any) => {
                           sessionStorage.removeItem('aesirx-analytics-rejected');
                         }}
                       >
-                        <img src={privacy} alt="Shield of Privacy" />
+                        <img src={privacy} alt="SoP Icon" />
                         {t('txt_shield_of_privacy')}
                       </div>
                     </div>
@@ -310,9 +313,10 @@ const OptIntConsentDetail = ({ optIn, setShowRevoke }: any) => {
                           <img
                             className="cover-img position-absolute h-100 w-100 object-fit-cover z-1"
                             src={bg}
+                            alt="Background Image"
                           />
                           <div className="minimize-shield position-relative z-2 py-2">
-                            <img src={privacy} alt="Shield of Privacy" />
+                            <img src={privacy} alt="SoP Icon" />
                             {t('txt_shield_of_privacy')}
                           </div>
                         </a>
