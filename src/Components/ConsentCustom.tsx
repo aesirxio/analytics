@@ -896,12 +896,12 @@ const ConsentComponentCustomApp = (props: any) => {
                             item === 'aesirx-analytics-optin-default'
                               ? t('txt_revoke_opt_in')
                               : item === 'aesirx-analytics-optin-payment'
-                                ? t('txt_revoke_opt_in_payment')
-                                : item === 'aesirx-analytics-optin-advisor'
-                                  ? t('txt_revoke_opt_in_advisor')
-                                  : t('txt_revoke_opt_in') +
-                                    ' ' +
-                                    item?.replace('aesirx-analytics-optin-', '')
+                              ? t('txt_revoke_opt_in_payment')
+                              : item === 'aesirx-analytics-optin-advisor'
+                              ? t('txt_revoke_opt_in_advisor')
+                              : t('txt_revoke_opt_in') +
+                                ' ' +
+                                item?.replace('aesirx-analytics-optin-', '')
                           }
                           value={item}
                           onChange={({ target: { value } }) => {
