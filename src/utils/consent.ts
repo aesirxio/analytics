@@ -79,21 +79,19 @@ const consentModeGrant = async (isGtag: any, id: any, layout: any) => {
     // eslint-disable-next-line prefer-rest-params
     dataLayer.push(arguments);
   }
-  if (layout === 'simple-consent-mode') {
-    if (
-      isGtag &&
-      !document.querySelector(`script[src="https://www.googletagmanager.com/gtag/js?id=${id}"]`)
-    ) {
-      await loadGtagScript(id);
-      gtag('js', new Date());
-      gtag('config', `${id}`);
-    } else if (
-      !isGtag &&
-      !document.querySelector(`script[src="https://www.googletagmanager.com/gtm.js?id=${id}"]`)
-    ) {
-      await loadGtmScript(id);
-      dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-    }
+  if (
+    isGtag &&
+    !document.querySelector(`script[src="https://www.googletagmanager.com/gtag/js?id=${id}"]`)
+  ) {
+    await loadGtagScript(id);
+    gtag('js', new Date());
+    gtag('config', `${id}`);
+  } else if (
+    !isGtag &&
+    !document.querySelector(`script[src="https://www.googletagmanager.com/gtm.js?id=${id}"]`)
+  ) {
+    await loadGtmScript(id);
+    dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
   }
   sessionStorage.setItem('consentGranted', 'true');
 
