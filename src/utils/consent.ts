@@ -19,8 +19,8 @@ const agreeConsents = async (
   const url = `${endpoint}/consent/v1/level${level}/${uuid}`;
   const urlV2 = `${endpoint}/consent/v2/level${level}/${uuid}`;
   if (sessionStorage.getItem('consentGranted') !== 'true') {
-    gtagId && consentModeGrant(true, gtagId, layout);
-    gtmId && consentModeGrant(false, gtmId, layout);
+    gtagId && consentModeGrant(true, gtagId);
+    gtmId && consentModeGrant(false, gtmId);
   }
   try {
     switch (level) {
@@ -70,7 +70,7 @@ const agreeConsents = async (
 };
 
 declare const dataLayer: any[];
-const consentModeGrant = async (isGtag: any, id: any, layout: any) => {
+const consentModeGrant = async (isGtag: any, id: any) => {
   async function gtag( // eslint-disable-next-line @typescript-eslint/no-unused-vars
     p0: any, // eslint-disable-next-line @typescript-eslint/no-unused-vars
     p1: any, // eslint-disable-next-line @typescript-eslint/no-unused-vars
