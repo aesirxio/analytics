@@ -13,14 +13,13 @@ const agreeConsents = async (
   jwt?: string,
   network = 'concordium',
   gtagId?: string,
-  gtmId?: string,
-  layout?: string
+  gtmId?: string
 ) => {
   const url = `${endpoint}/consent/v1/level${level}/${uuid}`;
   const urlV2 = `${endpoint}/consent/v2/level${level}/${uuid}`;
   if (sessionStorage.getItem('consentGranted') !== 'true') {
-    gtagId && consentModeGrant(true, gtagId, layout);
-    gtmId && consentModeGrant(false, gtmId, layout);
+    gtagId && consentModeGrant(true, gtagId);
+    gtmId && consentModeGrant(false, gtmId);
   }
   try {
     switch (level) {
@@ -70,7 +69,7 @@ const agreeConsents = async (
 };
 
 declare const dataLayer: any[];
-const consentModeGrant = async (isGtag: any, id: any, layout: any) => {
+const consentModeGrant = async (isGtag: any, id: any) => {
   async function gtag( // eslint-disable-next-line @typescript-eslint/no-unused-vars
     p0: any, // eslint-disable-next-line @typescript-eslint/no-unused-vars
     p1: any, // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -79,21 +78,19 @@ const consentModeGrant = async (isGtag: any, id: any, layout: any) => {
     // eslint-disable-next-line prefer-rest-params
     dataLayer.push(arguments);
   }
-  if (layout === 'simple-consent-mode') {
-    if (
-      isGtag &&
-      !document.querySelector(`script[src="https://www.googletagmanager.com/gtag/js?id=${id}"]`)
-    ) {
-      await loadGtagScript(id);
-      gtag('js', new Date());
-      gtag('config', `${id}`);
-    } else if (
-      !isGtag &&
-      !document.querySelector(`script[src="https://www.googletagmanager.com/gtm.js?id=${id}"]`)
-    ) {
-      await loadGtmScript(id);
-      dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-    }
+  if (
+    isGtag &&
+    !document.querySelector(`script[src="https://www.googletagmanager.com/gtag/js?id=${id}"]`)
+  ) {
+    await loadGtagScript(id);
+    gtag('js', new Date());
+    gtag('config', `${id}`);
+  } else if (
+    !isGtag &&
+    !document.querySelector(`script[src="https://www.googletagmanager.com/gtm.js?id=${id}"]`)
+  ) {
+    await loadGtmScript(id);
+    dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
   }
   sessionStorage.setItem('consentGranted', 'true');
 
