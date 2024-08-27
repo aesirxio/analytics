@@ -25,6 +25,18 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
   const { activeConnector, network, connectedAccounts, genesisHashes, setActiveConnectorType } =
     props;
 
+  const openFocusConsent = () => {
+    setShow(true);
+    const modal = document.getElementById('consent-modal');
+    if (modal) {
+      const focusableElements = modal.querySelectorAll('a, button, input');
+      const firstElement = focusableElements?.[0] as HTMLElement;
+      if (firstElement) {
+        firstElement.focus();
+      }
+    }
+  };
+
   useEffect(() => {
     const allow = sessionStorage.getItem('aesirx-analytics-allow');
     const currentUuid = sessionStorage.getItem('aesirx-analytics-uuid');
@@ -37,7 +49,7 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
         const consentList = await getConsents(endpoint, analyticsContext.visitor_uuid);
 
         if (consentList?.length === 0) {
-          setShow(true);
+          openFocusConsent();
           sessionStorage.removeItem('aesirx-analytics-allow');
         } else {
           if (level > 1) {
@@ -48,7 +60,7 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
 
           consentList.forEach((consent: any) => {
             if (consent.expiration && new Date(consent.expiration) < new Date()) {
-              setShow(true);
+              openFocusConsent();
               sessionStorage.removeItem('aesirx-analytics-allow');
               return;
             } else {

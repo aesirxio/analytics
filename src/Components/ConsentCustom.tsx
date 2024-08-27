@@ -1005,6 +1005,7 @@ const ConsentComponentCustomApp = (props: any) => {
       </div>
       <div
         tabIndex={-1}
+        id={'consent-modal'}
         className={`toast-container position-fixed m-md-3 ${
           showExpandConsent ? 'top-50 start-50 translate-middle' : 'bottom-0 end-0'
         }`}
