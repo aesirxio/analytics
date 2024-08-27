@@ -25,21 +25,31 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
   const { activeConnector, network, connectedAccounts, genesisHashes, setActiveConnectorType } =
     props;
 
-  const openFocusConsent = () => {
-    setShow(true);
-    const modal = document.getElementById('consent-modal');
-    if (modal) {
-      const focusableElements = modal.querySelectorAll('a, button, input');
-      const firstElement = focusableElements?.[0] as HTMLElement;
-      if (firstElement) {
-        firstElement.focus();
+  const observerModal = () => {
+    const callback = (mutationList: any) => {
+      for (const mutation of mutationList) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          if (!mutation.target.classList?.contains('minimize')) {
+            const firstElement = mutation.target.querySelector('a, button, input') as HTMLElement;
+            if (firstElement) {
+              firstElement.focus();
+            }
+          }
+        }
       }
+    };
+    const targetNode = document.querySelector('#consent-modal > div');
+    if (targetNode) {
+      const observer = new MutationObserver(callback);
+
+      observer.observe(targetNode, { attributes: true });
     }
   };
 
   useEffect(() => {
     const allow = sessionStorage.getItem('aesirx-analytics-allow');
     const currentUuid = sessionStorage.getItem('aesirx-analytics-uuid');
+    observerModal();
 
     if (
       analyticsContext.visitor_uuid &&
@@ -49,7 +59,7 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
         const consentList = await getConsents(endpoint, analyticsContext.visitor_uuid);
 
         if (consentList?.length === 0) {
-          openFocusConsent();
+          setShow(true);
           sessionStorage.removeItem('aesirx-analytics-allow');
         } else {
           if (level > 1) {
@@ -60,7 +70,7 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
 
           consentList.forEach((consent: any) => {
             if (consent.expiration && new Date(consent.expiration) < new Date()) {
-              openFocusConsent();
+              setShow(true);
               sessionStorage.removeItem('aesirx-analytics-allow');
               return;
             } else {
@@ -70,10 +80,10 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
                 const revokeTier = !consent?.consent_uuid
                   ? ''
                   : consent?.web3id && consent?.address
-                  ? '4'
-                  : consent?.address && !consent?.web3id
-                  ? '3'
-                  : '2';
+                    ? '4'
+                    : consent?.address && !consent?.web3id
+                      ? '3'
+                      : '2';
                 if (revokeTier) {
                   handleRevoke(true, revokeTier);
                 } else {
