@@ -13,8 +13,7 @@ const agreeConsents = async (
   jwt?: string,
   network = 'concordium',
   gtagId?: string,
-  gtmId?: string,
-  layout?: string
+  gtmId?: string
 ) => {
   const url = `${endpoint}/consent/v1/level${level}/${uuid}`;
   const urlV2 = `${endpoint}/consent/v2/level${level}/${uuid}`;
