@@ -226,10 +226,11 @@ const OptIntConsentDetail = ({ optIn, setShowRevoke }: any) => {
       document.querySelector(`.opt-in-consent.${optIn?.title}`).classList.remove('show');
     const hostUrl = endpoint ? endpoint : '';
     const root = hostUrl ? hostUrl.replace(/\/$/, '') : '';
-    trackEvent(root, '', {
-      event_name: 'Revoke consent',
-      event_type: 'revoke-consent',
-    });
+    root &&
+      trackEvent(root, '', {
+        event_name: 'Opt-in consent',
+        event_type: 'opt-in-consent',
+      });
   };
 
   const handleClose = () => {
