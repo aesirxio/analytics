@@ -4,6 +4,8 @@ import no from '../Assets/no.svg';
 import privacy from '../Assets/privacy.svg';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
+import { trackEvent } from '../utils';
+
 interface Props {
   optInConsentData?: any;
 }
@@ -14,6 +16,12 @@ declare global {
     optInConsentData: any;
   }
 }
+
+const endpoint = process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL
+  ? process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL
+  : process.env.REACT_APP_ENDPOINT_ANALYTICS_URL
+  ? process.env.REACT_APP_ENDPOINT_ANALYTICS_URL
+  : window['aesirx1stparty'] ?? '';
 const OptInConsent = ({
   optInConsentData = window?.optInConsentData ? JSON.parse(window?.optInConsentData) : [],
 }: Props) => {
@@ -216,6 +224,13 @@ const OptIntConsentDetail = ({ optIn, setShowRevoke }: any) => {
     window?.funcAfterOptInConsent && window.funcAfterOptInConsent();
     window?.optInConsentData &&
       document.querySelector(`.opt-in-consent.${optIn?.title}`).classList.remove('show');
+    const hostUrl = endpoint ? endpoint : '';
+    const root = hostUrl ? hostUrl.replace(/\/$/, '') : '';
+    root &&
+      trackEvent(root, '', {
+        event_name: 'Opt-in consent',
+        event_type: 'opt-in-consent',
+      });
   };
 
   const handleClose = () => {
