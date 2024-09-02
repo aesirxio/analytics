@@ -10,6 +10,7 @@ import common_th from '../translations/th/common.json';
 import common_ua from '../translations/ua/common.json';
 import common_vn from '../translations/vi/common.json';
 import common_fr from '../translations/fr/common.json';
+import common_nl from '../translations/nl/common.json';
 
 const defaultLanguages: any = {
   en: {
@@ -43,6 +44,10 @@ const defaultLanguages: any = {
   fr: {
     title: 'Français',
     translation: common_fr,
+  },
+  nl: {
+    title: 'Nederlands',
+    translation: common_nl,
   },
 };
 
