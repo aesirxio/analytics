@@ -1,7 +1,8 @@
 /* eslint-disable no-useless-catch */
 import { stringMessage } from '@concordium/react-components';
 import axios from 'axios';
-
+import getFingerprint from '../lib/fingerprint';
+import Bowser from 'bowser';
 const agreeConsents = async (
   endpoint: string,
   level: number,
@@ -13,19 +14,54 @@ const agreeConsents = async (
   jwt?: string,
   network = 'concordium',
   gtagId?: string,
-  gtmId?: string,
-  layout?: string
+  gtmId?: string
 ) => {
   const url = `${endpoint}/consent/v1/level${level}/${uuid}`;
   const urlV2 = `${endpoint}/consent/v2/level${level}/${uuid}`;
   if (sessionStorage.getItem('consentGranted') !== 'true') {
-    gtagId && consentModeGrant(true, gtagId, layout);
-    gtmId && consentModeGrant(false, gtmId, layout);
+    gtagId && consentModeGrant(true, gtagId);
+    gtmId && consentModeGrant(false, gtmId);
   }
+  const fingerprint = getFingerprint();
+  const { location, document } = window;
+  const { pathname, search, origin } = location;
+  const currentUrl = `${origin}${pathname}${search}`;
+  const referer = document.referrer
+    ? document.referrer
+    : window['referer']
+    ? window['referer'] === '/'
+      ? location.protocol + '//' + location.host
+      : location.protocol + '//' + location.host + window['referer']
+    : '';
+  const user_agent = window.navigator.userAgent;
+  const browser = Bowser.parse(window.navigator.userAgent);
+  const browser_name = browser?.browser?.name;
+  const browser_version = browser?.browser?.version ?? '0';
+  const lang = window.navigator['userLanguage'] || window.navigator.language;
+  const device = browser?.platform?.model ?? browser?.platform?.type;
+  const ip = '';
+
+  const dataPayload = {
+    fingerprint: fingerprint,
+    url: currentUrl?.replace(/^(https?:\/\/)?(www\.)?/, '$1'),
+    ...(referer &&
+      (referer !== currentUrl || document.referrer) && {
+        referer:
+          referer !== currentUrl
+            ? referer?.replace(/^(https?:\/\/)?(www\.)?/, '$1')
+            : document.referrer?.replace(/^(https?:\/\/)?(www\.)?/, '$1'),
+      }),
+    user_agent: user_agent,
+    ip: ip,
+    browser_name: browser_name,
+    browser_version: browser_version,
+    lang: lang,
+    device: device?.includes('iPhone') ? 'mobile' : device?.includes('iPad') ? 'tablet' : device,
+  };
   try {
     switch (level) {
       case 1:
-        await axios.post(`${url}/${consent}`);
+        await axios.post(`${url}/${consent}`, { ...dataPayload });
         break;
       case 2:
         await axios.post(
@@ -43,6 +79,7 @@ const agreeConsents = async (
         await axios.post(`${url}/${network}/${wallet}`, {
           signature: signature,
           consent: consent,
+          ...dataPayload,
         });
         break;
       case 4:
@@ -51,6 +88,7 @@ const agreeConsents = async (
           {
             signature: signature,
             consent: consent,
+            ...dataPayload,
           },
           {
             headers: {
@@ -70,7 +108,7 @@ const agreeConsents = async (
 };
 
 declare const dataLayer: any[];
-const consentModeGrant = async (isGtag: any, id: any, layout: any) => {
+const consentModeGrant = async (isGtag: any, id: any) => {
   async function gtag( // eslint-disable-next-line @typescript-eslint/no-unused-vars
     p0: any, // eslint-disable-next-line @typescript-eslint/no-unused-vars
     p1: any, // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -79,21 +117,19 @@ const consentModeGrant = async (isGtag: any, id: any, layout: any) => {
     // eslint-disable-next-line prefer-rest-params
     dataLayer.push(arguments);
   }
-  if (layout === 'simple-consent-mode') {
-    if (
-      isGtag &&
-      !document.querySelector(`script[src="https://www.googletagmanager.com/gtag/js?id=${id}"]`)
-    ) {
-      await loadGtagScript(id);
-      gtag('js', new Date());
-      gtag('config', `${id}`);
-    } else if (
-      !isGtag &&
-      !document.querySelector(`script[src="https://www.googletagmanager.com/gtm.js?id=${id}"]`)
-    ) {
-      await loadGtmScript(id);
-      dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-    }
+  if (
+    isGtag &&
+    !document.querySelector(`script[src="https://www.googletagmanager.com/gtag/js?id=${id}"]`)
+  ) {
+    await loadGtagScript(id);
+    gtag('js', new Date());
+    gtag('config', `${id}`);
+  } else if (
+    !isGtag &&
+    !document.querySelector(`script[src="https://www.googletagmanager.com/gtm.js?id=${id}"]`)
+  ) {
+    await loadGtmScript(id);
+    dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
   }
   sessionStorage.setItem('consentGranted', 'true');
 

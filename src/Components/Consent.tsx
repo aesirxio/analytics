@@ -707,6 +707,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                   <img
                     className="cover-img position-absolute h-100 w-100 object-fit-cover"
                     src={bg}
+                    alt="Background Image"
                   />
                   <div
                     className="minimize-shield"
@@ -723,7 +724,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                       setShowExpandRevoke(true);
                     }}
                   >
-                    <img src={privacy} alt="Shield of Privacy" />
+                    <img src={privacy} alt="SoP Icon" />
                     {t('txt_shield_of_privacy')}
                   </div>
                 </>
@@ -737,7 +738,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                       setShowExpandRevoke(false);
                     }}
                   >
-                    <img src={no} />
+                    <img src={no} alt="No Icon" />
                   </div>
                   <div className="p-3 bg-white text">
                     {t('txt_you_can_revoke')} <br />
@@ -756,11 +757,12 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                     <img
                       className="cover-img position-absolute h-100 w-100 object-fit-cover"
                       src={bg}
+                      alt="Background Image"
                     />
                     <div className="position-relative p-3">
                       <div className="d-flex align-items-center justify-content-between flex-wrap">
                         <div className="me-2">
-                          <img src={privacy} alt="Shield of Privacy" /> {t('txt_shield_of_privacy')}
+                          <img src={privacy} alt="SoP Icon" /> {t('txt_shield_of_privacy')}
                         </div>
                         <div className="d-flex align-items-center">
                           <a
@@ -820,6 +822,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                   <img
                     className="cover-img position-absolute h-100 w-100 object-fit-cover"
                     src={bg}
+                    alt="Background Image"
                   />
                   <div
                     className="minimize-shield"
@@ -828,7 +831,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                       sessionStorage.removeItem('aesirx-analytics-rejected');
                     }}
                   >
-                    <img src={privacy} alt="Shield of Privacy" />
+                    <img src={privacy} alt="SoP Icon" />
                     {t('txt_shield_of_privacy')}
                   </div>
                 </div>
@@ -870,7 +873,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                                     className="btn btn-success text-white d-flex align-items-center loginSSO"
                                     text={
                                       <>
-                                        <img src={yes} className="me-1" />
+                                        <img src={yes} className="me-1" alt="Yes Icon" />
                                         {t('txt_yes_i_consent')}
                                       </>
                                     }
@@ -895,7 +898,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                                       aria-hidden="true"
                                     ></span>
                                   ) : (
-                                    <img src={yes} className="me-1" />
+                                    <img src={yes} className="me-1" alt="Yes Icon" />
                                   )}
                                   {t('txt_yes_i_consent')}
                                 </Button>
@@ -906,7 +909,7 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
                                 onClick={handleNotAllow}
                                 className="d-flex align-items-center fs-14"
                               >
-                                <img src={no_white} className="me-1" />
+                                <img src={no_white} className="me-1" alt="No Icon" />
                                 {t('txt_reject_consent')}
                               </Button>
                             </>

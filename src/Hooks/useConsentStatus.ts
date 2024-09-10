@@ -25,9 +25,31 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
   const { activeConnector, network, connectedAccounts, genesisHashes, setActiveConnectorType } =
     props;
 
+  const observerModal = () => {
+    const callback = (mutationList: any) => {
+      for (const mutation of mutationList) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+          if (!mutation.target.classList?.contains('minimize')) {
+            const firstElement = mutation.target.querySelector('a, button, input') as HTMLElement;
+            if (firstElement) {
+              firstElement.focus();
+            }
+          }
+        }
+      }
+    };
+    const targetNode = document.querySelector('#consent-modal > div');
+    if (targetNode) {
+      const observer = new MutationObserver(callback);
+
+      observer.observe(targetNode, { attributes: true });
+    }
+  };
+
   useEffect(() => {
     const allow = sessionStorage.getItem('aesirx-analytics-allow');
     const currentUuid = sessionStorage.getItem('aesirx-analytics-uuid');
+    observerModal();
 
     if (
       analyticsContext.visitor_uuid &&

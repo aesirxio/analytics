@@ -4,6 +4,8 @@ import no from '../Assets/no.svg';
 import privacy from '../Assets/privacy.svg';
 import { useTranslation } from 'react-i18next';
 import { Button, Form } from 'react-bootstrap';
+import { trackEvent } from '../utils';
+
 interface Props {
   optInConsentData?: any;
 }
@@ -14,6 +16,12 @@ declare global {
     optInConsentData: any;
   }
 }
+
+const endpoint = process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL
+  ? process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL
+  : process.env.REACT_APP_ENDPOINT_ANALYTICS_URL
+  ? process.env.REACT_APP_ENDPOINT_ANALYTICS_URL
+  : window['aesirx1stparty'] ?? '';
 const OptInConsent = ({
   optInConsentData = window?.optInConsentData ? JSON.parse(window?.optInConsentData) : [],
 }: Props) => {
@@ -69,6 +77,7 @@ const OptInConsent = ({
                       <img
                         className="cover-img position-absolute h-100 w-100 object-fit-cover"
                         src={bg}
+                        alt="Background Image"
                       />
                       <div
                         className="minimize-shield"
@@ -76,7 +85,7 @@ const OptInConsent = ({
                           setShowExpandRevoke(true);
                         }}
                       >
-                        <img src={privacy} alt="Shield of Privacy" />
+                        <img src={privacy} alt="SoP Icon" />
                         {t('txt_shield_of_privacy')}
                       </div>
                     </>
@@ -103,9 +112,10 @@ const OptInConsent = ({
                             <img
                               className="cover-img position-absolute h-100 w-100 object-fit-cover z-1"
                               src={bg}
+                              alt="Background Image"
                             />
                             <div className="minimize-shield position-relative z-2 py-2">
-                              <img src={privacy} alt="Shield of Privacy" />
+                              <img src={privacy} alt="SoP Icon" />
                               {t('txt_shield_of_privacy')}
                             </div>
                           </a>
@@ -117,7 +127,7 @@ const OptInConsent = ({
                           setShowExpandRevoke(false);
                         }}
                       >
-                        <img src={no} />
+                        <img src={no} alt="No Icon" />
                       </div>
                       <div className="p-3 bg-white">{t('txt_you_can_revoke')}</div>
                       <Form className="mb-0 w-100 bg-white px-3">
@@ -214,6 +224,13 @@ const OptIntConsentDetail = ({ optIn, setShowRevoke }: any) => {
     window?.funcAfterOptInConsent && window.funcAfterOptInConsent();
     window?.optInConsentData &&
       document.querySelector(`.opt-in-consent.${optIn?.title}`).classList.remove('show');
+    const hostUrl = endpoint ? endpoint : '';
+    const root = hostUrl ? hostUrl.replace(/\/$/, '') : '';
+    root &&
+      trackEvent(root, '', {
+        event_name: 'Opt-in consent',
+        event_type: 'opt-in-consent',
+      });
   };
 
   const handleClose = () => {
@@ -275,6 +292,7 @@ const OptIntConsentDetail = ({ optIn, setShowRevoke }: any) => {
                       <img
                         className="cover-img position-absolute h-100 w-100 object-fit-cover"
                         src={bg}
+                        alt="Background Image"
                       />
                       <div
                         className="minimize-shield"
@@ -284,7 +302,7 @@ const OptIntConsentDetail = ({ optIn, setShowRevoke }: any) => {
                           sessionStorage.removeItem('aesirx-analytics-rejected');
                         }}
                       >
-                        <img src={privacy} alt="Shield of Privacy" />
+                        <img src={privacy} alt="SoP Icon" />
                         {t('txt_shield_of_privacy')}
                       </div>
                     </div>
@@ -310,9 +328,10 @@ const OptIntConsentDetail = ({ optIn, setShowRevoke }: any) => {
                           <img
                             className="cover-img position-absolute h-100 w-100 object-fit-cover z-1"
                             src={bg}
+                            alt="Background Image"
                           />
                           <div className="minimize-shield position-relative z-2 py-2">
-                            <img src={privacy} alt="Shield of Privacy" />
+                            <img src={privacy} alt="SoP Icon" />
                             {t('txt_shield_of_privacy')}
                           </div>
                         </a>
