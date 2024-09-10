@@ -1,7 +1,8 @@
 /* eslint-disable no-useless-catch */
 import { stringMessage } from '@concordium/react-components';
 import axios from 'axios';
-
+import getFingerprint from '../lib/fingerprint';
+import Bowser from 'bowser';
 const agreeConsents = async (
   endpoint: string,
   level: number,
@@ -21,10 +22,46 @@ const agreeConsents = async (
     gtagId && consentModeGrant(true, gtagId);
     gtmId && consentModeGrant(false, gtmId);
   }
+  const fingerprint = getFingerprint();
+  const { location, document } = window;
+  const { pathname, search, origin } = location;
+  const currentUrl = `${origin}${pathname}${search}`;
+  const referer = document.referrer
+    ? document.referrer
+    : window['referer']
+    ? window['referer'] === '/'
+      ? location.protocol + '//' + location.host
+      : location.protocol + '//' + location.host + window['referer']
+    : '';
+  const user_agent = window.navigator.userAgent;
+  const browser = Bowser.parse(window.navigator.userAgent);
+  const browser_name = browser?.browser?.name;
+  const browser_version = browser?.browser?.version ?? '0';
+  const lang = window.navigator['userLanguage'] || window.navigator.language;
+  const device = browser?.platform?.model ?? browser?.platform?.type;
+  const ip = '';
+
+  const dataPayload = {
+    fingerprint: fingerprint,
+    url: currentUrl?.replace(/^(https?:\/\/)?(www\.)?/, '$1'),
+    ...(referer &&
+      (referer !== currentUrl || document.referrer) && {
+        referer:
+          referer !== currentUrl
+            ? referer?.replace(/^(https?:\/\/)?(www\.)?/, '$1')
+            : document.referrer?.replace(/^(https?:\/\/)?(www\.)?/, '$1'),
+      }),
+    user_agent: user_agent,
+    ip: ip,
+    browser_name: browser_name,
+    browser_version: browser_version,
+    lang: lang,
+    device: device?.includes('iPhone') ? 'mobile' : device?.includes('iPad') ? 'tablet' : device,
+  };
   try {
     switch (level) {
       case 1:
-        await axios.post(`${url}/${consent}`);
+        await axios.post(`${url}/${consent}`, { ...dataPayload });
         break;
       case 2:
         await axios.post(
@@ -42,6 +79,7 @@ const agreeConsents = async (
         await axios.post(`${url}/${network}/${wallet}`, {
           signature: signature,
           consent: consent,
+          ...dataPayload,
         });
         break;
       case 4:
@@ -50,6 +88,7 @@ const agreeConsents = async (
           {
             signature: signature,
             consent: consent,
+            ...dataPayload,
           },
           {
             headers: {
