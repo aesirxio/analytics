@@ -29,7 +29,8 @@ const ConnectModal = ({
           <div className="p-4 block-wallet rounded-top">
             <div className="px-3 text-center">
               <h3 className="fs-3 fw-semibold mt-2 mb-4 text-primary">
-                {t('txt_please_connect_your_wallet')}
+                {(window as any)?.aesirx_analytics_translate?.txt_please_connect_your_wallet ??
+                  t('txt_please_connect_your_wallet')}
               </h3>
               <div className="mb-3">
                 <Suspense fallback={<>Loading...</>}>
@@ -50,7 +51,8 @@ const ConnectModal = ({
                           role="status"
                           aria-hidden="true"
                         ></span>
-                        {t('txt_connecting')}
+                        {(window as any)?.aesirx_analytics_translate?.txt_connecting ??
+                          t('txt_connecting')}
                       </>
                     ) : (
                       <>

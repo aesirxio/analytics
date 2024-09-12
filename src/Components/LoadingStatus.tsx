@@ -19,7 +19,10 @@ const LoadingStatus = ({ loading }: any) => {
               role="status"
               aria-hidden="true"
             ></span>
-            <span className="text">{t('txt_please_connect')}</span>
+            <span className="text">
+              {(window as any)?.aesirx_analytics_translate?.txt_please_connect ??
+                t('txt_please_connect')}
+            </span>
           </Button>
         </div>
       ) : loading === 'sign' ? (
@@ -34,7 +37,9 @@ const LoadingStatus = ({ loading }: any) => {
               role="status"
               aria-hidden="true"
             ></span>
-            <span className="text">{t('txt_please_sign')}</span>
+            <span className="text">
+              {(window as any)?.aesirx_analytics_translate?.txt_please_sign ?? t('txt_please_sign')}
+            </span>
           </Button>
         </div>
       ) : loading === 'saving' ? (
@@ -49,7 +54,9 @@ const LoadingStatus = ({ loading }: any) => {
               role="status"
               aria-hidden="true"
             ></span>
-            <span className="text">{t('txt_saving')}</span>
+            <span className="text">
+              {(window as any)?.aesirx_analytics_translate?.txt_saving ?? t('txt_saving')}
+            </span>
           </Button>
         </div>
       ) : (

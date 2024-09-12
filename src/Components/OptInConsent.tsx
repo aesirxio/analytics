@@ -17,11 +17,13 @@ declare global {
   }
 }
 
-const endpoint = process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL
-  ? process.env.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL
-  : process.env.REACT_APP_ENDPOINT_ANALYTICS_URL
-  ? process.env.REACT_APP_ENDPOINT_ANALYTICS_URL
-  : window['aesirx1stparty'] ?? '';
+const endpoint = window['aesirx1stparty']
+  ? window['aesirx1stparty']
+  : process?.env?.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL
+  ? process?.env?.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL
+  : process?.env?.REACT_APP_ENDPOINT_ANALYTICS_URL
+  ? process?.env?.REACT_APP_ENDPOINT_ANALYTICS_URL
+  : '';
 const OptInConsent = ({
   optInConsentData = window?.optInConsentData ? JSON.parse(window?.optInConsentData) : [],
 }: Props) => {
@@ -86,7 +88,8 @@ const OptInConsent = ({
                         }}
                       >
                         <img src={privacy} alt="SoP Icon" />
-                        {t('txt_shield_of_privacy')}
+                        {(window as any)?.aesirx_analytics_translate?.txt_shield_of_privacy ??
+                          t('txt_shield_of_privacy')}
                       </div>
                     </>
                   )}
@@ -100,7 +103,8 @@ const OptInConsent = ({
                         }}
                       >
                         <div className="text-primary text-nowrap">
-                          {t('txt_tracking_data_privacy')}
+                          {(window as any)?.aesirx_analytics_translate?.txt_tracking_data_privacy ??
+                            t('txt_tracking_data_privacy')}
                         </div>
                         <div className="d-flex align-items-center fs-14 text-primary">
                           <a
@@ -116,7 +120,8 @@ const OptInConsent = ({
                             />
                             <div className="minimize-shield position-relative z-2 py-2">
                               <img src={privacy} alt="SoP Icon" />
-                              {t('txt_shield_of_privacy')}
+                              {(window as any)?.aesirx_analytics_translate?.txt_shield_of_privacy ??
+                                t('txt_shield_of_privacy')}
                             </div>
                           </a>
                         </div>
@@ -129,7 +134,10 @@ const OptInConsent = ({
                       >
                         <img src={no} alt="No Icon" />
                       </div>
-                      <div className="p-3 bg-white">{t('txt_you_can_revoke')}</div>
+                      <div className="p-3 bg-white">
+                        {(window as any)?.aesirx_analytics_translate?.txt_you_can_revoke ??
+                          t('txt_you_can_revoke')}
+                      </div>
                       <Form className="mb-0 w-100 bg-white px-3">
                         {optInRevokes?.map((item, key) => {
                           return (
@@ -140,10 +148,13 @@ const OptInConsent = ({
                               type="checkbox"
                               label={
                                 item === 'aesirx-analytics-optin-default'
-                                  ? t('txt_revoke_opt_in')
-                                  : t('txt_revoke_opt_in') +
-                                    ' ' +
-                                    item?.replace('aesirx-analytics-optin-', '')
+                                  ? (window as any)?.aesirx_analytics_translate
+                                      ?.txt_revoke_opt_in ?? t('txt_revoke_opt_in')
+                                  : (window as any)?.aesirx_analytics_translate
+                                      ?.txt_revoke_opt_in ??
+                                    t('txt_revoke_opt_in') +
+                                      ' ' +
+                                      item?.replace('aesirx-analytics-optin-', '')
                               }
                               value={item}
                               onChange={({ target: { value } }) => {
@@ -164,7 +175,8 @@ const OptInConsent = ({
                                 target="_blank"
                                 rel="noreferrer"
                               >
-                                {t('txt_manage_consent')}
+                                {(window as any)?.aesirx_analytics_translate?.txt_manage_consent ??
+                                  t('txt_manage_consent')}
                               </a>
                               <Button
                                 variant="outline-success"
@@ -187,7 +199,8 @@ const OptInConsent = ({
                                   'd-flex align-items-center justify-content-center w-100 w-lg-35 revoke-btn fs-14 rounded-pill py-2 py-lg-3'
                                 }
                               >
-                                {t('txt_revoke_consent')}
+                                {(window as any)?.aesirx_analytics_translate?.txt_revoke_consent ??
+                                  t('txt_revoke_consent')}
                               </Button>
                             </div>
                           </div>
@@ -303,7 +316,8 @@ const OptIntConsentDetail = ({ optIn, setShowRevoke }: any) => {
                         }}
                       >
                         <img src={privacy} alt="SoP Icon" />
-                        {t('txt_shield_of_privacy')}
+                        {(window as any)?.aesirx_analytics_translate?.txt_shield_of_privacy ??
+                          t('txt_shield_of_privacy')}
                       </div>
                     </div>
                   </>
@@ -316,7 +330,8 @@ const OptIntConsentDetail = ({ optIn, setShowRevoke }: any) => {
                       }}
                     >
                       <div className="text-primary text-nowrap">
-                        {t('txt_tracking_data_privacy')}
+                        {(window as any)?.aesirx_analytics_translate?.txt_tracking_data_privacy ??
+                          t('txt_tracking_data_privacy')}
                       </div>
                       <div className="d-flex align-items-center fs-14 text-primary">
                         <a
@@ -332,7 +347,8 @@ const OptIntConsentDetail = ({ optIn, setShowRevoke }: any) => {
                           />
                           <div className="minimize-shield position-relative z-2 py-2">
                             <img src={privacy} alt="SoP Icon" />
-                            {t('txt_shield_of_privacy')}
+                            {(window as any)?.aesirx_analytics_translate?.txt_shield_of_privacy ??
+                              t('txt_shield_of_privacy')}
                           </div>
                         </a>
                       </div>
@@ -352,14 +368,16 @@ const OptIntConsentDetail = ({ optIn, setShowRevoke }: any) => {
                             variant="outline-success"
                             className="border-2 fs-7 fw-bold text-primary rounded-pill"
                           >
-                            {t('txt_reject_consent')}
+                            {(window as any)?.aesirx_analytics_translate?.txt_reject_consent ??
+                              t('txt_reject_consent')}
                           </Button>
                           <Button
                             onClick={handleConsent}
                             variant="outline-success"
                             className="border-2 fs-7 fw-bold text-primary rounded-pill"
                           >
-                            {t('txt_yes_i_consent')}
+                            {(window as any)?.aesirx_analytics_translate?.txt_yes_i_consent ??
+                              t('txt_yes_i_consent')}
                           </Button>
                         </div>
                       </div>

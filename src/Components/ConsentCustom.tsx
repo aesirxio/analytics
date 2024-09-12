@@ -846,7 +846,8 @@ const ConsentComponentCustomApp = (props: any) => {
                     }}
                   >
                     <img src={privacy} alt="SoP Icon" />
-                    {t('txt_shield_of_privacy')}
+                    {(window as any)?.aesirx_analytics_translate?.txt_shield_of_privacy ??
+                      t('txt_shield_of_privacy')}
                   </div>
                 </>
               )}
@@ -859,7 +860,10 @@ const ConsentComponentCustomApp = (props: any) => {
                       borderBottom: '1px solid #DEDEDE',
                     }}
                   >
-                    <div className="text-primary text-nowrap">{t('txt_tracking_data_privacy')}</div>
+                    <div className="text-primary text-nowrap">
+                      {(window as any)?.aesirx_analytics_translate?.txt_tracking_data_privacy ??
+                        t('txt_tracking_data_privacy')}
+                    </div>
                     <div className="d-flex align-items-center fs-14 text-primary">
                       <a
                         href="https://shield.aesirx.io/"
@@ -874,7 +878,8 @@ const ConsentComponentCustomApp = (props: any) => {
                         />
                         <div className="minimize-shield position-relative z-2 py-2">
                           <img src={privacy} alt="SoP Icon" />
-                          {t('txt_shield_of_privacy')}
+                          {(window as any)?.aesirx_analytics_translate?.txt_shield_of_privacy ??
+                            t('txt_shield_of_privacy')}
                         </div>
                       </a>
                     </div>
@@ -888,14 +893,21 @@ const ConsentComponentCustomApp = (props: any) => {
                     <img src={no} alt="No Icon" />
                   </div>
                   <div className="p-3 bg-white">
-                    {paymentRevoke ? t('txt_you_can_revoke_on_the_site') : t('txt_you_can_revoke')}
+                    {paymentRevoke
+                      ? (window as any)?.aesirx_analytics_translate
+                          ?.txt_you_can_revoke_on_the_site ?? t('txt_you_can_revoke_on_the_site')
+                      : (window as any)?.aesirx_analytics_translate?.txt_you_can_revoke ??
+                        t('txt_you_can_revoke')}
                   </div>
                   <Form className="mb-0 w-100 bg-white px-3">
                     <Form.Check
                       id={`option-revoke-consent`}
                       checked={revokeConsentOption === 'consent'}
                       type="checkbox"
-                      label={t('txt_revoke_consent_for_the_site')}
+                      label={
+                        (window as any)?.aesirx_analytics_translate
+                          ?.txt_revoke_consent_for_the_site ?? t('txt_revoke_consent_for_the_site')
+                      }
                       value={'consent'}
                       onChange={({ target: { value } }) => {
                         setRevokeConsentOption(value);
@@ -910,14 +922,18 @@ const ConsentComponentCustomApp = (props: any) => {
                           type="checkbox"
                           label={
                             item === 'aesirx-analytics-optin-default'
-                              ? t('txt_revoke_opt_in')
+                              ? (window as any)?.aesirx_analytics_translate?.txt_revoke_opt_in ??
+                                t('txt_revoke_opt_in')
                               : item === 'aesirx-analytics-optin-payment'
-                              ? t('txt_revoke_opt_in_payment')
+                              ? (window as any)?.aesirx_analytics_translate
+                                  ?.txt_revoke_opt_in_payment ?? t('txt_revoke_opt_in_payment')
                               : item === 'aesirx-analytics-optin-advisor'
-                              ? t('txt_revoke_opt_in_advisor')
-                              : t('txt_revoke_opt_in') +
-                                ' ' +
-                                item?.replace('aesirx-analytics-optin-', '')
+                              ? (window as any)?.aesirx_analytics_translate
+                                  ?.txt_revoke_opt_in_advisor ?? t('txt_revoke_opt_in_advisor')
+                              : (window as any)?.aesirx_analytics_translate?.txt_revoke_opt_in ??
+                                t('txt_revoke_opt_in') +
+                                  ' ' +
+                                  item?.replace('aesirx-analytics-optin-', '')
                           }
                           value={item}
                           onChange={({ target: { value } }) => {
@@ -938,7 +954,8 @@ const ConsentComponentCustomApp = (props: any) => {
                             target="_blank"
                             rel="noreferrer"
                           >
-                            {t('txt_manage_consent')}
+                            {(window as any)?.aesirx_analytics_translate?.txt_manage_consent ??
+                              t('txt_manage_consent')}
                           </a>
                           {loading === 'done' ? (
                             <Button
@@ -964,7 +981,8 @@ const ConsentComponentCustomApp = (props: any) => {
                                 'd-flex align-items-center justify-content-center w-100 w-lg-35 revoke-btn fs-14 rounded-pill py-2 py-lg-3'
                               }
                             >
-                              {t('txt_revoke_consent')}
+                              {(window as any)?.aesirx_analytics_translate?.txt_revoke_consent ??
+                                t('txt_revoke_consent')}
                             </Button>
                           ) : (
                             <></>
@@ -1023,7 +1041,8 @@ const ConsentComponentCustomApp = (props: any) => {
                     }}
                   >
                     <img src={privacy} alt="SoP Icon" />
-                    {t('txt_shield_of_privacy')}
+                    {(window as any)?.aesirx_analytics_translate?.txt_shield_of_privacy ??
+                      t('txt_shield_of_privacy')}
                   </div>
                 </div>
               </>
@@ -1035,13 +1054,19 @@ const ConsentComponentCustomApp = (props: any) => {
                       <>
                         <div className="bg-white rounded p-3 w-auto">
                           <>
-                            <p className="mb-1 mb-lg-3">{t('txt_select_your_preferred')}</p>
+                            <p className="mb-1 mb-lg-3">
+                              {(window as any)?.aesirx_analytics_translate
+                                ?.txt_select_your_preferred ?? t('txt_select_your_preferred')}
+                            </p>
                             <Form>
                               <Row>
                                 <Col lg={6} className="mb-2 mb-lg-0">
                                   <ConsentLevelUprade
                                     level={3}
-                                    levelname={t(`txt_decentralized_wallet`)}
+                                    levelname={
+                                      (window as any)?.aesirx_analytics_translate
+                                        ?.txt_decentralized_wallet ?? t('txt_decentralized_wallet')
+                                    }
                                     image={wallet_consent}
                                     content={
                                       <>
@@ -1055,7 +1080,9 @@ const ConsentComponentCustomApp = (props: any) => {
                                             />
                                           </span>
                                           <div className="ms-10px">
-                                            {t('txt_decentralized_wallet_will_be_loaded')}
+                                            {(window as any)?.aesirx_analytics_translate
+                                              ?.txt_decentralized_wallet_will_be_loaded ??
+                                              t('txt_decentralized_wallet_will_be_loaded')}
                                           </div>
                                         </div>
                                         <div className="d-flex align-items-start check-line">
@@ -1068,7 +1095,9 @@ const ConsentComponentCustomApp = (props: any) => {
                                             />
                                           </span>
                                           <div className="ms-10px">
-                                            {t('txt_both_first_party_third_party')}
+                                            {(window as any)?.aesirx_analytics_translate
+                                              ?.txt_both_first_party_third_party ??
+                                              t('txt_both_first_party_third_party')}
                                           </div>
                                         </div>
                                         <div className="d-flex align-items-start check-line">
@@ -1081,7 +1110,9 @@ const ConsentComponentCustomApp = (props: any) => {
                                             />
                                           </span>
                                           <div className="ms-10px">
-                                            {t('txt_all_consented_data_will_be_collected')}
+                                            {(window as any)?.aesirx_analytics_translate
+                                              ?.txt_all_consented_data_will_be_collected ??
+                                              t('txt_all_consented_data_will_be_collected')}
                                           </div>
                                         </div>
                                         <div className="d-flex align-items-start check-line">
@@ -1093,7 +1124,10 @@ const ConsentComponentCustomApp = (props: any) => {
                                               alt="Check Icon"
                                             />
                                           </span>
-                                          <div className="ms-10px">{t('txt_users_can_revoke')}</div>
+                                          <div className="ms-10px">
+                                            {(window as any)?.aesirx_analytics_translate
+                                              ?.txt_users_can_revoke ?? t('txt_users_can_revoke')}
+                                          </div>
                                         </div>
                                       </>
                                     }
@@ -1103,7 +1137,11 @@ const ConsentComponentCustomApp = (props: any) => {
                                 <Col lg={6}>
                                   <ConsentLevelUprade
                                     level={4}
-                                    levelname={t(`txt_decentralized_wallet_shield`)}
+                                    levelname={
+                                      (window as any)?.aesirx_analytics_translate
+                                        ?.txt_decentralized_wallet_shield ??
+                                      t('txt_decentralized_wallet_shield')
+                                    }
                                     image={wallet_shield_consent}
                                     content={
                                       <>
@@ -1117,7 +1155,9 @@ const ConsentComponentCustomApp = (props: any) => {
                                             />
                                           </span>
                                           <div className="ms-10px">
-                                            {t('txt_decentralized_wallet_will_be_loaded')}
+                                            {(window as any)?.aesirx_analytics_translate
+                                              ?.txt_decentralized_wallet_will_be_loaded ??
+                                              t('txt_decentralized_wallet_will_be_loaded')}
                                           </div>
                                         </div>
                                         <div className="d-flex align-items-start check-line">
@@ -1130,7 +1170,9 @@ const ConsentComponentCustomApp = (props: any) => {
                                             />
                                           </span>
                                           <div className="ms-10px">
-                                            {t('txt_both_first_party_third_party')}
+                                            {(window as any)?.aesirx_analytics_translate
+                                              ?.txt_both_first_party_third_party ??
+                                              t('txt_both_first_party_third_party')}
                                           </div>
                                         </div>
                                         <div className="d-flex align-items-start check-line">
@@ -1143,7 +1185,9 @@ const ConsentComponentCustomApp = (props: any) => {
                                             />
                                           </span>
                                           <div className="ms-10px">
-                                            {t('txt_all_consented_data_will_be_collected')}
+                                            {(window as any)?.aesirx_analytics_translate
+                                              ?.txt_all_consented_data_will_be_collected ??
+                                              t('txt_all_consented_data_will_be_collected')}
                                           </div>
                                         </div>
                                         <div className="d-flex align-items-start check-line">
@@ -1156,7 +1200,9 @@ const ConsentComponentCustomApp = (props: any) => {
                                             />
                                           </span>
                                           <div className="ms-10px">
-                                            {t('txt_users_can_revoke_dapp')}
+                                            {(window as any)?.aesirx_analytics_translate
+                                              ?.txt_users_can_revoke_dapp ??
+                                              t('txt_users_can_revoke_dapp')}
                                           </div>
                                         </div>
                                         <div className="d-flex align-items-start check-line">
@@ -1168,7 +1214,10 @@ const ConsentComponentCustomApp = (props: any) => {
                                               alt="Check Icon"
                                             />
                                           </span>
-                                          <div className="ms-10px">{t('txt_users_can_earn')}</div>
+                                          <div className="ms-10px">
+                                            {(window as any)?.aesirx_analytics_translate
+                                              ?.txt_users_can_earn ?? t('txt_users_can_earn')}
+                                          </div>
                                         </div>
                                       </>
                                     }
@@ -1186,7 +1235,8 @@ const ConsentComponentCustomApp = (props: any) => {
                                 }}
                                 className="d-flex align-items-center justify-content-center fs-14 w-100 w-lg-30 me-3 mb-2 mb-lg-0 rounded-pill py-3"
                               >
-                                {t('txt_back')}
+                                {(window as any)?.aesirx_analytics_translate?.txt_back ??
+                                  t('txt_back')}
                               </Button>
                               <div
                                 className={`ssoBtnWrapper d-flex align-items-center justify-content-center w-100 w-lg-30 me-3 bg-success rounded-pill ${
@@ -1203,7 +1253,12 @@ const ConsentComponentCustomApp = (props: any) => {
                                   >
                                     <SSOButton
                                       className="btn btn-success d-flex align-items-center justify-content-center loginSSO rounded-pill py-2 py-lg-3 w-100 fs-14 text-white"
-                                      text={<>{t('txt_continue')}</>}
+                                      text={
+                                        <>
+                                          {(window as any)?.aesirx_analytics_translate
+                                            ?.txt_continue ?? t('txt_continue')}
+                                        </>
+                                      }
                                       ssoState={'noscopes'}
                                       onGetData={onGetData}
                                       {...(level === 2 ? { noCreateAccount: true } : {})}
@@ -1228,7 +1283,8 @@ const ConsentComponentCustomApp = (props: any) => {
                                   ) : (
                                     <></>
                                   )}
-                                  {t('txt_continue')}
+                                  {(window as any)?.aesirx_analytics_translate?.txt_continue ??
+                                    t('txt_continue')}
                                 </Button>
                               )}
                             </div>
@@ -1269,7 +1325,8 @@ const ConsentComponentCustomApp = (props: any) => {
                                     onClick={handleNotAllow}
                                     className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
                                   >
-                                    {t('txt_reject_consent')}
+                                    {(window as any)?.aesirx_analytics_translate
+                                      ?.txt_reject_consent ?? t('txt_reject_consent')}
                                   </Button>
 
                                   {level === 2 || (level === 4 && !account && !address) ? (
@@ -1289,7 +1346,8 @@ const ConsentComponentCustomApp = (props: any) => {
                                       ) : (
                                         <></>
                                       )}
-                                      {t('txt_yes_i_consent')}
+                                      {(window as any)?.aesirx_analytics_translate
+                                        ?.txt_yes_i_consent ?? t('txt_yes_i_consent')}
                                     </Button>
                                   )}
                                   {layout === 'simple-consent-mode' ? (
@@ -1303,7 +1361,8 @@ const ConsentComponentCustomApp = (props: any) => {
                                         }}
                                         className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
                                       >
-                                        {t('txt_change_consent')}
+                                        {(window as any)?.aesirx_analytics_translate
+                                          ?.txt_change_consent ?? t('txt_change_consent')}
                                       </Button>{' '}
                                     </>
                                   )}
@@ -1349,7 +1408,8 @@ const ConsentComponentCustomApp = (props: any) => {
                                     onClick={handleNotAllow}
                                     className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
                                   >
-                                    {t('txt_reject_consent')}
+                                    {(window as any)?.aesirx_analytics_translate
+                                      ?.txt_reject_consent ?? t('txt_reject_consent')}
                                   </Button>
 
                                   {level === 2 || (level === 4 && !account && !address) ? (
@@ -1369,7 +1429,8 @@ const ConsentComponentCustomApp = (props: any) => {
                                       ) : (
                                         <></>
                                       )}
-                                      {t('txt_yes_i_consent')}
+                                      {(window as any)?.aesirx_analytics_translate
+                                        ?.txt_yes_i_consent ?? t('txt_yes_i_consent')}
                                     </Button>
                                   )}
                                   {layout === 'simple-consent-mode' ? (
@@ -1383,7 +1444,8 @@ const ConsentComponentCustomApp = (props: any) => {
                                         }}
                                         className="d-flex align-items-center justify-content-center fs-14 w-100 me-3 mb-2 mb-lg-0 rounded-pill py-2 py-lg-3"
                                       >
-                                        {t('txt_change_consent')}
+                                        {(window as any)?.aesirx_analytics_translate
+                                          ?.txt_change_consent ?? t('txt_change_consent')}
                                       </Button>{' '}
                                     </>
                                   )}
