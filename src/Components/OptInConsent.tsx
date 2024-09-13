@@ -17,13 +17,14 @@ declare global {
   }
 }
 
-const endpoint = window['aesirx1stparty']
-  ? window['aesirx1stparty']
-  : process?.env?.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL
-  ? process?.env?.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL
-  : process?.env?.REACT_APP_ENDPOINT_ANALYTICS_URL
-  ? process?.env?.REACT_APP_ENDPOINT_ANALYTICS_URL
-  : '';
+const endpoint =
+  typeof window !== 'undefined' && window['aesirx1stparty']
+    ? window['aesirx1stparty']
+    : process?.env?.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL
+    ? process?.env?.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL
+    : process?.env?.REACT_APP_ENDPOINT_ANALYTICS_URL
+    ? process?.env?.REACT_APP_ENDPOINT_ANALYTICS_URL
+    : '';
 const OptInConsent = ({
   optInConsentData = window?.optInConsentData ? JSON.parse(window?.optInConsentData) : [],
 }: Props) => {
