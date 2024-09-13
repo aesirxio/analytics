@@ -17,16 +17,14 @@ declare global {
   }
 }
 
-let endpoint = process?.env?.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL
-  ? process?.env?.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL
-  : process?.env?.REACT_APP_ENDPOINT_ANALYTICS_URL
+const endpoint =
+  typeof window !== 'undefined' && window['aesirx1stparty']
+    ? window['aesirx1stparty']
+    : process?.env?.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL
+    ? process?.env?.NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL
+    : process?.env?.REACT_APP_ENDPOINT_ANALYTICS_URL
     ? process?.env?.REACT_APP_ENDPOINT_ANALYTICS_URL
     : '';
-if (typeof window !== 'undefined') {
-  if (window['aesirx1stparty']) {
-    endpoint = window['aesirx1stparty'];
-  }
-}
 const OptInConsent = ({
   optInConsentData = window?.optInConsentData ? JSON.parse(window?.optInConsentData) : [],
 }: Props) => {
@@ -151,13 +149,13 @@ const OptInConsent = ({
                               type="checkbox"
                               label={
                                 item === 'aesirx-analytics-optin-default'
-                                  ? ((window as any)?.aesirx_analytics_translate
-                                      ?.txt_revoke_opt_in ?? t('txt_revoke_opt_in'))
-                                  : ((window as any)?.aesirx_analytics_translate
+                                  ? (window as any)?.aesirx_analytics_translate
+                                      ?.txt_revoke_opt_in ?? t('txt_revoke_opt_in')
+                                  : (window as any)?.aesirx_analytics_translate
                                       ?.txt_revoke_opt_in ??
                                     t('txt_revoke_opt_in') +
                                       ' ' +
-                                      item?.replace('aesirx-analytics-optin-', ''))
+                                      item?.replace('aesirx-analytics-optin-', '')
                               }
                               value={item}
                               onChange={({ target: { value } }) => {
