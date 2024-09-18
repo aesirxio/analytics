@@ -16,7 +16,7 @@ import { Button, Col, Form, Row } from 'react-bootstrap';
 import useConsentStatus from '../Hooks/useConsentStatus';
 import '../styles/style.scss';
 import { TermsComponent } from './Terms';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import no from '../Assets/no.svg';
 import bg from '../Assets/bg.png';
@@ -799,7 +799,6 @@ const ConsentComponentCustomApp = (props: any) => {
     .map((key) => key);
   return (
     <div>
-      <ToastContainer />
       <div className={`offcanvas-backdrop fade ${showBackdrop && show ? 'show' : 'd-none'}`} />
       <div
         tabIndex={-1}

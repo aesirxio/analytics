@@ -16,7 +16,7 @@ import { Button, Form } from 'react-bootstrap';
 import useConsentStatus from '../Hooks/useConsentStatus';
 import '../styles/style.scss';
 import { TermsComponent } from './Terms';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import yes from '../Assets/yes.svg';
 import no from '../Assets/no.svg';
@@ -682,7 +682,6 @@ const ConsentComponentApp = (props: WalletConnectionPropsExtends) => {
 
   return (
     <div>
-      <ToastContainer />
       <div className={`offcanvas-backdrop fade ${showBackdrop && show ? 'show' : 'd-none'}`} />
       <div
         tabIndex={-1}
