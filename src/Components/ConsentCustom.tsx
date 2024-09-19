@@ -51,6 +51,7 @@ import { useAccount, useSignMessage } from 'wagmi';
 import SSOEthereumProvider from './Ethereum';
 import { getWeb3ID } from '../utils/Concordium';
 import { trackEvent } from '../utils';
+import ConsentHeader from './ConsentHeader';
 declare global {
   interface Window {
     dataLayer: any;
@@ -69,6 +70,7 @@ const ConsentComponentCustom = ({
   layout,
   isOptInReplaceAnalytics,
   customConsentText,
+  languageSwitcher,
 }: any) => {
   return (
     <>
@@ -86,6 +88,7 @@ const ConsentComponentCustom = ({
                 gtmId={gtmId}
                 layout={layout}
                 customConsentText={customConsentText}
+                languageSwitcher={languageSwitcher}
               />
             )}
           </WithWalletConnector>
@@ -124,6 +127,7 @@ const ConsentComponentCustomWrapper = (props: any) => {
           gtmId={props?.gtmId}
           layout={props?.layout}
           customConsentText={props?.customConsentText}
+          languageSwitcher={props?.languageSwitcher}
           uuid={uuid}
           level={level}
           connection={connection}
@@ -150,6 +154,7 @@ const ConsentComponentCustomApp = (props: any) => {
     gtmId,
     layout,
     customConsentText,
+    languageSwitcher,
     activeConnectorType,
     activeConnector,
     activeConnectorError,
@@ -262,8 +267,7 @@ const ConsentComponentCustomApp = (props: any) => {
                 jwt,
                 'metamask',
                 gtagId,
-                gtmId,
-                layout
+                gtmId
               );
               sessionStorage.setItem('aesirx-analytics-uuid', uuid);
               sessionStorage.setItem('aesirx-analytics-allow', '1');
@@ -363,8 +367,7 @@ const ConsentComponentCustomApp = (props: any) => {
             jwt,
             'concordium',
             gtagId,
-            gtmId,
-            layout
+            gtmId
           );
           sessionStorage.setItem('aesirx-analytics-consent-type', 'concordium');
           setUpgradeLayout(false);
@@ -402,8 +405,7 @@ const ConsentComponentCustomApp = (props: any) => {
               null,
               null,
               gtagId,
-              gtmId,
-              layout
+              gtmId
             );
           } else if (
             !!existConsent?.consent_uuid &&
@@ -421,8 +423,7 @@ const ConsentComponentCustomApp = (props: any) => {
               null,
               null,
               gtagId,
-              gtmId,
-              layout
+              gtmId
             );
           }
         });
@@ -492,8 +493,7 @@ const ConsentComponentCustomApp = (props: any) => {
           response?.jwt,
           'concordium',
           gtagId,
-          gtmId,
-          layout
+          gtmId
         );
         setShow(false);
         handleRevoke(true, level);
@@ -551,8 +551,7 @@ const ConsentComponentCustomApp = (props: any) => {
             response?.jwt,
             'concordium',
             gtagId,
-            gtmId,
-            layout
+            gtmId
           );
           setShow(false);
           handleRevoke(true, level);
@@ -853,36 +852,7 @@ const ConsentComponentCustomApp = (props: any) => {
 
               {showExpandRevoke && (
                 <>
-                  <div
-                    className={`d-flex rounded-top align-items-center justify-content-between p-2 p-lg-3 fw-medium flex-wrap py-2 py-lg-3 px-4 header-consent-bg`}
-                    style={{
-                      borderBottom: '1px solid #DEDEDE',
-                    }}
-                  >
-                    <div className="text-primary text-nowrap">
-                      {(window as any)?.aesirx_analytics_translate?.txt_tracking_data_privacy ??
-                        t('txt_tracking_data_privacy')}
-                    </div>
-                    <div className="d-flex align-items-center fs-14 text-primary">
-                      <a
-                        href="https://shield.aesirx.io/"
-                        rel="noreferrer"
-                        target="_blank"
-                        className="minimize-shield-wrapper position-relative text-decoration-none"
-                      >
-                        <img
-                          className="cover-img position-absolute h-100 w-100 object-fit-cover z-1"
-                          src={bg}
-                          alt="Background Image"
-                        />
-                        <div className="minimize-shield position-relative z-2 py-2">
-                          <img src={privacy} alt="SoP Icon" />
-                          {(window as any)?.aesirx_analytics_translate?.txt_shield_of_privacy ??
-                            t('txt_shield_of_privacy')}
-                        </div>
-                      </a>
-                    </div>
-                  </div>
+                  <ConsentHeader languageSwitcher={languageSwitcher} />
                   <div
                     className="minimize-revoke"
                     onClick={() => {
@@ -1298,6 +1268,7 @@ const ConsentComponentCustomApp = (props: any) => {
                           isCustom={true}
                           layout={layout}
                           isRejectedLayout={true}
+                          languageSwitcher={languageSwitcher}
                         >
                           <Form className="mb-0 w-100">
                             <Form.Check
@@ -1381,6 +1352,7 @@ const ConsentComponentCustomApp = (props: any) => {
                           isCustom={true}
                           layout={layout}
                           customConsentText={customConsentText}
+                          languageSwitcher={languageSwitcher}
                         >
                           <Form className="mb-0 w-100">
                             <Form.Check
