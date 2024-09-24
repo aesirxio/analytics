@@ -244,7 +244,7 @@ const cleanHostName = (name: string) => {
   return name.replace(/^www./, '');
 };
 const getYoutubeID = (src: string) => {
-  const match = src.match(/^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/);
+  const match = src.match(/^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/);
   if (match && Array.isArray(match) && match[2] && match[2].length === 11) return match[2];
   return false;
 };
@@ -255,7 +255,7 @@ const randomString = (length: number, allChars = true) => {
   const response = [];
   for (let i = 0; i < length; i++) response.push(chars[Math.floor(Math.random() * chars.length)]);
   if (!allChars) return response.join('');
-  return btoa(response.join('')).replace(/\=+$/, '');
+  return btoa(response.join('')).replace(/=+$/, '');
 };
 const escapeRegex = (literal: any) => {
   return literal.replace(/[.*+?^${}()[\]\\]/g, '\\$&');

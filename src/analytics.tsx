@@ -353,7 +353,9 @@ const blockScripts = (mutations: any) => {
           node: node.cloneNode(),
           uniqueID,
         });
-      } catch (error) {}
+      } catch (error) {
+        console.log('error', error);
+      }
     }
   }
 };

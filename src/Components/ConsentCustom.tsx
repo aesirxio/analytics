@@ -50,7 +50,7 @@ import { useTranslation } from 'react-i18next';
 import { useAccount, useSignMessage } from 'wagmi';
 import SSOEthereumProvider from './Ethereum';
 import { getWeb3ID } from '../utils/Concordium';
-import { trackEvent, unBlockScripts } from '../utils';
+import { trackEvent } from '../utils';
 import ConsentHeader from './ConsentHeader';
 declare global {
   interface Window {
