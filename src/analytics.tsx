@@ -32,6 +32,7 @@ declare global {
     funcAfterConsent: any;
     funcAfterReject: any;
     configBlockJS: any;
+    blockJSDomains: any;
   }
 }
 const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
@@ -236,16 +237,34 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 const configBlockJS: any = {
-  _providersToBlock: [],
+  _providersToBlock: [
+    ...(window.blockJSDomains?.length
+      ? [
+          ...window.blockJSDomains?.map((domain: any) => {
+            return { re: domain, categories: ['analytics'] };
+          }),
+        ]
+      : []),
+  ],
   categories: [],
-  _shortCodes: [],
+  _shortCodes: [
+    {
+      key: 'video_placeholder',
+      content:
+        '<div class="video-placeholder-normal" data-aesirx-tag="video-placeholder" id="[UNIQUEID]"><p class="video-placeholder-text-normal" data-aesirx-tag="placeholder-title">Please accept consent to access this content</p></div>',
+      tag: '',
+      status: true,
+      attributes: [],
+    },
+  ],
   _backupNodes: [],
 };
 window.configBlockJS = configBlockJS;
 const addProviderToList = (node: any, cleanedHostname: any) => {
-  const nodeCategory = node.hasAttribute('data-cookieyes') && node.getAttribute('data-cookieyes');
+  const nodeCategory =
+    node.hasAttribute('data-aesirxconsent') && node.getAttribute('data-aesirxconsent');
   if (!nodeCategory) return;
-  const categoryName = nodeCategory.replace('cookieyes-', '');
+  const categoryName = nodeCategory.replace('aesirxconsent-', '');
   const provider = configBlockJS?._providersToBlock?.find(({ re }: any) => re === cleanedHostname);
   if (!provider) {
     configBlockJS._providersToBlock.push({
@@ -261,7 +280,7 @@ const addProviderToList = (node: any, cleanedHostname: any) => {
 
 const addPlaceholder = (htmlElm: any, uniqueID: any) => {
   const shortCodeData = configBlockJS._shortCodes.find(
-    (code: any) => code.key === 'cky_video_placeholder'
+    (code: any) => code.key === 'video_placeholder'
   );
   const videoPlaceHolderDataCode = shortCodeData.content;
   const { offsetWidth, offsetHeight } = htmlElm;
@@ -276,7 +295,10 @@ const addPlaceholder = (htmlElm: any, uniqueID: any) => {
   const innerTextElement: any = document.querySelector(
     `#${uniqueID} .video-placeholder-text-normal`
   );
-  innerTextElement.style.display = 'none';
+  innerTextElement.style.display = 'block';
+  innerTextElement.style.backgroundColor = '#000';
+  innerTextElement.style.borderColor = '#000';
+  innerTextElement.style.color = '#fff';
   const youtubeID = getYoutubeID(htmlElm.src);
   if (!youtubeID) return;
   addedNode.classList.replace('video-placeholder-normal', 'video-placeholder-youtube');
