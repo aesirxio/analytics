@@ -551,6 +551,25 @@ body {
     }
   }
 }
+.video-placeholder-normal,
+.video-placeholder-youtube {
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: #b2b0b059;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 100%;
+}
+.video-placeholder-text-normal,
+.video-placeholder-text-youtube {
+  text-align: center;
+  padding: 10px 16px;
+  border: 1px solid;
+  border-radius: 2px;
+}
 
 .aesirxsso,
 .aesirxconsent {
