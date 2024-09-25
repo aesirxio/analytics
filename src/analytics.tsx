@@ -236,11 +236,17 @@ document.addEventListener('DOMContentLoaded', () => {
     WoocommerceAnalytics();
   }
 });
-const configBlockJS: any = {
+interface ConfigBlockJS {
+  _providersToBlock: any[];
+  categories: any[];
+  _shortCodes: any[];
+  _backupNodes: any[];
+}
+const configBlockJS: ConfigBlockJS = {
   _providersToBlock: [
     ...(window.blockJSDomains?.length
       ? [
-          ...window.blockJSDomains?.map((domain: any) => {
+          ...window.blockJSDomains?.map((domain: string) => {
             return { re: domain, categories: ['analytics'] };
           }),
         ]
@@ -260,7 +266,7 @@ const configBlockJS: any = {
   _backupNodes: [],
 };
 window.configBlockJS = configBlockJS;
-const addProviderToList = (node: any, cleanedHostname: any) => {
+const addProviderToList = (node: any, cleanedHostname: string) => {
   const nodeCategory =
     node.hasAttribute('data-aesirxconsent') && node.getAttribute('data-aesirxconsent');
   if (!nodeCategory) return;
@@ -278,7 +284,7 @@ const addProviderToList = (node: any, cleanedHostname: any) => {
   } else if (!provider.categories.includes(categoryName)) provider.categories.push(categoryName);
 };
 
-const addPlaceholder = (htmlElm: any, uniqueID: any) => {
+const addPlaceholder = (htmlElm: any, uniqueID: string) => {
   const shortCodeData = configBlockJS._shortCodes.find(
     (code: any) => code.key === 'video_placeholder'
   );
@@ -292,7 +298,7 @@ const addPlaceholder = (htmlElm: any, uniqueID: any) => {
   const addedNode = document.getElementById(uniqueID);
   addedNode.style.width = `${offsetWidth}px`;
   addedNode.style.height = `${offsetHeight}px`;
-  const innerTextElement: any = document.querySelector(
+  const innerTextElement: HTMLElement = document.querySelector(
     `#${uniqueID} .video-placeholder-text-normal`
   );
   innerTextElement.style.display = 'block';
@@ -308,7 +314,7 @@ const addPlaceholder = (htmlElm: any, uniqueID: any) => {
     'video-placeholder-text-youtube'
   );
 };
-const shouldBlockProvider = (formattedRE: any) => {
+const shouldBlockProvider = (formattedRE: string) => {
   const provider = configBlockJS._providersToBlock.find(({ re }: any) =>
     new RegExp(escapeRegex(re)).test(formattedRE)
   );
@@ -337,7 +343,7 @@ const blockScripts = (mutations: any) => {
         if (node.nodeName.toLowerCase() === 'iframe') addPlaceholder(node, uniqueID);
         else {
           node.type = 'javascript/blocked';
-          const scriptEventListener = function (event: any) {
+          const scriptEventListener = function (event: Event) {
             event.preventDefault();
             node.removeEventListener('beforescriptexecute', scriptEventListener);
           };

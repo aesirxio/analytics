@@ -257,7 +257,7 @@ const randomString = (length: number, allChars = true) => {
   if (!allChars) return response.join('');
   return btoa(response.join('')).replace(/=+$/, '');
 };
-const escapeRegex = (literal: any) => {
+const escapeRegex = (literal: string) => {
   return literal.replace(/[.*+?^${}()[\]\\]/g, '\\$&');
 };
 
