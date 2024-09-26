@@ -246,9 +246,11 @@ const configBlockJS: ConfigBlockJS = {
   _providersToBlock: [
     ...(window.blockJSDomains?.length
       ? [
-          ...window.blockJSDomains?.map((domain: string) => {
-            return { re: domain, categories: ['analytics'] };
-          }),
+          ...window.blockJSDomains
+            ?.filter((el: string) => el)
+            ?.map((domain: string) => {
+              return { re: domain, categories: ['analytics'] };
+            }),
         ]
       : []),
   ],
