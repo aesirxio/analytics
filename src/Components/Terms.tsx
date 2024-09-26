@@ -243,7 +243,10 @@ const TermsComponent = ({
                                   </div>
                                 </div>
                                 <div>
-                                  <p className="mb-1 mb-lg-2 text-black">{t('txt_please_note')}</p>
+                                  <p className="mb-1 mb-lg-2 text-black">
+                                    {(window as any)?.aesirx_analytics_translate?.txt_please_note ??
+                                      t('txt_please_note')}
+                                  </p>
                                   <div className="d-flex align-items-start check-line">
                                     <span>
                                       <img
