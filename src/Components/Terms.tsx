@@ -8,6 +8,8 @@ import arrow from '../Assets/arrow.svg';
 import check_circle from '../Assets/check_circle.svg';
 import { useTranslation } from 'react-i18next';
 import { Tab, Tabs } from 'react-bootstrap';
+import ConsentHeader from './ConsentHeader';
+
 const terms = [
   {
     level: 1,
@@ -70,6 +72,7 @@ const TermsComponent = ({
   layout,
   isRejectedLayout,
   customConsentText,
+  languageSwitcher,
 }: any) => {
   const { t } = useTranslation();
   const handleReadmore = (status: boolean) => {
@@ -83,55 +86,10 @@ const TermsComponent = ({
         (term, key) =>
           term.level === level && (
             <Fragment key={key}>
-              <div
-                className={`rounded-top align-items-center justify-content-between p-2 p-lg-3 fw-medium flex-wrap  ${
-                  isCustom
-                    ? 'py-2 py-lg-3 px-lg-4 header-consent-bg'
-                    : 'p-2 p-lg-3 border-bottom bg-white'
-                } ${isRejectedLayout ? 'd-none' : 'd-flex'}`}
-                style={{
-                  ...(isCustom && {
-                    borderBottom: '1px solid #DEDEDE',
-                  }),
-                }}
-              >
-                <div className="text-primary text-nowrap">
-                  {isCustom
-                    ? (window as any)?.aesirx_analytics_translate?.txt_tracking_data_privacy ??
-                      t('txt_tracking_data_privacy')
-                    : t(term.name)}
-                </div>
-                <div className="d-flex align-items-center fs-14 text-primary">
-                  {isCustom ? (
-                    <>
-                      <a
-                        href="https://shield.aesirx.io/"
-                        rel="noreferrer"
-                        target="_blank"
-                        className="minimize-shield-wrapper position-relative text-decoration-none"
-                      >
-                        <img
-                          className="cover-img position-absolute h-100 w-100 object-fit-cover z-1"
-                          src={bg}
-                          alt="Background Image"
-                        />
-                        <div className="minimize-shield position-relative z-2 py-2">
-                          <img src={privacy} alt="SoP Icon" />
-                          {(window as any)?.aesirx_analytics_translate?.txt_shield_of_privacy ??
-                            t('txt_shield_of_privacy')}
-                        </div>
-                      </a>
-                    </>
-                  ) : (
-                    <>
-                      <div className={`status-tier tier-${term.level} rounded-circle`}></div>
-                      <div className="status-tier-text">
-                        {t(term.tier)} - {t(term.levelname)}
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
+              <ConsentHeader
+                isRejectedLayout={isRejectedLayout}
+                languageSwitcher={languageSwitcher}
+              />
               <div className={`pb-1 pb-lg-3 ${isCustom ? 'pt-0' : 'p-3'} bg-white`}>
                 {isCustom ? (
                   <>
@@ -239,11 +197,11 @@ const TermsComponent = ({
                                 </p>
                                 <p className="mt-0 mb-1 mb-lg-3">
                                   {layout === 'simple-consent-mode'
-                                    ? (window as any)?.aesirx_analytics_translate
+                                    ? ((window as any)?.aesirx_analytics_translate
                                         ?.txt_choose_how_we_use_simple ??
-                                      t('txt_choose_how_we_use_simple')
-                                    : (window as any)?.aesirx_analytics_translate
-                                        ?.txt_choose_how_we_use ?? t('txt_choose_how_we_use')}
+                                      t('txt_choose_how_we_use_simple'))
+                                    : ((window as any)?.aesirx_analytics_translate
+                                        ?.txt_choose_how_we_use ?? t('txt_choose_how_we_use'))}
                                 </p>
                                 <div className="mb-1 mb-lg-3">
                                   <p className="mb-1 mb-lg-2 text-black">
@@ -285,7 +243,10 @@ const TermsComponent = ({
                                   </div>
                                 </div>
                                 <div>
-                                  <p className="mb-1 mb-lg-2 text-black">{t('txt_please_note')}</p>
+                                  <p className="mb-1 mb-lg-2 text-black">
+                                    {(window as any)?.aesirx_analytics_translate?.txt_please_note ??
+                                      t('txt_please_note')}
+                                  </p>
                                   <div className="d-flex align-items-start check-line">
                                     <span>
                                       <img
@@ -368,11 +329,11 @@ const TermsComponent = ({
                           </p>
                           <p className="mt-0 mb-1 mb-lg-3">
                             {layout === 'simple-consent-mode'
-                              ? (window as any)?.aesirx_analytics_translate
+                              ? ((window as any)?.aesirx_analytics_translate
                                   ?.txt_choose_how_we_use_simple ??
-                                t('txt_choose_how_we_use_simple')
-                              : (window as any)?.aesirx_analytics_translate
-                                  ?.txt_choose_how_we_use ?? t('txt_choose_how_we_use')}
+                                t('txt_choose_how_we_use_simple'))
+                              : ((window as any)?.aesirx_analytics_translate
+                                  ?.txt_choose_how_we_use ?? t('txt_choose_how_we_use'))}
                           </p>
                           <div className="mb-1 mb-lg-3">
                             <p className="mb-1 mb-lg-2 text-black fw-semibold">

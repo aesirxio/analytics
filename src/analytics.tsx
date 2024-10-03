@@ -1,4 +1,12 @@
-import { endTrackerVisibilityState, startTracker, trackEvent } from './utils';
+import {
+  cleanHostName,
+  endTrackerVisibilityState,
+  escapeRegex,
+  getYoutubeID,
+  randomString,
+  startTracker,
+  trackEvent,
+} from './utils';
 import {
   addToCartAnalytics,
   checkoutAnalytics,
@@ -23,6 +31,8 @@ declare global {
     process: any;
     funcAfterConsent: any;
     funcAfterReject: any;
+    configBlockJS: any;
+    blockJSDomains: any;
   }
 }
 const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
@@ -69,6 +79,7 @@ const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
             endpoint={window['aesirx1stparty'] ?? ''}
             networkEnv={window['concordiumNetwork'] ?? ''}
             aesirXEndpoint={window['aesirxEndpoint'] ?? 'https://api.aesirx.io'}
+            languageSwitcher={window['languageSwitcher'] ?? ''}
             gtagId={gtagId}
             gtmId={gtmId}
             layout={layout}
@@ -79,11 +90,11 @@ const ConsentPopup = ({ visitor_uuid, event_uuid }: any) => {
     </AnalyticsContext.Provider>
   );
 };
-
-const container = document.body.appendChild(document.createElement('DIV'));
-
-const rootElement = createRoot(container);
-
+let rootElement: any = {};
+window.addEventListener('DOMContentLoaded', function () {
+  const container = document.body?.appendChild(document.createElement('DIV'));
+  rootElement = createRoot(container);
+});
 const AesirAnalytics = () => {
   const hook = (_this: object, method: string, callback: (_: string) => void) => {
     const orig = _this[method];
@@ -225,4 +236,141 @@ document.addEventListener('DOMContentLoaded', () => {
     WoocommerceAnalytics();
   }
 });
+interface ConfigBlockJS {
+  _providersToBlock: any[];
+  categories: any[];
+  _shortCodes: any[];
+  _backupNodes: any[];
+}
+const configBlockJS: ConfigBlockJS = {
+  _providersToBlock: [
+    ...(window.blockJSDomains?.length
+      ? [
+          ...window.blockJSDomains
+            ?.filter((el: string) => el)
+            ?.map((domain: string) => {
+              return { re: domain, categories: ['analytics'] };
+            }),
+        ]
+      : []),
+  ],
+  categories: [],
+  _shortCodes: [
+    {
+      key: 'video_placeholder',
+      content:
+        '<div class="video-placeholder-normal" data-aesirx-tag="video-placeholder" id="[UNIQUEID]"><p class="video-placeholder-text-normal" data-aesirx-tag="placeholder-title">Please accept consent to access this content</p></div>',
+      tag: '',
+      status: true,
+      attributes: [],
+    },
+  ],
+  _backupNodes: [],
+};
+window.configBlockJS = configBlockJS;
+const addProviderToList = (node: any, cleanedHostname: string) => {
+  const nodeCategory =
+    node.hasAttribute('data-aesirxconsent') && node.getAttribute('data-aesirxconsent');
+  if (!nodeCategory) return;
+  const categoryName = nodeCategory.replace('aesirxconsent-', '');
+  const provider = configBlockJS?._providersToBlock?.find(({ re }: any) => re === cleanedHostname);
+  if (!provider) {
+    configBlockJS._providersToBlock.push({
+      re: cleanedHostname,
+      categories: [categoryName],
+      fullPath: false,
+    });
+  } else if (!provider.isOverridden) {
+    provider.categories = [categoryName];
+    provider.isOverridden = true;
+  } else if (!provider.categories.includes(categoryName)) provider.categories.push(categoryName);
+};
+
+const addPlaceholder = (htmlElm: any, uniqueID: string) => {
+  const shortCodeData = configBlockJS._shortCodes.find(
+    (code: any) => code.key === 'video_placeholder'
+  );
+  const videoPlaceHolderDataCode = shortCodeData.content;
+  const { offsetWidth, offsetHeight } = htmlElm;
+  if (offsetWidth === 0 || offsetHeight === 0) return;
+  htmlElm.insertAdjacentHTML(
+    'beforebegin',
+    `${videoPlaceHolderDataCode}`.replace('[UNIQUEID]', uniqueID)
+  );
+  const addedNode = document.getElementById(uniqueID);
+  addedNode.style.width = `${offsetWidth}px`;
+  addedNode.style.height = `${offsetHeight}px`;
+  const innerTextElement: HTMLElement = document.querySelector(
+    `#${uniqueID} .video-placeholder-text-normal`
+  );
+  innerTextElement.style.display = 'block';
+  innerTextElement.style.backgroundColor = '#000';
+  innerTextElement.style.borderColor = '#000';
+  innerTextElement.style.color = '#fff';
+  const youtubeID = getYoutubeID(htmlElm.src);
+  if (!youtubeID) return;
+  addedNode.classList.replace('video-placeholder-normal', 'video-placeholder-youtube');
+  addedNode.style.backgroundImage = `linear-gradient(rgba(76,72,72,.7),rgba(76,72,72,.7)),url('https://img.youtube.com/vi/${youtubeID}/maxresdefault.jpg')`;
+  innerTextElement.classList.replace(
+    'video-placeholder-text-normal',
+    'video-placeholder-text-youtube'
+  );
+};
+const shouldBlockProvider = (formattedRE: string) => {
+  const provider = configBlockJS._providersToBlock.find(({ re }: any) =>
+    new RegExp(escapeRegex(re)).test(formattedRE)
+  );
+  if (sessionStorage.getItem('aesirx-analytics-allow')) return false;
+  return provider && true;
+};
+
+const blockScripts = (mutations: any) => {
+  for (const { addedNodes } of mutations) {
+    for (const node of addedNodes) {
+      if (
+        !node.src ||
+        !node.nodeName ||
+        !['script', 'iframe'].includes(node.nodeName.toLowerCase())
+      )
+        continue;
+      try {
+        const urlToParse = node.src.startsWith('//')
+          ? `${window.location.protocol}${node.src}`
+          : node.src;
+        const { hostname, pathname } = new URL(urlToParse);
+        const cleanedHostname = cleanHostName(`${hostname}${pathname}`);
+        addProviderToList(node, cleanedHostname);
+        if (!shouldBlockProvider(cleanedHostname)) continue;
+        const uniqueID = randomString(8, false);
+        if (node.nodeName.toLowerCase() === 'iframe') addPlaceholder(node, uniqueID);
+        else {
+          node.type = 'javascript/blocked';
+          const scriptEventListener = function (event: Event) {
+            event.preventDefault();
+            node.removeEventListener('beforescriptexecute', scriptEventListener);
+          };
+          node.addEventListener('beforescriptexecute', scriptEventListener);
+        }
+        const position =
+          document.head.compareDocumentPosition(node) & Node.DOCUMENT_POSITION_CONTAINED_BY
+            ? 'head'
+            : 'body';
+        node.remove();
+        configBlockJS._backupNodes.push({
+          position: position,
+          node: node.cloneNode(),
+          uniqueID,
+        });
+      } catch (error) {
+        console.log('error', error);
+      }
+    }
+  }
+};
+
 window['trackEventAnalytics'] = trackEvent;
+const _nodeListObserver = new MutationObserver(blockScripts);
+_nodeListObserver.observe(document.documentElement, {
+  childList: true,
+  subtree: true,
+});

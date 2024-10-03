@@ -16,7 +16,7 @@ import { Button, Col, Form, Row } from 'react-bootstrap';
 import useConsentStatus from '../Hooks/useConsentStatus';
 import '../styles/style.scss';
 import { TermsComponent } from './Terms';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 import no from '../Assets/no.svg';
 import bg from '../Assets/bg.png';
@@ -51,6 +51,7 @@ import { useAccount, useSignMessage } from 'wagmi';
 import SSOEthereumProvider from './Ethereum';
 import { getWeb3ID } from '../utils/Concordium';
 import { trackEvent } from '../utils';
+import ConsentHeader from './ConsentHeader';
 declare global {
   interface Window {
     dataLayer: any;
@@ -69,6 +70,7 @@ const ConsentComponentCustom = ({
   layout,
   isOptInReplaceAnalytics,
   customConsentText,
+  languageSwitcher,
 }: any) => {
   return (
     <>
@@ -86,6 +88,7 @@ const ConsentComponentCustom = ({
                 gtmId={gtmId}
                 layout={layout}
                 customConsentText={customConsentText}
+                languageSwitcher={languageSwitcher}
               />
             )}
           </WithWalletConnector>
@@ -124,6 +127,7 @@ const ConsentComponentCustomWrapper = (props: any) => {
           gtmId={props?.gtmId}
           layout={props?.layout}
           customConsentText={props?.customConsentText}
+          languageSwitcher={props?.languageSwitcher}
           uuid={uuid}
           level={level}
           connection={connection}
@@ -150,6 +154,7 @@ const ConsentComponentCustomApp = (props: any) => {
     gtmId,
     layout,
     customConsentText,
+    languageSwitcher,
     activeConnectorType,
     activeConnector,
     activeConnectorError,
@@ -262,8 +267,7 @@ const ConsentComponentCustomApp = (props: any) => {
                 jwt,
                 'metamask',
                 gtagId,
-                gtmId,
-                layout
+                gtmId
               );
               sessionStorage.setItem('aesirx-analytics-uuid', uuid);
               sessionStorage.setItem('aesirx-analytics-allow', '1');
@@ -363,8 +367,7 @@ const ConsentComponentCustomApp = (props: any) => {
             jwt,
             'concordium',
             gtagId,
-            gtmId,
-            layout
+            gtmId
           );
           sessionStorage.setItem('aesirx-analytics-consent-type', 'concordium');
           setUpgradeLayout(false);
@@ -402,8 +405,7 @@ const ConsentComponentCustomApp = (props: any) => {
               null,
               null,
               gtagId,
-              gtmId,
-              layout
+              gtmId
             );
           } else if (
             !!existConsent?.consent_uuid &&
@@ -421,8 +423,7 @@ const ConsentComponentCustomApp = (props: any) => {
               null,
               null,
               gtagId,
-              gtmId,
-              layout
+              gtmId
             );
           }
         });
@@ -492,8 +493,7 @@ const ConsentComponentCustomApp = (props: any) => {
           response?.jwt,
           'concordium',
           gtagId,
-          gtmId,
-          layout
+          gtmId
         );
         setShow(false);
         handleRevoke(true, level);
@@ -551,8 +551,7 @@ const ConsentComponentCustomApp = (props: any) => {
             response?.jwt,
             'concordium',
             gtagId,
-            gtmId,
-            layout
+            gtmId
           );
           setShow(false);
           handleRevoke(true, level);
@@ -799,7 +798,6 @@ const ConsentComponentCustomApp = (props: any) => {
     .map((key) => key);
   return (
     <div>
-      <ToastContainer />
       <div className={`offcanvas-backdrop fade ${showBackdrop && show ? 'show' : 'd-none'}`} />
       <div
         tabIndex={-1}
@@ -854,36 +852,7 @@ const ConsentComponentCustomApp = (props: any) => {
 
               {showExpandRevoke && (
                 <>
-                  <div
-                    className={`d-flex rounded-top align-items-center justify-content-between p-2 p-lg-3 fw-medium flex-wrap py-2 py-lg-3 px-4 header-consent-bg`}
-                    style={{
-                      borderBottom: '1px solid #DEDEDE',
-                    }}
-                  >
-                    <div className="text-primary text-nowrap">
-                      {(window as any)?.aesirx_analytics_translate?.txt_tracking_data_privacy ??
-                        t('txt_tracking_data_privacy')}
-                    </div>
-                    <div className="d-flex align-items-center fs-14 text-primary">
-                      <a
-                        href="https://shield.aesirx.io/"
-                        rel="noreferrer"
-                        target="_blank"
-                        className="minimize-shield-wrapper position-relative text-decoration-none"
-                      >
-                        <img
-                          className="cover-img position-absolute h-100 w-100 object-fit-cover z-1"
-                          src={bg}
-                          alt="Background Image"
-                        />
-                        <div className="minimize-shield position-relative z-2 py-2">
-                          <img src={privacy} alt="SoP Icon" />
-                          {(window as any)?.aesirx_analytics_translate?.txt_shield_of_privacy ??
-                            t('txt_shield_of_privacy')}
-                        </div>
-                      </a>
-                    </div>
-                  </div>
+                  <ConsentHeader languageSwitcher={languageSwitcher} />
                   <div
                     className="minimize-revoke"
                     onClick={() => {
@@ -894,10 +863,10 @@ const ConsentComponentCustomApp = (props: any) => {
                   </div>
                   <div className="p-3 bg-white">
                     {paymentRevoke
-                      ? (window as any)?.aesirx_analytics_translate
-                          ?.txt_you_can_revoke_on_the_site ?? t('txt_you_can_revoke_on_the_site')
-                      : (window as any)?.aesirx_analytics_translate?.txt_you_can_revoke ??
-                        t('txt_you_can_revoke')}
+                      ? ((window as any)?.aesirx_analytics_translate
+                          ?.txt_you_can_revoke_on_the_site ?? t('txt_you_can_revoke_on_the_site'))
+                      : ((window as any)?.aesirx_analytics_translate?.txt_you_can_revoke ??
+                        t('txt_you_can_revoke'))}
                   </div>
                   <Form className="mb-0 w-100 bg-white px-3">
                     <Form.Check
@@ -922,18 +891,19 @@ const ConsentComponentCustomApp = (props: any) => {
                           type="checkbox"
                           label={
                             item === 'aesirx-analytics-optin-default'
-                              ? (window as any)?.aesirx_analytics_translate?.txt_revoke_opt_in ??
-                                t('txt_revoke_opt_in')
+                              ? ((window as any)?.aesirx_analytics_translate?.txt_revoke_opt_in ??
+                                t('txt_revoke_opt_in'))
                               : item === 'aesirx-analytics-optin-payment'
-                              ? (window as any)?.aesirx_analytics_translate
-                                  ?.txt_revoke_opt_in_payment ?? t('txt_revoke_opt_in_payment')
-                              : item === 'aesirx-analytics-optin-advisor'
-                              ? (window as any)?.aesirx_analytics_translate
-                                  ?.txt_revoke_opt_in_advisor ?? t('txt_revoke_opt_in_advisor')
-                              : (window as any)?.aesirx_analytics_translate?.txt_revoke_opt_in ??
-                                t('txt_revoke_opt_in') +
-                                  ' ' +
-                                  item?.replace('aesirx-analytics-optin-', '')
+                                ? ((window as any)?.aesirx_analytics_translate
+                                    ?.txt_revoke_opt_in_payment ?? t('txt_revoke_opt_in_payment'))
+                                : item === 'aesirx-analytics-optin-advisor'
+                                  ? ((window as any)?.aesirx_analytics_translate
+                                      ?.txt_revoke_opt_in_advisor ?? t('txt_revoke_opt_in_advisor'))
+                                  : ((window as any)?.aesirx_analytics_translate
+                                      ?.txt_revoke_opt_in ??
+                                    t('txt_revoke_opt_in') +
+                                      ' ' +
+                                      item?.replace('aesirx-analytics-optin-', ''))
                           }
                           value={item}
                           onChange={({ target: { value } }) => {
@@ -1299,6 +1269,7 @@ const ConsentComponentCustomApp = (props: any) => {
                           isCustom={true}
                           layout={layout}
                           isRejectedLayout={true}
+                          languageSwitcher={languageSwitcher}
                         >
                           <Form className="mb-0 w-100">
                             <Form.Check
@@ -1382,6 +1353,7 @@ const ConsentComponentCustomApp = (props: any) => {
                           isCustom={true}
                           layout={layout}
                           customConsentText={customConsentText}
+                          languageSwitcher={languageSwitcher}
                         >
                           <Form className="mb-0 w-100">
                             <Form.Check

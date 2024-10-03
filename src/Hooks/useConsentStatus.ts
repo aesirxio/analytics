@@ -13,6 +13,7 @@ import {
 import { BROWSER_WALLET } from './config';
 import { isDesktop } from 'react-device-detect';
 import { BlockHash } from '@concordium/web-sdk';
+import { unBlockScripts } from '../utils';
 
 const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConnectionProps) => {
   const [show, setShow] = useState(false);
@@ -80,10 +81,10 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
                 const revokeTier = !consent?.consent_uuid
                   ? ''
                   : consent?.web3id && consent?.address
-                  ? '4'
-                  : consent?.address && !consent?.web3id
-                  ? '3'
-                  : '2';
+                    ? '4'
+                    : consent?.address && !consent?.web3id
+                      ? '3'
+                      : '2';
                 if (revokeTier) {
                   handleRevoke(true, revokeTier);
                 } else {
@@ -173,6 +174,7 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
     setShowRevoke(status);
     if (level && level !== '0') {
       window.funcAfterConsent && window.funcAfterConsent();
+      window.configBlockJS && unBlockScripts();
     }
   };
 
