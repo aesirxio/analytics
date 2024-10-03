@@ -99,6 +99,6 @@
     "@walletconnect/core": "2.9.1",
     "@walletconnect/types": "2.9.1",
     "@walletconnect/sign-client": "2.9.1",
-    "rollup": "3.26.3"
+    "rollup": "3.29.5"
   }
 }
