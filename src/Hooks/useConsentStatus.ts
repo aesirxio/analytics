@@ -81,10 +81,10 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
                 const revokeTier = !consent?.consent_uuid
                   ? ''
                   : consent?.web3id && consent?.address
-                  ? '4'
-                  : consent?.address && !consent?.web3id
-                  ? '3'
-                  : '2';
+                    ? '4'
+                    : consent?.address && !consent?.web3id
+                      ? '3'
+                      : '2';
                 if (revokeTier) {
                   handleRevoke(true, revokeTier);
                 } else {

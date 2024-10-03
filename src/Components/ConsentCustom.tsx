@@ -863,10 +863,10 @@ const ConsentComponentCustomApp = (props: any) => {
                   </div>
                   <div className="p-3 bg-white">
                     {paymentRevoke
-                      ? (window as any)?.aesirx_analytics_translate
-                          ?.txt_you_can_revoke_on_the_site ?? t('txt_you_can_revoke_on_the_site')
-                      : (window as any)?.aesirx_analytics_translate?.txt_you_can_revoke ??
-                        t('txt_you_can_revoke')}
+                      ? ((window as any)?.aesirx_analytics_translate
+                          ?.txt_you_can_revoke_on_the_site ?? t('txt_you_can_revoke_on_the_site'))
+                      : ((window as any)?.aesirx_analytics_translate?.txt_you_can_revoke ??
+                        t('txt_you_can_revoke'))}
                   </div>
                   <Form className="mb-0 w-100 bg-white px-3">
                     <Form.Check
@@ -891,18 +891,19 @@ const ConsentComponentCustomApp = (props: any) => {
                           type="checkbox"
                           label={
                             item === 'aesirx-analytics-optin-default'
-                              ? (window as any)?.aesirx_analytics_translate?.txt_revoke_opt_in ??
-                                t('txt_revoke_opt_in')
+                              ? ((window as any)?.aesirx_analytics_translate?.txt_revoke_opt_in ??
+                                t('txt_revoke_opt_in'))
                               : item === 'aesirx-analytics-optin-payment'
-                              ? (window as any)?.aesirx_analytics_translate
-                                  ?.txt_revoke_opt_in_payment ?? t('txt_revoke_opt_in_payment')
-                              : item === 'aesirx-analytics-optin-advisor'
-                              ? (window as any)?.aesirx_analytics_translate
-                                  ?.txt_revoke_opt_in_advisor ?? t('txt_revoke_opt_in_advisor')
-                              : (window as any)?.aesirx_analytics_translate?.txt_revoke_opt_in ??
-                                t('txt_revoke_opt_in') +
-                                  ' ' +
-                                  item?.replace('aesirx-analytics-optin-', '')
+                                ? ((window as any)?.aesirx_analytics_translate
+                                    ?.txt_revoke_opt_in_payment ?? t('txt_revoke_opt_in_payment'))
+                                : item === 'aesirx-analytics-optin-advisor'
+                                  ? ((window as any)?.aesirx_analytics_translate
+                                      ?.txt_revoke_opt_in_advisor ?? t('txt_revoke_opt_in_advisor'))
+                                  : ((window as any)?.aesirx_analytics_translate
+                                      ?.txt_revoke_opt_in ??
+                                    t('txt_revoke_opt_in') +
+                                      ' ' +
+                                      item?.replace('aesirx-analytics-optin-', ''))
                           }
                           value={item}
                           onChange={({ target: { value } }) => {
