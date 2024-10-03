@@ -197,11 +197,11 @@ const TermsComponent = ({
                                 </p>
                                 <p className="mt-0 mb-1 mb-lg-3">
                                   {layout === 'simple-consent-mode'
-                                    ? (window as any)?.aesirx_analytics_translate
+                                    ? ((window as any)?.aesirx_analytics_translate
                                         ?.txt_choose_how_we_use_simple ??
-                                      t('txt_choose_how_we_use_simple')
-                                    : (window as any)?.aesirx_analytics_translate
-                                        ?.txt_choose_how_we_use ?? t('txt_choose_how_we_use')}
+                                      t('txt_choose_how_we_use_simple'))
+                                    : ((window as any)?.aesirx_analytics_translate
+                                        ?.txt_choose_how_we_use ?? t('txt_choose_how_we_use'))}
                                 </p>
                                 <div className="mb-1 mb-lg-3">
                                   <p className="mb-1 mb-lg-2 text-black">
@@ -329,11 +329,11 @@ const TermsComponent = ({
                           </p>
                           <p className="mt-0 mb-1 mb-lg-3">
                             {layout === 'simple-consent-mode'
-                              ? (window as any)?.aesirx_analytics_translate
+                              ? ((window as any)?.aesirx_analytics_translate
                                   ?.txt_choose_how_we_use_simple ??
-                                t('txt_choose_how_we_use_simple')
-                              : (window as any)?.aesirx_analytics_translate
-                                  ?.txt_choose_how_we_use ?? t('txt_choose_how_we_use')}
+                                t('txt_choose_how_we_use_simple'))
+                              : ((window as any)?.aesirx_analytics_translate
+                                  ?.txt_choose_how_we_use ?? t('txt_choose_how_we_use'))}
                           </p>
                           <div className="mb-1 mb-lg-3">
                             <p className="mb-1 mb-lg-2 text-black fw-semibold">

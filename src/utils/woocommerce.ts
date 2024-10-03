@@ -23,8 +23,9 @@ const addToCartAnalytics = () => {
   );
   singleAddTocartShopList.forEach((item: any) => {
     item.addEventListener('click', () => {
-      const title = item.closest('.product').querySelector('.woocommerce-loop-product__title')
-        ?.innerText;
+      const title = item
+        .closest('.product')
+        .querySelector('.woocommerce-loop-product__title')?.innerText;
       if (!item.classList.contains('disabled')) {
         trackEventAddToCart(title, item.dataset.product_id, '1');
       }

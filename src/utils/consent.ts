@@ -29,10 +29,10 @@ const agreeConsents = async (
   const referer = document.referrer
     ? document.referrer
     : window['referer']
-    ? window['referer'] === '/'
-      ? location.protocol + '//' + location.host
-      : location.protocol + '//' + location.host + window['referer']
-    : '';
+      ? window['referer'] === '/'
+        ? location.protocol + '//' + location.host
+        : location.protocol + '//' + location.host + window['referer']
+      : '';
   const user_agent = window.navigator.userAgent;
   const browser = Bowser.parse(window.navigator.userAgent);
   const browser_name = browser?.browser?.name;
