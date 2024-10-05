@@ -175,6 +175,16 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
     if (level && level !== '0') {
       window.funcAfterConsent && window.funcAfterConsent();
       window.configBlockJS && unBlockScripts();
+      if (window['aesirx_analytics_blockjs']) {
+        const blockJSList = window['aesirx_analytics_blockjs'];
+        Object.keys(blockJSList).forEach((key) => {
+          const scriptNode = document.createElement('script');
+          scriptNode.src =
+            blockJSList[key].src + (blockJSList[key].ver ? `?ver=${blockJSList[key].ver}` : '');
+          scriptNode.type = 'text/javascript';
+          document.body.appendChild(scriptNode);
+        });
+      }
     }
   };
 
