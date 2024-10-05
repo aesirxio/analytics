@@ -175,8 +175,8 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
     if (level && level !== '0') {
       window.funcAfterConsent && window.funcAfterConsent();
       window.configBlockJS && unBlockScripts();
-      if (window['aesirx_analytics_blockjs']) {
-        const blockJSList = window['aesirx_analytics_blockjs'];
+      if (window['aesirx_analytics_degistered_scripts']) {
+        const blockJSList = window['aesirx_analytics_degistered_scripts'];
         Object.keys(blockJSList).forEach((key) => {
           const scriptNode = document.createElement('script');
           scriptNode.src =
