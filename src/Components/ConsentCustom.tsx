@@ -933,7 +933,7 @@ const ConsentComponentCustomApp = (props: any) => {
                               onClick={async () => {
                                 if (revokeConsentOption === 'consent') {
                                   await handleRevokeBtn();
-                                  if (level > 1) {
+                                  if (level > 1 || window['aesirx1stparty']) {
                                     setTimeout(() => {
                                       window.location.reload();
                                     }, 1000);
