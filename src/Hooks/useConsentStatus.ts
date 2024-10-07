@@ -177,13 +177,13 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
       window.configBlockJS && unBlockScripts();
       if (
         window['aesirx_analytics_degistered_scripts'] ||
-        window['deregistered_scripts_head'] ||
-        window['deregistered_scripts_footer']
+        window['aesirx_analytics_deregistered_scripts_head'] ||
+        window['aesirx_analytics_deregistered_scripts_footer']
       ) {
         const blockJSList = Object.assign(
           window['aesirx_analytics_degistered_scripts'],
-          window['deregistered_scripts_head'],
-          window['deregistered_scripts_footer']
+          window['aesirx_analytics_deregistered_scripts_head'],
+          window['aesirx_analytics_deregistered_scripts_footer']
         );
         Object.keys(blockJSList).forEach((key) => {
           const scriptNode = document.createElement('script');
