@@ -677,6 +677,11 @@ const ConsentComponentCustomApp = (props: any) => {
         event_name: 'Revoke consent',
         event_type: 'revoke-consent',
       });
+      if (levelRevoke === '1' && window['aesirx1stparty']) {
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      }
     } catch (error) {
       console.log(error);
       setLoading('done');
@@ -933,11 +938,6 @@ const ConsentComponentCustomApp = (props: any) => {
                               onClick={async () => {
                                 if (revokeConsentOption === 'consent') {
                                   await handleRevokeBtn();
-                                  if (level > 1 || window['aesirx1stparty']) {
-                                    setTimeout(() => {
-                                      window.location.reload();
-                                    }, 1000);
-                                  }
                                 } else {
                                   sessionStorage.removeItem(revokeConsentOption);
                                   setShowExpandRevoke(false);
