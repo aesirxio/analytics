@@ -99,6 +99,7 @@
     "@walletconnect/core": "2.9.1",
     "@walletconnect/types": "2.9.1",
     "@walletconnect/sign-client": "2.9.1",
+    "cookie": "^0.7.0",
     "rollup": "3.29.5"
   }
 }
