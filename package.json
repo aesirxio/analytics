@@ -1,6 +1,6 @@
 {
   "name": "aesirx-analytics",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "license": "GPL-3.0-only",
   "author": "AesirX",
   "repository": "https://gitlab.redweb.dk/aesirx/analytics",
@@ -99,6 +99,7 @@
     "@walletconnect/core": "2.9.1",
     "@walletconnect/types": "2.9.1",
     "@walletconnect/sign-client": "2.9.1",
+    "cookie": "^0.7.0",
     "rollup": "3.29.5"
   }
 }

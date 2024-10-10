@@ -75,6 +75,7 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
               sessionStorage.removeItem('aesirx-analytics-allow');
               return;
             } else {
+              setShow(false);
               sessionStorage.setItem('aesirx-analytics-uuid', analyticsContext.visitor_uuid);
               sessionStorage.setItem('aesirx-analytics-allow', '1');
               if (consent) {
