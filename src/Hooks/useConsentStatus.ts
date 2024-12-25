@@ -75,6 +75,7 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
               sessionStorage.removeItem('aesirx-analytics-allow');
               return;
             } else {
+              setShow(false);
               sessionStorage.setItem('aesirx-analytics-uuid', analyticsContext.visitor_uuid);
               sessionStorage.setItem('aesirx-analytics-allow', '1');
               if (consent) {
@@ -175,6 +176,24 @@ const useConsentStatus = (endpoint?: string, layout?: string, props?: WalletConn
     if (level && level !== '0') {
       window.funcAfterConsent && window.funcAfterConsent();
       window.configBlockJS && unBlockScripts();
+      if (
+        window['aesirx_analytics_degistered_scripts'] ||
+        window['aesirx_analytics_deregistered_scripts_head'] ||
+        window['aesirx_analytics_deregistered_scripts_footer']
+      ) {
+        const blockJSList = Object.assign(
+          window['aesirx_analytics_degistered_scripts'],
+          window['aesirx_analytics_deregistered_scripts_head'],
+          window['aesirx_analytics_deregistered_scripts_footer']
+        );
+        Object.keys(blockJSList).forEach((key) => {
+          const scriptNode = document.createElement('script');
+          scriptNode.src =
+            blockJSList[key].src + (blockJSList[key].ver ? `?ver=${blockJSList[key].ver}` : '');
+          scriptNode.type = 'text/javascript';
+          document.body.appendChild(scriptNode);
+        });
+      }
     }
   };
 
