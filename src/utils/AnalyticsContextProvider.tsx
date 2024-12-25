@@ -4,8 +4,6 @@
  */
 
 import React, { Dispatch, ReactNode, SetStateAction, useEffect, useRef, useState } from 'react';
-import { appLanguages } from '../translations';
-import { AesirXI18nextProvider } from './I18nextProvider';
 
 interface Props {
   children?: ReactNode;
@@ -47,7 +45,7 @@ const AnalyticsContextProvider: React.FC<Props> = ({ children }) => {
         ref: ref,
       }}
     >
-      <AesirXI18nextProvider appLanguages={appLanguages}>{children}</AesirXI18nextProvider>
+      {children}
     </AnalyticsContext.Provider>
   );
 };
