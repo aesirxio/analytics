@@ -25,6 +25,7 @@ window.addEventListener('DOMContentLoaded', function () {
   rootElement = createRoot(container);
 });
 const AesirAnalytics = () => {
+  window['aesirx-analytics-enable'] = 'true';
   const hook = (_this: object, method: string, callback: (_: string) => void) => {
     const orig = _this[method];
 
