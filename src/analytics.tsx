@@ -6,7 +6,6 @@ import {
   viewProductAnalytics,
 } from './utils/woocommerce';
 
-import { createRoot } from 'react-dom/client';
 import { Buffer } from 'buffer';
 
 window.Buffer = Buffer;
@@ -19,11 +18,6 @@ declare global {
     blockJSDomains: any;
   }
 }
-let rootElement: any = {};
-window.addEventListener('DOMContentLoaded', function () {
-  const container = document.body?.appendChild(document.createElement('DIV'));
-  rootElement = createRoot(container);
-});
 const AesirAnalytics = () => {
   window['aesirx-analytics-enable'] = 'true';
   const hook = (_this: object, method: string, callback: (_: string) => void) => {
