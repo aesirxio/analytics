@@ -73,10 +73,12 @@ const AesirAnalytics = () => {
 
   const update = async () => {
     if (document.readyState === 'complete') {
-      const responseStart = await startTracker(root);
-      if (responseStart) {
-        window['event_uuid'] = responseStart.event_uuid;
-        window['visitor_uuid'] = responseStart.visitor_uuid;
+      if (window['aesirx-consent-enable'] !== 'true') {
+        const responseStart = await startTracker(root);
+        if (responseStart) {
+          window['event_uuid'] = responseStart.event_uuid;
+          window['visitor_uuid'] = responseStart.visitor_uuid;
+        }
       }
       if (dataEvents) {
         addEvents(document);
