@@ -4,6 +4,8 @@ A powerful and compliant web Analytics platform (1st-party alternative to Google
 
 AesirX Analytics comes with a locally hosted JavaScript solution that gathers and stores data legally and compliantly in accordance with GDPR and other regional legislation including storage of citizens’ data in-country and 1st-party.
 
+*Important Change: AesirX Consent was split to another packages https://github.com/aesirxio/consent
+
 ## Setup instructions
 
 ### Setup the 1st party server
@@ -21,15 +23,11 @@ Follow the instructions in: [https://github.com/aesirxio/analytics-1stparty](htt
 ```
 <script>
   window.aesirx1stparty = "https://example.com"
-  window.aesirxClientID="[REPLACE THIS WITH THE PROVIDED CLIENT_ID]"
-  window.aesirxClientSecret="[REPLACE THIS WITH THE PROVIDED CLIENT_SECRET]"
 </script>
 <script async defer src="YOUR_PROJECT_PATH/analytics.js"></script>
 ```
 
 1. (`https://example.com` is the link to your 1st party server which must be installed)
-2. `CLIENT_ID` replace this with the provided `CLIENT_ID` from https://dapp.shield.aesirx.io/
-3. `CLIENT_SECRET` replace this with the provided `CLIENT_SECRET` fromhttps://dapp.shield.aesirx.io/
 
 #### Usage in ReactJS
 
@@ -39,12 +37,8 @@ Follow the instructions in: [https://github.com/aesirxio/analytics-1stparty](htt
 
 ```
 REACT_APP_ENDPOINT_ANALYTICS_URL=https://example.com
-REACT_APP_SSO_CLIENT_ID=[REPLACE THIS WITH THE PROVIDED CLIENT_ID]
-REACT_APP_SSO_CLIENT_SECRET=[REPLACE THIS WITH THE PROVIDED CLIENT_SECRET]
 
 (https://example.com is the link to your 1st party server)
-`CLIENT_ID` replace this with the provided `CLIENT_ID` from https://dapp.shield.aesirx.io/
-`CLIENT_SECRET` replace this with the provided `CLIENT_SECRET` fromhttps://dapp.shield.aesirx.io/
 ```
 
 ###### With react-router-dom v5:
@@ -76,12 +70,8 @@ export default AnalyticsContainer;
 
 ```
 NEXT_PUBLIC_ENDPOINT_ANALYTICS_URL=https://example.com
-NEXT_PUBLIC_SSO_CLIENT_ID=[REPLACE THIS WITH THE PROVIDED CLIENT_ID]
-NEXT_PUBLIC_SSO_CLIENT_SECRET=[REPLACE THIS WITH THE PROVIDED CLIENT_SECRET]
 
 (https://example.com is the link to your 1st party server)
-`CLIENT_ID` replace this with the provided `CLIENT_ID` from https://dapp.shield.aesirx.io/
-`CLIENT_SECRET` replace this with the provided `CLIENT_SECRET` fromhttps://dapp.shield.aesirx.io/
 ```
 
 ##### Disable Consent Popup:
