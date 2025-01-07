@@ -677,6 +677,11 @@ const ConsentComponentCustomApp = (props: any) => {
         event_name: 'Revoke consent',
         event_type: 'revoke-consent',
       });
+      if (window['aesirx1stparty']) {
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      }
     } catch (error) {
       console.log(error);
       setLoading('done');
@@ -936,7 +941,7 @@ const ConsentComponentCustomApp = (props: any) => {
                                   const levelRevoke =
                                     sessionStorage.getItem('aesirx-analytics-revoke') &&
                                     parseInt(sessionStorage.getItem('aesirx-analytics-revoke'));
-                                  if (levelRevoke > 1 || window['aesirx1stparty']) {
+                                  if (levelRevoke <= 1 && window['aesirx1stparty']) {
                                     setTimeout(() => {
                                       window.location.reload();
                                     }, 1000);
