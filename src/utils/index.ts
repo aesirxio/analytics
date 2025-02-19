@@ -51,7 +51,7 @@ const startTracker = async (
     const fingerprint = getFingerprint();
     const attributes = [];
     for (const key of urlParams.keys()) {
-      if (key.startsWith('utm_')) {
+      if (key.startsWith('utm_') || key.startsWith('gad_')) {
         urlParams.get(key) && attributes.push({ name: key, value: urlParams.get(key) });
       }
     }
