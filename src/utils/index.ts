@@ -102,7 +102,7 @@ const startTracker = async (
   }
 };
 
-const trackEvent = async (endpoint: string, referer?: string, data?: object) => {
+const trackEvent = async (endpoint: string, referer?: string, data?: object, _url?: string) => {
   const allow = sessionStorage.getItem('aesirx-analytics-allow');
   const reject = sessionStorage.getItem('aesirx-analytics-rejected');
   if (allow === '0' || reject === 'true') {
@@ -119,7 +119,7 @@ const trackEvent = async (endpoint: string, referer?: string, data?: object) => 
           ? location.protocol + '//' + location.host
           : location.protocol + '//' + location.host + window['referer']
         : '';
-  const url = location.protocol + '//' + location.host + location.pathname;
+  const url = _url ? _url : location.protocol + '//' + location.host + location.pathname;
   const user_agent = window.navigator.userAgent;
   const browser = Bowser.parse(window.navigator.userAgent);
   const browser_name = browser?.browser?.name;
