@@ -46,6 +46,7 @@ const startTracker = async (
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   const ip = '';
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone?.toLowerCase();
 
   try {
     const fingerprint = getFingerprint();
@@ -76,6 +77,7 @@ const startTracker = async (
       browser_version: browser_version,
       lang: lang,
       device: device?.includes('iPhone') ? 'mobile' : device?.includes('iPad') ? 'tablet' : device,
+      timezone: userTimeZone,
       ...(attributes?.length && {
         event_name: 'visit',
         event_type: 'action',
@@ -127,6 +129,7 @@ const trackEvent = async (endpoint: string, referer?: string, data?: object, _ur
   const lang = window.navigator['userLanguage'] || window.navigator.language;
   const device = browser?.platform?.model ?? browser?.platform?.type;
   const ip = '';
+  const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone?.toLowerCase();
 
   const fingerprint = getFingerprint();
   const headers = { type: 'application/json' };
@@ -144,6 +147,7 @@ const trackEvent = async (endpoint: string, referer?: string, data?: object, _ur
         browser_name: browser_name,
         browser_version: browser_version,
         lang: lang,
+        timezone: userTimeZone,
         device: device?.includes('iPhone')
           ? 'mobile'
           : device?.includes('iPad')
