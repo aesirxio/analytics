@@ -104,7 +104,7 @@ const startTracker = async (
   }
 };
 
-const trackEvent = async (endpoint: string, referer?: string, data?: object, _url?: string) => {
+const trackEvent = async (endpoint: string, referer?: string, data?: any, _url?: string) => {
   const allow = sessionStorage.getItem('aesirx-analytics-allow');
   const reject = sessionStorage.getItem('aesirx-analytics-rejected');
   if (allow === '0' || reject === 'true') {
@@ -130,6 +130,22 @@ const trackEvent = async (endpoint: string, referer?: string, data?: object, _ur
   const device = browser?.platform?.model ?? browser?.platform?.type;
   const ip = '';
   const userTimeZone = Intl.DateTimeFormat().resolvedOptions()?.timeZone;
+
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const attributesVisit = data?.attributes;
+  const attributes = [];
+  for (const key of urlParams.keys()) {
+    if (key.startsWith('utm_') || key.startsWith('gad_')) {
+      urlParams.get(key) && attributes.push({ name: key, value: urlParams.get(key) });
+    }
+  }
+  if (attributesVisit?.length) {
+    attributesVisit?.forEach((element: any) => {
+      element?.name && attributes.push({ name: element?.name, value: element?.value });
+    });
+  }
+  data.attributes = attributes;
 
   const fingerprint = getFingerprint();
   const headers = { type: 'application/json' };
