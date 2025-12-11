@@ -17,7 +17,8 @@ const startTracker = async (
   url?: string,
   referer?: string,
   user_agent?: string,
-  attributesVisit?: any
+  attributesVisit?: any,
+  visibilitychange = false
 ) => {
   const allow = sessionStorage.getItem('aesirx-analytics-allow');
   const reject = sessionStorage.getItem('aesirx-analytics-rejected');
@@ -78,6 +79,7 @@ const startTracker = async (
       lang: lang,
       device: device?.includes('iPhone') ? 'mobile' : device?.includes('iPad') ? 'tablet' : device,
       timezone: userTimeZone,
+      ...(visibilitychange && { visibility_change: visibilitychange }),
       ...(attributes?.length && {
         event_name: 'visit',
         event_type: 'action',
@@ -197,7 +199,7 @@ const endTrackerVisibilityState = (endPoint: string) => {
       endTracker(endPoint, window['event_uuid'], window['visitor_uuid']);
     }
     if (document.visibilityState === 'visible') {
-      const response = await startTracker(endPoint, '', '', '', window['attributes']);
+      const response = await startTracker(endPoint, '', '', '', window['attributes'], true);
       window['event_uuid'] = response?.event_uuid;
     }
   });
